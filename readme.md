@@ -9,15 +9,42 @@ $ cd to/project
 $ composer install
 ```
 
-If `.env` file it isn't existed in the root directory of the project you should run `$ cp .env-example .env`.
-Set the correct values to database connection.
-
 Make `.env` file in the `docker` folder and set the correct values:
 ```
 $ cd docker
-$ cp .env-example .env
+$ cp .env.example .env
 ```
 
+If `.env` file it isn't existed in the root directory of the project you should run `$ cp .env.example .env`.
+Set the correct values to database connection.
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=mysql // The host have to be `mysql` if you use project on your local.
+DB_PORT=3306
+DB_DATABASE=playster_content  
+DB_USERNAME=homestead // value you set in `docker/.env` file
+DB_PASSWORD=secret // value you set in `docker/.env` file
+```
+
+And also you need to add the Brightcove credentials to `.env` file.
+```dotenv
+BRIGHTCOVE_ACCOUNT_ID=
+BRIGHTCOVE_CLIENT_ID=
+BRIGHTCOVE_CLIENT_SECRET= 
+```
+
+Make sure that the directories within `storage` and `bootstrap/cache` are writable by web server or Laravel will not run.
+Run these commands from root directory if it isn't:
+```
+$ sudo chmod -R 775 bootstrap/cache
+$ sudo chmod -R 775 storage
+$ sudo chown -R $USER:www-data bootstap/cache
+$ sudo chown -R $USER:www-data storage
+```
+
+You should use the `php artisan key:generate` command to generate key to use Laravel's encrypter. 
+
+Before next steps make sure that the database is exist if you use project on your local.
 Run containers and migrations:
 ```
 $ docker-compose up -d web
@@ -37,8 +64,3 @@ $ php artisan make:user
 Now you can access to web interface. Check it in your browser: 
 - dashboard: `http://127.0.0.1:[NGINX_PORT]`. Login with your credentials
 - phpmyadmin: `http://127.0.0.1:[PMA_PORT]`
-
-
-## Troubleshooting
-
-Make sure that the directories within `storage` and `bootstrap/cache` are writable by web server or Laravel will not run . 
