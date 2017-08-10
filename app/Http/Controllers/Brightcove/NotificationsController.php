@@ -9,7 +9,17 @@ use App\Models\Brightcove;
 class NotificationsController extends Controller
 {
     const STATUS_SUCCESS = 'active';
-    const STATUS_FAILED = 'failed';
+    const STATUS_FAILED = 'inactive';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->middleware = [
+            ['middleware' => 'api', 'options' => []]
+        ];
+    }
+
 
     /**
      * We should get array {
