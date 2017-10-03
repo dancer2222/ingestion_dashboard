@@ -22,7 +22,7 @@ Route::get('/home', function () {
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => []], function () {
 
     Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove'], function () {
         Route::get('/', 'ContentController@index');
@@ -31,6 +31,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/folders/{folder}', 'ContentController@folder');
     });
 
+//    Route::group(['prefix' => 'search'], function () {
+//        Route::get('/search{id?}', 'SearchController@index');
+//        Route::post('/search', 'SearchController@index');
+//        Route::post('/search/{id?}', 'SearchController@indexRedirect');
+//        Route::get('/select/{id?}', 'SearchController@select');
+//        Route::post('/select/{id?}', 'SearchController@selectRedirect');
+//    };
 });
 
 Auth::routes();

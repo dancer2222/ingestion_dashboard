@@ -14,6 +14,7 @@
                     <span class="badge badge-default badge-pill">{{ $value['amount'] }}</span>
                 </a>
                 @endforeach
+                <a href="{{ action('SearchController@index')}}" class="list-group-item list-group-item-action justify-content-between">Search content for ID</a>
             </ul>
 
         </div>
