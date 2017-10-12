@@ -3,7 +3,6 @@
 <head>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>
         @yield('title', 'Dashboard')
     </title>
@@ -11,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('lib/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css') }}">
 
     <link rel="stylesheet" href="">
+
 </head>
 <body>
 
@@ -57,11 +57,11 @@
 
 </footer>
 
-<script src="{{ asset('lib/jquery/jquery-3.1.1.slim.min.js') }}"></script>
+<script src="{{asset("js/jquery.min.js")}}"></script>
 <script src="{{ asset('lib/tether/tether-1.4.0.min.js') }}"></script>
 <script src="{{ asset('lib/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js') }}"></script>
 
-<script src="{{ asset('js/main.js') }}"></script>
+<script src="{{asset("js/function.js")}}"></script>
 
 </body>
 </html>

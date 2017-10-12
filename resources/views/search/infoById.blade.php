@@ -3,9 +3,40 @@
 @section('title', 'Folders')
 
 @section('content')
+    @if(Session::has('message'))
+        <div class="alert alert-danger">
+            {{  Session::get('message') }}
+        </div>
+    @endif
+    @if(isset($message))
+        <div class="alert alert-danger">
+            {{ $message }}
+        </div>
+    @endif
+
+    @if(isset($id_url))
+        <div class="container">
+
+            <div class="col-xs-8">
+                <form method="POST" class="form-control-feedback" action="{{ action('SearchController@indexRedirect', ['id_url' => $id_url]) }}">
+                    <div class="form-group">
+                        <label for="text">Search for ID</label>
+                        <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="option" value="yes" checked>Do not show empty values</label>
+                    </div>
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <br> <a href="{{ '/' }}" class="btn btn-info">BACK</a>
+        </div>
+    @else
     <div class="container">
+
         <div class="col-xs-8">
-            <form method="GET" class="form-control-feedback" action="{{ action('SearchController@index') }}">
+            <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                 <div class="form-group">
                     <label for="text">Search for ID</label>
                     <input type="text" class="input-group col-3" id="id" name="id">
@@ -19,50 +50,112 @@
         </div>
         <br> <a href="{{ '/' }}" class="btn btn-info">BACK</a>
     </div>
+    @endif
     <br>
     @if(isset($info))
             <div class="container">
                 <table class="table table-hover">
-                    <tr style="background-color: #2ca02c">
-                        <td>Field name</td>
-                        <td>Data</td>
-                    </tr>
+                    <th style="background-color: #2ca02c">
+                        Field name
+                    </th>
+                    <th style="background-color: #2ca02c">
+                        Data
+                    </th>
                     <tr>
                         <td>Media Type</td>
                         <td>{{ $mediaTypeTitle }}</td>
                     </tr>
-                    @if('movies' === $mediaTypeTitle)
-                        <tr>
-                            <td>Feed</td>
-                            <td>aws s3 ls s3://playster-content-ingestion/{{ mb_strtolower($licensorName) }}/{{ $batchInfo->title }}
-                            |   <a href="" data-toggle="collapse" data-target="#link">Link to copy</a>
-                            <p id="link" class="collapse">
-                                aws s3 cp s3://layster-content-ingestion/{{ mb_strtolower($licensorName) }}/{{ $batchInfo->title }} ./
-                            </p>
-                            </td>
-                        </tr>
-                        @elseif('books' === $mediaTypeTitle)
+                    @if('movies' === $mediaTypeTitle and $batchInfo != null)
+
                         <tr>
                             <td>Feed</td>
                             <td>
-                                aws s3 ls s3://playster-book-service-dump/{{ mb_strtolower($licensorName) }}/{{ $batchInfo->title }}
-                                 |   <a href="" data-toggle="collapse" data-target="#link">Link to copy</a>
-                            <p id="link" class="collapse">
-                                aws s3 cp s3://playster-book-service-dump/{{ mb_strtolower($licensorName) }}/{{ $batchInfo->title }} ./
-                            </p>
+                                {{ $linkShow }}
+                                |   <a href="" data-toggle="collapse" data-target="#link">Link to copy</a>
+                                <div id="link" class="collapse">
+                                    {{ $linkCopy }}
+                                    <form method="POST" class="form-group" action="{{ action('ExcelController@index') }}">
+                                        <input type="hidden" id="bucket" name="bucket" value="{{ $bucket }}">
+                                        <input type="hidden" id="object" name="object" value="{{ $object }}">
+                                        <input type="hidden" id="title" name="batchTitle" value="{{ $batchInfo->title }}">
+                                        <input type="hidden" id="title" name="title" value="{{ $info['title'] }}">
+                                        <input type="hidden" id="id" name="id" value="{{ $info['id'] }}">
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <button type="submit" class="btn btn-info">Info by metadata file</button>
+                                    </form>
+                                </div>
+
+                                <div class="loader" style="display: none;"><p style="font-weight: bold; color: red">Please wait for loading...</p></div>
+                                <div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-lg modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body" style="word-wrap: break-word;">
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </td>
                         </tr>
-                    @elseif('audiobooks' === $mediaTypeTitle)
+                        @elseif('books' === $mediaTypeTitle and $batchInfo != null)
+                        <tr>
+                            <td>Feed</td>
+                            <td>
+                                {{ $linkShow }}
+                                |   <a href="" data-toggle="collapse" data-target="#link">Link to copy</a>
+                                <div id="link" class="collapse">
+                                    {{ $linkCopy }}
+                                    <form method="POST" class="form-group" id="form" action="{{ action('ExcelController@index') }}">
+                                        <input type="hidden" id="bucket" name="bucket" value="{{ $bucket }}">
+                                        <input type="hidden" id="object" name="object" value="{{ $object }}">
+                                        <input type="hidden" id="batchTitle" name="batchTitle" value="{{ $batchInfo->title }}">
+                                        <input type="hidden" id="title" name="title" value="{{ $info['title'] }}">
+                                        <input type="hidden" id="id" name="id" value="{{ $info['id'] }}">
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <button type="submit" class="btn btn-info">Info by metadata file</button>
+                                    </form>
+                                </div>
+
+                                <div class="loader" style="display: none;"><p style="font-weight: bold; color: red">Please wait for loading...</p></div>
+                                <div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-lg modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body" style="word-wrap: break-word;">
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @elseif('audiobooks' === $mediaTypeTitle and $batchInfo != null)
                         <tr>
                             <td>Batch Title</td>
                             <td>{{ $batchInfo->title }}</td>
                         </tr>
                     @endif
-
+                    @if($batchInfo != null)
                     <tr>
                         <td>Import date</td>
                         <td>{{ $batchInfo->import_date }}</td>
                     </tr>
+                    @endif
                     <tr>
                         <td>licensor name</td>
                         <td>{{ $licensorName }}</td>

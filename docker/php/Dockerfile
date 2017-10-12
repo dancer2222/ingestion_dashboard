@@ -12,4 +12,7 @@ RUN yes | pecl install xdebug \
            && tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
            && docker-php-ext-configure memcached \
            && docker-php-ext-install memcached \
-           && rm /tmp/memcached.tar.gz
+           && rm /tmp/memcached.tar.gz \
+    && docker-php-ext-install zip
+
+COPY ./php.ini-development /usr/local/etc/php/php.ini

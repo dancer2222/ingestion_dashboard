@@ -11,8 +11,16 @@ class MediaGeoRestrict extends Model
 
     public function getAllGeoRestrictionInfo($id)
     {
-        return $allInfo = DB::table('media_geo_restrict')
-            ->where('media_id', '=',$id)->get();
+        $allInfo = DB::table('media_geo_restrict')
+            ->where('media_id', '=',$id)
+            ->get();
+
+        if (count($allInfo) == 0) {
+            return $allInfo = null;
+        } else {
+            return $allInfo;
+        }
+
     }
 
     public function getFirstGeoRestrictionInfo($id)

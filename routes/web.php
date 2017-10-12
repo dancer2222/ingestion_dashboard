@@ -31,13 +31,16 @@ Route::group(['middleware' => []], function () {
         Route::get('/folders/{folder}', 'ContentController@folder');
     });
 
-//    Route::group(['prefix' => 'search'], function () {
-//        Route::get('/search{id?}', 'SearchController@index');
-//        Route::post('/search', 'SearchController@index');
-//        Route::post('/search/{id?}', 'SearchController@indexRedirect');
-//        Route::get('/select/{id?}', 'SearchController@select');
-//        Route::post('/select/{id?}', 'SearchController@selectRedirect');
-//    };
+
+        Route::get('/search/{id?}', 'SearchController@index');
+        Route::post('/search', 'SearchController@indexRedirect');
+
+        Route::get('/select/{id?}/{type?}', 'SearchController@select');
+        Route::post('/select', 'SearchController@selectRedirect');
+
+        Route::post('/show', 'ExcelController@index');
+
+
 });
 
 Auth::routes();
