@@ -14,4 +14,10 @@ class Book extends Model
         return $name = DB::table('book')
             ->where('id', '=',$id)->get();
     }
+
+    public function getInfoByTitle($title)
+    {
+        return $id = DB::table('book')
+            ->where('title', '=',$title)->get();
+    }
 }

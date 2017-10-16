@@ -14,4 +14,10 @@ class Movie extends Model
         return $name = DB::table('movie')
             ->where('id', '=',$id)->get();
     }
+
+    public function getInfoByTitle($title)
+    {
+        return $id = DB::table('movie')
+            ->where('title', '=',$title)->get();
+    }
 }

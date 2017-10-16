@@ -14,4 +14,10 @@ class AudioBook extends Model
         return $name = DB::table('audio_book')
             ->where('id', '=',$id)->get();
     }
+
+    public function getInfoByTitle($title)
+    {
+        return $id = DB::table('audio_book')
+            ->where('title', '=',$title)->get();
+    }
 }

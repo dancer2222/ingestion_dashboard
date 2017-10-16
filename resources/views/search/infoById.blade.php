@@ -33,24 +33,49 @@
             <br> <a href="{{ '/' }}" class="btn btn-info">BACK</a>
         </div>
     @else
-    <div class="container">
-
-        <div class="col-xs-8">
-            <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
-                <div class="form-group">
-                    <label for="text">Search for ID</label>
-                    <input type="text" class="input-group col-3" id="id" name="id">
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" name="option" value="yes" checked>Do not show empty values</label>
-                </div>
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6" align="center">
+                <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
+                    <div class="form-group">
+                        <label for="text"><h3>Search for ID</h3></label>
+                        <input type="text" class="input-group col-3" id="id" name="id">
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="option" value="yes" checked>Do not show empty values</label>
+                    </div>
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="col-lg-6" align="center">
+                <form method="POST" class="form-control-feedback" action="{{ action('SearchByTitleController@index') }}">
+                    <div class="form-group">
+                        <label for="text"><h3>Search for Title</h3></label>
+                        <input type="text" class="input-group col-3" id="title" name="title">
+                        <label for="text">Select a media type</label>
+                        <br>
+                        <select class="form-control-sm" id="type" name="type">
+                            <option name="books">books</option>
+                            <option name="movies">movies</option>
+                            <option name="audiobooks">audiobooks</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
         </div>
-        <br> <a href="{{ '/' }}" class="btn btn-info">BACK</a>
+
+
+
     </div>
+    <br>
+    <center>
+        <a href="{{ '/' }}" class="btn btn-info" >BACK</a>
+    </center>
     @endif
+
     <br>
     @if(isset($info))
             <div class="container">

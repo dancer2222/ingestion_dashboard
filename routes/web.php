@@ -32,13 +32,15 @@ Route::group(['middleware' => []], function () {
     });
 
 
-        Route::get('/search/{id?}', 'SearchController@index');
+        Route::get('/search/{id?}', 'SearchController@index')->name('search');
         Route::post('/search', 'SearchController@indexRedirect');
 
         Route::get('/select/{id?}/{type?}', 'SearchController@select');
         Route::post('/select', 'SearchController@selectRedirect');
 
         Route::post('/show', 'ExcelController@index');
+
+        Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
 
 
 });
