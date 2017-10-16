@@ -22,7 +22,7 @@ Route::get('/home', function () {
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => []], function () {
 
     Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove'], function () {
         Route::get('/', 'ContentController@index');
@@ -30,6 +30,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/folders', 'ContentController@folders');
         Route::get('/folders/{folder}', 'ContentController@folder');
     });
+
+
+        Route::get('/search/{id?}', 'SearchController@index')->name('search');
+        Route::post('/search', 'SearchController@indexRedirect');
+
+        Route::get('/select/{id?}/{type?}', 'SearchController@select');
+        Route::post('/select', 'SearchController@selectRedirect');
+
+        Route::post('/show', 'ExcelController@index');
+
+        Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
+
 
 });
 
