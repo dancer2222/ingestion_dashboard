@@ -22,7 +22,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/show',
             type: "POST",
-            dataType: 'json',
+            // dataType: 'json',
             data: {
                 bucket: bucket,
                 object: object,
@@ -33,11 +33,13 @@ $(document).ready(function () {
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
+            accepts: {
+                xml: 'text/xml',
+                text: 'text/plain'
+            },
             success: function (messages) {
-                var message = JSON.stringify(messages.message[0]);
                 $('#myModal').modal('show');
-                $('#myModal .modal-body').html(message);
-
+                $('#myModal .modal-body').text(messages);
                 loaderOff();
             },
             timeout: 500000,

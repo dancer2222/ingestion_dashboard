@@ -6,6 +6,7 @@ use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\ArrayToXml\ArrayToXml;
 
 
 class ExcelController extends Controller
@@ -77,8 +78,12 @@ class ExcelController extends Controller
                             $messages []= $value;
                         }
                     }
+                    $json = json_encode($messages[0]);
+                    $array = json_decode($json,TRUE);
+                    $result = ArrayToXml::convert($array);
 
-                    return response()->json(['message' => $messages]);
+                    return response($result);
+
                 case 'zip':
                     $messages []= 'This file has an extension `zip` you can look it up in: [public/'.$filepath.']';
                     return response()->json(['message' => $messages]);
