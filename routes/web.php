@@ -22,7 +22,7 @@ Route::get('/home', function () {
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => []], function () {
+Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove'], function () {
         Route::get('/', 'ContentController@index');
