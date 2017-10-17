@@ -60,8 +60,8 @@ class ExcelController extends Controller
 
             } catch (S3Exception $e) {
                 unlink($filepath);
-                $messages []=  $e->getMessage();
-                return response()->json(['message' => $messages]);
+                $messages =  $e->getMessage();
+                return redirect(action('SearchController@index', ['id' => $id]))->with('message', $messages);
             }
         }
 

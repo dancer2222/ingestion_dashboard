@@ -33,6 +33,7 @@ class SearchByTitleController extends Controller
 
     /**
      * @param $type
+     * @param $title
      * @return AudioBook|Book|Movie|\Illuminate\Http\RedirectResponse
      */
     public function switchType($type, $title)
@@ -46,12 +47,10 @@ class SearchByTitleController extends Controller
                 $info = new Book();
                 $info = $info->getInfoByTitle($title);
                 break;
-
             case 'audiobooks':
                 $info = new AudioBook();
                 $info = $info->getInfoByTitle($title);
                 break;
-
             default:
                 $message = 'Select a media type';
                 return back()->with('message', $message);
