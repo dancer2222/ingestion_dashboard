@@ -337,6 +337,7 @@ class SearchController extends Controller
     public function normalizeBucketName($licensorName)
     {
         $providers = [
+            'Aenetworks' => 'aenetworks',
             'Imira' => 'imira',
             'Brainstorm Media' => 'brainmedia',
             'EntertainmentOne' => 'eone',
