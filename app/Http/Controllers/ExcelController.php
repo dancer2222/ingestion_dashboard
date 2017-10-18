@@ -65,6 +65,7 @@ class ExcelController extends Controller
             }
         }
 
+        @chmod($filepath, 0777);
         if ($dataType != null){
             switch ($dataType) {
                 case 'xml':
