@@ -175,11 +175,11 @@
                             <td>{{ $batchInfo->title }}</td>
                         </tr>
                     @endif
-                    @if($batchInfo != null)
-                    <tr>
-                        <td>Import date</td>
-                        <td>{{ $batchInfo->import_date }}</td>
-                    </tr>
+                    @if(isset($batchInfo) and $batchInfo != null)
+                            <tr>
+                                <td>Import date</td>
+                                <td>{{ $batchInfo->import_date }}</td>
+                            </tr>
                     @endif
                     <tr>
                         <td>licensor name</td>
