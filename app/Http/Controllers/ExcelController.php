@@ -86,8 +86,8 @@ class ExcelController extends Controller
                     return response($result);
 
                 case 'zip':
-                    $messages []= 'This file has an extension `zip` you can look it up in: [public/'.$filepath.']';
-                    return response()->json(['message' => $messages]);
+                    $messages = 'This file has an extension `zip` you can look it up in: [public/'.$filepath.']';
+                    return response($messages);
                 case 'xlsx':
                     $messages =$this->getFile($filepath, $title);
                     return view('search.metadata', ['messages' => $messages]);
