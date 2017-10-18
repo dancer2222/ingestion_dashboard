@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'mysql_prod'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,20 +39,35 @@ return [
             'prefix' => '',
         ],
 
-        'mysql' => [
+        'mysql_prod' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
+            'host' => env('DB_PROD_HOST', '127.0.0.1'),
+            'port' => env('DB_PROD_PORT', '3306'),
+            'database' => env('DB_PROD_DATABASE', 'forge'),
+            'username' => env('DB_PROD_USERNAME', 'forge'),
+            'password' => env('DB_PROD_PASSWORD', ''),
+            'unix_socket' => env('DB_PROD_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'strict' => true,
             'engine' => null,
         ],
+
+	    'mysql_qa' => [
+		    'driver' => 'mysql',
+		    'host' => env('DB_QA_HOST', '127.0.0.1'),
+		    'port' => env('DB_QA_PORT', '3306'),
+		    'database' => env('DB_QA_DATABASE', 'forge'),
+		    'username' => env('DB_QA_USERNAME', 'forge'),
+		    'password' => env('DB_QA_PASSWORD', ''),
+		    'unix_socket' => env('DB_QA_SOCKET', ''),
+		    'charset' => 'utf8mb4',
+		    'collation' => 'utf8mb4_unicode_ci',
+		    'prefix' => '',
+		    'strict' => true,
+		    'engine' => null,
+	    ],
 
         'mysql_local' => [
             'driver' => 'mysql',

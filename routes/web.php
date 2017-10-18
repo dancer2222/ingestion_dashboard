@@ -32,17 +32,18 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
 
-        Route::get('/search/{id?}', 'SearchController@index')->name('search');
-        Route::post('/search', 'SearchController@indexRedirect');
+    Route::get('/search/{id?}', 'SearchController@index')->name('search');
+    Route::post('/search', 'SearchController@indexRedirect');
 
-        Route::get('/select/{id?}/{type?}', 'SearchController@select');
-        Route::post('/select', 'SearchController@selectRedirect');
+    Route::get('/select/{id?}/{type?}', 'SearchController@select');
+    Route::post('/select', 'SearchController@selectRedirect');
 
-        Route::post('/show', 'ExcelController@index');
+    Route::post('/show', 'ExcelController@index');
 
-        Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
+    Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
 
-
+	// Ajax requests
+	Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
 });
 
 Auth::routes();
