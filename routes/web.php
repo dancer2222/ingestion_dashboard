@@ -12,19 +12,19 @@
 */
 
 Route::get('/', function () {
-    return redirect('brightcove');
+    return redirect('dashboard');
 });
 
 Route::get('/home', function () {
-    return redirect('brightcove');
+    return redirect('dashboard');
 })->name('home');
 
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => []], function () {
+Route::group(['middleware' => ['auth']], function () {
 
-    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove'], function () {
+    Route::group(['prefix' => 'dashboard', 'namespace' => 'Brightcove'], function () {
         Route::get('/', 'ContentController@index');
         Route::get('/videos', 'ContentController@videos');
         Route::get('/folders', 'ContentController@folders');
