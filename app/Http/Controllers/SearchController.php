@@ -187,13 +187,16 @@ class SearchController extends Controller
                     $info = new Album();
                     $info =$info->getAlbumById($request->id)[0];
                     $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    $providerName = new DataSourceProvider();
+                    $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
                     return view('search.infoById', ['info' => (array)$info,
                                                             'id' => $info->id,
                                                             'mediaTypeTitle' => $mediaTypeTitle,
                                                             'mediaGeoRestrictInfo' => $country_code,
                                                             'licensorName' => $licensorName,
                                                             'option' => $request->option,
-                                                            'id_url' => $id_url]);
+                                                            'id_url' => $id_url,
+                                                            'providerName' => $providerName]);
                     break;
 
                 default:
@@ -289,6 +292,8 @@ class SearchController extends Controller
                 $info = new Album();
                 $info =$info->getAlbumById($request->id)[0];
                 $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                $providerName = new DataSourceProvider();
+                $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
                 return view('search.selectMediaTypes', ['info' => (array)$info,
                                                         'id' => $info->id,
                                                         'mediaTypeTitle' => $mediaTypeTitle,
@@ -296,7 +301,8 @@ class SearchController extends Controller
                                                         'licensorName' => $licensorName,
                                                         'option' => $request->option,
                                                         'id_url' => $id_url,
-                                                        'type' => $type]);
+                                                        'type' => $type,
+                                                        'providerName' => $providerName]);
                 break;
             default:
                 return view('search.selectMediaTypes');

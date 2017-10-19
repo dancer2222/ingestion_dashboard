@@ -20,7 +20,7 @@
             <div class="col-xs-8">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchController@indexRedirect', ['id_url' => $id_url]) }}">
                     <div class="form-group">
-                        <label for="text">Search by ID</label>
+                        <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                         <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
                     </div>
                     <div class="checkbox">
@@ -38,7 +38,7 @@
             <div class="col-lg-6" align="center">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                     <div class="form-group">
-                        <label for="text"><h3>Search by ID</h3></label>
+                        <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                         <input type="text" class="input-group col-3" id="id" name="id">
                     </div>
                     <div class="checkbox">
@@ -51,7 +51,7 @@
             <div class="col-lg-6" align="center">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchByTitleController@index') }}">
                     <div class="form-group">
-                        <label for="text"><h3>Search by Title</h3></label>
+                        <label for="text"><h3>Search by Title <span class="defaultDatabase">{{ config('database.default') }}</span>></h3></label>
                         <input type="text" class="input-group col-3" id="title" name="title">
                         <label for="text">Select a media type</label>
                         <br>
@@ -181,10 +181,6 @@
                                 <td>{{ $batchInfo->import_date }}</td>
                             </tr>
                     @endif
-                    <tr>
-                        <td>licensor name</td>
-                        <td>{{ $licensorName }}</td>
-                    </tr>
                     @if('yes' === $option)
                         @foreach($info as $value => $item)
                                 @if(null == $item)
@@ -197,12 +193,28 @@
                                                 {{ $item }}
                                             </td>
                                         </tr>
-                                        @else
-                                            <tr>
-                                                <td>{{ $value }}</td>
-                                                <td>{{ $item }}</td>
-                                            </tr>
+                                    @elseif($value === 'licensor_id')
+                                        <tr>
+                                            <td>Licensor</td>
+                                            <td>[{{ $item }}]{{ $licensorName }}</td>
+                                        </tr>
+                                    @elseif($value === 'data_source_provider_id')
+                                        <tr>
+                                            <td>Data source provider</td>
+                                            <td>[{{ $item }}]{{ $providerName }}</td>
+                                        </tr>
+                                    @elseif($value === 'date_added')
+                                        <tr>
+                                            <td>Date aded</td>
+                                            <td>  {{ date('Y-m-d', $item)}}</td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td>{{ $value }}</td>
+                                            <td>{{ $item }}</td>
+                                        </tr>
                                     @endif
+
                                 @endif
                         @endforeach
                     @else
@@ -214,13 +226,27 @@
                                             {{ $item }}
                                         </td>
                                     </tr>
-                                @else
-                                    <tr>
-                                        <td>{{ $value }}</td>
-                                        <td>{{ $item }}</td>
-                                    </tr>
+                            @elseif($value === 'licensor_id')
+                                <tr>
+                                    <td>Licensor</td>
+                                    <td>[{{ $item }}]{{ $licensorName }}</td>
+                                </tr>
+                            @elseif($value === 'data_source_provider_id')
+                                <tr>
+                                    <td>Data source provider</td>
+                                    <td>[{{ $item }}]{{ $providerName }}</td>
+                                </tr>
+                            @elseif($value === 'date_added')
+                                <tr>
+                                    <td>Date aded</td>
+                                    <td>  {{ date('Y-m-d', $item)}}</td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td>{{ $value }}</td>
+                                    <td>{{ $item }}</td>
+                                </tr>
                                 @endif
-
                         @endforeach
                     @endif
                     <tr>
@@ -229,10 +255,14 @@
                     </tr>
                 </table>
             </div>
-        <table class="table table-hover">
+        <table class="table table-hover mb-5">
             <tr align="center">
                 <td>Watch in playster this {{ $mediaTypeTitle }} - <a href="https://play.playster.com/{{ $mediaTypeTitle }}/{{ $info['id']}}/autumn-with-horses-trudy-nicholson" target="_blank">{{ $info['title'] }}</a></td>
             </tr>
+            <tr align="center">
+                <td>Watch in QA playster this {{ $mediaTypeTitle }} - <a href="https://qa-playster-v3-3rdparty.playster.com//{{ $mediaTypeTitle }}/{{ $info['id']}}/autumn-with-horses-trudy-nicholson" target="_blank">{{ $info['title'] }}</a></td>
+            </tr>
         </table>
     @endif
+
 @endsection

@@ -14,7 +14,7 @@
                     @if(isset($more))
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@selectRedirect', ['id_url' => $id_url]) }}">
                             <div class="form-group">
-                                <label for="text">Search by ID</label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
                                 <div class="alert alert-danger">
                                     This id has many media types, select the one you need
@@ -35,7 +35,7 @@
                     @else
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                             <div class="form-group">
-                                <label for="text">Search by ID</label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id">
                             </div>
                             <div class="checkbox">
@@ -54,7 +54,7 @@
                     @if(isset($more))
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@selectRedirect', ['id_url' => $id_url, 'type' => $type]) }}">
                             <div class="form-group">
-                                <label for="text">Search by ID</label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
                                 <div class="alert alert-danger">
                                     This id has many media types
@@ -75,7 +75,7 @@
                     @else
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                             <div class="form-group">
-                                <label for="text">Search by ID</label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id">
                             </div>
                             <div class="checkbox">
@@ -94,7 +94,7 @@
                     @if(isset($more))
                     <form method="POST" class="form-control-feedback" action="{{ action('SearchController@select') }}">
                         <div class="form-group">
-                            <label for="text">Search by ID</label>
+                            <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                             <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id }}">
                                     <div class="alert alert-danger">
                                         This id has many media types
@@ -115,7 +115,7 @@
                     @else
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@indexRedirect') }}">
                             <div class="form-group">
-                                <label for="text">Search by ID</label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id">
                             </div>
                             <div class="checkbox">
@@ -142,11 +142,6 @@
             <td>Media Type</td>
             <td>{{ $mediaTypeTitle }}</td>
         </tr>
-
-        <tr>
-            <td>licensor name</td>
-            <td>{{ $licensorName }}</td>
-        </tr>
         @if('yes' === $option)
             @foreach($info as $value => $item)
                 @if(null == $item)
@@ -158,6 +153,16 @@
                             <td id="description" class="collapse">
                                 {{ $item }}
                             </td>
+                        </tr>
+                    @elseif($value === 'licensor_id')
+                        <tr>
+                            <td>Licensor</td>
+                            <td>[{{ $item }}]{{ $licensorName }}</td>
+                        </tr>
+                    @elseif($value === 'data_source_provider_id')
+                        <tr>
+                            <td>Data source provider</td>
+                            <td>[{{ $item }}]{{ $providerName }}</td>
                         </tr>
                     @else
                         <tr>
@@ -176,6 +181,16 @@
                             {{ $item }}
                         </td>
                     </tr>
+                @elseif($value === 'licensor_id')
+                    <tr>
+                        <td>Licensor</td>
+                        <td>[{{ $item }}]{{ $licensorName }}</td>
+                    </tr>
+                @elseif($value === 'data_source_provider_id')
+                    <tr>
+                        <td>Data source provider</td>
+                        <td>[{{ $item }}]{{ $providerName }}</td>
+                    </tr>
                  @else
                     <tr>
                         <td>{{ $value }}</td>
@@ -191,9 +206,12 @@
         </tr>
     </table>
 </div>
-<table class="table table-hover">
+<table class="table table-hover mb-5">
     <tr align="center">
         <td>Watch in playster this {{ $mediaTypeTitle }} - <a href="https://play.playster.com/{{ $mediaTypeTitle }}/{{ $info['id']}}/autumn-with-horses-trudy-nicholson" target="_blank">{{ $info['title'] }}</a></td>
+    </tr>
+    <tr align="center">
+        <td>Watch in QA playster this {{ $mediaTypeTitle }} - <a href="https://qa-playster-v3-3rdparty.playster.com//{{ $mediaTypeTitle }}/{{ $info['id']}}/autumn-with-horses-trudy-nicholson" target="_blank">{{ $info['title'] }}</a></td>
     </tr>
 </table>
 @endif
