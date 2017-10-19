@@ -20,7 +20,7 @@
             <div class="col-xs-8">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchController@indexRedirect', ['id_url' => $id_url]) }}">
                     <div class="form-group">
-                        <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                        <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                         <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
                     </div>
                     <div class="checkbox">
@@ -38,7 +38,7 @@
             <div class="col-lg-6" align="center">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                     <div class="form-group">
-                        <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                        <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                         <input type="text" class="input-group col-3" id="id" name="id">
                     </div>
                     <div class="checkbox">
@@ -51,7 +51,7 @@
             <div class="col-lg-6" align="center">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchByTitleController@index') }}">
                     <div class="form-group">
-                        <label for="text"><h3>Search by Title {{ config('database.default') }}</h3></label>
+                        <label for="text"><h3>Search by Title <span class="defaultDatabase">{{ config('database.default') }}</span>></h3></label>
                         <input type="text" class="input-group col-3" id="title" name="title">
                         <label for="text">Select a media type</label>
                         <br>
@@ -203,11 +203,16 @@
                                             <td>Data source provider</td>
                                             <td>[{{ $item }}]{{ $providerName }}</td>
                                         </tr>
+                                    @elseif($value === 'date_added')
+                                        <tr>
+                                            <td>Date aded</td>
+                                            <td>  {{ date('Y-m-d', $item)}}</td>
+                                        </tr>
                                     @else
-                                            <tr>
-                                                <td>{{ $value }}</td>
-                                                <td>{{ $item }}</td>
-                                            </tr>
+                                        <tr>
+                                            <td>{{ $value }}</td>
+                                            <td>{{ $item }}</td>
+                                        </tr>
                                     @endif
 
                                 @endif
@@ -230,6 +235,11 @@
                                 <tr>
                                     <td>Data source provider</td>
                                     <td>[{{ $item }}]{{ $providerName }}</td>
+                                </tr>
+                            @elseif($value === 'date_added')
+                                <tr>
+                                    <td>Date aded</td>
+                                    <td>  {{ date('Y-m-d', $item)}}</td>
                                 </tr>
                             @else
                                 <tr>

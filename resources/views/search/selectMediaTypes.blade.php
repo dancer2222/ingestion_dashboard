@@ -14,7 +14,7 @@
                     @if(isset($more))
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@selectRedirect', ['id_url' => $id_url]) }}">
                             <div class="form-group">
-                                <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
                                 <div class="alert alert-danger">
                                     This id has many media types, select the one you need
@@ -35,7 +35,7 @@
                     @else
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                             <div class="form-group">
-                                <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id">
                             </div>
                             <div class="checkbox">
@@ -54,7 +54,7 @@
                     @if(isset($more))
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@selectRedirect', ['id_url' => $id_url, 'type' => $type]) }}">
                             <div class="form-group">
-                                <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
                                 <div class="alert alert-danger">
                                     This id has many media types
@@ -75,7 +75,7 @@
                     @else
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                             <div class="form-group">
-                                <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id">
                             </div>
                             <div class="checkbox">
@@ -94,7 +94,7 @@
                     @if(isset($more))
                     <form method="POST" class="form-control-feedback" action="{{ action('SearchController@select') }}">
                         <div class="form-group">
-                            <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                            <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                             <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id }}">
                                     <div class="alert alert-danger">
                                         This id has many media types
@@ -115,7 +115,7 @@
                     @else
                         <form method="POST" class="form-control-feedback" action="{{ action('SearchController@indexRedirect') }}">
                             <div class="form-group">
-                                <label for="text"><h3>Search by ID {{ config('database.default') }}</h3></label>
+                                <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                                 <input type="text" class="input-group col-3" id="id" name="id">
                             </div>
                             <div class="checkbox">
