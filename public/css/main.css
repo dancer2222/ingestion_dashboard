@@ -1,5 +1,17 @@
+footer {
+  min-height: 100px;
+}
+
 .footer-toolbar-container {
   background-color: #f7f7f7;
   border-top: 1px solid #d4d2d2;
   padding: 7px 5px;
+}
+
+.welcome-container {
+  min-height: 60vh;
+}
+
+.welcome-container input[name="id"] {
+  width: 350px;
 }
