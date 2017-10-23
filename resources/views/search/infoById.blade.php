@@ -35,7 +35,7 @@
     @else
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6" align="center">
+            <div class="col-lg-4" align="center">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
                     <div class="form-group">
                         <label for="text"><h3>Search by ID <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
@@ -48,10 +48,10 @@
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
             </div>
-            <div class="col-lg-6" align="center">
+            <div class="col-lg-4" align="center">
                 <form method="POST" class="form-control-feedback" action="{{ action('SearchByTitleController@index') }}">
                     <div class="form-group">
-                        <label for="text"><h3>Search by Title <span class="defaultDatabase">{{ config('database.default') }}</span>></h3></label>
+                        <label for="text"><h3>Search by Title <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
                         <input type="text" class="input-group col-3" id="title" name="title">
                         <label for="text">Select a media type</label>
                         <br>
@@ -65,15 +65,25 @@
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
             </div>
+            <div class="col-lg-4" align="center">
+                <form method="POST" class="form-control-feedback" action="{{ action('BatchReportController@index') }}">
+                    <div class="form-group">
+                        <label for="text"><h3>Generate Batch Report <span class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
+                        <input type="text" class="input-group col-3" id="batch_id" name="batch_id">
+                    </div>
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
         </div>
 
 
 
     </div>
     <br>
-    <center>
+    {{--<center>--}}
         <a href="{{ '/' }}" class="btn btn-info" >BACK</a>
-    </center>
+    {{--</center>--}}
     @endif
 
     <br>

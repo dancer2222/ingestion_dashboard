@@ -11,9 +11,8 @@ class Licensor extends Model
 
     public function getNameLicensorById($id)
     {
-        return $name = DB::table('licensors')
+        return DB::table('licensors')
             ->select('name')
             ->where('id', '=',$id)->get();
     }
-
 }

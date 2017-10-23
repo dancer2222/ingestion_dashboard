@@ -15,17 +15,12 @@ class MediaGeoRestrict extends Model
             ->where('media_id', '=',$id)
             ->get();
 
-        if (count($allInfo) == 0) {
-            return $allInfo = null;
-        } else {
-            return $allInfo;
-        }
-
+        return count($allInfo) ? $allInfo : null;
     }
 
     public function getFirstGeoRestrictionInfo($id)
     {
-        return $allInfo = DB::table('media_geo_restrict')
+        return DB::table('media_geo_restrict')
             ->select('media_type')
             ->where('media_id', '=',$id)->get()->first();
     }
@@ -37,10 +32,6 @@ class MediaGeoRestrict extends Model
             ->where('media_type', '=', $mediaType)
             ->get();
 
-        if (count($allInfo) == 0) {
-            return $allInfo = null;
-        } else {
-            return $allInfo;
-        }
+        return count($allInfo) ? $allInfo : null;
     }
 }
