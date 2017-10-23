@@ -29,41 +29,36 @@ class SearchController extends Controller
         $country_code = '';
 
         if (isset($request->id)) {
-            if (is_numeric($request->id) == false) {
+            if (!is_numeric($request->id)) {
                 $message = 'This [id] = ['.$request->id.'] must contain only digits';
                 return view('search.infoById', ['message' => $message]);
             }
+
             $mediaGeoRestrict = new MediaGeoRestrict();
             $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
             if ($mediaGeoRestrictInfo === null) {
                 $message = 'This [id] = '.$request->id.'  not found';
                 return view('search.infoById', ['message' => $message]);
             }
-            if (count($mediaGeoRestrictInfo) > 1){
+            if (count($mediaGeoRestrictInfo) > 1) {
                 $result = [];
-                foreach ($mediaGeoRestrictInfo as $item ) {
-                    $country_code .= $item->country_code .'.';
-                    $result []= $item->media_type;
-                  }
-                  if (count($result) > 1) {
-                      for ($i = 0; $i < count($result); $i++)
-                      {
-                          if ($result[0] != $result[$i]) {
-                              $more = '';
-                              $mediaRestAllMediaType = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
-                              foreach ($mediaRestAllMediaType as $value) {
-                                  $allMediaType []= $value->media_type;
-                              }
-                              $allMediaType = array_unique($allMediaType);
-                              foreach ($allMediaType as $mediaTypes) {
-                                  $mediaTypeTitles []= $mediaType->getTitleById($mediaTypes)[0]->title;
-                              }
-                              return view('search.selectMediaTypes', ['more' => $more, 'id' => $request->id,
-                                                                      'mediaTypeTitles' => $mediaTypeTitles,
-                                                                      'id_url' => $id_url,
-                                                                      'option' => $request->option]);
-                          }
-                  }
+                foreach ($mediaGeoRestrictInfo as $item) {
+                    $country_code .= $item->country_code . '.';
+                    $result [] = $item->media_type;
+                }
+                $resultUnique = array_unique($result);
+                if (count($resultUnique) > 1) {
+                    foreach ($resultUnique as $mediaTypes) {
+                        $mediaTypeTitles [] = $mediaType->getTitleById($mediaTypes)[0]->title;
+                    }
+                    $more = '';
+                    return view('search.selectMediaTypes', [
+                        'more'            => $more,
+                        'id'              => $request->id,
+                        'mediaTypeTitles' => $mediaTypeTitles,
+                        'id_url'          => $id_url,
+                        'option'          => $request->option
+                    ]);
                 }
             } else {
                 $country_code = $mediaGeoRestrictInfo[0]->country_code;
@@ -160,6 +155,8 @@ class SearchController extends Controller
                     //all info by batch_id
                     $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
                     $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    $providerName = new DataSourceProvider();
+                    $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
                     return view('search.infoById', ['info' => (array)$info,
                                                                  'id' => $request->id,
                                                                  'mediaTypeTitle' => $mediaTypeTitle,
@@ -167,7 +164,8 @@ class SearchController extends Controller
                                                                  'mediaGeoRestrictInfo' => $country_code,
                                                                  'licensorName' => $licensorName,
                                                                  'option' => $request->option,
-                                                                 'id_url' => $id_url]);
+                                                                 'id_url' => $id_url,
+                                                                 'providerName' => $providerName]);
                     break;
 
                 case 'games':

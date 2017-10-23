@@ -42,7 +42,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::post('/show', 'ExcelController@index');
 
-		Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
+    Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
+    Route::post('/report', 'BatchReportController@index');
 	});
 
 	// Ajax requests

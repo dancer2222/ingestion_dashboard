@@ -11,14 +11,14 @@ class MediaType extends Model
 
     public function getTitleById($media_type_id)
     {
-        return $title = DB::table('media_types')
+        return DB::table('media_types')
             ->select('title')
             ->where('media_type_id', '=',$media_type_id)->get();
     }
 
     public function getIdByTitle($title)
     {
-        return $title = DB::table('media_types')
+        return DB::table('media_types')
             ->select('media_type_id')
             ->where('title', '=', $title)->get();
     }

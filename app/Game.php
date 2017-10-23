@@ -11,7 +11,7 @@ class Game extends Model
 
     public function getGameById($id)
     {
-        return $name = DB::table('game')
+        return DB::table('game')
             ->where('id', '=',$id)->get();
     }
 }

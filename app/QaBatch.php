@@ -14,10 +14,6 @@ class QaBatch extends Model
         $allInfo = $name = DB::table('qa_batches')
             ->where('id', '=',$id)->get();
 
-        if (count($allInfo) == 0) {
-            return $allInfo = null;
-        } else {
-            return $allInfo;
-        }
+        return count($allInfo) ? $allInfo : null;
     }
 }

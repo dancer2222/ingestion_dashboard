@@ -16,11 +16,6 @@ class DataSourceProvider extends Model
             ->where('id', '=',$id)
             ->get();
 
-        if (count($allInfo) == 0) {
-            return $allInfo = null;
-        } else {
-            return $allInfo;
-        }
-
+        return count($allInfo) ? $allInfo : null;
     }
 }
