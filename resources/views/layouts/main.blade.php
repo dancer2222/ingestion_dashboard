@@ -46,6 +46,10 @@
                     <a class="dropdown-item" href="{{ action('Brightcove\\ContentController@folders') }}">Folders</a>
                 </div>
             </li>
+
+            <li class="nav-item dropdown">
+                <a href="{{ action('SearchController@index') }}" class="nav-link">Reports</a>
+            </li>
         </ul>
 
         <form class="form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">

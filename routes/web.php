@@ -11,37 +11,41 @@
 |
 */
 
-Route::get('/', function () {
-    return redirect('dashboard');
-});
-
-Route::get('/home', function () {
-    return redirect('dashboard');
-})->name('home');
-
 /**
  * Routes under 'auth' middleware
  */
 Route::group(['middleware' => ['auth']], function () {
+	Route::get('/', function () {
+		return view('welcome');
+	});
 
-    Route::group(['prefix' => 'dashboard', 'namespace' => 'Brightcove'], function () {
+	Route::get('/home', function () {
+		return redirect('brightcove');
+	})->name('home');
+
+    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove'], function () {
         Route::get('/', 'ContentController@index');
         Route::get('/videos', 'ContentController@videos');
         Route::get('/folders', 'ContentController@folders');
         Route::get('/folders/{folder}', 'ContentController@folder');
     });
 
+	Route::group(['prefix' => 'reports'], function () {
+		Route::get('/', function () {
+			return redirect(route('search'));
+		});
+		Route::get('/search/{id?}', 'SearchController@index')->name('search');
+		Route::post('/search', 'SearchController@indexRedirect');
 
-    Route::get('/search/{id?}', 'SearchController@index')->name('search');
-    Route::post('/search', 'SearchController@indexRedirect');
+		Route::get('/select/{id?}/{type?}', 'SearchController@select');
+		Route::post('/select', 'SearchController@selectRedirect');
 
-    Route::get('/select/{id?}/{type?}', 'SearchController@select');
-    Route::post('/select', 'SearchController@selectRedirect');
-
-    Route::post('/show', 'ExcelController@index');
+		Route::post('/show', 'ExcelController@index');
 
     Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
     Route::post('/report', 'BatchReportController@index');
+	});
+
 	// Ajax requests
 	Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
 });
