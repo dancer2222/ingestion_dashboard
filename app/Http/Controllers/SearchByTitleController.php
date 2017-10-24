@@ -21,7 +21,7 @@ class SearchByTitleController extends Controller
         $result = count($info);
 
         if ($result == 0) {
-            $message = 'Not found media witch this title - '.$title;
+            $message = 'Not found media witch this title - ' . $title;
             return back()->with('message', $message);
         } elseif ($result == 1) {
             return redirect()->route('search', ['id' => $info[0]->id]);

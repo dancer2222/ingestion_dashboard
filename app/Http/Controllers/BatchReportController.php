@@ -11,7 +11,7 @@ class BatchReportController extends Controller
     {
         if (isset($request->batch_id)) {
             if (!is_numeric($request->batch_id)) {
-                $message = 'This [batch_id] = ['.$request->batch_id.'] must contain only digits';
+                $message = 'This [batch_id] = [' . $request->batch_id . '] must contain only digits';
                 return back()->with('message', $message);
             }
             try {
@@ -23,6 +23,6 @@ class BatchReportController extends Controller
             }
         }
 
-        return back()->with('message','Pls input batch_id');
+        return back()->with('message', 'Pls input batch_id');
     }
 }

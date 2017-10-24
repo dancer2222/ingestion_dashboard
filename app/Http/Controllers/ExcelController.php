@@ -38,13 +38,13 @@ class ExcelController extends Controller
         $batchTitle = $request->batchTitle;
         $title = $request->title;
         $filepath = "download/$batchTitle";
-        $dataType = explode('.',$batchTitle, 2)[1];
+        $dataType = explode('.', $batchTitle, 2)[1];
 
         $s3 = new S3Client([
-            'version' => 'latest',
-            'region' => 'us-east-1',
+            'version'     => 'latest',
+            'region'      => 'us-east-1',
             'credentials' => [
-                'key' => env('AWS_ACCESS_KEY_ID'),
+                'key'    => env('AWS_ACCESS_KEY_ID'),
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
@@ -60,42 +60,42 @@ class ExcelController extends Controller
 
             } catch (S3Exception $e) {
                 unlink($filepath);
-                $messages =  $e->getMessage();
+                $messages = $e->getMessage();
                 return redirect(action('SearchController@index', ['id' => $id]))->with('message', $messages);
             }
         }
 
         @chmod($filepath, 0777);
-        if ($dataType != null){
+        if ($dataType != null) {
             switch ($dataType) {
                 case 'xml':
                     $messages = [];
                     $xml = simplexml_load_file($filepath);
-                    $idByBucket = explode(1000,$id)[1];
-                    foreach ($xml as $value)
-                    {
+                    $idByBucket = explode(1000, $id)[1];
+                    foreach ($xml as $value) {
                         if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
-                            or $value->{$this->getTagName('RecordReference')} == $idByBucket) {
-                            $messages []= $value;
+                            or $value->{$this->getTagName('RecordReference')} == $idByBucket
+                        ) {
+                            $messages [] = $value;
                         }
                     }
                     $json = json_encode($messages[0]);
-                    $array = json_decode($json,TRUE);
+                    $array = json_decode($json, true);
                     $result = ArrayToXml::convert($array);
 
                     return response($result);
 
                 case 'zip':
-                    $messages = 'This file has an extension `zip` you can look it up in: [public/'.$filepath.']';
+                    $messages = 'This file has an extension `zip` you can look it up in: [public/' . $filepath . ']';
                     return response($messages);
                 case 'xlsx':
-                    $messages =$this->getFile($filepath, $title);
+                    $messages = $this->getFile($filepath, $title);
                     return view('search.metadata', ['messages' => $messages]);
                 case 'csv':
-                    $messages =$this->getFile($filepath, $title);
+                    $messages = $this->getFile($filepath, $title);
                     return view('search.metadata', ['messages' => $messages]);
                 default:
-                    $message = 'Failed to define the data type in '. $batchTitle;
+                    $message = 'Failed to define the data type in ' . $batchTitle;
                     return redirect(action('SearchController@index', ['id' => $id]))->with('message', $message);
             }
         }
@@ -111,26 +111,26 @@ class ExcelController extends Controller
     public function getFile($filepath, $title)
     {
 
-       $results = Excel::load($filepath, function ($reader) {
-          $reader->all();
-       })->get();
-       $resultExcel = [];
+        $results = Excel::load($filepath, function ($reader) {
+            $reader->all();
+        })->get();
+        $resultExcel = [];
 
         foreach ($results as $result => $value) {
             foreach ($value as $item) {
-                    if (isset($value['title'])){
-                        if ($title == $value['title']) {
-                            $resultExcel []= $value;
-                        }
-                    } elseif (isset($item['series_name'])){
-                        if ($title == $item['series_name']){
-                            $resultExcel []= $item;
-                        }
+                if (isset($value['title'])) {
+                    if ($title == $value['title']) {
+                        $resultExcel [] = $value;
+                    }
+                } elseif (isset($item['series_name'])) {
+                    if ($title == $item['series_name']) {
+                        $resultExcel [] = $item;
                     }
                 }
             }
+        }
 
-       return $resultExcel;
+        return $resultExcel;
     }
 
     /**
