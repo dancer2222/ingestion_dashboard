@@ -119,6 +119,13 @@ class SearchController extends Controller
                     $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
                     $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
 
+                    if (isset($info->data_origin_id)) {
+                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/'.$info->data_origin_id.'.jpg';
+                    } else {
+                        $isbn = explode('1000', $info->id, 2)[1];
+                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/'.$isbn.'.jpg';
+                    }
+
                     if ($batchInfo != null) {
                         $batchInfo->title = explode($info->source . '_', $batchInfo->title, 2)[1];
                         // Create links to aws bucket
@@ -146,7 +153,8 @@ class SearchController extends Controller
                                                     'linkCopy'             => $linkCopy,
                                                     'linkShow'             => $linkShow,
                                                     'bucket'               => $bucket,
-                                                    'object'               => $object]);
+                                                    'object'               => $object,
+                                                    'imageUrl' => $imageUrl]);
                     break;
 
                 case 'audiobooks':

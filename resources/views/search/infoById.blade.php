@@ -146,6 +146,10 @@
                     </tr>
                 @elseif('books' === $mediaTypeTitle and $batchInfo != null)
                     <tr>
+                        <td>Image url</td>
+                        <td>{{ $imageUrl }} | <img src="{{ $imageUrl }}" style="width:4%; height:5%;"></td>
+                    </tr>
+                    <tr>
                         <td>Feed</td>
                         <td>
                             {{ $linkShow }}
