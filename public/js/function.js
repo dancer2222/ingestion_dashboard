@@ -13,14 +13,14 @@ $(document).ready(function () {
     $('#form button').click(function () {
         // var button;
             loaderOn();
-
+            var url = $('#form').attr('action');
             var bucket = $("input#bucket").val();
             var object = $("input#object").val();
             var title = $("input#title").val();
             var batchTitle = $("input#batchTitle").val();
             var id = $("input#id").val();
         $.ajax({
-            url: '/show',
+            url: url,
             type: "POST",
             // dataType: 'json',
             data: {
