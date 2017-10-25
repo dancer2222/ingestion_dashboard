@@ -86,9 +86,7 @@
             </div>
         </div>
         <br>
-        {{--<center>--}}
         <a href="{{ '/' }}" class="btn btn-info">BACK</a>
-        {{--</center>--}}
     @endif
 
     <br>
@@ -147,7 +145,7 @@
                 @elseif('books' === $mediaTypeTitle and $batchInfo != null)
                     <tr>
                         <td>Image url</td>
-                        <td>{{ $imageUrl }} | <img src="{{ $imageUrl }}" style="width:4%; height:5%;"></td>
+                        <td>{{ $imageUrl }} | <img src="{{ $imageUrl }}" style="width:55px; height:80px;"></td>
                     </tr>
                     <tr>
                         <td>Feed</td>
@@ -230,6 +228,19 @@
                                     <td>Date aded</td>
                                     <td>  {{ date('Y-m-d', $item)}}</td>
                                 </tr>
+                            @elseif($value === 'batch_id')
+                                <tr>
+                                    <td>batch_id</td>
+                                    <td>
+                                        <form method="POST" class="form-group" id="report"
+                                              action="{{ action('BatchReportController@index') }}">
+                                        <label>{{ $item }} |</label>
+                                            <input type="hidden" id="batch_id" name="batch_id" value="{{ $item }}">
+                                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                            <button type="submit" class="btn btn-success">Get batch report</button>
+                                        </form>
+                                    </td>
+                                </tr>
                             @else
                                 <tr>
                                     <td>{{ $value }}</td>
@@ -263,6 +274,19 @@
                             <tr>
                                 <td>Date aded</td>
                                 <td>  {{ date('Y-m-d', $item)}}</td>
+                            </tr>
+                        @elseif($value === 'batch_id')
+                            <tr>
+                                <td>batch_id</td>
+                                <td>
+                                    <form method="POST" class="form-group" id="report"
+                                          action="{{ action('BatchReportController@index') }}">
+                                        <label>{{ $item }} |</label>
+                                        <input type="hidden" id="batch_id" name="batch_id" value="{{ $item }}">
+                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                        <button type="submit" class="btn btn-success">Get batch report</button>
+                                    </form>
+                                </td>
                             </tr>
                         @else
                             <tr>
