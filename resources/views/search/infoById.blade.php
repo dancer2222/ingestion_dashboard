@@ -142,11 +142,13 @@
                             </div>
                         </td>
                     </tr>
-                @elseif('books' === $mediaTypeTitle and $batchInfo != null)
+                @elseif('books' === $mediaTypeTitle)
                     <tr>
                         <td>Image url</td>
                         <td>{{ $imageUrl }} | <img src="{{ $imageUrl }}" style="width:55px; height:80px;"></td>
                     </tr>
+                @elseif('books' === $mediaTypeTitle and $batchInfo != null)
+
                     <tr>
                         <td>Feed</td>
                         <td>
@@ -310,7 +312,7 @@
             </tr>
             <tr align="center">
                 <td>Watch in QA playster this {{ $mediaTypeTitle }} - <a
-                            href="https://qa-playster-v3-3rdparty.playster.com//{{ $mediaTypeTitle }}/{{ $info['id']}}/autumn-with-horses-trudy-nicholson"
+                            href="https://qa-playster-v3-3rdparty.playster.com/{{ $mediaTypeTitle }}/{{ $info['id']}}/autumn-with-horses-trudy-nicholson"
                             target="_blank">{{ $info['title'] }}</a></td>
             </tr>
         </table>

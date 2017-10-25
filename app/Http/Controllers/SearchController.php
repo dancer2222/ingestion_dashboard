@@ -69,13 +69,18 @@ class SearchController extends Controller
 
             switch ($mediaTypeTitle) {
                 case 'movies':
-                    $info = new Movie();
-                    //default bucket for movies
-                    $bucket = 'playster-content-ingestion';
-                    $info = $info->getMovieById($request->id)[0];
-                    //all info by batch_id
-                    $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    try {
+                        $info = new Movie();
+                        //default bucket for movies
+                        $bucket = 'playster-content-ingestion';
+                        $info = $info->getMovieById($request->id)[0];
+                        //all info by batch_id
+                        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
+                        $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    } catch (\Exception $exception) {
+                        $message = 'This [id] = ' . $request->id . '  not found in Movies database';
+                        return view('search.infoById', ['message' => $message]);
+                    }
 
                     if ($batchInfo != null && false != stristr($batchInfo->title, '.')) {
                         $providerName = new DataSourceProvider();
@@ -111,19 +116,23 @@ class SearchController extends Controller
                                                     'object'               => $object]);
                     break;
                 case 'books':
-                    $info = new Book();
-                    //default bucket for books
-                    $bucket = 'playster-book-service-dump';
-                    $info = $info->getBookById($request->id)[0];
-                    //all info by batch_id
-                    $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-
+                    try {
+                        $info = new Book();
+                        //default bucket for books
+                        $bucket = 'playster-book-service-dump';
+                        $info = $info->getBookById($request->id)[0];
+                        //all info by batch_id
+                        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
+                        $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    } catch (\Exception $exception) {
+                        $message = 'This [id] = ' . $request->id . '  not found in Books database';
+                        return view('search.infoById', ['message' => $message]);
+                    }
                     if (isset($info->data_origin_id)) {
-                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/'.$info->data_origin_id.'.jpg';
+                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/' . $info->data_origin_id . '.jpg';
                     } else {
                         $isbn = explode('1000', $info->id, 2)[1];
-                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/'.$isbn.'.jpg';
+                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/' . $isbn . '.jpg';
                     }
 
                     if ($batchInfo != null) {
@@ -154,15 +163,20 @@ class SearchController extends Controller
                                                     'linkShow'             => $linkShow,
                                                     'bucket'               => $bucket,
                                                     'object'               => $object,
-                                                    'imageUrl' => $imageUrl]);
+                                                    'imageUrl'             => $imageUrl]);
                     break;
 
                 case 'audiobooks':
-                    $info = new AudioBook();
-                    $info = $info->getAudioBookById($request->id)[0];
-                    //all info by batch_id
-                    $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    try {
+                        $info = new AudioBook();
+                        $info = $info->getAudioBookById($request->id)[0];
+                        //all info by batch_id
+                        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
+                        $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    } catch (\Exception $exception) {
+                        $message = 'This [id] = ' . $request->id . '  not found in AudioBooks database';
+                        return view('search.infoById', ['message' => $message]);
+                    }
                     $providerName = new DataSourceProvider();
                     $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
                     return view('search.infoById', ['info'                 => (array)$info,
@@ -177,8 +191,13 @@ class SearchController extends Controller
                     break;
 
                 case 'games':
-                    $info = new Game();
-                    $info = $info->getGameById($request->id)[0];
+                    try {
+                        $info = new Game();
+                        $info = $info->getGameById($request->id)[0];
+                    } catch (\Exception $exception) {
+                        $message = 'This [id] = ' . $request->id . '  not found in Games database';
+                        return view('search.infoById', ['message' => $message]);
+                    }
                     $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
                     return view('search.infoById', ['info'                 => (array)$info,
                                                     'id'                   => $info->id,
@@ -190,9 +209,14 @@ class SearchController extends Controller
                     break;
 
                 case 'albums':
-                    $info = new Album();
-                    $info = $info->getAlbumById($request->id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    try {
+                        $info = new Album();
+                        $info = $info->getAlbumById($request->id)[0];
+                        $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    } catch (\Exception $exception) {
+                        $message = 'This [id] = ' . $request->id . '  not found in Albums database';
+                        return view('search.infoById', ['message' => $message]);
+                    }
                     $providerName = new DataSourceProvider();
                     $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
                     return view('search.infoById', ['info'                 => (array)$info,
@@ -240,9 +264,14 @@ class SearchController extends Controller
         $country_code = $mediaInfo[0]->country_code;
         switch ($mediaTypeTitle) {
             case 'movies':
-                $info = new Movie();
-                $info = $info->getMovieById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                try {
+                    $info = new Movie();
+                    $info = $info->getMovieById($request->id)[0];
+                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                } catch (\Exception $exception) {
+                    $message = 'This [id] = ' . $request->id . '  not found in Movies database';
+                    return back()->with('message', $message);
+                }
                 return view('search.selectMediaTypes', ['info'                 => (array)$info,
                                                         'id'                   => $info->id,
                                                         'mediaTypeTitle'       => $mediaTypeTitle,
@@ -253,9 +282,14 @@ class SearchController extends Controller
                                                         'type'                 => $type]);
                 break;
             case 'books':
-                $info = new Book();
-                $info = $info->getBookById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                try {
+                    $info = new Book();
+                    $info = $info->getBookById($request->id)[0];
+                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                } catch (\Exception $exception) {
+                    $message = 'This [id] = ' . $request->id . '  not found in Books database';
+                    return back()->with('message', $message);
+                }
                 return view('search.selectMediaTypes', ['info'                 => (array)$info,
                                                         'id'                   => $info->id,
                                                         'mediaTypeTitle'       => $mediaTypeTitle,
@@ -267,9 +301,15 @@ class SearchController extends Controller
                 break;
 
             case 'audiobooks':
-                $info = new AudioBook();
-                $info = $info->getAudioBookById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                try {
+                    $info = new AudioBook();
+                    $info = $info->getAudioBookById($request->id)[0];
+                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                } catch (\Exception $exception) {
+                    $message = 'This [id] = ' . $request->id . '  not found in AudioBooks database';
+                    return back()->with('message', $message);
+                }
+
                 return view('search.selectMediaTypes', ['info'                 => (array)$info,
                                                         'id'                   => $info->id,
                                                         'mediaTypeTitle'       => $mediaTypeTitle,
@@ -281,9 +321,14 @@ class SearchController extends Controller
                 break;
 
             case 'games':
-                $info = new Game();
-                $info = $info->getGameById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                try {
+                    $info = new Game();
+                    $info = $info->getGameById($request->id)[0];
+                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                } catch (\Exception $exception) {
+                    $message = 'This [id] = ' . $request->id . '  not found in Games database';
+                    return back()->with('message', $message);
+                }
                 return view('search.selectMediaTypes', ['info'                 => (array)$info,
                                                         'id'                   => $info->id,
                                                         'mediaTypeTitle'       => $mediaTypeTitle,
@@ -295,11 +340,16 @@ class SearchController extends Controller
                 break;
 
             case 'albums':
-                $info = new Album();
-                $info = $info->getAlbumById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                $providerName = new DataSourceProvider();
-                $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
+                try {
+                    $info = new Album();
+                    $info = $info->getAlbumById($request->id)[0];
+                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    $providerName = new DataSourceProvider();
+                    $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
+                } catch (\Exception $exception) {
+                    $message = 'This [id] = ' . $request->id . '  not found in Albums database';
+                    return back()->with('message', $message);
+                }
                 return view('search.selectMediaTypes', ['info'                 => (array)$info,
                                                         'id'                   => $info->id,
                                                         'mediaTypeTitle'       => $mediaTypeTitle,
