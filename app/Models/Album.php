@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -9,7 +9,7 @@ class Album extends Model
 {
     protected $table = 'music_album';
 
-    public function getAlbumById($id)
+    public function getById($id)
     {
         return DB::table('music_album')
             ->where('id', '=',$id)->get();
