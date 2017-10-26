@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Album;
-use App\AudioBook;
-use App\Book;
-use App\DataSourceProvider;
-use App\Game;
-use App\Licensor;
-use App\MediaGeoRestrict;
-use App\MediaType;
-use App\Movie;
-use App\QaBatch;
+use App\Models\MediaGeoRestrict;
+use App\Models\MediaType;
 use Illuminate\Http\Request;
+use Ingestion\Search\Albums;
+use Ingestion\Search\AudioBooks;
+use Ingestion\Search\Books;
+use Ingestion\Search\Games;
+use Ingestion\Search\Movies;
+use Ingestion\Search\Info;
 
 class SearchController extends Controller
 {
@@ -23,9 +21,8 @@ class SearchController extends Controller
      */
     public function index(Request $request, $id_url = null)
     {
-        $qaBatches = new QaBatch();
+        $dataForView = [];
         $mediaType = new MediaType();
-        $licensor = new Licensor();
         $country_code = '';
 
         if (isset($request->id)) {
@@ -69,147 +66,34 @@ class SearchController extends Controller
 
             switch ($mediaTypeTitle) {
                 case 'movies':
-                    $info = new Movie();
-                    //default bucket for movies
-                    $bucket = 'playster-content-ingestion';
-                    $info = $info->getMovieById($request->id)[0];
-                    //all info by batch_id
-                    $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    $dataForView = Movies::searchInfoById($request->id, $mediaTypeTitle, $country_code);
 
-                    if ($batchInfo != null && false != stristr($batchInfo->title, '.')) {
-                        $providerName = new DataSourceProvider();
-                        $providerName = $providerName->getDataSourceProviderName($batchInfo->data_source_provider_id)[0]->name;
-                        $batchInfo->title = explode($providerName . '_', $batchInfo->title, 2)[1];
-
-                        // Create links to aws bucket
-                        $licensorNameToArray = $this->normalizeBucketName($licensorName);
-                        if ($licensorNameToArray != null) {
-                            $licensorName = $licensorNameToArray;
-                        }
-                        $linkCopy = 'aws s3 cp s3://' . $bucket . '/' . $licensorName . '/' . $batchInfo->title . ' ./';
-                        $linkShow = 'aws s3 ls s3://' . $bucket . '/' . $licensorName . '/' . $batchInfo->title;
-                        // Create object for aws bucket
-                        $object = $licensorName . '/' . $batchInfo->title;
-                    } else {
-                        $linkCopy = null;
-                        $linkShow = null;
-                        $object = null;
-                        $batchInfo = null;
-                    }
-                    return view('search.infoById', ['info'                 => (array)$info,
-                                                    'id'                   => $request->id,
-                                                    'mediaTypeTitle'       => $mediaTypeTitle,
-                                                    'batchInfo'            => $batchInfo,
-                                                    'mediaGeoRestrictInfo' => $country_code,
-                                                    'licensorName'         => $licensorName,
-                                                    'option'               => $request->option,
-                                                    'id_url'               => $id_url,
-                                                    'linkCopy'             => $linkCopy,
-                                                    'linkShow'             => $linkShow,
-                                                    'bucket'               => $bucket,
-                                                    'object'               => $object]);
                     break;
                 case 'books':
-                    $info = new Book();
-                    //default bucket for books
-                    $bucket = 'playster-book-service-dump';
-                    $info = $info->getBookById($request->id)[0];
-                    //all info by batch_id
-                    $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+                    $dataForView = Books::searchInfoById($request->id, $mediaTypeTitle, $country_code);
 
-                    if (isset($info->data_origin_id)) {
-                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/'.$info->data_origin_id.'.jpg';
-                    } else {
-                        $isbn = explode('1000', $info->id, 2)[1];
-                        $imageUrl = 'https://prod-image-resizer-v1-cdn1.playster.com/book/'.$isbn.'.jpg';
-                    }
-
-                    if ($batchInfo != null) {
-                        $batchInfo->title = explode($info->source . '_', $batchInfo->title, 2)[1];
-                        // Create links to aws bucket
-                        $licensorNameToArray = $this->normalizeBucketName($info->source);
-                        if ($licensorNameToArray != null) {
-                            $info->source = $licensorNameToArray;
-                        }
-                        $linkCopy = 'aws s3 cp s3://' . $bucket . '/' . $info->source . '/' . $batchInfo->title . ' ./';
-                        $linkShow = 'aws s3 ls s3://' . $bucket . '/' . $info->source . '/' . $batchInfo->title;
-                        // Create object for aws bucket
-                        $object = $info->source . '/' . $batchInfo->title;
-                    } else {
-                        $linkCopy = null;
-                        $linkShow = null;
-                        $object = null;
-                    }
-                    return view('search.infoById', ['info'                 => (array)$info,
-                                                    'id'                   => $info->id,
-                                                    'mediaTypeTitle'       => $mediaTypeTitle,
-                                                    'batchInfo'            => $batchInfo,
-                                                    'mediaGeoRestrictInfo' => $country_code,
-                                                    'licensorName'         => $licensorName,
-                                                    'option'               => $request->option,
-                                                    'id_url'               => $id_url,
-                                                    'linkCopy'             => $linkCopy,
-                                                    'linkShow'             => $linkShow,
-                                                    'bucket'               => $bucket,
-                                                    'object'               => $object,
-                                                    'imageUrl' => $imageUrl]);
                     break;
 
                 case 'audiobooks':
-                    $info = new AudioBook();
-                    $info = $info->getAudioBookById($request->id)[0];
-                    //all info by batch_id
-                    $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                    $providerName = new DataSourceProvider();
-                    $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
-                    return view('search.infoById', ['info'                 => (array)$info,
-                                                    'id'                   => $request->id,
-                                                    'mediaTypeTitle'       => $mediaTypeTitle,
-                                                    'batchInfo'            => $batchInfo,
-                                                    'mediaGeoRestrictInfo' => $country_code,
-                                                    'licensorName'         => $licensorName,
-                                                    'option'               => $request->option,
-                                                    'id_url'               => $id_url,
-                                                    'providerName'         => $providerName]);
+                    $dataForView = AudioBooks::searchInfoById($request->id, $mediaTypeTitle, $country_code);
+
                     break;
 
                 case 'games':
-                    $info = new Game();
-                    $info = $info->getGameById($request->id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                    return view('search.infoById', ['info'                 => (array)$info,
-                                                    'id'                   => $info->id,
-                                                    'mediaTypeTitle'       => $mediaTypeTitle,
-                                                    'mediaGeoRestrictInfo' => $country_code,
-                                                    'licensorName'         => $licensorName,
-                                                    'option'               => $request->option,
-                                                    'id_url'               => $id_url]);
+                    $dataForView = Games::searchInfoById($request->id, $mediaTypeTitle, $country_code);
+
                     break;
 
                 case 'albums':
-                    $info = new Album();
-                    $info = $info->getAlbumById($request->id)[0];
-                    $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                    $providerName = new DataSourceProvider();
-                    $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
-                    return view('search.infoById', ['info'                 => (array)$info,
-                                                    'id'                   => $info->id,
-                                                    'mediaTypeTitle'       => $mediaTypeTitle,
-                                                    'mediaGeoRestrictInfo' => $country_code,
-                                                    'licensorName'         => $licensorName,
-                                                    'option'               => $request->option,
-                                                    'id_url'               => $id_url,
-                                                    'providerName'         => $providerName]);
-                    break;
+                    $dataForView = Albums::searchInfoById($request->id, $mediaTypeTitle, $country_code);
 
-                default:
-                    return view('search.infoById');
+                    break;
             }
         }
-        return view('search.infoById');
+
+        $dataForView['option'] = $request->option;
+        $dataForView['id_url'] = $id_url;
+        return view('search.infoById', $dataForView);
     }
 
     /**
@@ -220,7 +104,6 @@ class SearchController extends Controller
      */
     public function select(Request $request, $id_url = null, $type = null)
     {
-        $licensor = new Licensor();
         $mediaType = new MediaType();
         $mediaGeoRestrict = new MediaGeoRestrict();
         if ($request->id == null) {
@@ -229,8 +112,14 @@ class SearchController extends Controller
         if ($id_url != null && $type == null) {
             return redirect(action('SearchController@index', ['id_url' => $id_url]));
         }
-        $mediaTypeTitle = $request->type;
-        $mediId = $mediaType->getIdByTitle($mediaTypeTitle)[0]->media_type_id;
+        try {
+            $mediaTypeTitle = $request->type;
+            $mediId = $mediaType->getIdByTitle($mediaTypeTitle)[0]->media_type_id;
+        } catch (\Exception $exception) {
+            $message = 'Not found ID by this title =' . $mediaTypeTitle;
+            return redirect(action('SearchController@index', ['id_url' => $id_url]))->with('message', $message);
+        }
+
         $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediId);
 
         if ($mediaInfo === null) {
@@ -238,82 +127,21 @@ class SearchController extends Controller
             return back()->with('message', $message);
         }
         $country_code = $mediaInfo[0]->country_code;
-        switch ($mediaTypeTitle) {
-            case 'movies':
-                $info = new Movie();
-                $info = $info->getMovieById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                return view('search.selectMediaTypes', ['info'                 => (array)$info,
-                                                        'id'                   => $info->id,
-                                                        'mediaTypeTitle'       => $mediaTypeTitle,
-                                                        'mediaGeoRestrictInfo' => $country_code,
-                                                        'licensorName'         => $licensorName,
-                                                        'option'               => $request->option,
-                                                        'id_url'               => $id_url,
-                                                        'type'                 => $type]);
-                break;
-            case 'books':
-                $info = new Book();
-                $info = $info->getBookById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                return view('search.selectMediaTypes', ['info'                 => (array)$info,
-                                                        'id'                   => $info->id,
-                                                        'mediaTypeTitle'       => $mediaTypeTitle,
-                                                        'mediaGeoRestrictInfo' => $country_code,
-                                                        'licensorName'         => $licensorName,
-                                                        'option'               => $request->option,
-                                                        'id_url'               => $id_url,
-                                                        'type'                 => $type]);
-                break;
+        $info = new Info();
+        $result = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $country_code);
 
-            case 'audiobooks':
-                $info = new AudioBook();
-                $info = $info->getAudioBookById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                return view('search.selectMediaTypes', ['info'                 => (array)$info,
-                                                        'id'                   => $info->id,
-                                                        'mediaTypeTitle'       => $mediaTypeTitle,
-                                                        'mediaGeoRestrictInfo' => $country_code,
-                                                        'licensorName'         => $licensorName,
-                                                        'option'               => $request->option,
-                                                        'id_url'               => $id_url,
-                                                        'type'                 => $type]);
-                break;
-
-            case 'games':
-                $info = new Game();
-                $info = $info->getGameById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                return view('search.selectMediaTypes', ['info'                 => (array)$info,
-                                                        'id'                   => $info->id,
-                                                        'mediaTypeTitle'       => $mediaTypeTitle,
-                                                        'mediaGeoRestrictInfo' => $country_code,
-                                                        'licensorName'         => $licensorName,
-                                                        'option'               => $request->option,
-                                                        'id_url'               => $id_url,
-                                                        'type'                 => $type]);
-                break;
-
-            case 'albums':
-                $info = new Album();
-                $info = $info->getAlbumById($request->id)[0];
-                $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
-                $providerName = new DataSourceProvider();
-                $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
-                return view('search.selectMediaTypes', ['info'                 => (array)$info,
-                                                        'id'                   => $info->id,
-                                                        'mediaTypeTitle'       => $mediaTypeTitle,
-                                                        'mediaGeoRestrictInfo' => $country_code,
-                                                        'licensorName'         => $licensorName,
-                                                        'option'               => $request->option,
-                                                        'id_url'               => $id_url,
-                                                        'type'                 => $type,
-                                                        'providerName'         => $providerName]);
-                break;
-
-            default:
-                return view('search.selectMediaTypes');
-        }
+        return view('search.selectMediaTypes', [
+            'info'                 => (array)$result['info'],
+            'id'                   => $result['id'],
+            'mediaTypeTitle'       => $result['mediaTypeTitle'],
+            'mediaGeoRestrictInfo' => $result['country_code'],
+            'licensorName'         => $result['licensorName'],
+            'imageUrl'             => $result['imageUrl'],
+            'providerName'         => $result['providerName'],
+            'option'               => $request->option,
+            'id_url'               => $id_url,
+            'type'                 => $type
+        ]);
     }
 
     /**
@@ -347,7 +175,7 @@ class SearchController extends Controller
      * @param $licensorName
      * @return mixed
      */
-    public function normalizeBucketName($licensorName)
+    public static function normalizeBucketName($licensorName)
     {
         $providers = [
             'Aenetworks'         => 'aenetworks',

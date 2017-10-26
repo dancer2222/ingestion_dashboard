@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\AudioBook;
-use App\Book;
-use App\Movie;
+use App\Models\AudioBook;
+use App\Models\Book;
+use App\Models\Movie;
 use Illuminate\Http\Request;
 
 class SearchByTitleController extends Controller

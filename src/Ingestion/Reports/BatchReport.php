@@ -3,10 +3,12 @@
 namespace Ingestion\Reports;
 
 
-use App\Album;
-use App\AudioBook;
-use App\Book;
-use App\Movie;
+use App\Models\Album;
+use App\Models\AudioBook;
+use App\Models\Book;
+use App\Models\Movie;
+use App\Models\QaBatch;
+use App\Models\MediaType;
 use DateTime;
 use Maatwebsite\Excel\Facades\Excel;
 use Mockery\Exception;
@@ -53,7 +55,7 @@ class BatchReport
     {
         // get Batch info
         try {
-            $qaBatch = new \App\QaBatch();
+            $qaBatch = new QaBatch();
             $batch_info = $qaBatch->getAllByBatchId($this->batch_id)[0];
             if ($batch_info === null) {
                 $message = 'This batch_id [' . $this->batch_id . '] not found in database';
@@ -65,7 +67,7 @@ class BatchReport
         }
 
         // get media types info in batch
-        $mediaTypes = new \App\MediaType();
+        $mediaTypes = new MediaType();
         try {
             $mediaTypeTitle = $mediaTypes->getTitleById($batch_info->media_type_id)[0]->title;
         } catch (\Exception $exception) {

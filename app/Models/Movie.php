@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +10,7 @@ class Movie extends Model
 {
     protected $table = 'movie';
 
-    public function getMovieById($id)
+    public function getById($id)
     {
         return DB::table('movie')
             ->where('id', '=',$id)->get();
