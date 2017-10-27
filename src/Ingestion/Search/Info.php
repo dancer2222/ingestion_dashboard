@@ -20,7 +20,7 @@ use App\Models\Movie;
 
 class Info
 {
-    public function getInfoSelectedMediaTypes($id, $mediaTypeTitle, $country_code)
+    public function getInfoSelectedMediaTypes($id, $mediaTypeTitle, $country_code, $mediaId)
     {
         $licensor = new Licensor();
         $info = $this->getModel($mediaTypeTitle, $id);
@@ -47,7 +47,8 @@ class Info
             'licensorName'   => $licensorName,
             'imageUrl'       => $imageUrl,
             'providerName'   => $providerName,
-            'info'           => $info
+            'info'           => (array)$info,
+            'mediaId'        => $mediaId
         ];
 
         return $result;

@@ -9,13 +9,31 @@
         </tr>
     @elseif($value === 'licensor_id')
         <tr>
-            <td>Licensor</td>
-            <td>[{{ $item }}]{{ $licensorName }}</td>
+            <td>{{ $value }}</td>
+            <td>{{ $item }}</td>
+            <td>{{ $licensorName }}</td>
         </tr>
     @elseif($value === 'data_source_provider_id')
         <tr>
-            <td>Data source provider</td>
-            <td>[{{ $item }}]{{ $providerName }}</td>
+            <td>{{ $value }}</td>
+            <td>{{ $item }}</td>
+            <td>{{ $providerName }}</td>
+        </tr>
+    @elseif($value === 'date_added')
+        <tr>
+            <td>{{ $value }}</td>
+            <td>{{ $item }}</td>
+            <td>{{ date('Y-m-d', $item)}}</td>
+        </tr>
+    @elseif($value === 'file_format_type_id')
+        <tr>
+            <td>{{ $value }}</td>
+            <td>{{ $item }}</td>
+            @if($item == 1)
+                <td>pdf</td>
+            @else
+                <td>epub</td>
+            @endif
         </tr>
     @else
         <tr>
@@ -23,5 +41,4 @@
             <td>{{ $item }}</td>
         </tr>
     @endif
-
 @endforeach

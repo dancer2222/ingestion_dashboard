@@ -20,13 +20,18 @@
                 <th style="background-color: #2ca02c">
                     Data
                 </th>
+                <th style="background-color: #2ca02c">
+                    For User
+                </th>
                 <tr>
                     <td>Media Type</td>
+                    <td>{{ $mediaGeoRestrictGetMediaType }}</td>
                     <td>{{ $mediaTypeTitle }}</td>
                 </tr>
                 <tr>
                     <td>Image url</td>
-                    <td>{{ $imageUrl }} | <img src="{{ $imageUrl }}" style="width:55px; height:80px;"></td>
+                    <td>{{ $imageUrl }}</td>
+                    <td><img src="{{ $imageUrl }}" style="width:55px; height:80px;"></td>
                 </tr>
                 @if('movies' === $mediaTypeTitle and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.moviesPresentBatchInfo')
@@ -45,7 +50,17 @@
                 @endif
                 <tr>
                     <td>Geo Restriction</td>
-                    <td>{{ $country_code }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#country_code">
+                            Show Geo Restriction
+                        </button>
+                    </td>
+                    <td>
+                        <div id="country_code" class="collapse">
+                            {{ $country_code }}
+                        </div>
+                    </td>
+
                 </tr>
             </table>
         </div>

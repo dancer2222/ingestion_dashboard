@@ -21,7 +21,7 @@ class Games
      * @param $id
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function searchInfoById($id, $mediaTypeTitle, $country_code)
+    public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $licensor = new Licensor();
         try {
@@ -35,12 +35,13 @@ class Games
         $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
 
         $result = [
-            'id'             => $id,
-            'country_code'   => $country_code,
-            'mediaTypeTitle' => $mediaTypeTitle,
-            'licensorName'   => $licensorName,
-            'info'           => (array)$info,
-            'imageUrl'       => $imageUrl
+            'id'                           => $id,
+            'country_code'                 => $country_code,
+            'mediaTypeTitle'               => $mediaTypeTitle,
+            'licensorName'                 => $licensorName,
+            'info'                         => (array)$info,
+            'imageUrl'                     => $imageUrl,
+            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
         ];
 
         return $result;
