@@ -5,22 +5,41 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class AudioBook
+ * @package App\Models
+ */
 class AudioBook extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'audio_book';
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getById($id)
     {
         return DB::table('audio_book')
             ->where('id', '=',$id)->get();
     }
 
+    /**
+     * @param $title
+     * @return mixed
+     */
     public function getInfoByTitle($title)
     {
         return DB::table('audio_book')
             ->where('title', '=',$title)->get();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getBatchInfoForAudioBooks($id)
     {
         return DB::table('audio_book as ab')

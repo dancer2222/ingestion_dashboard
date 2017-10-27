@@ -7,6 +7,10 @@ use App\Models\Book;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 
+/**
+ * Class SearchByTitleController
+ * @package App\Http\Controllers
+ */
 class SearchByTitleController extends Controller
 {
     /**

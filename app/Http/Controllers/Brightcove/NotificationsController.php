@@ -6,11 +6,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Brightcove;
 
+/**
+ * Class NotificationsController
+ * @package App\Http\Controllers\Brightcove
+ */
 class NotificationsController extends Controller
 {
     const STATUS_SUCCESS = 'active';
     const STATUS_FAILED = 'inactive';
 
+    /**
+     * NotificationsController constructor.
+     */
     public function __construct()
     {
         parent::__construct();

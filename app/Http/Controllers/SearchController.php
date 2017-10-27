@@ -12,6 +12,10 @@ use Ingestion\Search\Games;
 use Ingestion\Search\Movies;
 use Ingestion\Search\Info;
 
+/**
+ * Class SearchController
+ * @package App\Http\Controllers
+ */
 class SearchController extends Controller
 {
     /**

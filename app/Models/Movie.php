@@ -4,24 +4,42 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use App\MediaGeoRestrict;
 
+/**
+ * Class Movie
+ * @package App\Models
+ */
 class Movie extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'movie';
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getById($id)
     {
         return DB::table('movie')
             ->where('id', '=',$id)->get();
     }
 
+    /**
+     * @param $title
+     * @return mixed
+     */
     public function getInfoByTitle($title)
     {
         return DB::table('movie')
             ->where('title', '=',$title)->get();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getBatchInfoForMovies($id)
     {
         return DB::table('movie as m')

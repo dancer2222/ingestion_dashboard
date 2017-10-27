@@ -14,7 +14,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Mockery\Exception;
 
 /**
- * Reports
+ * Class BatchReport
+ * @package Ingestion\Reports
  */
 class BatchReport
 {
@@ -24,7 +25,7 @@ class BatchReport
     private $batch_id;
 
     /**
-     * Reports constructor.
+     * BatchReport constructor.
      * @param $batch_id
      */
     public function __construct($batch_id)
@@ -33,10 +34,7 @@ class BatchReport
     }
 
     /**
-     * generate Failed items Report
-     *
-     * @access public
-     *
+     * @return \Exception|string
      */
     public function generate()
     {
@@ -49,7 +47,7 @@ class BatchReport
     }
 
     /**
-     * @return string
+     * @return \Exception|string
      */
     private function generateBatchList()
     {

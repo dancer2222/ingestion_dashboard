@@ -5,8 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Ingestion\Reports\BatchReport;
 
+/**
+ * Class BatchReportController
+ * @package App\Http\Controllers
+ */
 class BatchReportController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function index(Request $request)
     {
         if (isset($request->batch_id)) {

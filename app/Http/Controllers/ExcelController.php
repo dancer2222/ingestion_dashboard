@@ -9,6 +9,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ArrayToXml\ArrayToXml;
 
 
+/**
+ * Class ExcelController
+ * @package App\Http\Controllers
+ */
 class ExcelController extends Controller
 {
     /**
@@ -21,6 +25,9 @@ class ExcelController extends Controller
      */
     protected $isShortTags = false;
 
+    /**
+     * ExcelController constructor
+     */
     public function __construct()
     {
         $this->shortTags = TagListController::getTagList();

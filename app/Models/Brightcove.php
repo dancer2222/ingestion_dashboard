@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Brightcove
+ * @package App\Models
+ */
 class Brightcove extends Model
 {
     /**
@@ -13,7 +17,13 @@ class Brightcove extends Model
      */
     public $timestamps = false;
 
+    /**
+     * @var string
+     */
     protected $table = 'brightcove';
 
+    /**
+     * @var array
+     */
     protected $fillable = ['id', 'brightcove_id', 'status', 'user_id', 'created_at', 'updated_at', 'non_drm_brightcove_id'];
 }

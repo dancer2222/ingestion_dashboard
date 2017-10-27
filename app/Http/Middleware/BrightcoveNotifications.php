@@ -4,6 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+/**
+ * Class BrightcoveNotifications
+ * @package App\Http\Middleware
+ */
 class BrightcoveNotifications
 {
     /**

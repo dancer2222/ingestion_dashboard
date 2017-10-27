@@ -4,6 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+/**
+ * Class DatabaseConfig
+ * @package App\Http\Middleware
+ */
 class DatabaseConfig
 {
     /**

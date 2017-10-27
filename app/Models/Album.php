@@ -5,16 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Album
+ * @package App\Models
+ */
 class Album extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'music_album';
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getById($id)
     {
         return DB::table('music_album')
             ->where('id', '=',$id)->get();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getBatchInfoForAlbums($id)
     {
         return DB::table('music_album_artists as maa')
