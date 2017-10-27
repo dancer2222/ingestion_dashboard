@@ -91,7 +91,22 @@ class ExcelController extends Controller
                     $result = ArrayToXml::convert($array);
 
                     return response($result);
+                case 'COT':
+                    $messages = [];
+                    $xml = simplexml_load_file($filepath);
+                    $idByBucket = explode(1000, $id)[1];
+                    foreach ($xml as $value) {
+                        if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
+                            or $value->{$this->getTagName('RecordReference')} == $idByBucket
+                        ) {
+                            $messages [] = $value;
+                        }
+                    }
+                    $json = json_encode($messages[0]);
+                    $array = json_decode($json, true);
+                    $result = ArrayToXml::convert($array);
 
+                    return response($result);
                 case 'zip':
                     $messages = 'This file has an extension `zip` you can look it up in: [public/' . $filepath . ']';
                     return response($messages);
