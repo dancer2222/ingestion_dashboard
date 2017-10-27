@@ -14,12 +14,21 @@ use App\Models\Book;
 use App\Models\DataSourceProvider;
 use App\Models\Game;
 use App\Models\Licensor;
-use App\Models\MediaGeoRestrict;
-use App\Models\MediaType;
 use App\Models\Movie;
 
+/**
+ * Class Info
+ * @package Ingestion\Search
+ */
 class Info
 {
+    /**
+     * @param $id
+     * @param $mediaTypeTitle
+     * @param $country_code
+     * @param $mediaId
+     * @return array|\Illuminate\Http\RedirectResponse
+     */
     public function getInfoSelectedMediaTypes($id, $mediaTypeTitle, $country_code, $mediaId)
     {
         $licensor = new Licensor();
@@ -54,6 +63,11 @@ class Info
         return $result;
     }
 
+    /**
+     * @param $mediaTypeTitle
+     * @param $id
+     * @return Album|AudioBook|Book|Game|Movie
+     */
     public function getModel($mediaTypeTitle, $id)
     {
         switch ($mediaTypeTitle) {

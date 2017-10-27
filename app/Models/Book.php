@@ -5,22 +5,41 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Book
+ * @package App\Models
+ */
 class Book extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'book';
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getById($id)
     {
         return DB::table('book')
             ->where('id', '=',$id)->get();
     }
 
+    /**
+     * @param $title
+     * @return mixed
+     */
     public function getInfoByTitle($title)
     {
         return DB::table('book')
             ->where('title', '=',$title)->get();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getBatchInfoForBooks($id)
     {
         return DB::table('book as b')

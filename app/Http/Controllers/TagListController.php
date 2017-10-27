@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+/**
+ * Class TagListController
+ * @package App\Http\Controllers
+ */
 class TagListController extends Controller
 {
     /**
