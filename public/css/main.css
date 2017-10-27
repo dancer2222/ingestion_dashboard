@@ -15,3 +15,7 @@ footer {
 .welcome-container input[name="id"] {
   width: 350px;
 }
+
+body {
+  font-size: 0.9rem;
+}
