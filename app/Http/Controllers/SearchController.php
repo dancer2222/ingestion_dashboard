@@ -62,30 +62,31 @@ class SearchController extends Controller
             }
 
             $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
+
             $mediaTypeTitle = $mediaType->getTitleById($mediaGeoRestrictGetMediaType->media_type)[0]->title;
 
             switch ($mediaTypeTitle) {
                 case 'movies':
-                    $dataForView = Movies::searchInfoById($request->id, $mediaTypeTitle, $country_code);
+                    $dataForView = Movies::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
 
                     break;
                 case 'books':
-                    $dataForView = Books::searchInfoById($request->id, $mediaTypeTitle, $country_code);
+                    $dataForView = Books::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
 
                     break;
 
                 case 'audiobooks':
-                    $dataForView = AudioBooks::searchInfoById($request->id, $mediaTypeTitle, $country_code);
+                    $dataForView = AudioBooks::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
 
                     break;
 
                 case 'games':
-                    $dataForView = Games::searchInfoById($request->id, $mediaTypeTitle, $country_code);
+                    $dataForView = Games::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
 
                     break;
 
                 case 'albums':
-                    $dataForView = Albums::searchInfoById($request->id, $mediaTypeTitle, $country_code);
+                    $dataForView = Albums::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
 
                     break;
             }
@@ -114,34 +115,24 @@ class SearchController extends Controller
         }
         try {
             $mediaTypeTitle = $request->type;
-            $mediId = $mediaType->getIdByTitle($mediaTypeTitle)[0]->media_type_id;
+            $mediaId = $mediaType->getIdByTitle($mediaTypeTitle)[0]->media_type_id;
         } catch (\Exception $exception) {
             $message = 'Not found ID by this title =' . $mediaTypeTitle;
             return redirect(action('SearchController@index', ['id_url' => $id_url]))->with('message', $message);
         }
 
-        $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediId);
-
+        $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediaId);
         if ($mediaInfo === null) {
             $message = 'not exist id =  ' . $request->id . ' with a  media type = ' . $request->type;
             return back()->with('message', $message);
         }
         $country_code = $mediaInfo[0]->country_code;
         $info = new Info();
-        $result = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $country_code);
-
-        return view('search.selectMediaTypes', [
-            'info'                 => (array)$result['info'],
-            'id'                   => $result['id'],
-            'mediaTypeTitle'       => $result['mediaTypeTitle'],
-            'mediaGeoRestrictInfo' => $result['country_code'],
-            'licensorName'         => $result['licensorName'],
-            'imageUrl'             => $result['imageUrl'],
-            'providerName'         => $result['providerName'],
-            'option'               => $request->option,
-            'id_url'               => $id_url,
-            'type'                 => $type
-        ]);
+        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $country_code, $mediaId);
+        $dataForView['option'] = $request->option;
+        $dataForView['id_url'] = $id_url;
+        $dataForView['type'] = $type;
+        return view('search.selectMediaTypes', $dataForView);
     }
 
     /**

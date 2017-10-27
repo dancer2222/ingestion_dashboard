@@ -22,7 +22,7 @@ class Albums
      * @param $id
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function searchInfoById($id, $mediaTypeTitle, $country_code)
+    public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $licensor = new Licensor();
         try {
@@ -39,13 +39,14 @@ class Albums
         $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
 
         $result = [
-            'id'             => $id,
-            'country_code'   => $country_code,
-            'mediaTypeTitle' => $mediaTypeTitle,
-            'licensorName'   => $licensorName,
-            'info'           => (array)$info,
-            'providerName'   => $providerName,
-            'imageUrl'       => $imageUrl
+            'id'                           => $id,
+            'country_code'                 => $country_code,
+            'mediaTypeTitle'               => $mediaTypeTitle,
+            'licensorName'                 => $licensorName,
+            'info'                         => (array)$info,
+            'providerName'                 => $providerName,
+            'imageUrl'                     => $imageUrl,
+            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
         ];
 
         return $result;

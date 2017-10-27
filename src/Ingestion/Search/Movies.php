@@ -24,7 +24,7 @@ class Movies
      * @param $id
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function searchInfoById($id, $mediaTypeTitle, $country_code)
+    public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
@@ -61,16 +61,17 @@ class Movies
         }
 
         $result = [
-            'id'             => $id,
-            'country_code'   => $country_code,
-            'mediaTypeTitle' => $mediaTypeTitle,
-            'linkCopy'       => $linkCopy,
-            'linkShow'       => $linkShow,
-            'object'         => $object,
-            'batchInfo'      => $batchInfo,
-            'licensorName'   => $licensorName,
-            'info'           => (array)$info,
-            'imageUrl'       => $imageUrl
+            'id'                           => $id,
+            'country_code'                 => $country_code,
+            'mediaTypeTitle'               => $mediaTypeTitle,
+            'linkCopy'                     => $linkCopy,
+            'linkShow'                     => $linkShow,
+            'object'                       => $object,
+            'batchInfo'                    => $batchInfo,
+            'licensorName'                 => $licensorName,
+            'info'                         => (array)$info,
+            'imageUrl'                     => $imageUrl,
+            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
         ];
 
         return $result;
