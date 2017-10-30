@@ -95,7 +95,6 @@
 <script src="{{ asset('lib/notify-bootstrap/notify.min.js') }}"></script>
 
 {{-- Custom scripts --}}
-<script src="{{asset('js/function.js')}}"></script>
 <script src="{{asset('js/main.js')}}"></script>
 
 </body>

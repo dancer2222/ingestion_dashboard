@@ -15,7 +15,7 @@
         <div id="link" class="collapse">
             {{ $linkCopy }}
             <form method="POST" class="form-group" id="form"
-                  action="{{ action('ExcelController@index') }}">
+                  action="{{ action('ExcelController@index') }}" target="_blank">
                 <input type="hidden" id="bucket" name="bucket" value="{{ config('main.links.aws.bucket.books') }}">
                 <input type="hidden" id="object" name="object" value="{{ $object }}">
                 <input type="hidden" id="batchTitle" name="batchTitle"
@@ -25,26 +25,6 @@
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <button type="submit" class="btn btn-info">Info by metadata file</button>
             </form>
-        </div>
-
-        <div class="loader" style="display: none;"><p style="font-weight: bold; color: red">Please
-                wait for loading...</p></div>
-        <div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
-            <div class="modal-lg modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body" style="word-wrap: break-word;">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </td>
 </tr>
