@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ArrayToXml\ArrayToXml;
 
@@ -76,40 +77,16 @@ class ExcelController extends Controller
         if ($dataType != null) {
             switch ($dataType) {
                 case 'xml':
-                    $messages = [];
-                    $xml = simplexml_load_file($filepath);
-                    $idByBucket = explode(1000, $id)[1];
-                    foreach ($xml as $value) {
-                        if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
-                            or $value->{$this->getTagName('RecordReference')} == $idByBucket
-                        ) {
-                            $messages [] = $value;
-                        }
-                    }
-                    $json = json_encode($messages[0]);
-                    $array = json_decode($json, true);
-                    $result = ArrayToXml::convert($array);
+                    $result = $this->searchProductInXml($filepath, $id);
 
-                    return response($result);
+                    return response($result)->header('Content-Type', 'text/xml');
                 case 'COT':
-                    $messages = [];
-                    $xml = simplexml_load_file($filepath);
-                    $idByBucket = explode(1000, $id)[1];
-                    foreach ($xml as $value) {
-                        if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
-                            or $value->{$this->getTagName('RecordReference')} == $idByBucket
-                        ) {
-                            $messages [] = $value;
-                        }
-                    }
-                    $json = json_encode($messages[0]);
-                    $array = json_decode($json, true);
-                    $result = ArrayToXml::convert($array);
+                    $result = $this->searchProductInXml($filepath, $id);
 
-                    return response($result);
+                    return response($result)->header('Content-Type', 'text/xml');
                 case 'zip':
-                    $messages = 'This file has an extension `zip` you can look it up in: [public/' . $filepath . ']';
-                    return response($messages);
+                    $message = 'This file has an extension `zip` you can look it up in: [public/' . $filepath . ']';
+                    return back()->with('message', $message);
                 case 'xlsx':
                     $messages = $this->getFile($filepath, $title);
                     return view('search.metadata', ['messages' => $messages]);
@@ -169,5 +146,29 @@ class ExcelController extends Controller
         }
 
         return false;
+    }
+
+    /**
+     * @param $filepath
+     * @param $id
+     * @return string
+     */
+    public function searchProductInXml($filepath, $id)
+    {
+        $messages = [];
+        $xml = simplexml_load_file($filepath);
+        $idByBucket = explode(1000, $id)[1];
+        foreach ($xml as $value) {
+            if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
+                or $value->{$this->getTagName('RecordReference')} == $idByBucket
+            ) {
+                $messages [] = $value;
+            }
+        }
+        $json = json_encode($messages[0]);
+        $array = json_decode($json, true);
+        $result = ArrayToXml::convert($array, 'product');
+
+        return $result;
     }
 }
