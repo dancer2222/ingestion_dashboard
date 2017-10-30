@@ -12,6 +12,7 @@ use App\Http\Controllers\SearchController;
 use App\Models\Book;
 use App\Models\Licensor;
 use App\Models\QaBatch;
+use Aws\S3\S3Client;
 
 /**
  * Class Books
@@ -21,6 +22,9 @@ class Books
 {
     /**
      * @param $id
+     * @param $mediaTypeTitle
+     * @param $country_code
+     * @param $mediaGeoRestrictGetMediaType
      * @return array
      */
     public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
@@ -53,6 +57,20 @@ class Books
             }
             $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $batchInfo->title . ' ./';
             $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $batchInfo->title;
+            $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $info->isbn . '.jpg';
+            $s3 = new S3Client([
+                'version'     => 'latest',
+                'region'      => 'us-east-1',
+                'credentials' => [
+                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                ],
+            ]);
+            try {
+                $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $info->source . '/' . $info->isbn . '.jpg');
+            } catch (\Exception $exception) {
+                $exception->getMessage();
+            }
             // Create object for aws bucket
             $object = $info->source . '/' . $batchInfo->title;
         } else {
@@ -73,7 +91,10 @@ class Books
             'licensorName'                 => $licensorName,
             'info'                         => (array)$info,
             'imageUrl'                     => $imageUrl,
-            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
+            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
+            'response'                     => $response,
+            'linkImageInBucket'            => $linkImageInBucket
+
         ];
 
         return $result;

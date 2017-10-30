@@ -1,4 +1,13 @@
 <tr>
+    <td>Image url in bucket</td>
+    <td>{{ $linkImageInBucket }}</td>
+    @if($response == 1)
+        <td style="color: green">Present in the bucket</td>
+    @else
+        <td style="color: red">Not present in the bucket</td>
+    @endif
+</tr>
+<tr>
     <td>Feed</td>
     <td>
         {{ $linkShow }}
