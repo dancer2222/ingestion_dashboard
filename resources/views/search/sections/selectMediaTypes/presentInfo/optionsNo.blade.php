@@ -25,6 +25,21 @@
             <td>{{ $item }}</td>
             <td>{{ date('Y-m-d', $item)}}</td>
         </tr>
+    @elseif($value === 'emedia_release_date')
+        <tr>
+            <td>{{ $value }}</td>
+            <td>{{ $item }}</td>
+            <td>{{ date('Y-m-d', $item)}}</td>
+        </tr>
+    @elseif($value === 'status')
+        <tr>
+            <td>{{ $value }}</td>
+            @if($item == 'inactive')
+                <td style="color: red">{{ $item }}</td>
+            @else
+                <td style="color: green">{{ $item }}</td>
+            @endif
+        </tr>
     @elseif($value === 'file_format_type_id')
         <tr>
             <td>{{ $value }}</td>

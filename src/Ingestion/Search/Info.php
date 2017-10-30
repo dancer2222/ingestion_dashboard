@@ -15,6 +15,7 @@ use App\Models\DataSourceProvider;
 use App\Models\Game;
 use App\Models\Licensor;
 use App\Models\Movie;
+use Aws\S3\S3Client;
 
 /**
  * Class Info
@@ -48,16 +49,37 @@ class Info
             $message = 'This [id] = ' . $id . '  not found in Books database';
             return back()->with('message', $message);
         }
+        if ($mediaTypeTitle == 'books') {
+            $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $providerName . '/' . $info->isbn . '.jpg';
+            $s3 = new S3Client([
+                'version'     => 'latest',
+                'region'      => 'us-east-1',
+                'credentials' => [
+                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                ],
+            ]);
+            try {
+                $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $providerName . '/' . $info->isbn . '.jpg');
+            } catch (\Exception $exception) {
+                $exception->getMessage();
+            }
+        } else {
+            $linkImageInBucket = null;
+            $response = null;
+        }
 
         $result = [
-            'id'             => $id,
-            'country_code'   => $country_code,
-            'mediaTypeTitle' => $mediaTypeTitle,
-            'licensorName'   => $licensorName,
-            'imageUrl'       => $imageUrl,
-            'providerName'   => $providerName,
-            'info'           => (array)$info,
-            'mediaId'        => $mediaId
+            'id'                => $id,
+            'country_code'      => $country_code,
+            'mediaTypeTitle'    => $mediaTypeTitle,
+            'licensorName'      => $licensorName,
+            'imageUrl'          => $imageUrl,
+            'providerName'      => $providerName,
+            'info'              => (array)$info,
+            'mediaId'           => $mediaId,
+            'response'          => $response,
+            'linkImageInBucket' => $linkImageInBucket
         ];
 
         return $result;
