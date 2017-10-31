@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class Licensor
@@ -23,6 +22,6 @@ class Licensor extends Model
     public function getNameLicensorById($id)
     {
         return $this->select('name')
-            ->where('id',$id)->get()->toArray()[0]['name'];
+            ->where('id',$id)->first()->toArray()['name'];
     }
 }

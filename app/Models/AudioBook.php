@@ -22,7 +22,7 @@ class AudioBook extends Model
      */
     public function getById($id)
     {
-        return $this->where('id',$id)->get()->toArray()[0];
+        return $this->where('id',$id)->first()->toArray();
     }
 
     /**

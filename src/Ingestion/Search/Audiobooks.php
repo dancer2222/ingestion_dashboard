@@ -9,10 +9,10 @@ use App\Models\QaBatch;
 use App\Models\DataSourceProvider;
 
 /**
- * Class AudioBooks
+ * Class Audiobooks
  * @package Ingestion\Reports
  */
-class AudioBooks
+class Audiobooks
 {
     /**
      * @param $id
@@ -31,7 +31,7 @@ class AudioBooks
             $idLink = substr($id, -5);
             $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
         } catch (\Exception $exception) {
-            $message = 'This [id] = ' . $id . '  not found in AudioBooks database';
+            $message = 'This [id] = ' . $id . '  not found in Audiobooks database';
             return view('search.infoById', ['message' => $message]);
         }
         $providerName = new DataSourceProvider();

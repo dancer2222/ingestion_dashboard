@@ -22,7 +22,7 @@ class QaBatch extends Model
      */
     public function getAllByBatchId($id)
     {
-        $allInfo = $this->where('id',$id)->get()->toArray()[0];
+        $allInfo = $this->where('id',$id)->first()->toArray();
 
         return count($allInfo) ? $allInfo : null;
     }
