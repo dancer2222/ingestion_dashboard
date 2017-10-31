@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 25.10.17
- * Time: 19:01
- */
 
 namespace Ingestion\Search;
 
 use App\Models\DataSourceProvider;
 use App\Http\Controllers\SearchController;
+use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\Movie;
 use App\Models\QaBatch;
@@ -39,6 +34,7 @@ class Movies
             $message = 'This [id] = ' . $id . '  not found in Movies database';
             return view('search.infoById', ['message' => $message]);
         }
+
         if ($batchInfo != null && false != stristr($batchInfo->title, '.')) {
             $providerName = new DataSourceProvider();
             $providerName = $providerName->getDataSourceProviderName($batchInfo->data_source_provider_id)[0]->name;
@@ -53,12 +49,15 @@ class Movies
             $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo->title;
             // Create object for aws bucket
             $object = $licensorName . '/' . $batchInfo->title;
+            $failedItems = new FailedItems();
+            $failedItems = $failedItems->getFailedItems($id, $info->batch_id);
         } else {
             $linkCopy = null;
             $linkShow = null;
             $object = null;
             $batchInfo = null;
         }
+
 
         $result = [
             'id'                           => $id,
@@ -71,7 +70,8 @@ class Movies
             'licensorName'                 => $licensorName,
             'info'                         => (array)$info,
             'imageUrl'                     => $imageUrl,
-            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
+            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
+            'messages'                     => $failedItems
         ];
 
         return $result;

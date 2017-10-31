@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 25.10.17
- * Time: 19:34
- */
 
 namespace Ingestion\Search;
 
 use App\Http\Controllers\SearchController;
 use App\Models\Book;
+use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\QaBatch;
 use Aws\S3\S3Client;
@@ -39,7 +34,7 @@ class Books
             $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found in Books database';
-            return view('search.infoById', ['message' => $message]);
+            return view('search.infoById', ['messages' => $message]);
         }
         if (isset($info->data_origin_id)) {
             $imageUrl = config('main.links.image.book') . $info->data_origin_id . '.jpg';
@@ -79,6 +74,8 @@ class Books
             $object = null;
             $batchInfo = null;
         }
+        $failedItems = new FailedItems();
+        $failedItems = $failedItems->getFailedItems($info->isbn, $info->batch_id);
 
         $result = [
             'id'                           => $id,
@@ -93,7 +90,8 @@ class Books
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'response'                     => $response,
-            'linkImageInBucket'            => $linkImageInBucket
+            'linkImageInBucket'            => $linkImageInBucket,
+            'messages'                     => $failedItems
 
         ];
 

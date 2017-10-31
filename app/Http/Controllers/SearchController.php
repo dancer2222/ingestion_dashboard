@@ -32,14 +32,14 @@ class SearchController extends Controller
         if (isset($request->id)) {
             if (!is_numeric($request->id)) {
                 $message = 'This [id] = [' . $request->id . '] must contain only digits';
-                return view('search.infoById', ['message' => $message]);
+                return back()->with('message', $message);
             }
 
             $mediaGeoRestrict = new MediaGeoRestrict();
             $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
             if ($mediaGeoRestrictInfo === null) {
                 $message = 'This [id] = ' . $request->id . '  not found';
-                return view('search.infoById', ['message' => $message]);
+                return back()->with('message', $message);
             }
             if (count($mediaGeoRestrictInfo) > 1) {
                 $result = [];

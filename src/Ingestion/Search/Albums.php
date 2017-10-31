@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 26.10.17
- * Time: 10:50
- */
 
 namespace Ingestion\Search;
 
 use App\Models\Album;
+use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\DataSourceProvider;
 
@@ -37,6 +32,8 @@ class Albums
         }
         $providerName = new DataSourceProvider();
         $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
+        $failedItems = new FailedItems();
+        $failedItems = $failedItems->getFailedItems($id, $info->batch_id);
 
         $result = [
             'id'                           => $id,
@@ -46,7 +43,8 @@ class Albums
             'info'                         => (array)$info,
             'providerName'                 => $providerName,
             'imageUrl'                     => $imageUrl,
-            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
+            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
+            'messages'                     => $failedItems
         ];
 
         return $result;
