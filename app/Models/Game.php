@@ -23,6 +23,6 @@ class Game extends Model
     public function getById($id)
     {
         return DB::table('game')
-            ->where('id', '=',$id)->get();
+            ->where('id',$id)->get();
     }
 }

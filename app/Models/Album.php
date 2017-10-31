@@ -23,7 +23,7 @@ class Album extends Model
     public function getById($id)
     {
         return DB::table('music_album')
-            ->where('id', '=',$id)->get();
+            ->where('id',$id)->get();
     }
 
     /**

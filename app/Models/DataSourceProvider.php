@@ -24,7 +24,7 @@ class DataSourceProvider extends Model
     {
         $allInfo = DB::table('data_source_provider')
             ->select('name')
-            ->where('id', '=',$id)
+            ->where('id',$id)
             ->get();
 
         return count($allInfo) ? $allInfo : null;

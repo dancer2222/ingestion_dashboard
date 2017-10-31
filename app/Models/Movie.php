@@ -23,7 +23,7 @@ class Movie extends Model
     public function getById($id)
     {
         return DB::table('movie')
-            ->where('id', '=',$id)->get();
+            ->where('id',$id)->get();
     }
 
     /**
@@ -33,7 +33,7 @@ class Movie extends Model
     public function getInfoByTitle($title)
     {
         return DB::table('movie')
-            ->where('title', '=',$title)->get();
+            ->where('title',$title)->get();
     }
 
     /**

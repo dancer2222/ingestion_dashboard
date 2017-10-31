@@ -23,7 +23,7 @@ class Book extends Model
     public function getById($id)
     {
         return DB::table('book')
-            ->where('id', '=',$id)->get();
+            ->where('id',$id)->get();
     }
 
     /**
@@ -33,7 +33,7 @@ class Book extends Model
     public function getInfoByTitle($title)
     {
         return DB::table('book')
-            ->where('title', '=',$title)->get();
+            ->where('title',$title)->get();
     }
 
     /**

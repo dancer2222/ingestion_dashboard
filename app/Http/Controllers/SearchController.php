@@ -37,10 +37,12 @@ class SearchController extends Controller
 
             $mediaGeoRestrict = new MediaGeoRestrict();
             $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
+
             if ($mediaGeoRestrictInfo === null) {
                 $message = 'This [id] = ' . $request->id . '  not found';
                 return back()->with('message', $message);
             }
+
             if (count($mediaGeoRestrictInfo) > 1) {
                 $result = [];
                 foreach ($mediaGeoRestrictInfo as $item) {
