@@ -3,6 +3,7 @@
 namespace Ingestion\Search;
 
 use App\Models\AudioBook;
+use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\QaBatch;
 use App\Models\DataSourceProvider;
@@ -35,6 +36,8 @@ class AudioBooks
         }
         $providerName = new DataSourceProvider();
         $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
+        $failedItems = new FailedItems();
+        $failedItems = $failedItems->getFailedItems($id, $info->batch_id);
 
         $result = [
             'id'                           => $id,
@@ -45,7 +48,8 @@ class AudioBooks
             'info'                         => (array)$info,
             'providerName'                 => $providerName,
             'imageUrl'                     => $imageUrl,
-            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
+            'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
+            'messages'                     => $failedItems
         ];
 
         return $result;

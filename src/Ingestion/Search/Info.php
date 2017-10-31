@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 26.10.17
- * Time: 12:26
- */
 
 namespace Ingestion\Search;
 
