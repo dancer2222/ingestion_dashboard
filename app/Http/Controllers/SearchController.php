@@ -5,11 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\MediaGeoRestrict;
 use App\Models\MediaType;
 use Illuminate\Http\Request;
-use Ingestion\Search\Albums;
-use Ingestion\Search\AudioBooks;
-use Ingestion\Search\Books;
-use Ingestion\Search\Games;
-use Ingestion\Search\Movies;
 use Ingestion\Search\Info;
 
 /**
@@ -21,7 +16,7 @@ class SearchController extends Controller
     /**
      * @param Request $request
      * @param null $id_url
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index(Request $request, $id_url = null)
     {
@@ -68,33 +63,10 @@ class SearchController extends Controller
             }
 
             $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
-            $mediaTypeTitle = $mediaType->getTitleById($mediaGeoRestrictGetMediaType['media_type']);
+            $mediaTypeTitle = ucfirst($mediaType->getTitleById($mediaGeoRestrictGetMediaType));
 
-            switch ($mediaTypeTitle) {
-                case 'movies':
-                    $dataForView = Movies::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
-
-                    break;
-                case 'books':
-                    $dataForView = Books::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
-
-                    break;
-
-                case 'audiobooks':
-                    $dataForView = AudioBooks::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
-
-                    break;
-
-                case 'games':
-                    $dataForView = Games::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
-
-                    break;
-
-                case 'albums':
-                    $dataForView = Albums::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
-
-                    break;
-            }
+            $className = new \ReflectionMethod("Ingestion\Search\\" . $mediaTypeTitle, 'searchInfoById');
+            $dataForView = $className->invoke(null, $request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
         }
 
         $dataForView['option'] = $request->option;
@@ -127,13 +99,14 @@ class SearchController extends Controller
         }
 
         $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediaId);
+
         if ($mediaInfo === null) {
             $message = 'not exist id =  ' . $request->id . ' with a  media type = ' . $request->type;
             return back()->with('message', $message);
         }
-        $country_code = $mediaInfo[0]->country_code;
+
         $info = new Info();
-        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $country_code, $mediaId);
+        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $mediaInfo['country_code'], $mediaId);
         $dataForView['option'] = $request->option;
         $dataForView['id_url'] = $id_url;
         $dataForView['type'] = $type;

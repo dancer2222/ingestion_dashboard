@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class Game
@@ -22,6 +21,6 @@ class Game extends Model
      */
     public function getById($id)
     {
-        return $this->where('id',$id)->get()->toArray()[0];
+        return $this->where('id',$id)->first()->toArray();
     }
 }

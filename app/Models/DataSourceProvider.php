@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class DataSourceProvider
@@ -24,7 +23,7 @@ class DataSourceProvider extends Model
     {
         $allInfo = $this->select('name')
             ->where('id',$id)
-            ->get()->toArray()[0]['name'];
+            ->first()->toArray()['name'];
 
         return count($allInfo) ? $allInfo : null;
     }

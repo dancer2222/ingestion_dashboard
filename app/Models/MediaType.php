@@ -23,7 +23,7 @@ class MediaType extends Model
     public function getTitleById($media_type_id)
     {
         return $this->select('title')
-            ->where('media_type_id',$media_type_id)->get()->toArray()[0]['title'];
+            ->where('media_type_id',$media_type_id)->first()->toArray()['title'];
     }
 
     /**
