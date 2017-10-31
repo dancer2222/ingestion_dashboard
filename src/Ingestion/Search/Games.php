@@ -20,20 +20,20 @@ class Games
         $licensor = new Licensor();
         try {
             $info = new Game();
-            $info = $info->getById($id)[0];
+            $info = $info->getById($id);
             $imageUrl = config('main.links.image.game') . $id . '.jpg';
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found in Games database';
             return view('search.infoById', ['message' => $message]);
         }
-        $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
 
         $result = [
             'id'                           => $id,
             'country_code'                 => $country_code,
             'mediaTypeTitle'               => $mediaTypeTitle,
             'licensorName'                 => $licensorName,
-            'info'                         => (array)$info,
+            'info'                         => $info,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType
         ];

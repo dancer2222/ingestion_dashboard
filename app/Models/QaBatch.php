@@ -22,8 +22,7 @@ class QaBatch extends Model
      */
     public function getAllByBatchId($id)
     {
-        $allInfo = $name = DB::table('qa_batches')
-            ->where('id',$id)->get();
+        $allInfo = $this->where('id',$id)->get()->toArray()[0];
 
         return count($allInfo) ? $allInfo : null;
     }

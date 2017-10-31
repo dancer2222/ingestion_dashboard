@@ -22,8 +22,7 @@ class Book extends Model
      */
     public function getById($id)
     {
-        return DB::table('book')
-            ->where('id',$id)->get();
+        return $this->where('id',$id)->get()->toArray()[0];
     }
 
     /**
