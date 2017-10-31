@@ -22,9 +22,8 @@ class MediaGeoRestrict extends Model
      */
     public function getAllGeoRestrictionInfo($id)
     {
-        $allInfo = DB::table('media_geo_restrict')
-            ->where('media_id', '=', $id)
-            ->get();
+        $allInfo = $this->where('media_id', $id)
+            ->get()->toArray();
 
         return count($allInfo) ? $allInfo : null;
     }
@@ -35,9 +34,8 @@ class MediaGeoRestrict extends Model
      */
     public function getFirstGeoRestrictionInfo($id)
     {
-        return DB::table('media_geo_restrict')
-            ->select('media_type')
-            ->where('media_id', '=', $id)->get()->first();
+        return $this->select('media_type')
+            ->where('media_id', $id)->first()->toArray();
     }
 
     /**
@@ -48,8 +46,8 @@ class MediaGeoRestrict extends Model
     public function getGeoRestrictionInfoByMediaType($id, $mediaType)
     {
         $allInfo = DB::table('media_geo_restrict')
-            ->where('media_id', '=', $id)
-            ->where('media_type', '=', $mediaType)
+            ->where('media_id', $id)
+            ->where('media_type', $mediaType)
             ->get();
 
         return count($allInfo) ? $allInfo : null;

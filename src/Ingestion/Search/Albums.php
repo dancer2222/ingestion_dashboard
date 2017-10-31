@@ -22,8 +22,8 @@ class Albums
         $licensor = new Licensor();
         try {
             $info = new Album();
-            $info = $info->getById($id)[0];
-            $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+            $info = $info->getById($id);
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
             $idLink = substr($id, -7);
             $imageUrl = config('main.links.image.album') . $idLink . '.jpg';
         } catch (\Exception $exception) {
@@ -31,16 +31,16 @@ class Albums
             return view('search.infoById', ['message' => $message]);
         }
         $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
+        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
         $failedItems = new FailedItems();
-        $failedItems = $failedItems->getFailedItems($id, $info->batch_id);
+        $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
 
         $result = [
             'id'                           => $id,
             'country_code'                 => $country_code,
             'mediaTypeTitle'               => $mediaTypeTitle,
             'licensorName'                 => $licensorName,
-            'info'                         => (array)$info,
+            'info'                         => $info,
             'providerName'                 => $providerName,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,

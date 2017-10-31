@@ -22,10 +22,9 @@ class DataSourceProvider extends Model
      */
     public function getDataSourceProviderName($id)
     {
-        $allInfo = DB::table('data_source_provider')
-            ->select('name')
-            ->where('id', '=',$id)
-            ->get();
+        $allInfo = $this->select('name')
+            ->where('id',$id)
+            ->get()->toArray()[0]['name'];
 
         return count($allInfo) ? $allInfo : null;
     }

@@ -25,39 +25,38 @@ class Movies
         $licensor = new Licensor();
         try {
             $info = new Movie();
-            $info = $info->getById($id)[0];
+            $info = $info->getById($id);
             //all info by batch_id
-            $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-            $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+            $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
             $imageUrl = config('main.links.image.movie') . $id . '.jpg';
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found in Movies database';
             return view('search.infoById', ['message' => $message]);
         }
 
-        if ($batchInfo != null && false != stristr($batchInfo->title, '.')) {
+        if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {
             $providerName = new DataSourceProvider();
-            $providerName = $providerName->getDataSourceProviderName($batchInfo->data_source_provider_id)[0]->name;
-            $batchInfo->title = explode($providerName . '_', $batchInfo->title, 2)[1];
+            $providerName = $providerName->getDataSourceProviderName($batchInfo['data_source_provider_id']);
+            $batchInfo['title'] = explode($providerName . '_', $batchInfo['title'], 2)[1];
 
             // Create links to aws bucket
             $licensorNameToArray = SearchController::normalizeBucketName($licensorName);
             if ($licensorNameToArray != null) {
                 $licensorName = $licensorNameToArray;
             }
-            $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo->title . ' ./';
-            $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo->title;
+            $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo['title'] . ' ./';
+            $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo['title'];
             // Create object for aws bucket
-            $object = $licensorName . '/' . $batchInfo->title;
+            $object = $licensorName . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($id, $info->batch_id);
+            $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
         } else {
             $linkCopy = null;
             $linkShow = null;
             $object = null;
             $batchInfo = null;
         }
-
 
         $result = [
             'id'                           => $id,
@@ -68,7 +67,7 @@ class Movies
             'object'                       => $object,
             'batchInfo'                    => $batchInfo,
             'licensorName'                 => $licensorName,
-            'info'                         => (array)$info,
+            'info'                         => $info,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems

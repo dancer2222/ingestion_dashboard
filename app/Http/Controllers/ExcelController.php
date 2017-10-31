@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ArrayToXml\ArrayToXml;
 

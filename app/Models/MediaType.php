@@ -22,9 +22,8 @@ class MediaType extends Model
      */
     public function getTitleById($media_type_id)
     {
-        return DB::table('media_types')
-            ->select('title')
-            ->where('media_type_id', '=',$media_type_id)->get();
+        return $this->select('title')
+            ->where('media_type_id',$media_type_id)->get()->toArray()[0]['title'];
     }
 
     /**
@@ -35,6 +34,6 @@ class MediaType extends Model
     {
         return DB::table('media_types')
             ->select('media_type_id')
-            ->where('title', '=', $title)->get();
+            ->where('title', $title)->get();
     }
 }

@@ -30,11 +30,11 @@ class Info
         $info = $this->getModel($mediaTypeTitle, $id);
         try {
             $imageUrl = $info->imageUrl;
-            $info = $info->getById($id)[0];
-            $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+            $info = $info->getById($id);
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
             if (isset($info->data_source_provider_id)) {
                 $providerName = new DataSourceProvider();
-                $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
+                $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
             } else {
                 $providerName = null;
             }
@@ -44,7 +44,7 @@ class Info
             return back()->with('message', $message);
         }
         if ($mediaTypeTitle == 'books') {
-            $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $providerName . '/' . $info->isbn . '.jpg';
+            $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $providerName . '/' . $info['isbn'] . '.jpg';
             $s3 = new S3Client([
                 'version'     => 'latest',
                 'region'      => 'us-east-1',
@@ -54,7 +54,7 @@ class Info
                 ],
             ]);
             try {
-                $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $providerName . '/' . $info->isbn . '.jpg');
+                $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $providerName . '/' . $info['isbn'] . '.jpg');
             } catch (\Exception $exception) {
                 $exception->getMessage();
             }
@@ -70,7 +70,7 @@ class Info
             'licensorName'      => $licensorName,
             'imageUrl'          => $imageUrl,
             'providerName'      => $providerName,
-            'info'              => (array)$info,
+            'info'              => $info,
             'mediaId'           => $mediaId,
             'response'          => $response,
             'linkImageInBucket' => $linkImageInBucket

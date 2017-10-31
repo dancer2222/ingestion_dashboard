@@ -37,20 +37,22 @@ class SearchController extends Controller
 
             $mediaGeoRestrict = new MediaGeoRestrict();
             $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
+
             if ($mediaGeoRestrictInfo === null) {
                 $message = 'This [id] = ' . $request->id . '  not found';
                 return back()->with('message', $message);
             }
+
             if (count($mediaGeoRestrictInfo) > 1) {
                 $result = [];
                 foreach ($mediaGeoRestrictInfo as $item) {
-                    $country_code .= $item->country_code . '.';
-                    $result [] = $item->media_type;
+                    $country_code .= $item['country_code'] . '.';
+                    $result [] = $item['media_type'];
                 }
                 $resultUnique = array_unique($result);
                 if (count($resultUnique) > 1) {
                     foreach ($resultUnique as $mediaTypes) {
-                        $mediaTypeTitles [] = $mediaType->getTitleById($mediaTypes)[0]->title;
+                        $mediaTypeTitles [] = $mediaType->getTitleById($mediaTypes);
                     }
                     $more = '';
                     return view('search.selectMediaTypes', [
@@ -62,35 +64,34 @@ class SearchController extends Controller
                     ]);
                 }
             } else {
-                $country_code = $mediaGeoRestrictInfo[0]->country_code;
+                $country_code = $mediaGeoRestrictInfo[0]['country_code'];
             }
 
             $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
-
-            $mediaTypeTitle = $mediaType->getTitleById($mediaGeoRestrictGetMediaType->media_type)[0]->title;
+            $mediaTypeTitle = $mediaType->getTitleById($mediaGeoRestrictGetMediaType['media_type']);
 
             switch ($mediaTypeTitle) {
                 case 'movies':
-                    $dataForView = Movies::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
+                    $dataForView = Movies::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
 
                     break;
                 case 'books':
-                    $dataForView = Books::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
+                    $dataForView = Books::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
 
                     break;
 
                 case 'audiobooks':
-                    $dataForView = AudioBooks::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
+                    $dataForView = AudioBooks::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
 
                     break;
 
                 case 'games':
-                    $dataForView = Games::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
+                    $dataForView = Games::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
 
                     break;
 
                 case 'albums':
-                    $dataForView = Albums::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType->media_type);
+                    $dataForView = Albums::searchInfoById($request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
 
                     break;
             }

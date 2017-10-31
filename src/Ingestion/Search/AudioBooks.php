@@ -24,10 +24,10 @@ class AudioBooks
         $licensor = new Licensor();
         try {
             $info = new AudioBook();
-            $info = $info->getById($id)[0];
+            $info = $info->getById($id);
             //all info by batch_id
-            $batchInfo = $qaBatches->getAllByBatchId($info->batch_id)[0];
-            $licensorName = $licensor->getNameLicensorById($info->licensor_id)[0]->name;
+            $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
             $idLink = substr($id, -5);
             $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
         } catch (\Exception $exception) {
@@ -35,9 +35,9 @@ class AudioBooks
             return view('search.infoById', ['message' => $message]);
         }
         $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)[0]->name;
+        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
         $failedItems = new FailedItems();
-        $failedItems = $failedItems->getFailedItems($id, $info->batch_id);
+        $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
 
         $result = [
             'id'                           => $id,
@@ -45,7 +45,7 @@ class AudioBooks
             'mediaTypeTitle'               => $mediaTypeTitle,
             'batchInfo'                    => $batchInfo,
             'licensorName'                 => $licensorName,
-            'info'                         => (array)$info,
+            'info'                         => $info,
             'providerName'                 => $providerName,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
