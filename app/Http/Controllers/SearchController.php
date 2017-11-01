@@ -66,7 +66,7 @@ class SearchController extends Controller
             $mediaTypeTitle = ucfirst($mediaType->getTitleById($mediaGeoRestrictGetMediaType));
 
             $className = new \ReflectionMethod("Ingestion\Search\\" . $mediaTypeTitle, 'searchInfoById');
-            $dataForView = $className->invoke(null, $request->id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType['media_type']);
+            $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_code, $mediaGeoRestrictGetMediaType['media_type']);
         }
 
         $dataForView['option'] = $request->option;
