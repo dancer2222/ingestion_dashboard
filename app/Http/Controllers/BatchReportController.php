@@ -30,7 +30,6 @@ class BatchReportController extends Controller
                 return back()->with('message', $exception);
             }
         }
-
         return back()->with('message', 'Pls input batch_id');
     }
 }
