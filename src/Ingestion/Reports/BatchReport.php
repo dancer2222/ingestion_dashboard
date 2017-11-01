@@ -54,7 +54,8 @@ class BatchReport
         // get Batch info
         try {
             $qaBatch = new QaBatch();
-            $batch_info = $qaBatch->getAllByBatchId($this->batch_id)[0];
+            $batch_info = $qaBatch->getAllByBatchId($this->batch_id);
+
             if ($batch_info === null) {
                 $message = 'This batch_id [' . $this->batch_id . '] not found in database';
 
@@ -67,7 +68,7 @@ class BatchReport
         // get media types info in batch
         $mediaTypes = new MediaType();
         try {
-            $mediaTypeTitle = $mediaTypes->getTitleById($batch_info->media_type_id)[0]->title;
+            $mediaTypeTitle = $mediaTypes->getTitleById($batch_info['media_type_id']);
         } catch (\Exception $exception) {
             return $exception;
         }
@@ -125,7 +126,6 @@ class BatchReport
         } catch (\Exception $exception) {
             return $exception;
         }
-
 
         //create xlsx document
         try {
