@@ -36,8 +36,14 @@ class Audiobooks
         }
         $providerName = new DataSourceProvider();
         $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
-        $failedItems = new FailedItems();
-        $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
+        if($batchInfo != null)
+        {
+            $failedItems = new FailedItems();
+            $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
+        } else {
+            $failedItems = null;
+        }
+
 
         $result = [
             'id'                           => $id,
