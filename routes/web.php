@@ -14,15 +14,16 @@
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['google.auth']], function () {
+	// Home routes
 	Route::get('/', function () {
 		return view('welcome');
 	});
-
 	Route::get('/home', function () {
 		return redirect('brightcove');
 	})->name('home');
 
+	// Brightcove
     Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove'], function () {
         Route::get('/', 'ContentController@index');
         Route::get('/videos', 'ContentController@videos');
@@ -30,6 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/folders/{folder}', 'ContentController@folder');
     });
 
+    // Reports
 	Route::group(['prefix' => 'reports'], function () {
 		Route::get('/', function () {
 			return redirect(route('search'));
@@ -42,12 +44,20 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::post('/show', 'ExcelController@index');
 
-    Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
-    Route::post('/report', 'BatchReportController@index');
+        Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
+        Route::post('/report', 'BatchReportController@index');
 	});
 
 	// Ajax requests
 	Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
+});
+
+// Auth
+Route::group(['prefix' => 'oauth2', 'namespace' => 'Auth'], function () {
+	Route::get('/login', 'LoginGoogleController@login');
+	Route::get('/callback/google', 'LoginGoogleController@callback');
+
+	Route::post('/logout', 'LoginGoogleController@logout')->name('logout');
 });
 
 Auth::routes();
