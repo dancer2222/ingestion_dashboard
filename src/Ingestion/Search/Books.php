@@ -68,14 +68,15 @@ class Books
             }
             // Create object for aws bucket
             $object = $info['source'] . '/' . $batchInfo['title'];
+            $failedItems = new FailedItems();
+            $failedItems = $failedItems->getFailedItems($info['isbn'], $info['batch_id']);
         } else {
             $linkCopy = null;
             $linkShow = null;
             $object = null;
             $batchInfo = null;
+            $failedItems = null;
         }
-        $failedItems = new FailedItems();
-        $failedItems = $failedItems->getFailedItems($info['isbn'], $info['batch_id']);
 
         $result = [
             'id'                           => $id,

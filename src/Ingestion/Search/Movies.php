@@ -56,6 +56,7 @@ class Movies
             $linkShow = null;
             $object = null;
             $batchInfo = null;
+            $failedItems = null;
         }
 
         $result = [
