@@ -13,6 +13,15 @@ RUN yes | pecl install xdebug \
            && docker-php-ext-configure memcached \
            && docker-php-ext-install memcached \
            && rm /tmp/memcached.tar.gz \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip \
+	# Install composer
+	&& curl https://getcomposer.org/installer | php -- \
+	&& mv composer.phar /usr/local/bin/composer \
+	&& chmod +x /usr/local/bin/composer
 
 COPY ./php.ini-development /usr/local/etc/php/php.ini
+
+COPY ./run.sh /php-run.sh
+RUN chmod 777 /php-run.sh
+
+CMD ["/php-run.sh"]

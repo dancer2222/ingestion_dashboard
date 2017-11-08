@@ -41,4 +41,9 @@ return [
         'client_secret' => env('BRIGHTCOVE_CLIENT_SECRET'),
     ],
 
+	'google' => [
+		'client_id' => env('GOOGLE_CLIENT_ID'),
+		'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+		'redirect_uri' => env('GOOGLE_REDIRECT_URI', url('oauth2/callback/google')),
+	],
 ];
