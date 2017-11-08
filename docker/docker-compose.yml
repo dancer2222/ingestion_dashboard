@@ -1,9 +1,10 @@
 version: "2"
 
 services:
-  br_web:
-    container_name: br_web
-    build: ./nginx
+  # Nginx container
+  d_nginx:
+    image: nginx:latest
+    container_name: d_nginx
     volumes:
       - "${PATH_TO_LOCAL_PROJECT}:${PATH_TO_PROJECT_INSIDE_CONTAINER}"
       - "./dashboard.conf:/etc/nginx/conf.d/nginx.conf:ro"
@@ -11,10 +12,12 @@ services:
       - "${NGINX_PORT}:80"
     working_dir: ${PATH_TO_PROJECT_INSIDE_CONTAINER}
     links:
-      - br_php
-  br_php:
+      - d_php
+  # Php-fpm container
+  d_php:
+    image: d_php:1.0.0
     build: ./php
-    container_name: br_php
+    container_name: d_php
     volumes:
       - "${PATH_TO_LOCAL_PROJECT}:${PATH_TO_PROJECT_INSIDE_CONTAINER}"
     working_dir: ${PATH_TO_PROJECT_INSIDE_CONTAINER}
