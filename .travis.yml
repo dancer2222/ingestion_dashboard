@@ -1,0 +1,24 @@
+language: php
+
+sudo: required
+
+dist: trusty
+
+services:
+  - docker
+
+before_install:
+  - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
+  - docker build -t $REPO:$TRAVIS_TAG .
+  - docker run -d -p 80:80 $REPO:$TRAVIS_TAG
+  - docker ps -a
+
+after_success:
+  - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push $REPO
+  - tar -czf build.tar.gz *
+  - rm -rf `ls | grep -v build.tar.gz`
+
+script:
+  - echo "NO PHPUNIT tests"
