@@ -6,6 +6,8 @@ use App\Models\Album;
 use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\DataSourceProvider;
+use App\Models\MusicAlbumArtist;
+use App\Models\MusicArtist;
 use App\Models\QaBatch;
 
 /**
@@ -22,6 +24,14 @@ class Albums
     {
         $licensor = new Licensor();
         $qaBatches = new QaBatch();
+        $musicAlbumArtists = new MusicAlbumArtist();
+
+        $musicArtist = $musicAlbumArtists->getArtistByAlbumId($id);
+        $nameMusicArtist = [];
+        if ($musicArtist != null) {
+            $musicArtistName = new MusicArtist();
+            $nameMusicArtist = $musicArtistName->getNameArtistByArtistId($musicArtist['artist_id']);
+        }
         try {
             $info = new Album();
             $info = $info->getById($id);
@@ -35,8 +45,7 @@ class Albums
         }
         $providerName = new DataSourceProvider();
         $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
-        if($batchInfo != null)
-        {
+        if ($batchInfo != null) {
             $failedItems = new FailedItems();
             $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
         } else {
@@ -51,7 +60,8 @@ class Albums
             'providerName'                 => $providerName,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages'                     => $failedItems
+            'messages'                     => $failedItems,
+            'artistName'                   => $nameMusicArtist['name']
         ];
 
         return $result;
