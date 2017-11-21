@@ -28,6 +28,7 @@
                         <option name="books">books</option>
                         <option name="movies">movies</option>
                         <option name="audiobooks">audiobooks</option>
+                        <option name="albums">albums</option>
                     </select>
                 </div>
                 <input type="hidden" name="_token" value="{{csrf_token()}}">

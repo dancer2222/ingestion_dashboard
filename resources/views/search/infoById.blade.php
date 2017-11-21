@@ -39,6 +39,11 @@
                     @include('search.sections.infoById.presentInfo.booksPresentBatchInfo')
                 @elseif('audiobooks' === $mediaTypeTitle and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.audiobooksPresentBatchInfo')
+                @elseif('albums' === $mediaTypeTitle)
+                    <tr>
+                        <td>artist Name</td>
+                        <td>{{ $artistName }}</td>
+                    </tr>
                 @endif
                 @if(isset($batchInfo) and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.presentBatchInfoImportDate')

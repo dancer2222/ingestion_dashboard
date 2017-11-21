@@ -26,6 +26,15 @@ class Album extends Model
     }
 
     /**
+     * @param $title
+     * @return mixed
+     */
+    public function getInfoByTitle($title)
+    {
+        return DB::table('music_album')
+            ->where('title',$title)->get();
+    }
+    /**
      * @param $id
      * @return mixed
      */

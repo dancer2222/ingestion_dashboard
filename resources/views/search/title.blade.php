@@ -4,28 +4,29 @@
 
 @section('content')
     <h3>Click to ID for more info</h3>
-    <table class="table table-hover">
-        <th style="background-color: #2ca02c">id</th>
-        <th style="background-color: #2ca02c">title</th>
-        <th style="background-color: #2ca02c">ma_release_date</th>
-        <th style="background-color: #2ca02c">language</th>
-        <th style="background-color: #2ca02c">download_url</th>
-        <th style="background-color: #2ca02c">licensor_id</th>
-        <th style="background-color: #2ca02c">status</th>
-        <th style="background-color: #2ca02c">source</th>
-        <th style="background-color: #2ca02c">batch_id</th>
-
-        @foreach($info as $value)
+    <table class="table table-hover" border="2px">
+        <tr>
+            @foreach($info[0] as $item => $a)
+                <th style="background-color: #2ca02c">
+                    {{ $item }}
+                </th>
+            @endforeach
+        </tr>
+        @foreach($info as $message)
             <tr>
-                <td><a href="{{ action('SearchController@index', ['id' => $value->id]) }}" style="color: #b6a338; text-decoration: none; font-weight: bold;">{{ $value->id }}</a> </td>
-                <td>{{ $value->title }}</td>
-                <td>{{ $value->ma_release_date }}</td>
-                <td>{{ $value->language }}</td>
-                <td>{{ $value->download_url }}</td>
-                <td>{{ $value->licensor_id }}</td>
-                <td>{{ $value->status }}</td>
-                <td>{{ $value->source }}</td>
-                <td>{{ $value->batch_id }}</td>
+                @foreach($message as $value => $item)
+                    @if($item == null or $item == '')
+                        <td>
+                            <p style="font-size: 13px">0</p>
+                        </td>
+                    @elseif($value == 'id')
+                        <td><a href="{{ action('SearchController@index', ['id' => $item]) }}" style="color: #b6a338; text-decoration: none; font-weight: bold;">{{ $item }}</a> </td>
+                    @else
+                        <td>
+                            <p style="font-size: 13px">{{ $item }}</p>
+                        </td>
+                    @endif
+                @endforeach
             </tr>
         @endforeach
     </table>

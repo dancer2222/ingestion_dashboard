@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Album;
 use App\Models\AudioBook;
 use App\Models\Book;
 use App\Models\Movie;
@@ -30,7 +31,6 @@ class SearchByTitleController extends Controller
         } elseif ($result == 1) {
             return redirect()->route('search', ['id' => $info[0]->id]);
         } else {
-
             return view('search.title', ['info' => $info]);
         }
     }
@@ -53,6 +53,10 @@ class SearchByTitleController extends Controller
                 break;
             case 'audiobooks':
                 $info = new AudioBook();
+                $info = $info->getInfoByTitle($title);
+                break;
+            case 'albums':
+                $info = new Album();
                 $info = $info->getInfoByTitle($title);
                 break;
             default:
