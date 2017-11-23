@@ -9,6 +9,8 @@ services:
 
 before_install:
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
+  - echo ${REPO}
+  - echo ${TRAVIS_TAG}
   - docker build -t $REPO:$TRAVIS_TAG .
   - docker run -d -p 80:80 $REPO:$TRAVIS_TAG
   - docker ps -a
