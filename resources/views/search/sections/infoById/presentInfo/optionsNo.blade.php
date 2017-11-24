@@ -40,6 +40,18 @@
                 <td style="color: green">{{ $item }}</td>
             @endif
         </tr>
+    @elseif($value === 'download_url')
+        <tr>
+            <td>{{ $value }}</td>
+            <td>{{ $item }}</td>
+            @if($presentEpub == 1)
+                <td style="color: green">Present in the bucket</td>
+            @elseif(isset($http_response_header))
+                <td style="color: #67b168">{{ $http_response_header }}</td>
+            @else
+                <td style="color: red">Not present in the bucket</td>
+            @endif
+        </tr>
     @elseif($value === 'batch_id')
         <tr>
             <td>{{ $value }}</td>

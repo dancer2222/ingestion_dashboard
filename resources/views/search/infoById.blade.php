@@ -40,10 +40,7 @@
                 @elseif('audiobooks' === $mediaTypeTitle and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.audiobooksPresentBatchInfo')
                 @elseif('albums' === $mediaTypeTitle)
-                    <tr>
-                        <td>artist Name</td>
-                        <td>{{ $artistName }}</td>
-                    </tr>
+                    @include('search.sections.infoById.albums.albumsInfo')
                 @endif
                 @if(isset($batchInfo) and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.presentBatchInfoImportDate')
@@ -62,7 +59,13 @@
                     </td>
                     <td>
                         <div id="country_code" class="collapse">
-                            {{ $country_code }}
+                            @foreach($country_code as $item)
+                                @if( in_array($item,['US', 'CA', 'GB']) )
+                                    <b style='color:#cb1906'>{{$item}}</b>
+                                @else
+                                    {{ $item }}
+                                @endif
+                            @endforeach
                         </div>
                     </td>
 

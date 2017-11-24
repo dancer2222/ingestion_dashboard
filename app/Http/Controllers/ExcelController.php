@@ -79,21 +79,27 @@ class ExcelController extends Controller
                     $result = $this->searchProductInXml($filepath, $id);
 
                     return response($result)->header('Content-Type', 'text/xml');
+
                 case 'COT':
                     $result = $this->searchProductInXml($filepath, $id);
 
                     return response($result)->header('Content-Type', 'text/xml');
+
                 case 'zip':
                     $message = 'This file has an extension `zip` you can look it up in: [public/' . $filepath . ']';
                     return back()->with('message', $message);
+
                 case 'xlsx':
                     $messages = $this->getFile($filepath, $title);
+
                     return view('search.metadata', ['messages' => $messages]);
                 case 'csv':
                     $messages = $this->getFile($filepath, $title);
+
                     return view('search.metadata', ['messages' => $messages]);
                 default:
                     $message = 'Failed to define the data type in ' . $batchTitle;
+
                     return redirect(action('SearchController@index', ['id' => $id]))->with('message', $message);
             }
         }
@@ -115,12 +121,17 @@ class ExcelController extends Controller
         $resultExcel = [];
 
         foreach ($results as $result => $value) {
+
             foreach ($value as $item) {
+
                 if (isset($value['title'])) {
+
                     if ($title == $value['title']) {
                         $resultExcel [] = $value;
                     }
+
                 } elseif (isset($item['series_name'])) {
+
                     if ($title == $item['series_name']) {
                         $resultExcel [] = $item;
                     }
@@ -155,7 +166,12 @@ class ExcelController extends Controller
     public function searchProductInXml($filepath, $id)
     {
         $messages = [];
-        $xml = simplexml_load_file($filepath);
+        try {
+            $xml = simplexml_load_file($filepath);
+        } catch (\ErrorException $exception) {
+            return $exception;
+        }
+
         $idByBucket = explode(1000, $id)[1];
         foreach ($xml as $value) {
             if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
@@ -164,6 +180,7 @@ class ExcelController extends Controller
                 $messages [] = $value;
             }
         }
+
         $json = json_encode($messages[0]);
         $array = json_decode($json, true);
         $result = ArrayToXml::convert($array, 'product');

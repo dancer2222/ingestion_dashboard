@@ -14,5 +14,5 @@
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
     </div>
-    <br> <a href="{{ '/' }}" class="btn btn-info">BACK</a>
+    <br> <a class="btn btn-info" href="{{ URL::previous() }}">back</a>
 </div>

@@ -20,13 +20,13 @@ class SearchController extends Controller
      */
     public function index(Request $request, $id_url = null)
     {
-        $dataForView = [];
         $mediaType = new MediaType();
-        $country_code = '';
+        $country_code = [];
 
         if (isset($request->id)) {
             if (!is_numeric($request->id)) {
                 $message = 'This [id] = [' . $request->id . '] must contain only digits';
+
                 return back()->with('message', $message);
             }
 
@@ -35,21 +35,27 @@ class SearchController extends Controller
 
             if ($mediaGeoRestrictInfo === null) {
                 $message = 'This [id] = ' . $request->id . '  not found';
+
                 return back()->with('message', $message);
             }
 
             if (count($mediaGeoRestrictInfo) > 1) {
                 $result = [];
+
                 foreach ($mediaGeoRestrictInfo as $item) {
-                    $country_code .= $item['country_code'] . '.';
-                    $result [] = $item['media_type'];
+                    $country_code[] = $item['country_code'];
+                    $result[] = $item['media_type'];
                 }
+
                 $resultUnique = array_unique($result);
+
                 if (count($resultUnique) > 1) {
                     foreach ($resultUnique as $mediaTypes) {
                         $mediaTypeTitles [] = $mediaType->getTitleById($mediaTypes);
                     }
+
                     $more = '';
+
                     return view('search.selectMediaTypes', [
                         'more'            => $more,
                         'id'              => $request->id,
@@ -59,19 +65,24 @@ class SearchController extends Controller
                     ]);
                 }
             } else {
-                $country_code = $mediaGeoRestrictInfo[0]['country_code'];
+                $country_code [] = $mediaGeoRestrictInfo[0]['country_code'];
             }
 
             $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
             $mediaTypeTitle = ucfirst($mediaType->getTitleById($mediaGeoRestrictGetMediaType));
-
             $className = new \ReflectionMethod("Ingestion\Search\\" . $mediaTypeTitle, 'searchInfoById');
-            $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_code, $mediaGeoRestrictGetMediaType['media_type']);
-        }
+            try {
+                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_code, $mediaGeoRestrictGetMediaType['media_type']);
+            } catch (\Exception $exception) {
+                return back()->with(['message' => $exception->getMessage()]);
+            }
 
-        $dataForView['option'] = $request->option;
-        $dataForView['id_url'] = $id_url;
-        return view('search.infoById', $dataForView);
+
+            $dataForView['option'] = $request->option;
+            $dataForView['id_url'] = $id_url;
+
+            return view('search.infoById', $dataForView);
+        }
     }
 
     /**
@@ -84,21 +95,30 @@ class SearchController extends Controller
     {
         $mediaType = new MediaType();
         $mediaGeoRestrict = new MediaGeoRestrict();
+
         if ($request->id == null) {
             return redirect(action('SearchController@index', ['id_url' => $id_url]));
         }
+
         if ($id_url != null && $type == null) {
             return redirect(action('SearchController@index', ['id_url' => $id_url]));
         }
+
         try {
             $mediaTypeTitle = $request->type;
             $mediaId = $mediaType->getIdByTitle($mediaTypeTitle)[0]->media_type_id;
         } catch (\Exception $exception) {
             $message = 'Not found ID by this title =' . $mediaTypeTitle;
+
             return redirect(action('SearchController@index', ['id_url' => $id_url]))->with('message', $message);
         }
 
-        $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediaId);
+        try {
+            $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediaId);
+        } catch (\Exception $exception) {
+            return back()->with(['message' => $exception->getMessage()]);
+        }
+
 
         if ($mediaInfo === null) {
             $message = 'not exist id =  ' . $request->id . ' with a  media type = ' . $request->type;
@@ -110,6 +130,7 @@ class SearchController extends Controller
         $dataForView['option'] = $request->option;
         $dataForView['id_url'] = $id_url;
         $dataForView['type'] = $type;
+
         return view('search.selectMediaTypes', $dataForView);
     }
 
@@ -164,8 +185,10 @@ class SearchController extends Controller
             'Harlequin'          => 'Harlequin',
             'HarlequinGermany'   => 'Harlequin-Germany',
             'HarlequinIberica'   => 'harl-iberica',
-            'HarperCollins'      => 'harcol',
-            'HarperCollinsUK'    => 'harcol',
+            'HarperCollins'      => 'harper-collins-us',
+            'HarperCollinsUK'    => 'harper-collins-us',
+            'ThomasNelson'       => 'harper-collins-us/Thomas_Nelson',
+            'GrupoNelson'        => 'harper-collins-us/Grupo_Nelson',
             'hasbro'             => 'hasbro',
             'IDW'                => 'idwpub',
             'IPG'                => 'IPG',
