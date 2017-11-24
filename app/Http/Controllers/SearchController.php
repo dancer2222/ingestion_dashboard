@@ -83,6 +83,8 @@ class SearchController extends Controller
 
             return view('search.infoById', $dataForView);
         }
+
+        return view('search.infoById');
     }
 
     /**
