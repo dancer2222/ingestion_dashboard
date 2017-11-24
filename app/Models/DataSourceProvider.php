@@ -23,7 +23,7 @@ class DataSourceProvider extends Model
     {
         $allInfo = $this->select('name')
             ->where('id',$id)
-            ->first()->toArray()['name'];
+            ->first()->toArray();
 
         return count($allInfo) ? $allInfo : null;
     }

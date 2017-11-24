@@ -9,6 +9,9 @@ use App\Models\DataSourceProvider;
 use App\Models\Game;
 use App\Models\Licensor;
 use App\Models\Movie;
+use App\Models\Music;
+use App\Models\MusicAlbumArtist;
+use App\Models\MusicArtist;
 use Aws\S3\S3Client;
 
 /**
@@ -28,13 +31,19 @@ class Info
     {
         $licensor = new Licensor();
         $info = $this->getModel($mediaTypeTitle, $id);
+        $response = '';
+        $linkImageInBucket = '';
         try {
             $imageUrl = $info->imageUrl;
             $info = $info->getById($id);
+            if ($info == null) {
+                $message = 'This [id] = ' . $id . '  not found in database';
+                throw new \Exception($message);
+            }
             $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
             if (isset($info->data_source_provider_id)) {
                 $providerName = new DataSourceProvider();
-                $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
+                $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
             } else {
                 $providerName = null;
             }
@@ -58,6 +67,16 @@ class Info
             } catch (\Exception $exception) {
                 $exception->getMessage();
             }
+        } elseif ($mediaTypeTitle == 'albums') {
+            $musicAlbumArtists = new MusicAlbumArtist();
+            $music = new Music();
+            $tracks = $music->getMusicByAlbumId($id);
+            $musicArtist = $musicAlbumArtists->getArtistByAlbumId($id);
+            $artistName = [];
+            if ($musicArtist != null) {
+                $musicArtistName = new MusicArtist();
+                $artistName = $musicArtistName->getNameArtistByArtistId($musicArtist['artist_id'])['name'];
+            }
         } else {
             $linkImageInBucket = null;
             $response = null;
@@ -73,7 +92,9 @@ class Info
             'info'              => $info,
             'mediaId'           => $mediaId,
             'response'          => $response,
-            'linkImageInBucket' => $linkImageInBucket
+            'linkImageInBucket' => $linkImageInBucket,
+            'artistName'        => $artistName,
+            'tracks'            => $tracks
         ];
 
         return $result;
@@ -121,6 +142,7 @@ class Info
                     $idLink = $id;
                 }
                 $imageUrl = config('main.links.image.album') . $idLink . '.jpg';
+
                 break;
 
         }

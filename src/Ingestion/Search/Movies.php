@@ -26,6 +26,10 @@ class Movies
         try {
             $info = new Movie();
             $info = $info->getById($id);
+            if ($info == null) {
+                $message = 'This [id] = ' . $id . '  not found in Movies database';
+                throw new \Exception($message);
+            }
             //all info by batch_id
             $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
             $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
@@ -37,7 +41,7 @@ class Movies
 
         if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {
             $providerName = new DataSourceProvider();
-            $providerName = $providerName->getDataSourceProviderName($batchInfo['data_source_provider_id']);
+            $providerName = $providerName->getDataSourceProviderName($batchInfo['data_source_provider_id'])['name'];
             $batchInfo['title'] = explode($providerName . '_', $batchInfo['title'], 2)[1];
 
             // Create links to aws bucket
@@ -50,7 +54,7 @@ class Movies
             // Create object for aws bucket
             $object = $licensorName . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
+            $failedItems = $failedItems->getFailedItems($id);
         } else {
             $linkCopy = null;
             $linkShow = null;

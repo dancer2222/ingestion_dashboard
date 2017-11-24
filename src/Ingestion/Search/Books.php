@@ -21,21 +21,23 @@ class Books
      * @param $country_code
      * @param $mediaGeoRestrictGetMediaType
      * @return array
+     * @throws \Exception
      */
     public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
-        try {
-            $info = new Book();
-            $info = $info->getById($id);
-            //all info by batch_id
-            $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
-            $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
-        } catch (\Exception $exception) {
+
+        $info = new Book();
+        $info = $info->getById($id);
+        if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Books database';
-            return view('search.infoById', ['messages' => $message]);
+            throw new \Exception($message);
         }
+        //all info by batch_id
+        $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
+        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+
         if (isset($info['data_origin_id'])) {
             $imageUrl = config('main.links.image.book') . $info['data_origin_id'] . '.jpg';
         } else {
@@ -61,21 +63,22 @@ class Books
                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
                 ],
             ]);
-            try {
-                $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $info['source'] . '/' . $info['isbn'] . '.jpg');
-            } catch (\Exception $exception) {
-                $exception->getMessage();
-            }
+
+
+            $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $info['source'] . '/' . $info['isbn'] . '.jpg');
+            $presentEpub = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $info['source'] . '/' . $info['download_url']);
+
             // Create object for aws bucket
             $object = $info['source'] . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($info['isbn'], $info['batch_id']);
+            $failedItems = $failedItems->getFailedItems($info['isbn']);
         } else {
             $linkCopy = null;
             $linkShow = null;
             $object = null;
             $batchInfo = null;
             $failedItems = null;
+            $presentEpub = null;
         }
 
         $result = [
@@ -92,7 +95,8 @@ class Books
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'response'                     => $response,
             'linkImageInBucket'            => $linkImageInBucket,
-            'messages'                     => $failedItems
+            'messages'                     => $failedItems,
+            'presentEpub'                  => $presentEpub
 
         ];
 

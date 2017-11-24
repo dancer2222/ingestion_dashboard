@@ -50,4 +50,4 @@
     </div>
 </div>
 <br>
-<a href="{{ '/' }}" class="btn btn-info">BACK</a>
+<a class="btn btn-info" href="{{ URL::previous() }}">back</a>

@@ -20,7 +20,7 @@
                             <p style="font-size: 13px">0</p>
                         </td>
                     @elseif($value == 'id')
-                        <td><a href="{{ action('SearchController@index', ['id' => $item]) }}" style="color: #b6a338; text-decoration: none; font-weight: bold;">{{ $item }}</a> </td>
+                        <td><a href="{{ action('SearchController@index', ['id' => $item, 'option' => 'yes']) }}" style="color: #b6a338; text-decoration: none; font-weight: bold;">{{ $item }}</a> </td>
                     @else
                         <td>
                             <p style="font-size: 13px">{{ $item }}</p>

@@ -43,6 +43,7 @@ Route::group(['middleware' => ['google.auth']], function () {
 		Route::post('/select', 'SearchController@selectRedirect');
 
 		Route::post('/show', 'ExcelController@index');
+		Route::get('/track/{id?}/{option?}', 'TrackController@index');
 
         Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
         Route::post('/report', 'BatchReportController@index');

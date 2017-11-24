@@ -22,24 +22,24 @@ class Audiobooks
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
-        try {
-            $info = new AudioBook();
-            $info = $info->getById($id);
-            //all info by batch_id
-            $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
-            $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
-            $idLink = substr($id, -5);
-            $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
-        } catch (\Exception $exception) {
+
+        $info = new AudioBook();
+        $info = $info->getById($id);
+        if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Audiobooks database';
-            return view('search.infoById', ['message' => $message]);
+            throw new \Exception($message);
         }
+        //all info by batch_id
+        $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
+        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+        $idLink = substr($id, -5);
+        $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
+
         $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
-        if($batchInfo != null)
-        {
+        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
+        if ($batchInfo != null) {
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($id, $info['batch_id']);
+            $failedItems = $failedItems->getFailedItems($id);
         } else {
             $failedItems = null;
         }
