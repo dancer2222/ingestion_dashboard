@@ -47,12 +47,14 @@
             <tr>
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
-                @if($presentEpub == 1)
-                    <td style="color: green">Present in the bucket</td>
-                @elseif(isset($http_response_header))
-                    <td style="color: #67b168">{{ $http_response_header }}</td>
-                @else
-                    <td style="color: red">Not present in the bucket</td>
+                @if(isset($presentEpub))
+                    @if($presentEpub == 1)
+                        <td style="color: green">Present in the bucket</td>
+                    @elseif(isset($http_response_header))
+                        <td style="color: #67b168">{{ $http_response_header }}</td>
+                    @else
+                        <td style="color: red">Not present in the bucket</td>
+                    @endif
                 @endif
             </tr>
         @elseif($value === 'batch_id')
