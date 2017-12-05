@@ -28,6 +28,8 @@ RUN chmod 777 /dashboard-run.sh
 
 COPY ./dashboard.conf /etc/nginx/sites-enabled/default.conf
 
+EXPOSE 7771
+
 VOLUME ["/code/dashboard"]
 
 CMD ["/dashboard-run.sh"]
