@@ -7,7 +7,7 @@ dist: trusty
 services:
   - docker
 
-script:
+before_install:
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
   - docker build -f Dockerfile -t $REPO:$TRAVIS_TAG .
   - docker run -d -p 80:80 $REPO:$TRAVIS_TAG
