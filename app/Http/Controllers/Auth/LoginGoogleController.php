@@ -39,7 +39,7 @@ class LoginGoogleController extends Controller {
 	{
 		$user = $google->user();
 
-		if ($user && $user->getDomain() === 'hyuna.bb') {
+		if ($user && $user->getDomain() === 'playster.com') {
 			Session::put('sessionUser', $user);
 
 			return redirect('/');

@@ -7,10 +7,10 @@ dist: trusty
 services:
   - docker
 
-before_install:
+script:
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
-  - docker build -t $REPO:$TRAVIS_TAG .
-  - docker run -d -p 80:80 $REPO:$TRAVIS_TAG
+  - docker build -f Dockerfile -t $REPO .
+  - docker run -d -p 80:80 $REPO
   - docker ps -a
 
 after_success:
@@ -22,3 +22,12 @@ after_success:
 
 script:
   - echo "NO PHPUNIT tests"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: seVfZDRYCB2yOIic+so5EOS+HcLXvZNmWrz7PpzsZtkx4zqlamy4ysKWmdhBJIqumiiUFboy27iJXfTi3lqyaYh9loNPdwAcbe/X2Em7GbYwb35j5ATSKWDGPM9RYmw++gHMGOjJwOKx7PyGZNIV/gTgeytpSIwNcRrcCgrI3N61k1dbZLzyO+9XOoX3xqyjIMq5m5EbXgWK/BZYpQlwbbw66ikCbhsbL6FuE6GGSVio8kdiOdpKJwDwbu8IgmGBlyv4130qdSTa+qH8I9p1QGY2ndd//dSWbpBD4tbStd6Zc7hsVB4wPES5s4HEb6rlVAKc9a4mWGUfQQtPL9pJDTTKccVLf4meVocIw3IAMCoE2yCxWVY/S4mYjhbosGIC6zjgDaIq0r1eUbxmGOMaoXmEJTGsJKNXU7knXRe/8701rhQc1Ypo2+QoPGG/JIlEJTTjUL9tXYWB5ZsHHA4a7NR0dQZu4IyIlDNqQbjycQKLcKkxv/8Jegl0lhzjTTRxXG9pnYEkn+BUdSAmv0wY649ZNNq13UveOLdYpxAjQ8Ws2mUUUbBMXzAkWs+bxLL7TSBT6REoSunUvlog+9WD2HSq6LKa4idDEsHm1MCXp1ALsn02ZAnJXr9dxktt39E2Q0Ujg5MEyf9uqaHN3HPimalV1upleioH+nsDCU/bCGU=
+  file: build.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true
