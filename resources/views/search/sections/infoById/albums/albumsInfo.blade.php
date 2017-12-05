@@ -14,13 +14,12 @@
                                 |&nbsp;<span style="color: #761c19">[Title]</span>- {{ $track['title'] }}
                                 |&nbsp;<span style="color: #761c19">[Date Added]</span> - {{ $track['date_added'] }}
                                 |&nbsp;<span style="color: #761c19">[Status]</span> - {{ $track['status'] }}
-                                | <span style="color: #761c19">[In 7digital]</span> - {{ get_headers($track['download_url'])[13] }}
-                            </a>
+                                | <span style="color: #761c19">[In 7digital]</span> - {{ checkHeaders($track['download_url']) }}
+                        </a>
                     </li>
             @endforeach
         </ul>
     </div>
-
     <td>artist Name</td>
     <td>{{ $artistName }}</td>
 </tr>

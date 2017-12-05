@@ -39,6 +39,12 @@ class SearchController extends Controller
                 return back()->with('message', $message);
             }
 
+            foreach ($mediaGeoRestrictInfo as &$item) {
+                if ($item['status'] == 'inactive') {
+                    $item['country_code'] = 'inactive';
+                }
+            }
+
             if (count($mediaGeoRestrictInfo) > 1) {
                 $result = [];
 
@@ -48,6 +54,7 @@ class SearchController extends Controller
                 }
 
                 $resultUnique = array_unique($result);
+                $country_codeUnique = array_unique($country_code);
 
                 if (count($resultUnique) > 1) {
                     foreach ($resultUnique as $mediaTypes) {
@@ -65,14 +72,15 @@ class SearchController extends Controller
                     ]);
                 }
             } else {
-                $country_code [] = $mediaGeoRestrictInfo[0]['country_code'];
+                $country_codeUnique [] = $mediaGeoRestrictInfo[0]['country_code'];
+
             }
 
             $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
             $mediaTypeTitle = ucfirst($mediaType->getTitleById($mediaGeoRestrictGetMediaType));
             $className = new \ReflectionMethod("Ingestion\Search\\" . $mediaTypeTitle, 'searchInfoById');
             try {
-                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_code, $mediaGeoRestrictGetMediaType['media_type']);
+                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_codeUnique, $mediaGeoRestrictGetMediaType['media_type']);
             } catch (\Exception $exception) {
                 return back()->with(['message' => $exception->getMessage()]);
             }

@@ -18,7 +18,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/', function () {
 		return view('welcome');
 	});
-
+//    Route::get('/home', 'HomeController@index');
 	Route::get('/home', function () {
 		return redirect('brightcove');
 	})->name('home');
@@ -43,11 +43,23 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::post('/show', 'ExcelController@index');
 		Route::get('/track/{id?}/{option?}', 'TrackController@index');
 
-    Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
-    Route::post('/report', 'BatchReportController@index');
+        Route::post('/searchByTitle/{title?}', 'SearchByTitleController@index');
+        Route::post('/report', 'BatchReportController@index');
+
+
+
 	});
 
-	// Ajax requests
+    //Tools route
+    Route::group(['prefix' => 'tools'], function() {
+        Route::get('/', function () {
+            return redirect(route('tools'));
+        });
+        Route::get('/select', 'ToolsController@index');
+        Route::post('/select', 'ToolsController@doIt');
+    });
+
+	 //Ajax requests
 	Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
 });
 

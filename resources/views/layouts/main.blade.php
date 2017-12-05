@@ -14,8 +14,18 @@
 
     {{-- Custom css --}}
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <style>
+        .first-img {
+            background: url({{asset('images/ob.jpg')}}) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+    </style>
 </head>
-<body>
+<body class="first-img">
 
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded mb-5">
     <a class="navbar-brand" href="{{ url('/') }}">
@@ -50,6 +60,9 @@
             <li class="nav-item dropdown">
                 <a href="{{ action('SearchController@index') }}" class="nav-link">Reports</a>
             </li>
+            <li class="nav-item dropdown">
+                <a href="{{ action('ToolsController@index') }}" class="nav-link">Tools</a>
+            </li>
         </ul>
 
         <form class="form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">
@@ -63,7 +76,6 @@
 </nav>
 
 @yield('content')
-
 
 <footer class="container-fluid">
 

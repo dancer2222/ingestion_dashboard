@@ -16,7 +16,12 @@ class Audiobooks
 {
     /**
      * @param $id
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param $mediaTypeTitle
+     * @param $country_code
+     * @param $mediaGeoRestrictGetMediaType
+     *
+     * @return array
+     * @throws \Exception
      */
     public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
@@ -32,7 +37,7 @@ class Audiobooks
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
         $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
-        $idLink = substr($id, -5);
+        $idLink = substr($id, -6);
         $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
 
         $providerName = new DataSourceProvider();

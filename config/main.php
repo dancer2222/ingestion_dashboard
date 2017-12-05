@@ -1,6 +1,6 @@
 <?php
 return [
-    'links' => [
+    'links'    => [
         'playster' => [
             'prod' => 'https://play.playster.com/',
             'qa'   => 'https://qa-playster-v3-3rdparty.playster.com/'
@@ -20,5 +20,12 @@ return [
             'album'     => 'https://prod-image-resizer-v1-cdn1.playster.com/album/7digital/',
             'audiobook' => 'https://prod-image-resizer-v1-cdn1.playster.com/audiobook/findaway/square/'
         ]
+    ],
+    'rabbitMq' => [
+        'host'     => '10.0.10.63',
+        'port'     => '5672',
+        'user'     => 'guest',
+        'password' => 'guest',
+        'queue' => 'ingestion-tools'
     ]
 ];

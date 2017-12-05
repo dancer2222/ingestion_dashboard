@@ -45,6 +45,7 @@ class ExcelController extends Controller
         $batchTitle = $request->batchTitle;
         $title = $request->title;
         $filepath = "download/$batchTitle";
+
         $dataType = explode('.', $batchTitle, 2)[1];
 
         $s3 = new S3Client([

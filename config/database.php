@@ -54,6 +54,21 @@ return [
             'engine' => null,
         ],
 
+        'mysql_prod_slow' => [
+            'driver' => 'mysql',
+            'host' => env('DB_PROD_SQ_HOST', '127.0.0.1'),
+            'port' => env('DB_PROD_SQ_PORT', '3306'),
+            'database' => env('DB_PROD_SQ_DATABASE', 'forge'),
+            'username' => env('DB_PROD_SQ_USERNAME', 'forge'),
+            'password' => env('DB_PROD_SQ_PASSWORD', ''),
+            'unix_socket' => env('DB_PROD_SQ_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'ingestion' => [
             'driver' => 'mysql',
             'host' => env('DB_INGESTION_HOST', '127.0.0.1'),
