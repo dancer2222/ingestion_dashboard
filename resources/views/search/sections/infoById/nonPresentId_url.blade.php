@@ -1,40 +1,5 @@
 <div class="container-fluid">
     <div class="row">
-        {{--<div class="col-lg-4" align="center">--}}
-        {{--<form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">--}}
-        {{--<div class="form-group">--}}
-        {{--<label for="text"><h3>Search by ID <span--}}
-        {{--class="defaultDatabase">{{ config('database.default') }}</span></h3></label>--}}
-        {{--<input type="text" class="input-group col-3" id="id" name="id">--}}
-        {{--</div>--}}
-        {{--<div class="checkbox">--}}
-        {{--<label><input type="checkbox" name="option" value="yes" checked>Do not show empty--}}
-        {{--values</label>--}}
-        {{--</div>--}}
-        {{--<input type="hidden" name="_token" value="{{csrf_token()}}">--}}
-        {{--<button type="submit" class="btn btn-default">Submit</button>--}}
-        {{--</form>--}}
-        {{--</div>--}}
-        {{--<div class="col-lg-4" align="center">--}}
-        {{--<form method="POST" class="form-control-feedback"--}}
-        {{--action="{{ action('SearchByTitleController@index') }}">--}}
-        {{--<div class="form-group">--}}
-        {{--<label for="text"><h3>Search by Title <span--}}
-        {{--class="defaultDatabase">{{ config('database.default') }}</span></h3></label>--}}
-        {{--<input type="text" class="input-group col-3" id="title" name="title">--}}
-        {{--<label for="text">Select a media type</label>--}}
-        {{--<br>--}}
-        {{--<select class="form-control-sm" id="type" name="type">--}}
-        {{--<option name="books">books</option>--}}
-        {{--<option name="movies">movies</option>--}}
-        {{--<option name="audiobooks">audiobooks</option>--}}
-        {{--<option name="albums">albums</option>--}}
-        {{--</select>--}}
-        {{--</div>--}}
-        {{--<input type="hidden" name="_token" value="{{csrf_token()}}">--}}
-        {{--<button type="submit" class="btn btn-default">Submit</button>--}}
-        {{--</form>--}}
-        {{--</div>--}}
         <div class="col-lg-4" align="center" method="get">
             <form id="form_tools" action="{{ route('sel') }}" method="get" class="form-inline">
                 <div class="col">
@@ -63,7 +28,6 @@
                     </select>
                 </div>
             </form>
-
         </div>
         <div class="col-lg-4" align="center">
             @if(isset($selectedTypes))
@@ -71,7 +35,8 @@
                     <form method="POST" class="form-control-feedback"
                           action="{{ action($type['controller']) }}">
                         <div class="form-group">
-                            <label for="text"><h3>Search by <span style="color: red">{{ $type['variableRequest'] }}</span> <span
+                            <label for="text"><h3>Search by <span
+                                            style="color: red">{{ $type['variableRequest'] }}</span> <span
                                             class="defaultDatabase">{{ config('database.default') }}</span></h3>
                             </label>
                             @if($type['variableRequest'] == 'id')
@@ -100,7 +65,6 @@
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
-
             @endif
         </div>
         <div class="col-lg-4" align="center">
@@ -115,8 +79,6 @@
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
         </div>
-</div>
-
-
-<br>
-<a class="btn btn-info" href="{{ URL::previous() }}">back</a>
+    </div>
+    <br>
+    <a class="btn btn-info" href="{{ URL::previous() }}">back</a>
