@@ -34,6 +34,7 @@ class Albums
         $tracks = $music->getMusicByAlbumId($id);
         $musicArtist = $musicAlbumArtists->getArtistByAlbumId($id);
         $nameMusicArtist = [];
+
         if ($musicArtist != null) {
             $musicArtistName = new MusicArtist();
             $nameMusicArtist = $musicArtistName->getNameArtistByArtistId($musicArtist['artist_id']);
@@ -45,6 +46,7 @@ class Albums
             $message = 'This [id] = ' . $id . '  not found in Albums database';
             throw new \Exception($message);
         }
+
         $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
         $idLink = substr($id, -7);
         $firstSymbol = substr($idLink, 0, 1);
@@ -58,6 +60,7 @@ class Albums
 
         $providerName = new DataSourceProvider();
         $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
+
         if ($batchInfo != null) {
             $failedItems = new FailedItems();
             $failedItems = $failedItems->getFailedItems($id);

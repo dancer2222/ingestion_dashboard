@@ -4,7 +4,7 @@ namespace Ingestion\Reports;
 
 
 use App\Models\Album;
-use App\Models\AudioBook;
+use App\Models\Audiobook;
 use App\Models\Book;
 use App\Models\Movie;
 use App\Models\QaBatch;
@@ -101,7 +101,7 @@ class BatchReport
                 break;
             case 'audiobooks':
                 try {
-                    $audioBook = new AudioBook();
+                    $audioBook = new Audiobook();
                     $batch = $audioBook->getBatchInfoForAudioBooks($this->batch_id);
                 } catch (\Exception $exception) {
                     return $exception;

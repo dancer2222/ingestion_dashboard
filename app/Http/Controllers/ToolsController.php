@@ -7,9 +7,19 @@ use Ingestion\Tools\RabbitMQ;
 
 class ToolsController extends Controller
 {
-    public function index()
+
+
+    public function index(Request $request)
     {
-        return view('tools.selectMediaTypeTools');
+        $data = include public_path().'/someconfig.php';
+        $commands = [];
+        if ($request->has('type') && $request->has('action')) {
+            $commands = array_where($data['commands'], function($value, $key) use ($request) {
+                return strpos($key, $request->type) !== false && strpos($key, $request->action) !== false;
+            });
+        }
+
+        return view('tools.selectMediaTypeTools', ['data' => $data , 'commands' => $commands]);
     }
 
     public function doIt(Request $request)

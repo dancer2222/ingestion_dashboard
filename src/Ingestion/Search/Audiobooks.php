@@ -2,7 +2,7 @@
 
 namespace Ingestion\Search;
 
-use App\Models\AudioBook;
+use App\Models\Audiobook;
 use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\QaBatch;
@@ -28,7 +28,7 @@ class Audiobooks
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
 
-        $info = new AudioBook();
+        $info = new Audiobook();
         $info = $info->getById($id);
         if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Audiobooks database';

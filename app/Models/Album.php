@@ -23,6 +23,7 @@ class Album extends Model
     public function getById($id)
     {
         $a = $this->where('id',$id)->first();
+
         return $a ==null ? $a : $a->toArray();
     }
 
@@ -30,10 +31,21 @@ class Album extends Model
      * @param $title
      * @return mixed
      */
-    public function getInfoByTitle($title)
+    public static function getInfoByTitle($title)
     {
         return DB::table('music_album')
             ->where('title',$title)->get();
+    }
+
+    /**
+     * @param $upc
+     *
+     * @return mixed
+     */
+    public static function getInfoByUpc($upc)
+    {
+        return DB::table('music_album')
+            ->where('upc',$upc)->get();
     }
     /**
      * @param $id

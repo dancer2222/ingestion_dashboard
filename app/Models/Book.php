@@ -23,6 +23,7 @@ class Book extends Model
     public function getById($id)
     {
         $a = $this->where('id',$id)->first();
+
         return $a ==null ? $a : $a->toArray();
     }
 
@@ -30,10 +31,16 @@ class Book extends Model
      * @param $title
      * @return mixed
      */
-    public function getInfoByTitle($title)
+    public static function getInfoByTitle($title)
     {
         return DB::table('book')
             ->where('title',$title)->get();
+    }
+
+    public static function getInfoByIsbn($isbn)
+    {
+        return DB::table('book')
+            ->where('isbn',$isbn)->get();
     }
 
     /**

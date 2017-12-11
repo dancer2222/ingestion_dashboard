@@ -4,72 +4,49 @@
 
 @section('content')
     <div class="container">
-        {{--<center>--}}
         <div class="row">
-            <div class="col-lg-3">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Movie
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Active</a>
-                        <a class="dropdown-item" href="#">Inactive</a>
-                        <a class="dropdown-item" href="#">Fix</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
+            <form id="form_tools" action="{{ route('tools.index') }}" method="get" class="form-inline">
+                <div class="col">
+                    <h2>Type </h2>
+                    <select name="type" id="" onchange="$('#form_tools').submit();"
+                            class="form-control form-control-lg">
+                        @foreach($data['types'] as $type)
+                            <option value="{{ $type }}" {{ request()->has('type') && request()->get('type') == $type ? 'selected' : '' }}>{{ $type }}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-
-            <div class="col-lg-3">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Books
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Active</a>
-                        <a class="dropdown-item" href="#">Inactive</a>
-                        <a class="dropdown-item" href="#">Fix</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
+                <div class="col">
+                    <h2>Action</h2>
+                    <select name="action" id="" onchange="$('#form_tools').submit();"
+                            class="form-control form-control-lg">
+                        @foreach($data['actions'] as $action)
+                            <option value="{{ $action }}" {{ request()->has('action') && request()->get('action') == $action ? 'selected' : '' }}>{{ $action }}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-
-            <div class="col-lg-3">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        AudioBooks
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Active</a>
-                        <a class="dropdown-item" href="#">Inactive</a>
-                        <a class="dropdown-item" href="#">Fix</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Music
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Active</a>
-                        <a class="dropdown-item" href="#">Inactive</a>
-                        <a class="dropdown-item" href="#">Fix</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
-        {{--</center>--}}
+        @if($commands)
+            <br>
+            <hr>
+            <h2>Select tolls</h2>
+            @foreach($commands as $command)
+                <hr style="font-weight: bold; ">
+                <div class="row">
+                    <form method="POST" class="form-control-feedback" action="{{ action('ToolsController@doIt') }}">
+                        <div class="form-group">
+                            <label for="text"><h5>Description</h5></label>
+                            <div class="input-group">
+                                <input type="text" id="message" name="message" class="form-control">
+                                <input type="hidden" id="id" name="id" value="1">
+                            </div>
+                        </div>
+                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </div>
+            @endforeach
+        @else
+        @endif
     </div>
 @endsection

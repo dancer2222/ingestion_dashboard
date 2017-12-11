@@ -15,7 +15,8 @@ class SearchController extends Controller
 {
     /**
      * @param Request $request
-     * @param null $id_url
+     * @param null    $id_url
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index(Request $request, $id_url = null)
@@ -55,6 +56,13 @@ class SearchController extends Controller
 
                 $resultUnique = array_unique($result);
                 $country_codeUnique = array_unique($country_code);
+                if (count($country_codeUnique) > 1) {
+                    foreach ($country_codeUnique as &$code) {
+                        if ($code == 'inactive') {
+                            $code = null;
+                        }
+                    }
+                }
 
                 if (count($resultUnique) > 1) {
                     foreach ($resultUnique as $mediaTypes) {
@@ -73,18 +81,19 @@ class SearchController extends Controller
                 }
             } else {
                 $country_codeUnique [] = $mediaGeoRestrictInfo[0]['country_code'];
-
             }
 
             $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
+
             $mediaTypeTitle = ucfirst($mediaType->getTitleById($mediaGeoRestrictGetMediaType));
             $className = new \ReflectionMethod("Ingestion\Search\\" . $mediaTypeTitle, 'searchInfoById');
+
             try {
-                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_codeUnique, $mediaGeoRestrictGetMediaType['media_type']);
+                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_codeUnique,
+                    $mediaGeoRestrictGetMediaType['media_type']);
             } catch (\Exception $exception) {
                 return back()->with(['message' => $exception->getMessage()]);
             }
-
 
             $dataForView['option'] = $request->option;
             $dataForView['id_url'] = $id_url;
@@ -97,8 +106,9 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
-     * @param null $id_url
-     * @param null $type
+     * @param null    $id_url
+     * @param null    $type
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function select(Request $request, $id_url = null, $type = null)
@@ -129,14 +139,15 @@ class SearchController extends Controller
             return back()->with(['message' => $exception->getMessage()]);
         }
 
-
         if ($mediaInfo === null) {
             $message = 'not exist id =  ' . $request->id . ' with a  media type = ' . $request->type;
+
             return back()->with('message', $message);
         }
 
         $info = new Info();
-        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $mediaInfo['country_code'], $mediaId);
+        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $mediaInfo['country_code'],
+            $mediaId);
         $dataForView['option'] = $request->option;
         $dataForView['id_url'] = $id_url;
         $dataForView['type'] = $type;
@@ -146,33 +157,42 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function indexRedirect(Request $request)
     {
-        return redirect(action('SearchController@index', ['id_url' => $request->id,
-                                                          'option' => $request->option]));
+        return redirect(action('SearchController@index', [
+            'id_url' => $request->id,
+            'option' => $request->option
+        ]));
     }
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function selectRedirect(Request $request)
     {
         if (isset($request->type)) {
-            return redirect(action('SearchController@select', ['id_url' => $request->id,
-                                                               'type'   => $request->type,
-                                                               'option' => $request->option]));
+            return redirect(action('SearchController@select', [
+                'id_url' => $request->id,
+                'type'   => $request->type,
+                'option' => $request->option
+            ]));
         } else {
-            return redirect(action('SearchController@select', ['id_url' => $request->id,
-                                                               'option' => $request->option]));
+            return redirect(action('SearchController@select', [
+                'id_url' => $request->id,
+                'option' => $request->option
+            ]));
         }
 
     }
 
     /**
      * @param $licensorName
+     *
      * @return mixed
      */
     public static function normalizeBucketName($licensorName)

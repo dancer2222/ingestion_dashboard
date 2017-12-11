@@ -30,7 +30,7 @@ class Movie extends Model
      * @param $title
      * @return mixed
      */
-    public function getInfoByTitle($title)
+    public static function getInfoByTitle($title)
     {
         return DB::table('movie')
             ->where('title',$title)->get();
