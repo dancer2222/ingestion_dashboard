@@ -5,11 +5,28 @@ namespace Ingestion\Tools;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
+/**
+ * Class RabbitMQ
+ * @package Ingestion\Tools
+ */
 class RabbitMQ
 {
+    /**
+     * @var AMQPStreamConnection
+     */
     private $connection;
+    /**
+     * @var
+     */
     private $queue;
 
+    /**
+     * RabbitMQ constructor.
+     *
+     * @param array $config
+     *
+     * @throws \Exception
+     */
     public function __construct(array $config)
     {
         if (!$config['host']) {
@@ -42,6 +59,11 @@ class RabbitMQ
         $this->createChanel();
     }
 
+    /**
+     * @param string|null $queue
+     *
+     * @return \PhpAmqpLib\Channel\AMQPChannel
+     */
     public function createChanel(string $queue = null)
     {
         if (!$queue) {
@@ -53,7 +75,11 @@ class RabbitMQ
         return $this->channel;
     }
 
-
+    /**
+     * @param $message
+     *
+     * @return $this
+     */
     public function putMessage($message)
     {
         $msg = new AMQPMessage($this->channel, $message);
@@ -62,6 +88,9 @@ class RabbitMQ
         return $this;
     }
 
+    /**
+     *
+     */
     public function closeConnection()
     {
         $this->channel->close();

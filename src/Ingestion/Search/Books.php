@@ -32,7 +32,6 @@ class Books
         $licensor = new Licensor();
         $mediaLenguage = new MediaLanguage();
         $maLanguage = new MaLanguage();
-
         $info = new Book();
         $info = $info->getById($id);
 

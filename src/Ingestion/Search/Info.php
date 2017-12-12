@@ -117,6 +117,7 @@ class Info
                 $info = new Movie();
                 $imageUrl = config('main.links.image.movie') . $id . '.jpg';
                 break;
+
             case 'books':
                 $info = new Book();
                 if (strlen($id) > 5) {
@@ -126,6 +127,7 @@ class Info
                 }
                 $imageUrl = config('main.links.image.book') . $isbn . '.jpg';
                 break;
+
             case 'audiobooks':
                 $info = new Audiobook();
                 if (strlen($id) > 5) {
@@ -135,10 +137,12 @@ class Info
                 }
                 $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
                 break;
+
             case 'games':
                 $info = new Game();
                 $imageUrl = config('main.links.image.game') . $id . '.jpg';
                 break;
+
             case 'albums':
                 $info = new Album();
                 if (strlen($id) > 5) {

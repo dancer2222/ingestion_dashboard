@@ -170,6 +170,7 @@ class ExcelController extends Controller
         try {
             $xml = simplexml_load_file($filepath);
         } catch (\ErrorException $exception) {
+
             return $exception;
         }
 

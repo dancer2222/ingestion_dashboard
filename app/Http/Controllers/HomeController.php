@@ -35,8 +35,7 @@ class HomeController extends Controller
 
         $channel->close();
         $connection->close();
-//
-//        die;
+
         return view('home');
     }
 }

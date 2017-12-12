@@ -15,7 +15,7 @@ class SearchController extends Controller
 {
     /**
      * @param Request $request
-     * @param null    $id_url
+     * @param null $id_url
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
@@ -72,11 +72,11 @@ class SearchController extends Controller
                     $more = '';
 
                     return view('search.selectMediaTypes', [
-                        'more'            => $more,
-                        'id'              => $request->id,
+                        'more' => $more,
+                        'id' => $request->id,
                         'mediaTypeTitles' => $mediaTypeTitles,
-                        'id_url'          => $id_url,
-                        'option'          => $request->option
+                        'id_url' => $id_url,
+                        'option' => $request->option
                     ]);
                 }
             } else {
@@ -106,8 +106,8 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
-     * @param null    $id_url
-     * @param null    $type
+     * @param null $id_url
+     * @param null $type
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
@@ -117,6 +117,7 @@ class SearchController extends Controller
         $mediaGeoRestrict = new MediaGeoRestrict();
 
         if ($request->id == null) {
+
             return redirect(action('SearchController@index', ['id_url' => $id_url]));
         }
 
@@ -136,6 +137,7 @@ class SearchController extends Controller
         try {
             $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediaId);
         } catch (\Exception $exception) {
+
             return back()->with(['message' => $exception->getMessage()]);
         }
 
@@ -178,7 +180,7 @@ class SearchController extends Controller
         if (isset($request->type)) {
             return redirect(action('SearchController@select', [
                 'id_url' => $request->id,
-                'type'   => $request->type,
+                'type' => $request->type,
                 'option' => $request->option
             ]));
         } else {
@@ -198,46 +200,46 @@ class SearchController extends Controller
     public static function normalizeBucketName($licensorName)
     {
         $providers = [
-            'Aenetworks'         => 'aenetworks',
-            'Imira'              => 'imira',
-            'Brainstorm Media'   => 'brainmedia',
-            'EntertainmentOne'   => 'eone',
-            '9StoryMedia'        => '9storymedia',
-            'Baker'              => 'baker',
-            'BBC'                => 'bbc',
-            'Corus'              => 'corus',
-            'DeMarque'           => 'demarque',
-            'DHXMedia'           => 'dhxmedia',
-            'Draft2Digital'      => 'draft2digital',
-            'DynamiteComics'     => 'dynamitecomics',
-            'Firebrand'          => 'Firebrand',
-            'Nelvana'            => 'corus',
-            'Harlequin'          => 'Harlequin',
-            'HarlequinGermany'   => 'Harlequin-Germany',
-            'HarlequinIberica'   => 'harl-iberica',
-            'HarperCollins'      => 'harper-collins-us',
-            'HarperCollinsUK'    => 'harper-collins-us',
-            'ThomasNelson'       => 'harper-collins-us/Thomas_Nelson',
-            'GrupoNelson'        => 'harper-collins-us/Grupo_Nelson',
-            'hasbro'             => 'hasbro',
-            'IDW'                => 'idwpub',
-            'IPG'                => 'IPG',
-            'JoMedia'            => 'JoMedia',
+            'Aenetworks' => 'aenetworks',
+            'Imira' => 'imira',
+            'Brainstorm Media' => 'brainmedia',
+            'EntertainmentOne' => 'eone',
+            '9StoryMedia' => '9storymedia',
+            'Baker' => 'baker',
+            'BBC' => 'bbc',
+            'Corus' => 'corus',
+            'DeMarque' => 'demarque',
+            'DHXMedia' => 'dhxmedia',
+            'Draft2Digital' => 'draft2digital',
+            'DynamiteComics' => 'dynamitecomics',
+            'Firebrand' => 'Firebrand',
+            'Nelvana' => 'corus',
+            'Harlequin' => 'Harlequin',
+            'HarlequinGermany' => 'Harlequin-Germany',
+            'HarlequinIberica' => 'harl-iberica',
+            'HarperCollins' => 'harper-collins-us',
+            'HarperCollinsUK' => 'harper-collins-us',
+            'ThomasNelson' => 'harper-collins-us/Thomas_Nelson',
+            'GrupoNelson' => 'harper-collins-us/Grupo_Nelson',
+            'hasbro' => 'hasbro',
+            'IDW' => 'idwpub',
+            'IPG' => 'IPG',
+            'JoMedia' => 'JoMedia',
             'NationalGeographic' => 'nationalgeographic',
-            'Palatium'           => 'palatium',
-            'Parkstone'          => 'parkstone',
-            'pickatale'          => 'pickatale',
-            'Pubdrive'           => 'pubdrive',
-            'RedWheelWeiser'     => 'rwwbooks',
-            'SandrewMetronome'   => 'sandrewmetronome',
-            'Scanbox'            => 'scanbox',
-            'Screenmedia'        => 'screenmedia',
-            'SimonAndSchuster'   => 'simonschuster',
-            'StreetLib'          => 'streetlib',
-            'TheOrchard'         => 'theorchard',
-            'TwinSisters'        => 'twinsisters',
-            'UnderTheMilkyWay'   => 'underthemilkyway',
-            'Vearsa'             => 'vearsa',
+            'Palatium' => 'palatium',
+            'Parkstone' => 'parkstone',
+            'pickatale' => 'pickatale',
+            'Pubdrive' => 'pubdrive',
+            'RedWheelWeiser' => 'rwwbooks',
+            'SandrewMetronome' => 'sandrewmetronome',
+            'Scanbox' => 'scanbox',
+            'Screenmedia' => 'screenmedia',
+            'SimonAndSchuster' => 'simonschuster',
+            'StreetLib' => 'streetlib',
+            'TheOrchard' => 'theorchard',
+            'TwinSisters' => 'twinsisters',
+            'UnderTheMilkyWay' => 'underthemilkyway',
+            'Vearsa' => 'vearsa',
         ];
 
         foreach ($providers as $provider => $value) {

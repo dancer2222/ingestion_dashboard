@@ -58,7 +58,7 @@
             </li>
 
             <li class="nav-item dropdown">
-                <a href="{{ action('SearchController@index') }}" class="nav-link">Reports</a>
+                <a href="{{ action('SearchController@index') }}" class="nav-link">Search</a>
             </li>
             <li class="nav-item dropdown">
                 <a href="{{ action('ToolsController@index') }}" class="nav-link">Tools</a>

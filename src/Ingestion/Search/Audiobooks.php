@@ -27,11 +27,12 @@ class Audiobooks
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
-
         $info = new Audiobook();
         $info = $info->getById($id);
+
         if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Audiobooks database';
+
             throw new \Exception($message);
         }
         //all info by batch_id
@@ -48,7 +49,6 @@ class Audiobooks
         } else {
             $failedItems = null;
         }
-
 
         $result = [
             'id'                           => $id,
