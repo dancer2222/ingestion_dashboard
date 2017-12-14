@@ -14,9 +14,14 @@ use Illuminate\Http\Request;
 */
 
 
-Route::group(['prefix' => 'brightcove', 'middleware' => ['api.brightcove.notifications'], 'namespace' => 'Brightcove'], function ($app) {
-    Route::post('/notifications', 'NotificationsController@updateStatus');
+//Route::group(['prefix' => 'brightcove', 'middleware' => ['api.brightcove.notifications'], 'namespace' => 'Brightcove'], function ($app) {
+//    Route::post('/notifications', 'NotificationsController@updateStatus');
+//});
+
+Route::group(['prefix' => 'v1'], function() {
+        Route::post('/tools/config', 'API\\V1\\Tools\\ConfigController@store');
 });
+
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();

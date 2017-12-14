@@ -19,3 +19,23 @@ footer {
 body {
   font-size: 0.9rem;
 }
+.table {
+  background-color: white;
+}
+.container .table{
+  background-color: white;
+}
+
+h3 span {
+  color: orange;
+  font-weight: bold;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, cursive;
+}
+
+.container {
+    background-color: white;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+}
+
+

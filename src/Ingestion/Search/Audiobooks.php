@@ -2,7 +2,7 @@
 
 namespace Ingestion\Search;
 
-use App\Models\AudioBook;
+use App\Models\Audiobook;
 use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\QaBatch;
@@ -16,23 +16,29 @@ class Audiobooks
 {
     /**
      * @param $id
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param $mediaTypeTitle
+     * @param $country_code
+     * @param $mediaGeoRestrictGetMediaType
+     *
+     * @return array
+     * @throws \Exception
      */
     public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
-
-        $info = new AudioBook();
+        $info = new Audiobook();
         $info = $info->getById($id);
+
         if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Audiobooks database';
+
             throw new \Exception($message);
         }
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
         $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
-        $idLink = substr($id, -5);
+        $idLink = substr($id, -6);
         $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
 
         $providerName = new DataSourceProvider();
@@ -43,7 +49,6 @@ class Audiobooks
         } else {
             $failedItems = null;
         }
-
 
         $result = [
             'id'                           => $id,

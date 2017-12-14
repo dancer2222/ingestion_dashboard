@@ -12,6 +12,7 @@ RUN yes | pecl install xdebug \
            && tar -C /usr/src/php/ext/memcached -zxvf /tmp/memcached.tar.gz --strip 1 \
            && docker-php-ext-configure memcached \
            && docker-php-ext-install memcached \
+           && docker-php-ext-install bcmath \
            && rm /tmp/memcached.tar.gz \
     && docker-php-ext-install zip \
 	# Install composer

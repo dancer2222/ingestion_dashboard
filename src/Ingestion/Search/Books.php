@@ -6,6 +6,8 @@ use App\Http\Controllers\SearchController;
 use App\Models\Book;
 use App\Models\FailedItems;
 use App\Models\Licensor;
+use App\Models\MaLanguage;
+use App\Models\MediaLanguage;
 use App\Models\QaBatch;
 use Aws\S3\S3Client;
 
@@ -20,6 +22,7 @@ class Books
      * @param $mediaTypeTitle
      * @param $country_code
      * @param $mediaGeoRestrictGetMediaType
+     *
      * @return array
      * @throws \Exception
      */
@@ -27,13 +30,20 @@ class Books
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
-
+        $mediaLenguage = new MediaLanguage();
+        $maLanguage = new MaLanguage();
         $info = new Book();
         $info = $info->getById($id);
+
         if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Books database';
             throw new \Exception($message);
         }
+
+        $langId = $mediaLenguage->getBookLanguageId($id);
+        $langName = $maLanguage->getLanguageNameByLanguageId($langId['language_id'])['name'];
+        $info['language'] = $langName;
+
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
         $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
@@ -64,9 +74,10 @@ class Books
                 ],
             ]);
 
-
-            $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $info['source'] . '/' . $info['isbn'] . '.jpg');
-            $presentEpub = $s3->doesObjectExist(config('main.links.aws.bucket.books'), $info['source'] . '/' . $info['download_url']);
+            $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'),
+                $info['source'] . '/' . $info['isbn'] . '.jpg');
+            $presentEpub = $s3->doesObjectExist(config('main.links.aws.bucket.books'),
+                $info['source'] . '/' . $info['download_url']);
 
             // Create object for aws bucket
             $object = $info['source'] . '/' . $batchInfo['title'];
@@ -96,7 +107,8 @@ class Books
             'response'                     => $response,
             'linkImageInBucket'            => $linkImageInBucket,
             'messages'                     => $failedItems,
-            'presentEpub'                  => $presentEpub
+            'presentEpub'                  => $presentEpub,
+            'langName'                     => $langName
 
         ];
 

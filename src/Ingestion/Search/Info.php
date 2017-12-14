@@ -3,7 +3,7 @@
 namespace Ingestion\Search;
 
 use App\Models\Album;
-use App\Models\AudioBook;
+use App\Models\Audiobook;
 use App\Models\Book;
 use App\Models\DataSourceProvider;
 use App\Models\Game;
@@ -33,6 +33,9 @@ class Info
         $info = $this->getModel($mediaTypeTitle, $id);
         $response = '';
         $linkImageInBucket = '';
+        $artistName = '';
+        $tracks = '';
+
         try {
             $imageUrl = $info->imageUrl;
             $info = $info->getById($id);
@@ -52,6 +55,7 @@ class Info
             $message = 'This [id] = ' . $id . '  not found in Books database';
             return back()->with('message', $message);
         }
+
         if ($mediaTypeTitle == 'books') {
             $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $providerName . '/' . $info['isbn'] . '.jpg';
             $s3 = new S3Client([
@@ -80,6 +84,8 @@ class Info
         } else {
             $linkImageInBucket = null;
             $response = null;
+            $artistName = null;
+            $tracks = null;
         }
 
         $result = [
@@ -103,7 +109,8 @@ class Info
     /**
      * @param $mediaTypeTitle
      * @param $id
-     * @return Album|AudioBook|Book|Game|Movie
+     *
+     * @return Album|Audiobook|Book|Game|Movie
      */
     public function getModel($mediaTypeTitle, $id)
     {
@@ -112,6 +119,7 @@ class Info
                 $info = new Movie();
                 $imageUrl = config('main.links.image.movie') . $id . '.jpg';
                 break;
+
             case 'books':
                 $info = new Book();
                 if (strlen($id) > 5) {
@@ -121,8 +129,9 @@ class Info
                 }
                 $imageUrl = config('main.links.image.book') . $isbn . '.jpg';
                 break;
+
             case 'audiobooks':
-                $info = new AudioBook();
+                $info = new Audiobook();
                 if (strlen($id) > 5) {
                     $idLink = substr($id, -5);
                 } else {
@@ -130,10 +139,12 @@ class Info
                 }
                 $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
                 break;
+
             case 'games':
                 $info = new Game();
                 $imageUrl = config('main.links.image.game') . $id . '.jpg';
                 break;
+
             case 'albums':
                 $info = new Album();
                 if (strlen($id) > 5) {
@@ -144,7 +155,6 @@ class Info
                 $imageUrl = config('main.links.image.album') . $idLink . '.jpg';
 
                 break;
-
         }
 
         $info->imageUrl = $imageUrl;

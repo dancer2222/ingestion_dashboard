@@ -4,7 +4,7 @@ namespace Ingestion\Reports;
 
 
 use App\Models\Album;
-use App\Models\AudioBook;
+use App\Models\Audiobook;
 use App\Models\Book;
 use App\Models\Movie;
 use App\Models\QaBatch;
@@ -26,6 +26,7 @@ class BatchReport
 
     /**
      * BatchReport constructor.
+     *
      * @param $batch_id
      */
     public function __construct($batch_id)
@@ -40,8 +41,10 @@ class BatchReport
     {
         try {
             $message = $this->generateBatchList();
+
             return $message;
         } catch (\Exception $e) {
+
             return $e;
         }
     }
@@ -62,6 +65,7 @@ class BatchReport
                 return $message;
             }
         } catch (\Exception $exception) {
+
             return $exception;
         }
 
@@ -70,6 +74,7 @@ class BatchReport
         try {
             $mediaTypeTitle = $mediaTypes->getTitleById($batch_info['media_type_id']);
         } catch (\Exception $exception) {
+
             return $exception;
         }
 
@@ -79,6 +84,7 @@ class BatchReport
                     $movie = new Movie();
                     $batch = $movie->getBatchInfoForMovies($this->batch_id);
                 } catch (\Exception $exception) {
+
                     return $exception;
                 }
                 break;
@@ -87,6 +93,7 @@ class BatchReport
                     $book = new Book();
                     $batch = $book->getBatchInfoForBooks($this->batch_id);
                 } catch (\Exception $exception) {
+
                     return $exception;
                 }
                 break;
@@ -96,19 +103,22 @@ class BatchReport
                     $album = new Album();
                     $batch = $album->getBatchInfoForAlbums($this->batch_id);
                 } catch (\Exception $exception) {
+
                     return $exception;
                 }
                 break;
             case 'audiobooks':
                 try {
-                    $audioBook = new AudioBook();
+                    $audioBook = new Audiobook();
                     $batch = $audioBook->getBatchInfoForAudioBooks($this->batch_id);
                 } catch (\Exception $exception) {
+
                     return $exception;
                 }
                 break;
             default:
                 $message = 'This batch_id [' . $this->batch_id . '] not found in database';
+
                 return $message;
         }
 
@@ -124,6 +134,7 @@ class BatchReport
             }
             array_unshift($finalBatch, array_keys($finalBatch[0]));
         } catch (\Exception $exception) {
+
             return $exception;
         }
 
@@ -135,8 +146,10 @@ class BatchReport
                 });
             })->download('xlsx');
             $message = 'Report generate successful';
+
             return $message;
         } catch (Exception $exception) {
+
             return $exception;
         }
     }
@@ -149,6 +162,7 @@ class BatchReport
     protected function getReportFileName()
     {
         $currentDate = (new DateTime())->format('Y-m-d');
+
         return $this->batch_id . '_BatchReport_' . $currentDate . '.xls';
     }
 }

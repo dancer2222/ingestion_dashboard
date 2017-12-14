@@ -14,10 +14,20 @@
 
     {{-- Custom css --}}
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-</head>
-<body>
+    <style>
+        .first-img {
+            background: url({{asset('images/ob.jpg')}}) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
 
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded mb-5">
+    </style>
+</head>
+<body class="first-img">
+
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded mb-5 fixed-top">
     <a class="navbar-brand" href="{{ url('/') }}">
         <img src="{{ asset('images/elephant-logo.png') }}" width="50" height="30" alt="">
     </a>
@@ -37,7 +47,7 @@
 
         @else
 
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto ">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="dropdownBrightcove" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                    href="#">Brightcove</a>
@@ -48,7 +58,10 @@
             </li>
 
             <li class="nav-item dropdown">
-                <a href="{{ action('SearchController@index') }}" class="nav-link">Reports</a>
+                <a href="{{ action('SearchController@index') }}" class="nav-link">Search</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="{{ action('ToolsController@index') }}" class="nav-link">Tools</a>
             </li>
         </ul>
 
@@ -76,9 +89,8 @@
 
     </div>
 </nav>
-
+<br><br><br><br>
 @yield('content')
-
 
 <footer class="container-fluid">
 

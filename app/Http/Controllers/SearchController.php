@@ -16,6 +16,7 @@ class SearchController extends Controller
     /**
      * @param Request $request
      * @param null $id_url
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index(Request $request, $id_url = null)
@@ -39,6 +40,12 @@ class SearchController extends Controller
                 return back()->with('message', $message);
             }
 
+            foreach ($mediaGeoRestrictInfo as &$item) {
+                if ($item['status'] == 'inactive') {
+                    $item['country_code'] = 'inactive';
+                }
+            }
+
             if (count($mediaGeoRestrictInfo) > 1) {
                 $result = [];
 
@@ -48,6 +55,14 @@ class SearchController extends Controller
                 }
 
                 $resultUnique = array_unique($result);
+                $country_codeUnique = array_unique($country_code);
+                if (count($country_codeUnique) > 1) {
+                    foreach ($country_codeUnique as &$code) {
+                        if ($code == 'inactive') {
+                            $code = null;
+                        }
+                    }
+                }
 
                 if (count($resultUnique) > 1) {
                     foreach ($resultUnique as $mediaTypes) {
@@ -57,26 +72,28 @@ class SearchController extends Controller
                     $more = '';
 
                     return view('search.selectMediaTypes', [
-                        'more'            => $more,
-                        'id'              => $request->id,
+                        'more' => $more,
+                        'id' => $request->id,
                         'mediaTypeTitles' => $mediaTypeTitles,
-                        'id_url'          => $id_url,
-                        'option'          => $request->option
+                        'id_url' => $id_url,
+                        'option' => $request->option
                     ]);
                 }
             } else {
-                $country_code [] = $mediaGeoRestrictInfo[0]['country_code'];
+                $country_codeUnique [] = $mediaGeoRestrictInfo[0]['country_code'];
             }
 
             $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
+
             $mediaTypeTitle = ucfirst($mediaType->getTitleById($mediaGeoRestrictGetMediaType));
             $className = new \ReflectionMethod("Ingestion\Search\\" . $mediaTypeTitle, 'searchInfoById');
+
             try {
-                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_code, $mediaGeoRestrictGetMediaType['media_type']);
+                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_codeUnique,
+                    $mediaGeoRestrictGetMediaType['media_type']);
             } catch (\Exception $exception) {
                 return back()->with(['message' => $exception->getMessage()]);
             }
-
 
             $dataForView['option'] = $request->option;
             $dataForView['id_url'] = $id_url;
@@ -91,6 +108,7 @@ class SearchController extends Controller
      * @param Request $request
      * @param null $id_url
      * @param null $type
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function select(Request $request, $id_url = null, $type = null)
@@ -99,6 +117,7 @@ class SearchController extends Controller
         $mediaGeoRestrict = new MediaGeoRestrict();
 
         if ($request->id == null) {
+
             return redirect(action('SearchController@index', ['id_url' => $id_url]));
         }
 
@@ -118,17 +137,19 @@ class SearchController extends Controller
         try {
             $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediaId);
         } catch (\Exception $exception) {
+
             return back()->with(['message' => $exception->getMessage()]);
         }
 
-
         if ($mediaInfo === null) {
             $message = 'not exist id =  ' . $request->id . ' with a  media type = ' . $request->type;
+
             return back()->with('message', $message);
         }
 
         $info = new Info();
-        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $mediaInfo['country_code'], $mediaId);
+        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $mediaInfo['country_code'],
+            $mediaId);
         $dataForView['option'] = $request->option;
         $dataForView['id_url'] = $id_url;
         $dataForView['type'] = $type;
@@ -138,78 +159,87 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function indexRedirect(Request $request)
     {
-        return redirect(action('SearchController@index', ['id_url' => $request->id,
-                                                          'option' => $request->option]));
+        return redirect(action('SearchController@index', [
+            'id_url' => $request->id,
+            'option' => $request->option
+        ]));
     }
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function selectRedirect(Request $request)
     {
         if (isset($request->type)) {
-            return redirect(action('SearchController@select', ['id_url' => $request->id,
-                                                               'type'   => $request->type,
-                                                               'option' => $request->option]));
+            return redirect(action('SearchController@select', [
+                'id_url' => $request->id,
+                'type' => $request->type,
+                'option' => $request->option
+            ]));
         } else {
-            return redirect(action('SearchController@select', ['id_url' => $request->id,
-                                                               'option' => $request->option]));
+            return redirect(action('SearchController@select', [
+                'id_url' => $request->id,
+                'option' => $request->option
+            ]));
         }
 
     }
 
     /**
      * @param $licensorName
+     *
      * @return mixed
      */
     public static function normalizeBucketName($licensorName)
     {
         $providers = [
-            'Aenetworks'         => 'aenetworks',
-            'Imira'              => 'imira',
-            'Brainstorm Media'   => 'brainmedia',
-            'EntertainmentOne'   => 'eone',
-            '9StoryMedia'        => '9storymedia',
-            'Baker'              => 'baker',
-            'BBC'                => 'bbc',
-            'Corus'              => 'corus',
-            'DeMarque'           => 'demarque',
-            'DHXMedia'           => 'dhxmedia',
-            'Draft2Digital'      => 'draft2digital',
-            'DynamiteComics'     => 'dynamitecomics',
-            'Firebrand'          => 'Firebrand',
-            'Nelvana'            => 'corus',
-            'Harlequin'          => 'Harlequin',
-            'HarlequinGermany'   => 'Harlequin-Germany',
-            'HarlequinIberica'   => 'harl-iberica',
-            'HarperCollins'      => 'harper-collins-us',
-            'HarperCollinsUK'    => 'harper-collins-us',
-            'ThomasNelson'       => 'harper-collins-us/Thomas_Nelson',
-            'GrupoNelson'        => 'harper-collins-us/Grupo_Nelson',
-            'hasbro'             => 'hasbro',
-            'IDW'                => 'idwpub',
-            'IPG'                => 'IPG',
-            'JoMedia'            => 'JoMedia',
+            'Aenetworks' => 'aenetworks',
+            'Imira' => 'imira',
+            'Brainstorm Media' => 'brainmedia',
+            'EntertainmentOne' => 'eone',
+            '9StoryMedia' => '9storymedia',
+            'Baker' => 'baker',
+            'BBC' => 'bbc',
+            'Corus' => 'corus',
+            'DeMarque' => 'demarque',
+            'DHXMedia' => 'dhxmedia',
+            'Draft2Digital' => 'draft2digital',
+            'DynamiteComics' => 'dynamitecomics',
+            'Firebrand' => 'Firebrand',
+            'Nelvana' => 'corus',
+            'Harlequin' => 'Harlequin',
+            'HarlequinGermany' => 'Harlequin-Germany',
+            'HarlequinIberica' => 'harl-iberica',
+            'HarperCollins' => 'harper-collins-us',
+            'HarperCollinsUK' => 'harper-collins-us',
+            'ThomasNelson' => 'harper-collins-us/Thomas_Nelson',
+            'GrupoNelson' => 'harper-collins-us/Grupo_Nelson',
+            'hasbro' => 'hasbro',
+            'IDW' => 'idwpub',
+            'IPG' => 'IPG',
+            'JoMedia' => 'JoMedia',
             'NationalGeographic' => 'nationalgeographic',
-            'Palatium'           => 'palatium',
-            'Parkstone'          => 'parkstone',
-            'pickatale'          => 'pickatale',
-            'Pubdrive'           => 'pubdrive',
-            'RedWheelWeiser'     => 'rwwbooks',
-            'SandrewMetronome'   => 'sandrewmetronome',
-            'Scanbox'            => 'scanbox',
-            'Screenmedia'        => 'screenmedia',
-            'SimonAndSchuster'   => 'simonschuster',
-            'StreetLib'          => 'streetlib',
-            'TheOrchard'         => 'theorchard',
-            'TwinSisters'        => 'twinsisters',
-            'UnderTheMilkyWay'   => 'underthemilkyway',
-            'Vearsa'             => 'vearsa',
+            'Palatium' => 'palatium',
+            'Parkstone' => 'parkstone',
+            'pickatale' => 'pickatale',
+            'Pubdrive' => 'pubdrive',
+            'RedWheelWeiser' => 'rwwbooks',
+            'SandrewMetronome' => 'sandrewmetronome',
+            'Scanbox' => 'scanbox',
+            'Screenmedia' => 'screenmedia',
+            'SimonAndSchuster' => 'simonschuster',
+            'StreetLib' => 'streetlib',
+            'TheOrchard' => 'theorchard',
+            'TwinSisters' => 'twinsisters',
+            'UnderTheMilkyWay' => 'underthemilkyway',
+            'Vearsa' => 'vearsa',
         ];
 
         foreach ($providers as $provider => $value) {

@@ -24,6 +24,7 @@ class TrackController extends Controller
         }
         $dataForView['option'] = $option;
         $dataForView['id_url'] = $id;
+
         return view('search.Trakcs', $dataForView);
     }
 }

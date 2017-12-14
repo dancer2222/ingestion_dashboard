@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col text-center">
                         <h3>Search by ID in <span
-                                    class="defaultDatabase text-primary">{{ config('database.default') }}</span></h3>
+                                    class="defaultDatabase text-warning">{{ config('database.default') }}</span></h3>
                         <form class="form-group  justify-content-center" method="post"
                               action="{{ action('SearchController@index') }}">
                             <div align="center">

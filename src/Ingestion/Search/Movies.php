@@ -17,13 +17,18 @@ class Movies
 {
     /**
      * @param $id
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param $mediaTypeTitle
+     * @param $country_code
+     * @param $mediaGeoRestrictGetMediaType
+     *
+     * @return array
+     * @throws \Exception
      */
     public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
-        try {
+
             $info = new Movie();
             $info = $info->getById($id);
             if ($info == null) {
@@ -34,10 +39,6 @@ class Movies
             $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
             $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
             $imageUrl = config('main.links.image.movie') . $id . '.jpg';
-        } catch (\Exception $exception) {
-            $message = 'This [id] = ' . $id . '  not found in Movies database';
-            return view('search.infoById', ['message' => $message]);
-        }
 
         if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {
             $providerName = new DataSourceProvider();

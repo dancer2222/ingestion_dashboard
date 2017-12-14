@@ -9,7 +9,6 @@
     @else
         @include('search.sections.infoById.nonPresentId_url')
     @endif
-
     <br>
     @if(isset($info))
         <div class="container">
@@ -60,19 +59,18 @@
                     <td>
                         <div id="country_code" class="collapse">
                             @foreach($country_code as $item)
-                                @if( in_array($item,['US', 'CA', 'GB']) )
-                                    <b style='color:#cb1906'>{{$item}}</b>
+                                @if( in_array($item,['US', 'CA', 'GB']) or $item == 'inactive')
+                                    <b style='color: red'>{{$item}}</b>
                                 @else
                                     {{ $item }}
                                 @endif
                             @endforeach
                         </div>
                     </td>
-
                 </tr>
             </table>
         </div>
+        <br>
         @include('search.sections.links.linksForWatch')
     @endif
-
 @endsection

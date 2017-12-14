@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class AudioBook
+ * Class Audiobook
  * @package App\Models
  */
-class AudioBook extends Model
+class Audiobook extends Model
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class AudioBook extends Model
      * @param $title
      * @return mixed
      */
-    public function getInfoByTitle($title)
+    public static function getInfoByTitle($title)
     {
         return DB::table('audio_book')
             ->where('title',$title)->get();
