@@ -51,7 +51,7 @@ class ToolsController extends Controller
             'name' => $command[2]
             ];
 
-        $options = $request->has('options') ? $request->options : [];
+        $options = $request->has('params') ? $request->params : [];
 
         foreach ($options as $param => $value) {
             $message['extra']['options'][$param] = $value;
