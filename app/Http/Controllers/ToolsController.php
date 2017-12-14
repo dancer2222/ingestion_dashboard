@@ -39,7 +39,7 @@ class ToolsController extends Controller
     /**
      * @param Request $request
      *
-     * @return bool|\Exception
+     * @return \Exception|\Illuminate\Http\RedirectResponse
      */
     public function doIt(Request $request)
     {
@@ -51,25 +51,26 @@ class ToolsController extends Controller
             'name' => $command[2]
             ];
 
-        foreach ($request->params as $param => $value) {
-            $message['extra'] = [
-                'options' => [
-                    $param => $value
-                ]
-            ];
+        $options = $request->has('params') ? $request->params : [];
+
+        foreach ($options as $param => $value) {
+            $message['extra']['options'][$param] = $value;
         }
 
-        foreach ($request->arguments as $params => $value) {
-            $message['arguments'] = [$params];
+        $arguments = $request->has('arguments') ? $request->arguments : [];
+
+        foreach ($arguments as $param => $value) {
+            $message['extra']['arguments'][] = $param;
         }
 
         $message = \GuzzleHttp\json_encode($message);
+
         try {
             $rabbit = new RabbitMQ(config('main.rabbitMq'));
             $rabbit->putMessage((string)$message, config('main.rabbitMq'))->closeConnection();
         } catch (\Exception $exception) {
 
-            return $exception;
+            return back()->with(['message' => $exception->getMessage(), 'status' => 'error']);
         }
 
         return back()->with('message', $message);

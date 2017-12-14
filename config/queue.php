@@ -63,11 +63,6 @@ return [
             'queue' => 'default',
             'retry_after' => 90,
         ],
-//        'rabbitmq' => [
-//            'driver' => 'rabbitmq',
-//            'factory_class' => \Enqueue\AmqpBunny\AmqpConnectionFactory::class,
-//        ],
-
     ],
 
     /*
