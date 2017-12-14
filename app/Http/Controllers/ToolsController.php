@@ -39,7 +39,7 @@ class ToolsController extends Controller
     /**
      * @param Request $request
      *
-     * @return bool|\Exception
+     * @return \Exception|\Illuminate\Http\RedirectResponse
      */
     public function doIt(Request $request)
     {
