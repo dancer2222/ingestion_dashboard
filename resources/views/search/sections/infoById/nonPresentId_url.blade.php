@@ -4,7 +4,6 @@
             <form id="form_tools" action="{{ route('sel') }}" method="get" class="form-inline">
                 <div class="col">
                     <h2>Search by </h2>
-
                     <select name="type" id="" onchange="$('#form_tools').submit();"
                             class="form-control form-control-lg">
                         <option value="games" {{ request()->has('type') && request()->get('type') == 'games' ? 'selected' : '' }}>
@@ -18,9 +17,6 @@
                         </option>
                         <option value="movies" {{ request()->has('type') && request()->get('type') == 'movies' ? 'selected' : '' }}>
                             Movies
-                        </option>
-                        <option value="games" {{ request()->has('type') && request()->get('type') == 'games' ? 'selected' : '' }}>
-                            Games
                         </option>
                         <option value="albums" {{ request()->has('type') && request()->get('type') == 'albums' ? 'selected' : '' }} >
                             Albums

@@ -31,3 +31,11 @@ h3 span {
   font-weight: bold;
   font-family: "Century Gothic", CenturyGothic, AppleGothic, cursive;
 }
+
+.container {
+    background-color: white;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+}
+
+

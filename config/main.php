@@ -27,6 +27,6 @@ return [
         'port'     => '5672',
         'user'     => 'guest',
         'password' => 'guest',
-        'queue' => 'ingestion-tools'
+        'queue'    => 'ingestion-tools'
     ]
 ];

@@ -17,20 +17,58 @@ return [
         6 => 'make',
     ],
     'commands' => [
-        'core:make:blankTool'  => '\\JoMedia\\Tools\\ToolBuilder::class',
-        'core:make:blankTool1'  => [
-            '--name' => 'Descriptfsdfsdfdsfdf',
-            '--file' => 'Descriptfsdfsdfdsfdf',
-        ],
-        'core:make:blankTool2'  => [
-            '--name' => 'Descriptfsdfsdfdsfdf',
-            '--file' => 'Descriptfsdfsdfdsfdf',
-        ],
-        'core:make:blankTool3'  => [
-            '--name' => 'Descriptfsdfsdfdsfdf',
-            '--file' => 'Descriptfsdfsdfdsfdf',
-        ],
-        'core:check:blankTool' => '\\JoMedia\\Tools\\ToolBuilder::class',
-        'albums:fix:blankTool' => '\\JoMedia\\Tools\\ToolBuilder::class',
+        'core:make:blankTool'     => 'JoMedia\\Tools\\ToolBuilder',
+        'movies:fix:duplicateIds' => 'Tools\\Movies\\MoviesFixDuplicateIds',
+        'movies:activate:byIds'   => 'Tools\\MoviesActivateByIds',
+        'movies:deactivate:byIds' => 'Tools\\MoviesDeactivateByIds',
+        'albums:check:covers'     => 'Tools\\AlbumsCheckCovers',
     ],
+    'params'   => [
+        'core:make:blankTool'     => [
+            'options'   => [],
+            'arguments' => [],
+        ],
+        'movies:fix:duplicateIds' => [
+            'options'   => [
+                'batch' => [
+                    'description' => null,
+                    'isRequired'  => true,
+                ],
+            ],
+            'arguments' => [],
+        ],
+        'movies:activate:byIds'   => [
+            'options'   => [
+                'ids' => [
+                    'description' => null,
+                    'isRequired'  => true,
+                ],
+            ],
+            'arguments' => [],
+        ],
+        'movies:deactivate:byIds' => [
+            'options'   => [
+                'ids' => [
+                    'description' => null,
+                    'isRequired'  => true,
+                ],
+            ],
+            'arguments' => [],
+        ],
+        'albums:check:covers'     => [
+            'options'   => [
+                'ids' => [
+                    'description' => null,
+                    'isRequired'  => true,
+                ],
+            ],
+            'arguments' => [
+                'full' => [
+                    'description' => null,
+                    'isRequired'  => false,
+                ],
+            ],
+        ],
+    ],
+    'url'      => 'api/v1/tools/config',
 ];

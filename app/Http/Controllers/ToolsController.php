@@ -19,10 +19,17 @@ class ToolsController extends Controller
     public function index(Request $request)
     {
         $data = include public_path().'/someconfig.php';
+
         $commands = [];
         if ($request->has('type') && $request->has('action')) {
+
             $commands = array_where($data['commands'], function($value, $key) use ($request) {
-                return strpos($key, $request->type) !== false && strpos($key, $request->action) !== false;
+                $items = explode(':', $key);
+
+                $type = strpos($items[0], $request->type);
+                $action = strpos($items[1], $request->action);
+
+                return $type !== false && $action !== false && $action === 0;
             });
         }
 
@@ -36,13 +43,35 @@ class ToolsController extends Controller
      */
     public function doIt(Request $request)
     {
+        $message = [];
+        $command = explode(":", $request->command);
+        $message['message'] = [
+            'type' => $command[0],
+            'action' => $command[1],
+            'name' => $command[2]
+            ];
+
+        foreach ($request->params as $param => $value) {
+            $message['extra'] = [
+                'options' => [
+                    $param => $value
+                ]
+            ];
+        }
+
+        foreach ($request->arguments as $params => $value) {
+            $message['arguments'] = [$params];
+        }
+
+        $message = \GuzzleHttp\json_encode($message);
         try {
             $rabbit = new RabbitMQ(config('main.rabbitMq'));
-            $rabbit->putMessage($request->message)->closeConnection();
+            $rabbit->putMessage((string)$message, config('main.rabbitMq'))->closeConnection();
         } catch (\Exception $exception) {
+
             return $exception;
         }
 
-        return true;
+        return back()->with('message', $message);
     }
 }

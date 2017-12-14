@@ -33,6 +33,8 @@ class Info
         $info = $this->getModel($mediaTypeTitle, $id);
         $response = '';
         $linkImageInBucket = '';
+        $artistName = '';
+        $tracks = '';
 
         try {
             $imageUrl = $info->imageUrl;

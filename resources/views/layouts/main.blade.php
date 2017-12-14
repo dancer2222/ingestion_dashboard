@@ -27,7 +27,7 @@
 </head>
 <body class="first-img">
 
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded mb-5">
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded mb-5 fixed-top">
     <a class="navbar-brand" href="{{ url('/') }}">
         <img src="{{ asset('images/elephant-logo.png') }}" width="50" height="30" alt="">
     </a>
@@ -47,7 +47,7 @@
 
         @else
 
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto ">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="dropdownBrightcove" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                    href="#">Brightcove</a>
@@ -74,7 +74,7 @@
 
     </div>
 </nav>
-
+<br><br><br><br>
 @yield('content')
 
 <footer class="container-fluid">

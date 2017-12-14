@@ -20,6 +20,7 @@ class RabbitMQ
      */
     private $queue;
 
+
     /**
      * RabbitMQ constructor.
      *
@@ -56,7 +57,6 @@ class RabbitMQ
             $config['password']);
 
         $this->channel = $this->connection->channel();
-        $this->createChanel();
     }
 
     /**
@@ -80,16 +80,16 @@ class RabbitMQ
      *
      * @return $this
      */
-    public function putMessage($message)
+    public function putMessage($message, $config)
     {
-        $msg = new AMQPMessage($this->channel, $message);
-        $this->channel->basic_publish($msg);
+        $msg = new AMQPMessage($message);
+        $this->channel->basic_publish($msg, '', $config['queue']);
 
         return $this;
     }
 
     /**
-     *
+     * Close connection
      */
     public function closeConnection()
     {

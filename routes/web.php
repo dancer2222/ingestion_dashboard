@@ -58,7 +58,7 @@ Route::group(['middleware' => ['auth']], function() {
             return redirect(route('tools'));
         });
         Route::get('/select', 'ToolsController@index')->name('tools.index');
-        Route::post('/select', 'ToolsController@doIt')->name('tools.do');
+        Route::post('/select/{command?}', 'ToolsController@doIt')->name('tools.do');
     });
 
     //Ajax requests

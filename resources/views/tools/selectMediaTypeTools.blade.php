@@ -3,7 +3,8 @@
 @section('title', 'Folders')
 
 @section('content')
-    <div class="container">
+    @include('search.sections.message.errorGreen')
+    <div class="container" style="background-color: wheat; padding: 50px 50px 50px 50px; border-radius: 10px">
         <div class="row">
             <form id="form_tools" action="{{ route('tools.index') }}" method="get" class="form-inline">
                 <div class="col">
@@ -26,22 +27,41 @@
                 </div>
             </form>
         </div>
-        @if($commands)
+     @if($commands)
             <br>
             <hr>
-            <h2>Select tolls</h2>
-            @foreach($commands as $command)
+            <h2>Select tolls:</h2>
+            @foreach($commands as $command => $item)
                 <hr style="font-weight: bold; ">
                 <div class="row">
-                    <form method="POST" class="form-control-feedback" action="{{ action('ToolsController@doIt') }}">
-                        <div class="form-group">
-                            <label for="text"><h5>Description</h5></label>
-                            <div class="input-group">
-                                <input type="text" id="message" name="message" class="form-control">
-                                <input type="hidden" id="id" name="id" value="1">
+                    <form method="POST" class="form-control-feedback" action="{{ action('ToolsController@doIt', ['command' => $command ]) }}">
+                        <label for="text"><h2>{{ $command }}</h2></label><br>
+                        @foreach($data['params'][$command]['arguments'] as $argumentName => $argumentValue)
+                            @if($argumentValue['isRequired'] == true)
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="hidden" name="arguments[{{$argumentName}}]" value="on"><h5 style="color: red">{{ $argumentName }}  {{ $argumentValue['isRequired'] ? 'required' : '' }}</h5>
+                                </label>
                             </div>
-                        </div>
+                            @else
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="arguments[{{$argumentName}}]"><h5>{{ $argumentName }}  {{ $argumentValue['isRequired'] ? 'required' : '' }}</h5>
+                                    </label>
+                                </div>
+                            @endif
+                        @endforeach
+                        @foreach($data['params'][$command]['options'] as $optionName => $optionValue)
+                            <label for="text"><h5>{{ $optionValue['description'] }}</h5></label>
+                            <div class="input-group">
+                                <div class="input-group-addon">{{ $optionName }}
+                                    - {{ $optionValue['isRequired'] ? 'required' : '' }}</div>
+                                <input class="form-control" type="text" name="params[{{$optionName}}]">
+                            </div>
+                        @endforeach
+                        <br>
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <br>
                         <button type="submit" class="btn btn-default">Submit</button>
                     </form>
                 </div>

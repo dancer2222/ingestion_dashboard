@@ -9,7 +9,6 @@
     @else
         @include('search.sections.infoById.nonPresentId_url')
     @endif
-
     <br>
     @if(isset($info))
         <div class="container">
@@ -71,7 +70,7 @@
                 </tr>
             </table>
         </div>
+        <br>
         @include('search.sections.links.linksForWatch')
     @endif
-
 @endsection
