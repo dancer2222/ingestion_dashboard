@@ -70,7 +70,7 @@ class ToolsController extends Controller
             $rabbit->putMessage((string)$message, config('main.rabbitMq'))->closeConnection();
         } catch (\Exception $exception) {
 
-            return $exception;
+            return back()->with(['message' => $exception->getMessage(), 'status' => 'error']);
         }
 
         return back()->with('message', $message);
