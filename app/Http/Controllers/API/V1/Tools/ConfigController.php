@@ -17,7 +17,6 @@ class ConfigController extends Controller
      */
     public function store(Request $request)
     {
-        var_dump($request->all());
         file_put_contents(public_path().'/someconfig.php', "<?php \n return " . var_export($request->all(), true) . "; \n");
     }
 }

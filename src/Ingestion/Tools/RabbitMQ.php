@@ -20,7 +20,6 @@ class RabbitMQ
      */
     private $queue;
 
-
     /**
      * RabbitMQ constructor.
      *
