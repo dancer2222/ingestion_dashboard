@@ -86,7 +86,6 @@ $(document).ready(function () {
     });
 
    $('[type=submit]').on('click', function () {
-       console.log('ssssss');
        $('body').css({'cursor': 'progress'});
    })
 });
