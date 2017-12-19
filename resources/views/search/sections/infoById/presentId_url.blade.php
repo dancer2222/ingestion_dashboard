@@ -1,18 +1,21 @@
 <div class="container">
-    <div class="col-xs-8">
-        <form method="POST" class="form-control-feedback"
-              action="{{ action('SearchController@indexRedirect', ['id_url' => $id_url]) }}">
-            <div class="form-group">
-                <label for="text"><h3>Search by ID <span
-                                class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
-                <input type="text" class="input-group col-3" id="id" name="id" value="{{ $id_url }}">
+    <form method="POST"
+          action="{{ action('SearchController@indexRedirect', ['id_url' => $id_url]) }}">
+        <h3>Search by ID <span
+                    class="defaultDatabase">{{ config('database.default') }}</span></h3>
+        <div class="row">
+            <div class="col-sm-3">
+                <input class="form-control" type="text" id="id" name="id" value="{{ $id_url }}"><br>
             </div>
-            <div class="checkbox">
-                <label><input type="checkbox" name="option" value="yes" checked>Do not show empty values</label>
+            <div class="col-sm-1">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <button type="submit" class="btn btn-default">Submit</button>
             </div>
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
-    </div>
-    <br> <a class="btn btn-info" href="{{ URL::previous() }}">back</a>
+            <div class="col">
+                <input type="checkbox" name="option" value="yes" checked>Don`t show empty values
+                <a class="btn btn-info" href="{{ URL::previous() }}" style="float: right">back</a>
+            </div>
+        </div>
+    </form>
+
 </div>

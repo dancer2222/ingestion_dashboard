@@ -6,6 +6,7 @@ $.ajaxSetup({
     url: location.origin
 });
 
+
 // Notify default settings
 // http://bootstrap-notify.remabledesigns.com/
 $.notifyDefaults({
@@ -83,4 +84,9 @@ $(document).ready(function () {
    $('.change-db').on('click', function () {
         changeDbConnection($(this).text());
     });
+
+   $('[type=submit]').on('click', function () {
+       console.log('ssssss');
+       $('body').css({'cursor': 'progress'});
+   })
 });
