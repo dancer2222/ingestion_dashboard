@@ -4,14 +4,21 @@
 
 @section('content')
     @include('search.sections.message.error')
+    <br>
     @if(isset($id_url))
         @include('search.sections.infoById.presentId_url')
     @else
         @include('search.sections.infoById.nonPresentId_url')
     @endif
     <br>
+
     @if(isset($info))
         <div class="container">
+            @include('search.sections.links.linksForWatch')
+        </div>
+        <br>
+        <div class="container">
+            {{--@include('search.sections.links.linksForWatch')--}}
             <table class="table table-hover">
                 <th style="background-color: #2ca02c">
                     Field name
@@ -70,7 +77,5 @@
                 </tr>
             </table>
         </div>
-        <br>
-        @include('search.sections.links.linksForWatch')
     @endif
 @endsection
