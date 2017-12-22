@@ -28,21 +28,24 @@ class Audiobooks
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
         $info = new Audiobook();
-        $info = $info->getById($id);
+        $info = $info->getInfoById($id);
 
         if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Audiobooks database';
 
             throw new \Exception($message);
+        } elseif (count($info) == 1) {
+            $info = $info[0];
         }
+
         //all info by batch_id
-        $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
-        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
+        $licensorName = $licensor->getNameLicensorById($info->licensor_id);
         $idLink = substr($id, -6);
         $imageUrl = config('main.links.image.audiobook') . $idLink . '.jpg';
 
         $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
+        $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)['name'];
         if ($batchInfo != null) {
             $failedItems = new FailedItems();
             $failedItems = $failedItems->getFailedItems($id);

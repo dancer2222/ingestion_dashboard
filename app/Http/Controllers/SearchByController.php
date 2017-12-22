@@ -19,9 +19,11 @@ class SearchByController extends Controller
         $input = $request->input;
         $type = $request->type;
         $mediaType = $request->mediaType;
-        $info = $this->switchType($type, $input, $mediaType);
-        $result = count($info);
+        $option = $request->option;
 
+        $info = $this->switchType($type, $input, $mediaType);
+
+        $result = count($info);
         if ($result == 0) {
             $message = 'Not found '.$request->type.' witch  - ' . $input;
 
@@ -29,11 +31,11 @@ class SearchByController extends Controller
 
         } elseif ($result == 1) {
 
-            return redirect()->route('search', ['id' => $info[0]->id]);
+            return redirect()->route('search', ['id' => $info[0]->id, 'type' => $type, 'option' => $option]);
 
         } else {
 
-            return view('search.title', ['info' => $info]);
+            return view('search.title', ['info' => $info, 'type' => $type]);
         }
     }
 

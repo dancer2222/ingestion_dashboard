@@ -3,7 +3,7 @@
         <div class="col-lg-4" align="center" method="get">
             <form id="form_tools" action="{{ route('sel') }}" method="get" class="form-inline">
                 <div class="col">
-                    <h2>Search by </h2>
+                    <h3>Select media type</h3>
                     <select name="type" id="" onchange="$('#form_tools').submit();"
                             class="form-control form-control-lg">
                         <option value="games" {{ request()->has('type') && request()->get('type') == 'games' ? 'selected' : '' }}>
@@ -29,38 +29,21 @@
             @if(isset($selectedTypes))
                 @foreach($selectedTypes as $type)
                     <form method="POST" class="form-control-feedback"
-                          action="{{ action($type['controller']) }}">
+                          action="{{ action('SearchByController@index') }}">
                         <div class="form-group">
                             <label for="text"><h3>Search by <span
-                                            style="color: red">{{ $type['variableRequest'] }}</span> <span
+                                            style="color: red">{{ $type }}</span> <span
                                             class="defaultDatabase">{{ config('database.default') }}</span></h3>
                             </label>
-                            @if($type['variableRequest'] == 'id')
-                                <input type="text" class="input-group col-3" name="{{ $type['variableRequest'] }}">
-                            @else
-                                <input type="text" class="input-group col-3" name="input">
-                            @endif
+                            <input type="text" class="input-group col-3" name="input">
                         </div>
                         <input type="hidden" name="type" value="{{request()->get('type')}}">
-                        <input type="hidden" name="mediaType" value="{{ $type['variableRequest'] }}">
+                        <input type="hidden" name="mediaType" value="{{ $type }}">
+                        <input type="checkbox" name="option" value="yes" checked>Don`t show empty value <br>
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                         <button type="submit" class="btn btn-default">Submit</button>
                     </form>
                 @endforeach
-            @else
-                <form method="POST" class="form-control-feedback" action="{{ action('SearchController@index') }}">
-                    <div class="form-group">
-                        <label for="text"><h3>Search by ID <span
-                                        class="defaultDatabase">{{ config('database.default') }}</span></h3></label>
-                        <input type="text" class="input-group col-3" id="id" name="id">
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="option" value="yes" checked>Do not show empty
-                            values</label>
-                    </div>
-                    <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
             @endif
         </div>
         <div class="col-lg-4" align="center">
@@ -76,5 +59,6 @@
             </form>
         </div>
     </div>
+</div>
     <br>
     <a class="btn btn-info" href="{{ URL::previous() }}">back</a>

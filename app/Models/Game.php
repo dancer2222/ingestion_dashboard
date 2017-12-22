@@ -19,8 +19,8 @@ class Game extends Model
      * @param $id
      * @return mixed
      */
-    public function getById($id)
+    public static function getInfoById($id)
     {
-        return $this->where('id',$id)->first()->toArray();
+        return DB::table('game')->where('id',$id)->get();
     }
 }

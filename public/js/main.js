@@ -88,4 +88,8 @@ $(document).ready(function () {
    $('[type=submit]').on('click', function () {
        $('body').css({'cursor': 'progress'});
    })
+
 });
+
+
+

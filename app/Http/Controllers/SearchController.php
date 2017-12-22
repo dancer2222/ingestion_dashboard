@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\MediaGeoRestrict;
-use App\Models\MediaType;
 use Illuminate\Http\Request;
-use Ingestion\Search\Info;
+//use Ingestion\Search\Info;
 
 /**
  * Class SearchController
@@ -15,13 +14,11 @@ class SearchController extends Controller
 {
     /**
      * @param Request $request
-     * @param null $id_url
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function index(Request $request, $id_url = null)
+    public function index(Request $request)
     {
-        $mediaType = new MediaType();
         $country_code = [];
 
         if (isset($request->id)) {
@@ -34,28 +31,23 @@ class SearchController extends Controller
             $mediaGeoRestrict = new MediaGeoRestrict();
             $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
 
-            if ($mediaGeoRestrictInfo === null) {
-                $message = 'This [id] = ' . $request->id . '  not found';
-
-                return back()->with('message', $message);
-            }
-
-            foreach ($mediaGeoRestrictInfo as &$item) {
-                if ($item['status'] == 'inactive') {
-                    $item['country_code'] = 'inactive';
+            //add in country_code status inactive
+            if ($mediaGeoRestrictInfo !== null) {
+                foreach ($mediaGeoRestrictInfo as &$item) {
+                    if ($item['status'] == 'inactive') {
+                        $item['country_code'] = 'inactive';
+                    }
                 }
             }
-
+            //have more geo restrict info
             if (count($mediaGeoRestrictInfo) > 1) {
-                $result = [];
 
-                foreach ($mediaGeoRestrictInfo as $item) {
-                    $country_code[] = $item['country_code'];
-                    $result[] = $item['media_type'];
+                foreach ($mediaGeoRestrictInfo as $value) {
+                    $country_code[] = $value['country_code'];
                 }
 
-                $resultUnique = array_unique($result);
                 $country_codeUnique = array_unique($country_code);
+
                 if (count($country_codeUnique) > 1) {
                     foreach ($country_codeUnique as &$code) {
                         if ($code == 'inactive') {
@@ -64,132 +56,29 @@ class SearchController extends Controller
                     }
                 }
 
-                if (count($resultUnique) > 1) {
-                    foreach ($resultUnique as $mediaTypes) {
-                        $mediaTypeTitles [] = $mediaType->getTitleById($mediaTypes);
-                    }
-
-                    $more = '';
-
-                    return view('search.selectMediaTypes', [
-                        'more' => $more,
-                        'id' => $request->id,
-                        'mediaTypeTitles' => $mediaTypeTitles,
-                        'id_url' => $id_url,
-                        'option' => $request->option
-                    ]);
-                }
             } else {
-                $country_codeUnique [] = $mediaGeoRestrictInfo[0]['country_code'];
+                if ($mediaGeoRestrictInfo === null) {
+                    $country_codeUnique [] = 'This [id] = ' . $request->id . '  not found in mediaGeoRestrict';
+                } else {
+                    $country_codeUnique [] = $mediaGeoRestrictInfo[0]['country_code'];
+                }
             }
 
-            $mediaGeoRestrictGetMediaType = $mediaGeoRestrict->getFirstGeoRestrictionInfo($request->id);
-
-            $mediaTypeTitle = ucfirst($mediaType->getTitleById($mediaGeoRestrictGetMediaType));
-            $className = new \ReflectionMethod("Ingestion\Search\\" . $mediaTypeTitle, 'searchInfoById');
+            $className = new \ReflectionMethod("Ingestion\Search\\" . ucfirst($request->type), 'searchInfoById');
 
             try {
-                $dataForView = $className->invoke(null, $request->id, lcfirst($mediaTypeTitle), $country_codeUnique,
-                    $mediaGeoRestrictGetMediaType['media_type']);
+                $dataForView = $className->invoke(null, $request->id, $request->type, $country_codeUnique,
+                    $request->type);
             } catch (\Exception $exception) {
                 return back()->with(['message' => $exception->getMessage()]);
             }
 
             $dataForView['option'] = $request->option;
-            $dataForView['id_url'] = $id_url;
 
             return view('search.infoById', $dataForView);
         }
 
         return view('search.infoById');
-    }
-
-    /**
-     * @param Request $request
-     * @param null $id_url
-     * @param null $type
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
-     */
-    public function select(Request $request, $id_url = null, $type = null)
-    {
-        $mediaType = new MediaType();
-        $mediaGeoRestrict = new MediaGeoRestrict();
-
-        if ($request->id == null) {
-
-            return redirect(action('SearchController@index', ['id_url' => $id_url]));
-        }
-
-        if ($id_url != null && $type == null) {
-            return redirect(action('SearchController@index', ['id_url' => $id_url]));
-        }
-
-        try {
-            $mediaTypeTitle = $request->type;
-            $mediaId = $mediaType->getIdByTitle($mediaTypeTitle)[0]->media_type_id;
-        } catch (\Exception $exception) {
-            $message = 'Not found ID by this title =' . $mediaTypeTitle;
-
-            return redirect(action('SearchController@index', ['id_url' => $id_url]))->with('message', $message);
-        }
-
-        try {
-            $mediaInfo = $mediaGeoRestrict->getGeoRestrictionInfoByMediaType($request->id, $mediaId);
-        } catch (\Exception $exception) {
-
-            return back()->with(['message' => $exception->getMessage()]);
-        }
-
-        if ($mediaInfo === null) {
-            $message = 'not exist id =  ' . $request->id . ' with a  media type = ' . $request->type;
-
-            return back()->with('message', $message);
-        }
-
-        $info = new Info();
-        $dataForView = $info->getInfoSelectedMediaTypes($request->id, $mediaTypeTitle, $mediaInfo['country_code'],
-            $mediaId);
-        $dataForView['option'] = $request->option;
-        $dataForView['id_url'] = $id_url;
-        $dataForView['type'] = $type;
-
-        return view('search.selectMediaTypes', $dataForView);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function indexRedirect(Request $request)
-    {
-        return redirect(action('SearchController@index', [
-            'id_url' => $request->id,
-            'option' => $request->option
-        ]));
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function selectRedirect(Request $request)
-    {
-        if (isset($request->type)) {
-            return redirect(action('SearchController@select', [
-                'id_url' => $request->id,
-                'type' => $request->type,
-                'option' => $request->option
-            ]));
-        } else {
-            return redirect(action('SearchController@select', [
-                'id_url' => $request->id,
-                'option' => $request->option
-            ]));
-        }
-
     }
 
     /**
@@ -207,6 +96,7 @@ class SearchController extends Controller
             '9StoryMedia' => '9storymedia',
             'Baker' => 'baker',
             'BBC' => 'bbc',
+            'BrainStormMedia' => 'brainmedia',
             'Corus' => 'corus',
             'DeMarque' => 'demarque',
             'DHXMedia' => 'dhxmedia',

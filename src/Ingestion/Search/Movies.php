@@ -30,14 +30,17 @@ class Movies
         $licensor = new Licensor();
 
             $info = new Movie();
-            $info = $info->getById($id);
+            $info = $info->getInfoById($id);
+
             if ($info == null) {
                 $message = 'This [id] = ' . $id . '  not found in Movies database';
                 throw new \Exception($message);
+            } elseif (count($info) == 1) {
+                $info = $info[0];
             }
             //all info by batch_id
-            $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
-            $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+            $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
+            $licensorName = $licensor->getNameLicensorById($info->licensor_id);
             $imageUrl = config('main.links.image.movie') . $id . '.jpg';
 
         if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {

@@ -20,11 +20,9 @@ class Book extends Model
      * @param $id
      * @return mixed
      */
-    public function getById($id)
+    public static function getInfoById($id)
     {
-        $a = $this->where('id',$id)->first();
-
-        return $a ==null ? $a : $a->toArray();
+        return DB::table('book')->where('id',$id)->get();
     }
 
     /**
