@@ -22,6 +22,7 @@ class SearchController extends Controller
         $country_code = [];
 
         if (isset($request->id)) {
+
             if (!is_numeric($request->id)) {
                 $message = 'This [id] = [' . $request->id . '] must contain only digits';
 
@@ -39,6 +40,7 @@ class SearchController extends Controller
                     }
                 }
             }
+
             //have more geo restrict info
             if (count($mediaGeoRestrictInfo) > 1) {
 
@@ -57,6 +59,7 @@ class SearchController extends Controller
                 }
 
             } else {
+
                 if ($mediaGeoRestrictInfo === null) {
                     $country_codeUnique [] = 'This [id] = ' . $request->id . '  not found in mediaGeoRestrict';
                 } else {
@@ -70,6 +73,7 @@ class SearchController extends Controller
                 $dataForView = $className->invoke(null, $request->id, $request->type, $country_codeUnique,
                     $request->type);
             } catch (\Exception $exception) {
+
                 return back()->with(['message' => $exception->getMessage()]);
             }
 
@@ -133,6 +137,7 @@ class SearchController extends Controller
         ];
 
         foreach ($providers as $provider => $value) {
+
             if (mb_strtolower($provider) == mb_strtolower($licensorName)) {
                 return $value;
                 break;

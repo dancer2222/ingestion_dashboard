@@ -2,7 +2,7 @@
     <td>Feed</td>
     <td>
         {{ $linkShow }}
-        | <a href="" data-toggle="collapse" data-target="#link">Link to copy</a>
+        | <a href="" data-toggle="collapse" data-target="#link" class="badge badge-success">Link to copy</a>
         <div id="link" class="collapse">
             {{ $linkCopy }}
             @if($licensorName == 'aenetworks')

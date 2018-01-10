@@ -89,6 +89,7 @@ class ExcelController extends Controller
 
                 case 'zip':
                     $message = 'This file has an extension `zip` you can look it up in: [public/' . $filepath . ']';
+
                     return back()->with('message', $message);
 
                 case 'xlsx':
@@ -168,6 +169,7 @@ class ExcelController extends Controller
     public function searchProductInXml($filepath, $id)
     {
         $messages = [];
+
         try {
             $xml = simplexml_load_file($filepath);
         } catch (\ErrorException $exception) {

@@ -64,7 +64,6 @@ function changeDbConnection(connectionName) {
           if (data === connectionName) {
             $('#db-dropdown').text(connectionName);
             $('.defaultDatabase').text(connectionName);
-
             $.notify({
               message: 'Database connection was changed to: <b>' + data + '</b>'
             });

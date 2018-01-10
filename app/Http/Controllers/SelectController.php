@@ -22,6 +22,7 @@ class SelectController extends Controller
             $selectedTypes = [];
 
             switch ($request->type) {
+
                 case 'movies':
                     $selectedTypes = ['id', 'title'];
                     break;

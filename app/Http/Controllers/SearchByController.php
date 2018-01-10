@@ -16,26 +16,21 @@ class SearchByController extends Controller
      */
     public function index(Request $request)
     {
-        $input = $request->input;
-        $type = $request->type;
-        $mediaType = $request->mediaType;
-        $option = $request->option;
-
-        $info = $this->switchType($type, $input, $mediaType);
+        $info = $this->switchType($request->type, $request->input, $request->mediaType);
 
         $result = count($info);
         if ($result == 0) {
-            $message = 'Not found '.$request->type.' witch  - ' . $input;
+            $message = 'Not found '.$request->type.' witch  - ' . $request->input;
 
             return back()->with('message', $message);
 
         } elseif ($result == 1) {
 
-            return redirect()->route('search', ['id' => $info[0]->id, 'type' => $type, 'option' => $option]);
+            return redirect()->route('search', ['id' => $info[0]->id, 'type' => $request->type, 'option' => $request->option]);
 
         } else {
 
-            return view('search.title', ['info' => $info, 'type' => $type]);
+            return view('search.title', ['info' => $info, 'type' => $request->type]);
         }
     }
 

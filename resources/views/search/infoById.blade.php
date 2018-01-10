@@ -5,11 +5,7 @@
 @section('content')
     @include('search.sections.message.error')
     <br>
-    {{--@if(isset($id_url))--}}
-        {{--@include('search.sections.infoById.presentId_url')--}}
-    {{--@else--}}
-        @include('search.sections.infoById.nonPresentId_url')
-    {{--@endif--}}
+    @include('search.sections.infoById.nonPresentId_url')
     <br>
     @if(isset($info))
         <div class="container">
@@ -57,7 +53,7 @@
                 <tr>
                     <td>Geo Restriction</td>
                     <td>
-                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#country_code">
+                        <button type="button" class="btn btn-outline-success" data-toggle="collapse" data-target="#country_code">
                             Show Geo Restriction
                         </button>
                     </td>
