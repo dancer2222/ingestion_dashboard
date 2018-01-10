@@ -1,37 +1,49 @@
 @foreach($info as $value => $item)
-    @if($value === 'description')
+
+    @switch($value)
+        @case('description')
         <tr>
-            <td><a href="" data-toggle="collapse" data-target="#description">{{ $value }}</a><br>
+            <td><a href="" data-toggle="collapse" data-target="#description" class="badge badge-success">{{ $value }}</a><br>
             </td>
             <td id="description" class="collapse">
                 {{ $item }}
             </td>
         </tr>
-    @elseif($value === 'licensor_id')
+        @break
+
+        @case('licensor_id')
         <tr>
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td>{{ $licensorName }}</td>
         </tr>
-    @elseif($value === 'data_source_provider_id')
+        @break
+
+        @case('data_source_provider_id')
         <tr>
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td>{{ $providerName }}</td>
         </tr>
-    @elseif($value === 'date_added')
+        @break
+
+        @case('date_added')
         <tr>
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td>{{ date('Y-m-d', $item)}}</td>
         </tr>
-    @elseif($value === 'emedia_release_date')
+        @break
+
+        @case('emedia_release_date')
         <tr>
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td>{{ date('Y-m-d', $item)}}</td>
         </tr>
-    @elseif($value === 'status')
+        @break
+
+        @case('status')
         <tr>
             <td>{{ $value }}</td>
             @if($item == 'inactive')
@@ -40,7 +52,9 @@
                 <td style="color: green">{{ $item }}</td>
             @endif
         </tr>
-    @elseif($value === 'download_url')
+        @break
+
+        @case('download_url')
         <tr>
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
@@ -54,7 +68,9 @@
                 @endif
             @endif
         </tr>
-    @elseif($value === 'batch_id')
+        @break
+
+        @case('batch_id')
         <tr>
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
@@ -67,10 +83,12 @@
                 </form>
             </td>
         </tr>
-    @else
+        @break
+
+        @default
         <tr>
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
         </tr>
-    @endif
+    @endswitch
 @endforeach

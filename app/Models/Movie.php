@@ -20,10 +20,9 @@ class Movie extends Model
      * @param $id
      * @return mixed
      */
-    public function getById($id)
+    public static function getInfoById($id)
     {
-        $a = $this->where('id',$id)->first();
-        return $a ==null ? $a : $a->toArray();
+        return DB::table('movie')->where('id',$id)->get();
     }
 
     /**

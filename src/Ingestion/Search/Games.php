@@ -20,7 +20,7 @@ class Games
         $licensor = new Licensor();
         try {
             $info = new Game();
-            $info = $info->getById($id);
+            $info = $info->getInfoById($id);
             $imageUrl = config('main.links.image.game') . $id . '.jpg';
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found in Games database';

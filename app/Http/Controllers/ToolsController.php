@@ -21,11 +21,12 @@ class ToolsController extends Controller
         $data = include public_path().'/someconfig.php';
 
         $commands = [];
+
         if ($request->has('type') && $request->has('action')) {
 
             $commands = array_where($data['commands'], function($value, $key) use ($request) {
-                $items = explode(':', $key);
 
+                $items = explode(':', $key);
                 $type = strpos($items[0], $request->type);
                 $action = strpos($items[1], $request->action);
 
@@ -45,6 +46,7 @@ class ToolsController extends Controller
     {
         $message = [];
         $command = explode(":", $request->command);
+
         $message['message'] = [
             'type' => $command[0],
             'action' => $command[1],

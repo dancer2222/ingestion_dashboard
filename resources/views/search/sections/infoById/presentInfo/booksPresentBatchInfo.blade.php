@@ -20,8 +20,8 @@
                 <input type="hidden" id="object" name="object" value="{{ $object }}">
                 <input type="hidden" id="batchTitle" name="batchTitle"
                        value="{{ $batchInfo['title'] }}">
-                <input type="hidden" id="title" name="title" value="{{ $info['title'] }}">
-                <input type="hidden" id="id" name="id" value="{{ $info['id'] }}">
+                <input type="hidden" id="title" name="title" value="{{ $info->title }}">
+                <input type="hidden" id="id" name="id" value="{{ $info->id }}">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <button type="submit" class="btn btn-info">Info by metadata file</button>
             </form>

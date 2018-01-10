@@ -44,8 +44,8 @@ class ExcelController extends Controller
         $id = $request->id;
         $batchTitle = $request->batchTitle;
         $title = $request->title;
-        $filepath = "download/$batchTitle";
 
+        $filepath = "download/$batchTitle";
         $dataType = explode('.', $batchTitle, 2)[1];
 
         $s3 = new S3Client([
@@ -58,6 +58,7 @@ class ExcelController extends Controller
         ]);
 
         if (!file_exists($filepath)) {
+
             try {
                 // Get the object
                 $s3->getObject(array(
@@ -69,7 +70,7 @@ class ExcelController extends Controller
             } catch (S3Exception $e) {
                 unlink($filepath);
                 $messages = $e->getMessage();
-                return redirect(action('SearchController@index', ['id' => $id]))->with('message', $messages);
+                return redirect(action('SearchController@index', ['id' => $id, 'type' => '']))->with('message', $messages);
             }
         }
 
@@ -88,6 +89,7 @@ class ExcelController extends Controller
 
                 case 'zip':
                     $message = 'This file has an extension `zip` you can look it up in: [public/' . $filepath . ']';
+
                     return back()->with('message', $message);
 
                 case 'xlsx':
@@ -140,7 +142,7 @@ class ExcelController extends Controller
             }
         }
 
-        return $resultExcel;
+        return array_unique($resultExcel);
     }
 
     /**
@@ -167,6 +169,7 @@ class ExcelController extends Controller
     public function searchProductInXml($filepath, $id)
     {
         $messages = [];
+
         try {
             $xml = simplexml_load_file($filepath);
         } catch (\ErrorException $exception) {

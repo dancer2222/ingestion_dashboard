@@ -20,10 +20,9 @@ class Audiobook extends Model
      * @param $id
      * @return mixed
      */
-    public function getById($id)
+    public static function getInfoById($id)
     {
-        $a = $this->where('id',$id)->first();
-        return $a ==null ? $a : $a->toArray();
+        return DB::table('audio_book')->where('id',$id)->get();
     }
 
     /**
@@ -36,6 +35,11 @@ class Audiobook extends Model
             ->where('title',$title)->get();
     }
 
+    public static function getInfoByDataOriginId($id)
+    {
+        return DB::table('audio_book')
+            ->where('data_origin_id',$id)->get();
+    }
     /**
      * @param $id
      * @return mixed

@@ -37,18 +37,13 @@ Route::group(['middleware' => ['auth']], function() {
         //Select search
         Route::get('/sel', 'SelectController@index')->name('sel');
 
-
-
-        Route::get('/search/{id?}', 'SearchController@index')->name('search');
+        Route::get('/search/{id?}/{type?}', 'SearchController@index')->name('search');
         Route::post('/search', 'SearchController@indexRedirect');
-
-        Route::get('/select/{id?}/{type?}', 'SearchController@select');
-        Route::post('/select', 'SearchController@selectRedirect');
 
         Route::post('/show', 'ExcelController@index');
         Route::get('/track/{id?}/{option?}', 'TrackController@index');
 
-        Route::post('/searchByTitle/{title?}', 'SearchByController@index');
+        Route::post('/searchBy/{title?}', 'SearchByController@index');
         Route::post('/report', 'BatchReportController@index');
     });
 

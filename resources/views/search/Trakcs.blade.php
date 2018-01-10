@@ -4,12 +4,7 @@
 
 @section('content')
     @include('search.sections.message.error')
-    @if(isset($id_url))
-        @include('search.sections.infoById.presentId_url')
-    @else
-        @include('search.sections.infoById.nonPresentId_url')
-    @endif
-
+    @include('search.sections.infoById.nonPresentId_url')
     <br>
     @if(isset($info))
         <div class="container">

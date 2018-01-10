@@ -41,13 +41,16 @@ class Albums
         }
 
         $info = new Album();
-        $info = $info->getById($id);
+        $info = $info->getInfoById($id);
+
         if ($info == null) {
             $message = 'This [id] = ' . $id . '  not found in Albums database';
             throw new \Exception($message);
+        } elseif (count($info) == 1) {
+            $info = $info[0];
         }
 
-        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+        $licensorName = $licensor->getNameLicensorById($info->licensor_id);
         $idLink = substr($id, -7);
         $firstSymbol = substr($idLink, 0, 1);
 
@@ -56,10 +59,10 @@ class Albums
         }
 
         $imageUrl = config('main.links.image.album') . $idLink . '.jpg';
-        $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
+        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
 
         $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
+        $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)->name;
 
         if ($batchInfo != null) {
             $failedItems = new FailedItems();
