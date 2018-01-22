@@ -96,6 +96,13 @@ class ExcelController extends Controller
                     $messages = $this->getFile($filepath, $title);
 
                     return view('search.metadata', ['messages' => $messages]);
+
+                case 'xls':
+
+                    $messages = $this->getFile($filepath, $title);
+
+                    return view('search.metadata', ['messages' => $messages]);
+
                 case 'csv':
                     $messages = $this->getFile($filepath, $title);
 
@@ -121,6 +128,7 @@ class ExcelController extends Controller
         $results = Excel::load($filepath, function ($reader) {
             $reader->all();
         })->get();
+
         $resultExcel = [];
 
         foreach ($results as $result => $value) {
@@ -128,16 +136,11 @@ class ExcelController extends Controller
             foreach ($value as $item) {
 
                 if (isset($value['title'])) {
-
                     if ($title == $value['title']) {
                         $resultExcel [] = $value;
                     }
-
                 } elseif (isset($item['series_name'])) {
-
-                    if ($title == $item['series_name']) {
                         $resultExcel [] = $item;
-                    }
                 }
             }
         }

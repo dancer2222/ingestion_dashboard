@@ -21,7 +21,7 @@ class SearchController extends Controller
     {
         $country_code = [];
 
-        if (isset($request->id)) {
+        if (isset($request->id) && isset($request->type)) {
 
             if (!is_numeric($request->id)) {
                 $message = 'This [id] = [' . $request->id . '] must contain only digits';
