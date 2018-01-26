@@ -20,6 +20,7 @@ class FailedItems extends Model
     public function getFailedItems($id)
     {
         $allInfo = $this->where('item_id', $id)->get()->toArray();
+
         return count($allInfo) ? $allInfo : null;
     }
 }
