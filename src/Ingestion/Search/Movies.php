@@ -2,6 +2,7 @@
 
 namespace Ingestion\Search;
 
+use App\Models\Brightcove;
 use App\Models\DataSourceProvider;
 use App\Http\Controllers\SearchController;
 use App\Models\FailedItems;
@@ -28,20 +29,26 @@ class Movies
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
+        $brightcove = new Brightcove();
 
-            $info = new Movie();
-            $info = $info->getInfoById($id);
+        $info = new Movie();
+        $info = $info->getInfoById($id);
 
-            if ($info == null) {
-                $message = 'This [id] = ' . $id . '  not found in Movies database';
-                throw new \Exception($message);
-            } elseif (count($info) == 1) {
-                $info = $info[0];
-            }
-            //all info by batch_id
-            $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
-            $licensorName = $licensor->getNameLicensorById($info->licensor_id);
-            $imageUrl = config('main.links.image.movie') . $id . '.jpg';
+        if ($info == null) {
+            $message = 'This [id] = ' . $id . '  not found in Movies database';
+            throw new \Exception($message);
+        } elseif (count($info) == 1) {
+            $info = $info[0];
+        }
+        //all info by batch_id
+        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
+        $licensorName = $licensor->getNameLicensorById($info->licensor_id);
+        $imageUrl = config('main.links.image.movie') . $id . '.jpg';
+        $brightcove_id = $brightcove->getBrightcoveId($id);
+
+        if ($brightcove_id != null){
+            $brightcove_id = $brightcove_id->brightcove_id;
+        }
 
         if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {
             $providerName = new DataSourceProvider();
@@ -79,7 +86,8 @@ class Movies
             'info'                         => $info,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages'                     => $failedItems
+            'messages'                     => $failedItems,
+            'brightcove_id'                => $brightcove_id
         ];
 
         return $result;

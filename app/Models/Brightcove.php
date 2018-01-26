@@ -26,4 +26,11 @@ class Brightcove extends Model
      * @var array
      */
     protected $fillable = ['id', 'brightcove_id', 'status', 'user_id', 'created_at', 'updated_at', 'non_drm_brightcove_id'];
+
+    public function getBrightcoveId($id)
+    {
+        return $this->where('id',$id)
+            ->select('brightcove_id')
+            ->first();
+    }
 }
