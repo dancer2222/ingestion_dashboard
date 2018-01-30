@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/search/{id?}/{type?}', 'SearchController@index')->name('search');
         Route::post('/search', 'SearchController@indexRedirect');
 
-        Route::post('/show', 'ExcelController@index');
+        Route::post('/show', 'ParseController@index');
         Route::get('/track/{id?}/{option?}', 'TrackController@index');
 
         Route::post('/searchBy/{title?}', 'SearchByController@index');

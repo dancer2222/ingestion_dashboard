@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\MediaGeoRestrict;
 use Illuminate\Http\Request;
-//use Ingestion\Search\Info;
 
 /**
  * Class SearchController
