@@ -2,6 +2,8 @@
 
 namespace Ingestion\ParseMetadata;
 
+use Aws\S3\S3Client;
+use Aws\Result;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ArrayToXml\ArrayToXml;
 
@@ -30,15 +32,15 @@ class Parse
     }
 
     /**
-     * @param $batchTitle
-     * @param $dataType
-     * @param $id
-     * @param $title
-     * @param $filepath
+     * @param string $batchTitle
+     * @param string $dataType
+     * @param        $id
+     * @param string $title
+     * @param string $filepath
      *
      * @return array|null|string
      */
-    public function index($batchTitle, $dataType, $id, $title, $filepath)
+    public function index(string $batchTitle,string $dataType, $id,string $title,string $filepath)
     {
         $messages = null;
         if ($dataType != null) {
@@ -61,35 +63,25 @@ class Parse
     }
 
     /**
-     * @param $awsS3
-     * @param $bucket
-     * @param $object
-     * @param $filepath
-     * @param $id
+     * @param S3Client $awsS3
+     * @param string   $bucket
+     * @param string   $path
+     * @param string   $filepath
      *
-     * @return bool|\Illuminate\Http\RedirectResponse
+     * @return Result
      */
-    public function download($awsS3, $bucket, $object, $filepath, $id)
+    public function download(S3Client $awsS3, string $bucket, string $path,string $filepath): Result
     {
-        try {
-            // Get the object
-            $awsS3->getObject([
-                'Bucket' => $bucket,
-                'Key'    => $object,
-                'SaveAs' => $filepath
-            ]);
+        // Get the object
+        $result = $awsS3->getObject([
+            'Bucket' => $bucket,
+            'Key'    => $path,
+            'SaveAs' => $filepath
+        ]);
 
-            @chmod($filepath, 0777);
+        @chmod($filepath, 0777);
 
-        } catch (\Exception $e) {
-            @unlink($filepath);
-            $messages = $e->getMessage();
-
-            return redirect(action('SearchController@index', ['id' => $id, 'type' => '']))->with('message',
-                $messages);
-        }
-
-        return false;
+        return $result;
     }
 
     /**

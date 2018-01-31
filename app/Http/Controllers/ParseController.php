@@ -52,7 +52,7 @@ class ParseController extends Controller
 
         try {
             $parse = new Parse();
-            $parse->download($awsS3, $request->bucket, $request->object, $this->filepath, $request->id);
+            $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
             $result = $parse->index($request->batchTitle, $this->dataType, $request->id, $request->title, $this->filepath);
 
         } catch (\Exception $exception) {
