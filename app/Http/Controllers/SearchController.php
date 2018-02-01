@@ -15,21 +15,25 @@ class SearchController extends Controller
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @throws \ReflectionException
      */
     public function index(Request $request)
     {
         $country_code = [];
 
         if (isset($request->id) && isset($request->type)) {
-
             if (!is_numeric($request->id)) {
                 $message = 'This [id] = [' . $request->id . '] must contain only digits';
 
                 return back()->with('message', $message);
             }
 
-            $mediaGeoRestrict = new MediaGeoRestrict();
-            $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
+            try{
+                $mediaGeoRestrict = new MediaGeoRestrict();
+                $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
+            } catch (\Exception $exception) {
+                return back()->with(['message' => $exception->getMessage()]);
+            }
 
             //add in country_code status inactive
             if ($mediaGeoRestrictInfo !== null) {
@@ -73,7 +77,7 @@ class SearchController extends Controller
                     $request->type);
             } catch (\Exception $exception) {
 
-                return back()->with(['message' => $exception->getMessage()]);
+                return view('search.infoById')->withErrors($exception->getMessage());
             }
 
             $dataForView['option'] = $request->option;

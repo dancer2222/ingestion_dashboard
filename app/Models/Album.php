@@ -45,6 +45,7 @@ class Album extends Model
         return DB::table('music_album')
             ->where('upc',$upc)->get();
     }
+
     /**
      * @param $id
      * @return mixed

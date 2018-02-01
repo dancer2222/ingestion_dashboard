@@ -90,7 +90,7 @@ class Parse
      *
      * @return array
      */
-    public function getFile($filepath, $title)
+    public function getFile(string $filepath, string $title)
     {
 
         $results = Excel::load($filepath, function ($reader) {

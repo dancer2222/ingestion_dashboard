@@ -12,7 +12,9 @@ class SearchByController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @throws \ReflectionException
      */
     public function index(Request $request)
     {
@@ -40,6 +42,7 @@ class SearchByController extends Controller
      * @param $mediaType
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public function switchType($type, $input, $mediaType)
     {
