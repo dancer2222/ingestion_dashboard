@@ -28,7 +28,6 @@ class SearchController extends Controller
             }
 
             $country_codeUnique = Id::search($request->id);
-
             $className = new \ReflectionMethod("Ingestion\Search\\" . ucfirst($request->type), 'searchInfoById');
 
             try {

@@ -10,18 +10,22 @@ namespace Ingestion\Search;
 
 use App\Models\MediaGeoRestrict;
 
+
+/**
+ * Class Id
+ * @package Ingestion\Search
+ */
 class Id
 {
+    /**
+     * @param $id
+     * @return array
+     */
     public static function search($id)
     {
         $country_code = [];
-
-        try {
-            $mediaGeoRestrict = new MediaGeoRestrict();
-            $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($id);
-        } catch (\Exception $exception) {
-            return back()->with(['message' => $exception->getMessage()]);
-        }
+        $mediaGeoRestrict = new MediaGeoRestrict();
+        $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($id);
 
         //add in country_code status inactive
         if ($mediaGeoRestrictInfo !== null) {
