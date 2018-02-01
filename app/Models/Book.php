@@ -35,6 +35,11 @@ class Book extends Model
             ->where('title',$title)->get();
     }
 
+    /**
+     * @param $isbn
+     *
+     * @return mixed
+     */
     public static function getInfoByIsbn($isbn)
     {
         return DB::table('book')

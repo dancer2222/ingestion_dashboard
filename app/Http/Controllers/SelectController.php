@@ -17,7 +17,6 @@ class SelectController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->type) {
             $selectedTypes = [];
 

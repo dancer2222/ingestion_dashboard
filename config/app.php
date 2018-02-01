@@ -182,6 +182,7 @@ return [
         App\Providers\BrightcoveHandlerServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        App\Providers\AwsServiceProvider::class,
     ],
 
     /*

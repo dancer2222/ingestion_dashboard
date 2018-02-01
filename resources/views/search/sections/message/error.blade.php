@@ -3,6 +3,14 @@
         {{  Session::get('message') }}
     </div>
 @endif
+@if ($errors->any())
+    <div class="alert alert-danger">
+
+    {{ implode('', $errors->all(':message')) }}
+
+    </div>
+@endif
+
 @if(isset($messages))
     <div class="container col-xs-8">
         <h3 style="color: red">Failed items</h3>

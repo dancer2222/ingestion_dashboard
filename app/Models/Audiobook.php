@@ -35,11 +35,28 @@ class Audiobook extends Model
             ->where('title',$title)->get();
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public static function getInfoByDataOriginId($id)
     {
         return DB::table('audio_book')
             ->where('data_origin_id',$id)->get();
     }
+
+    /**
+     * @param $isbn
+     *
+     * @return mixed
+     */
+    public static function getInfoByIsbn($isbn)
+    {
+        return DB::table('product_audio_book')
+            ->where('isbn',$isbn)->get();
+    }
+
     /**
      * @param $id
      * @return mixed

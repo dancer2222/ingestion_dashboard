@@ -1,16 +1,16 @@
 <?php
-
-namespace App\Http\Controllers;
-
 /**
- * Class TagListController
- * @package App\Http\Controllers
+ * Created by PhpStorm.
+ * User: dancer
+ * Date: 29.01.18
+ * Time: 18:44
  */
-class TagListController extends Controller
+
+namespace Ingestion\ParseMetadata;
+
+
+class TagList
 {
-    /**
-     * @return array
-     */
     public static function getTagList()
     {
         return [
