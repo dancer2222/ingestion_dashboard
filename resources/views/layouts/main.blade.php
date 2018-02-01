@@ -37,7 +37,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        @if(Auth::guest())
+        @if(!isAuth())
 
         <div class="navbar-nav col-12">
             <span class="navbar-text text-center col-12">
@@ -65,7 +65,22 @@
             </li>
         </ul>
 
-        <form class="form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ googleUser()->getName() }}
+                    <img class="rounded-circle" src="{{ googleUser()->getPhotoUrl() }}" alt="" style="max-height: 30px;">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item disabled" href="#">Profile <small>coming soon</small></a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" onclick="$('#logout').submit()">Sign out</a>
+                </div>
+            </li>
+        </ul>
+
+        <form id="logout" class="d-none form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">
             {{ csrf_field() }}
             <button type="submit" class="btn btn-sm btn-outline-primary">Sign out</button>
         </form>

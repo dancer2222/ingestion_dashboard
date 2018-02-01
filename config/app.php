@@ -168,6 +168,7 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+	    Ingestion\Auth\Google\GoogleProvider::class,
 
         /*
          * Application Service Providers...
