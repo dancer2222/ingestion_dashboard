@@ -24,7 +24,7 @@ class ToolsController extends Controller
 
         if ($request->has('type') && $request->has('action')) {
 
-            $commands = array_where($data['commands'], function ($value, $key) use ($request) {
+            $commands = array_where($data['commands'], function($value, $key) use ($request) {
 
                 $items = explode(':', $key);
                 $type = strpos($items[0], $request->type);
@@ -48,9 +48,9 @@ class ToolsController extends Controller
         $command = explode(":", $request->command);
 
         $message['message'] = [
-            'type' => $command[0],
+            'type'   => $command[0],
             'action' => $command[1],
-            'name' => $command[2]
+            'name'   => $command[2]
         ];
 
         $options = $request->has('params') ? $request->params : [];

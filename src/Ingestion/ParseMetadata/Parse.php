@@ -75,7 +75,7 @@ class Parse
         // Get the object
         $result = $awsS3->getObject([
             'Bucket' => $bucket,
-            'Key' => $path,
+            'Key'    => $path,
             'SaveAs' => $filepath
         ]);
 
@@ -93,7 +93,7 @@ class Parse
     public function getFile(string $filepath, string $title)
     {
 
-        $results = Excel::load($filepath, function ($reader) {
+        $results = Excel::load($filepath, function($reader) {
             $reader->all();
         })->get();
 

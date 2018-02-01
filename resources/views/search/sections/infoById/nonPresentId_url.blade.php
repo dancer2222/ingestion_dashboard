@@ -60,5 +60,5 @@
         </div>
     </div>
 </div>
-    <br>
-    <a class="btn btn-info" href="{{ URL::previous() }}">back</a>
+<br>
+<a class="btn btn-info" href="{{ URL::previous() }}">back</a>

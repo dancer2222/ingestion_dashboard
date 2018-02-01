@@ -27,26 +27,29 @@
                 </div>
             </form>
         </div>
-     @if($commands)
+        @if($commands)
             <br>
             <hr>
             <h2>Select tolls:</h2>
             @foreach($commands as $command => $item)
                 <hr style="font-weight: bold; ">
                 <div class="row">
-                    <form method="POST" class="form-control-feedback" action="{{ action('ToolsController@doIt', ['command' => $command ]) }}">
+                    <form method="POST" class="form-control-feedback"
+                          action="{{ action('ToolsController@doIt', ['command' => $command ]) }}">
                         <label for="text"><h2>{{ $command }}</h2></label><br>
                         @foreach($data['params'][$command]['arguments'] as $argumentName => $argumentValue)
                             @if($argumentValue['isRequired'] == true)
-                            <div class="form-check form-check-inline">
-                                <label class="form-check-label">
-                                    <input type="hidden" name="arguments[{{$argumentName}}]" value="on"><h5 style="color: red">{{ $argumentName }}  {{ $argumentValue['isRequired'] ? 'required' : '' }}</h5>
-                                </label>
-                            </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="hidden" name="arguments[{{$argumentName}}]" value="on"><h5
+                                                style="color: red">{{ $argumentName }}  {{ $argumentValue['isRequired'] ? 'required' : '' }}</h5>
+                                    </label>
+                                </div>
                             @else
                                 <div class="form-check form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="checkbox" name="arguments[{{$argumentName}}]"><h5>{{ $argumentName }}  {{ $argumentValue['isRequired'] ? 'required' : '' }}</h5>
+                                        <input type="checkbox" name="arguments[{{$argumentName}}]">
+                                        <h5>{{ $argumentName }}  {{ $argumentValue['isRequired'] ? 'required' : '' }}</h5>
                                     </label>
                                 </div>
                             @endif

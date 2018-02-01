@@ -4,7 +4,6 @@ namespace Ingestion\Search;
 
 use App\Models\Brightcove;
 use App\Models\DataSourceProvider;
-use App\Http\Controllers\SearchController;
 use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\Movie;
@@ -34,7 +33,7 @@ class Movies
         $info = new Movie();
         $info = $info->getInfoById($id);
 
-        if ($info == null) {
+        if ($info == null or $info->isEmpty() == true) {
             $message = 'This [id] = ' . $id . '  not found in Movies database';
             throw new \Exception($message);
         } elseif (count($info) == 1) {
@@ -56,7 +55,7 @@ class Movies
             $batchInfo['title'] = explode($providerName . '_', $batchInfo['title'], 2)[1];
 
             // Create links to aws bucket
-            $licensorNameToArray = SearchController::normalizeBucketName($licensorName);
+            $licensorNameToArray = Normalize::normalizeBucketName($licensorName);
             if ($licensorNameToArray != null) {
                 $licensorName = $licensorNameToArray;
             }
@@ -75,19 +74,19 @@ class Movies
         }
 
         $result = [
-            'id' => $id,
-            'country_code' => $country_code,
-            'mediaTypeTitle' => $mediaTypeTitle,
-            'linkCopy' => $linkCopy,
-            'linkShow' => $linkShow,
-            'object' => $object,
-            'batchInfo' => $batchInfo,
-            'licensorName' => $licensorName,
-            'info' => $info,
-            'imageUrl' => $imageUrl,
+            'id'                           => $id,
+            'country_code'                 => $country_code,
+            'mediaTypeTitle'               => $mediaTypeTitle,
+            'linkCopy'                     => $linkCopy,
+            'linkShow'                     => $linkShow,
+            'object'                       => $object,
+            'batchInfo'                    => $batchInfo,
+            'licensorName'                 => $licensorName,
+            'info'                         => $info,
+            'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages' => $failedItems,
-            'brightcove_id' => $brightcove_id
+            'messages'                     => $failedItems,
+            'brightcove_id'                => $brightcove_id
         ];
 
         return $result;
