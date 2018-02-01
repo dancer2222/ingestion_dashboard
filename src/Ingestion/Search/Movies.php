@@ -46,7 +46,7 @@ class Movies
         $imageUrl = config('main.links.image.movie') . $id . '.jpg';
         $brightcove_id = $brightcove->getBrightcoveId($id);
 
-        if ($brightcove_id != null){
+        if ($brightcove_id != null) {
             $brightcove_id = $brightcove_id->brightcove_id;
         }
 
@@ -75,19 +75,19 @@ class Movies
         }
 
         $result = [
-            'id'                           => $id,
-            'country_code'                 => $country_code,
-            'mediaTypeTitle'               => $mediaTypeTitle,
-            'linkCopy'                     => $linkCopy,
-            'linkShow'                     => $linkShow,
-            'object'                       => $object,
-            'batchInfo'                    => $batchInfo,
-            'licensorName'                 => $licensorName,
-            'info'                         => $info,
-            'imageUrl'                     => $imageUrl,
+            'id' => $id,
+            'country_code' => $country_code,
+            'mediaTypeTitle' => $mediaTypeTitle,
+            'linkCopy' => $linkCopy,
+            'linkShow' => $linkShow,
+            'object' => $object,
+            'batchInfo' => $batchInfo,
+            'licensorName' => $licensorName,
+            'info' => $info,
+            'imageUrl' => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages'                     => $failedItems,
-            'brightcove_id'                => $brightcove_id
+            'messages' => $failedItems,
+            'brightcove_id' => $brightcove_id
         ];
 
         return $result;

@@ -22,7 +22,7 @@ class Movie extends Model
      */
     public static function getInfoById($id)
     {
-        return DB::table('movie')->where('id',$id)->get();
+        return DB::table('movie')->where('id', $id)->get();
     }
 
     /**
@@ -32,7 +32,7 @@ class Movie extends Model
     public static function getInfoByTitle($title)
     {
         return DB::table('movie')
-            ->where('title',$title)->get();
+            ->where('title', $title)->get();
     }
 
     /**
@@ -57,7 +57,6 @@ class Movie extends Model
                                     GROUP_CONCAT(DISTINCT dir.name SEPARATOR ', ') AS all_directors,
                                     GROUP_CONCAT(DISTINCT prd.name SEPARATOR ', ') AS all_producers
             "))
-
             ->leftJoin('media_geo_restrict as mgr', 'm.id', 'mgr.media_id')
             ->leftJoin('movie_actors as ma', 'm.id', 'ma.movie_id')
             ->leftJoin('actors as ac', 'ma.actor_id', 'ac.id')

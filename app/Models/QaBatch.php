@@ -22,6 +22,6 @@ class QaBatch extends Model
      */
     public function getAllByBatchId($id)
     {
-        return $this->where('id',$id)->first();
+        return $this->where('id', $id)->first();
     }
 }

@@ -22,7 +22,7 @@ class Book extends Model
      */
     public static function getInfoById($id)
     {
-        return DB::table('book')->where('id',$id)->get();
+        return DB::table('book')->where('id', $id)->get();
     }
 
     /**
@@ -32,7 +32,7 @@ class Book extends Model
     public static function getInfoByTitle($title)
     {
         return DB::table('book')
-            ->where('title',$title)->get();
+            ->where('title', $title)->get();
     }
 
     /**
@@ -43,7 +43,7 @@ class Book extends Model
     public static function getInfoByIsbn($isbn)
     {
         return DB::table('book')
-            ->where('isbn',$isbn)->get();
+            ->where('isbn', $isbn)->get();
     }
 
     /**
@@ -70,7 +70,6 @@ class Book extends Model
                                 GROUP_CONCAT(DISTINCT licen.name SEPARATOR ', ') AS licensor_name,
                                 GROUP_CONCAT(DISTINCT l.name SEPARATOR ', ') AS language
             "))
-
             ->leftJoin('book_artists as bart', 'b.id', 'bart.book_id')
             ->leftJoin('artists as artist', 'bart.artist_id', 'artist.id')
             ->leftJoin('book_authors as bauth', 'b.id', 'bauth.book_id')

@@ -22,7 +22,7 @@ class Album extends Model
      */
     public static function getInfoById($id)
     {
-        return DB::table('music_album')->where('id',$id)->get();
+        return DB::table('music_album')->where('id', $id)->get();
     }
 
     /**
@@ -32,7 +32,7 @@ class Album extends Model
     public static function getInfoByTitle($title)
     {
         return DB::table('music_album')
-            ->where('title',$title)->get();
+            ->where('title', $title)->get();
     }
 
     /**
@@ -43,7 +43,7 @@ class Album extends Model
     public static function getInfoByUpc($upc)
     {
         return DB::table('music_album')
-            ->where('upc',$upc)->get();
+            ->where('upc', $upc)->get();
     }
 
     /**

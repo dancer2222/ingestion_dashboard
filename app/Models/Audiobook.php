@@ -22,7 +22,7 @@ class Audiobook extends Model
      */
     public static function getInfoById($id)
     {
-        return DB::table('audio_book')->where('id',$id)->get();
+        return DB::table('audio_book')->where('id', $id)->get();
     }
 
     /**
@@ -32,7 +32,7 @@ class Audiobook extends Model
     public static function getInfoByTitle($title)
     {
         return DB::table('audio_book')
-            ->where('title',$title)->get();
+            ->where('title', $title)->get();
     }
 
     /**
@@ -43,7 +43,7 @@ class Audiobook extends Model
     public static function getInfoByDataOriginId($id)
     {
         return DB::table('audio_book')
-            ->where('data_origin_id',$id)->get();
+            ->where('data_origin_id', $id)->get();
     }
 
     /**
@@ -54,7 +54,7 @@ class Audiobook extends Model
     public static function getInfoByIsbn($isbn)
     {
         return DB::table('product_audio_book')
-            ->where('isbn',$isbn)->get();
+            ->where('isbn', $isbn)->get();
     }
 
     /**

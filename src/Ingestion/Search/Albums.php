@@ -71,17 +71,17 @@ class Albums
             $failedItems = null;
         }
         $result = [
-            'id'                           => $id,
-            'country_code'                 => $country_code,
-            'mediaTypeTitle'               => $mediaTypeTitle,
-            'licensorName'                 => $licensorName,
-            'info'                         => $info,
-            'providerName'                 => $providerName,
-            'imageUrl'                     => $imageUrl,
+            'id' => $id,
+            'country_code' => $country_code,
+            'mediaTypeTitle' => $mediaTypeTitle,
+            'licensorName' => $licensorName,
+            'info' => $info,
+            'providerName' => $providerName,
+            'imageUrl' => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages'                     => $failedItems,
-            'artistName'                   => $nameMusicArtist['name'],
-            'tracks'                       => $tracks
+            'messages' => $failedItems,
+            'artistName' => $nameMusicArtist['name'],
+            'tracks' => $tracks
         ];
 
         return $result;

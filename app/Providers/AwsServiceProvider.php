@@ -31,10 +31,10 @@ class AwsServiceProvider extends ServiceProvider
     {
         $this->app->singleton(S3Client::class, function ($app) {
             $s3 = new S3Client([
-                'version'     => 'latest',
-                'region'      => 'us-east-1',
+                'version' => 'latest',
+                'region' => 'us-east-1',
                 'credentials' => [
-                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'key' => env('AWS_ACCESS_KEY_ID'),
                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
                 ],
             ]);
@@ -43,11 +43,12 @@ class AwsServiceProvider extends ServiceProvider
         });
     }
 
-      /**
-   * @inheritdoc
-   * @return array
-   */
-    public function provides() {
-      return [S3Client::class];
+    /**
+     * @inheritdoc
+     * @return array
+     */
+    public function provides()
+    {
+        return [S3Client::class];
     }
 }

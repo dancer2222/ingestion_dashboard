@@ -21,6 +21,6 @@ class Game extends Model
      */
     public static function getInfoById($id)
     {
-        return DB::table('game')->where('id',$id)->get();
+        return DB::table('game')->where('id', $id)->get();
     }
 }

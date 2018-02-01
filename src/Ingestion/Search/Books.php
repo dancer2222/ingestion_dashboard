@@ -69,10 +69,10 @@ class Books
             $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $batchInfo['title'];
             $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $info->isbn . '.jpg';
             $s3 = new S3Client([
-                'version'     => 'latest',
-                'region'      => 'us-east-1',
+                'version' => 'latest',
+                'region' => 'us-east-1',
                 'credentials' => [
-                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'key' => env('AWS_ACCESS_KEY_ID'),
                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
                 ],
             ]);
@@ -96,22 +96,22 @@ class Books
         }
 
         $result = [
-            'id'                           => $id,
-            'country_code'                 => $country_code,
-            'mediaTypeTitle'               => $mediaTypeTitle,
-            'linkCopy'                     => $linkCopy,
-            'linkShow'                     => $linkShow,
-            'object'                       => $object,
-            'batchInfo'                    => $batchInfo,
-            'licensorName'                 => $licensorName,
-            'info'                         => $info,
-            'imageUrl'                     => $imageUrl,
+            'id' => $id,
+            'country_code' => $country_code,
+            'mediaTypeTitle' => $mediaTypeTitle,
+            'linkCopy' => $linkCopy,
+            'linkShow' => $linkShow,
+            'object' => $object,
+            'batchInfo' => $batchInfo,
+            'licensorName' => $licensorName,
+            'info' => $info,
+            'imageUrl' => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'response'                     => $response,
-            'linkImageInBucket'            => $linkImageInBucket,
-            'messages'                     => $failedItems,
-            'presentEpub'                  => $presentEpub,
-            'langName'                     => $langName
+            'response' => $response,
+            'linkImageInBucket' => $linkImageInBucket,
+            'messages' => $failedItems,
+            'presentEpub' => $presentEpub,
+            'langName' => $langName
 
         ];
 
