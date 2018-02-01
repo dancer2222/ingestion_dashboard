@@ -37,8 +37,8 @@ class Musics
 
         $result = [
             'providerName' => $providerName,
-            'info'         => $info,
-            'presentEpub'  => '',
+            'info' => $info,
+            'presentEpub' => '',
             'http_response_header' => $http_response_header
         ];
 

@@ -31,7 +31,7 @@ class Audiobooks
         $info = $info->getInfoById($id);
 
         if ($info == null or $info->isEmpty() == true) {
-            
+
             $message = 'This [id] = ' . $id . '  not found in Audiobooks database';
 
             throw new \Exception($message);
@@ -55,16 +55,16 @@ class Audiobooks
         }
 
         $result = [
-            'id'                           => $id,
-            'country_code'                 => $country_code,
-            'mediaTypeTitle'               => $mediaTypeTitle,
-            'batchInfo'                    => $batchInfo,
-            'licensorName'                 => $licensorName,
-            'info'                         => $info,
-            'providerName'                 => $providerName,
-            'imageUrl'                     => $imageUrl,
+            'id' => $id,
+            'country_code' => $country_code,
+            'mediaTypeTitle' => $mediaTypeTitle,
+            'batchInfo' => $batchInfo,
+            'licensorName' => $licensorName,
+            'info' => $info,
+            'providerName' => $providerName,
+            'imageUrl' => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages'                     => $failedItems
+            'messages' => $failedItems
         ];
 
         return $result;

@@ -40,7 +40,7 @@ class Parse
      *
      * @return array|null|string
      */
-    public function index(string $batchTitle,string $dataType, $id,string $title,string $filepath)
+    public function index(string $batchTitle, string $dataType, $id, string $title, string $filepath)
     {
         $messages = null;
         if ($dataType != null) {
@@ -64,18 +64,18 @@ class Parse
 
     /**
      * @param S3Client $awsS3
-     * @param string   $bucket
-     * @param string   $path
-     * @param string   $filepath
+     * @param string $bucket
+     * @param string $path
+     * @param string $filepath
      *
      * @return Result
      */
-    public function download(S3Client $awsS3, string $bucket, string $path,string $filepath): Result
+    public function download(S3Client $awsS3, string $bucket, string $path, string $filepath): Result
     {
         // Get the object
         $result = $awsS3->getObject([
             'Bucket' => $bucket,
-            'Key'    => $path,
+            'Key' => $path,
             'SaveAs' => $filepath
         ]);
 

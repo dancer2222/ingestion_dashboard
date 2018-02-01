@@ -28,7 +28,7 @@ class SearchController extends Controller
                 return back()->with('message', $message);
             }
 
-            try{
+            try {
                 $mediaGeoRestrict = new MediaGeoRestrict();
                 $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($request->id);
             } catch (\Exception $exception) {

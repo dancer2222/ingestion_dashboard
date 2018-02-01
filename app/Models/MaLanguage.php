@@ -23,8 +23,8 @@ class MaLanguage extends Model
      */
     public function getLanguageNameByLanguageId($id)
     {
-        $a = $this->where('id',$id)->first();
+        $a = $this->where('id', $id)->first();
 
-        return $a ==null ? $a : $a->toArray();
+        return $a == null ? $a : $a->toArray();
     }
 }

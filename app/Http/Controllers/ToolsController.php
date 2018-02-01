@@ -18,13 +18,13 @@ class ToolsController extends Controller
      */
     public function index(Request $request)
     {
-        $data = include public_path().'/someconfig.php';
+        $data = include public_path() . '/someconfig.php';
 
         $commands = [];
 
         if ($request->has('type') && $request->has('action')) {
 
-            $commands = array_where($data['commands'], function($value, $key) use ($request) {
+            $commands = array_where($data['commands'], function ($value, $key) use ($request) {
 
                 $items = explode(':', $key);
                 $type = strpos($items[0], $request->type);
@@ -34,7 +34,7 @@ class ToolsController extends Controller
             });
         }
 
-        return view('tools.selectMediaTypeTools', ['data' => $data , 'commands' => $commands]);
+        return view('tools.selectMediaTypeTools', ['data' => $data, 'commands' => $commands]);
     }
 
     /**
@@ -51,7 +51,7 @@ class ToolsController extends Controller
             'type' => $command[0],
             'action' => $command[1],
             'name' => $command[2]
-            ];
+        ];
 
         $options = $request->has('params') ? $request->params : [];
 

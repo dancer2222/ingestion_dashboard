@@ -31,8 +31,8 @@ class ParseController extends Controller
     public function __construct(Request $request)
     {
         try {
-           $this->dataType = explode('.', $request->batchTitle, 2)[1];
-           $this->filepath = "download/$request->batchTitle";
+            $this->dataType = explode('.', $request->batchTitle, 2)[1];
+            $this->filepath = "download/$request->batchTitle";
         } catch (\Exception $exception) {
 
             return redirect(action('SearchController@index', ['id' => $request->id, 'type' => '']))->with('message',
@@ -53,7 +53,8 @@ class ParseController extends Controller
         try {
             $parse = new Parse();
             $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
-            $result = $parse->index($request->batchTitle, $this->dataType, $request->id, $request->title, $this->filepath);
+            $result = $parse->index($request->batchTitle, $this->dataType, $request->id, $request->title,
+                $this->filepath);
 
         } catch (\Exception $exception) {
 

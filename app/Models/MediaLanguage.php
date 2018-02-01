@@ -22,8 +22,8 @@ class MediaLanguage extends Model
      */
     public function getBookLanguageId($id)
     {
-        $a = $this->where('media_id',$id)->first();
+        $a = $this->where('media_id', $id)->first();
 
-        return $a ==null ? $a : $a->toArray();
+        return $a == null ? $a : $a->toArray();
     }
 }
