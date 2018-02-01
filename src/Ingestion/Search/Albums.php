@@ -43,7 +43,7 @@ class Albums
         $info = new Album();
         $info = $info->getInfoById($id);
 
-        if ($info == null) {
+        if ($info == null or $info->isEmpty() == true) {
             $message = 'This [id] = ' . $id . '  not found in Albums database';
             throw new \Exception($message);
         } elseif (count($info) == 1) {
@@ -71,17 +71,17 @@ class Albums
             $failedItems = null;
         }
         $result = [
-            'id' => $id,
-            'country_code' => $country_code,
-            'mediaTypeTitle' => $mediaTypeTitle,
-            'licensorName' => $licensorName,
-            'info' => $info,
-            'providerName' => $providerName,
-            'imageUrl' => $imageUrl,
+            'id'                           => $id,
+            'country_code'                 => $country_code,
+            'mediaTypeTitle'               => $mediaTypeTitle,
+            'licensorName'                 => $licensorName,
+            'info'                         => $info,
+            'providerName'                 => $providerName,
+            'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages' => $failedItems,
-            'artistName' => $nameMusicArtist['name'],
-            'tracks' => $tracks
+            'messages'                     => $failedItems,
+            'artistName'                   => $nameMusicArtist['name'],
+            'tracks'                       => $tracks
         ];
 
         return $result;

@@ -10,7 +10,6 @@ namespace Ingestion\Search;
 
 use App\Models\DataSourceProvider;
 use App\Models\Music;
-use Illuminate\Http\Request;
 
 /**
  * Class Musics
@@ -36,9 +35,9 @@ class Musics
         $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
 
         $result = [
-            'providerName' => $providerName,
-            'info' => $info,
-            'presentEpub' => '',
+            'providerName'         => $providerName,
+            'info'                 => $info,
+            'presentEpub'          => '',
             'http_response_header' => $http_response_header
         ];
 

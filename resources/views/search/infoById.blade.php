@@ -53,7 +53,8 @@
                 <tr>
                     <td>Geo Restriction</td>
                     <td>
-                        <button type="button" class="btn btn-outline-success" data-toggle="collapse" data-target="#country_code">
+                        <button type="button" class="btn btn-outline-success" data-toggle="collapse"
+                                data-target="#country_code">
                             Show Geo Restriction
                         </button>
                     </td>

@@ -3,7 +3,8 @@
     @switch($value)
         @case('description')
         <tr>
-            <td><a href="" data-toggle="collapse" data-target="#description" class="badge badge-success">{{ $value }}</a><br>
+            <td><a href="" data-toggle="collapse" data-target="#description"
+                   class="badge badge-success">{{ $value }}</a><br>
             </td>
             <td id="description" class="collapse">
                 {{ $item }}

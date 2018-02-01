@@ -6,7 +6,7 @@
 @if ($errors->any())
     <div class="alert alert-danger">
 
-    {{ implode('', $errors->all(':message')) }}
+        {{ implode('', $errors->all(':message')) }}
 
     </div>
 @endif
@@ -22,15 +22,15 @@
                     </th>
                 @endforeach
             </tr>
-                @foreach($messages as $message)
-                    <tr>
-                        @foreach($message as $value)
-                            <td>
-                                <p style="font-size: 12px">{{ $value }}</p>
-                            </td>
-                        @endforeach
-                    </tr>
-                @endforeach
+            @foreach($messages as $message)
+                <tr>
+                    @foreach($message as $value)
+                        <td>
+                            <p style="font-size: 12px">{{ $value }}</p>
+                        </td>
+                    @endforeach
+                </tr>
+            @endforeach
         </table>
     </div>
 @endif

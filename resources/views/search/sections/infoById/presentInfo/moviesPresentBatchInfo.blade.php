@@ -16,13 +16,13 @@
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <button type="submit" class="btn btn-info">Info by metadata file</button>
                 </form>
-             @endif
+            @endif
         </div>
     </td>
 </tr>
 @if(isset($brightcove_id))
-<tr>
-    <td>Brightcove_id</td>
-    <td>{{ $brightcove_id }}</td>
-</tr>
+    <tr>
+        <td>Brightcove_id</td>
+        <td>{{ $brightcove_id }}</td>
+    </tr>
 @endif

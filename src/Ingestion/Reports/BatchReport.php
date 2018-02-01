@@ -141,8 +141,8 @@ class BatchReport
 
         //create xlsx document
         try {
-            Excel::create($this->getReportFileName(), function ($excel) use ($finalBatch) {
-                $excel->sheet('Report', function ($sheet) use ($finalBatch) {
+            Excel::create($this->getReportFileName(), function($excel) use ($finalBatch) {
+                $excel->sheet('Report', function($sheet) use ($finalBatch) {
                     $sheet->fromArray($finalBatch, null, 'A1', false, false);
                 });
             })->download('xlsx');
