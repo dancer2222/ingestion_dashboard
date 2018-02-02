@@ -67,7 +67,6 @@ class Parse
      * @param string $bucket
      * @param string $path
      * @param string $filepath
-     *
      * @return Result
      */
     public function download(S3Client $awsS3, string $bucket, string $path, string $filepath): Result

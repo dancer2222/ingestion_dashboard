@@ -4,8 +4,17 @@ namespace App\Http\Controllers;
 
 use Ingestion\Search\Musics;
 
+/**
+ * Class TrackController
+ * @package App\Http\Controllers
+ */
 class TrackController extends Controller
 {
+    /**
+     * @param $id
+     * @param $option
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function index($id, $option)
     {
         try {

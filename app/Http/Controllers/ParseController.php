@@ -42,6 +42,11 @@ class ParseController extends Controller
         return false;
     }
 
+    /**
+     * @param Request $request
+     * @param S3Client $awsS3
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function index(Request $request, S3Client $awsS3)
     {
         if ($this->dataType == 'zip') {

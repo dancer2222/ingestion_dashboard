@@ -10,7 +10,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class FailedItems extends Model
 {
+    /**
+     * @var string
+     */
     protected $connection = 'ingestion';
+
+    /**
+     * @var string
+     */
     protected $table = 'ingestion_failed_items';
 
     /**

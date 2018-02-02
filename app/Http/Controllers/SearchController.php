@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MediaGeoRestrict;
 use Illuminate\Http\Request;
 use Ingestion\Search\Id;
 

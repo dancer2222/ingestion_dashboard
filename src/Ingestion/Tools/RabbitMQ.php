@@ -15,6 +15,7 @@ class RabbitMQ
      * @var AMQPStreamConnection
      */
     private $connection;
+
     /**
      * @var
      */
@@ -76,7 +77,7 @@ class RabbitMQ
 
     /**
      * @param $message
-     *
+     * @param $config
      * @return $this
      */
     public function putMessage($message, $config)

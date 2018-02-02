@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Music
+ * @package App\Models
+ */
 class Music extends Model
 {
     /**
