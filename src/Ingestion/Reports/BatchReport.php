@@ -2,7 +2,6 @@
 
 namespace Ingestion\Reports;
 
-
 use App\Models\Album;
 use App\Models\Audiobook;
 use App\Models\Book;

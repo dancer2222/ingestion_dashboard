@@ -9,6 +9,10 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+public/download/
+public/fonts/
+storage/framework/
+tests/Feature/
 .env
 
 /storage/framework/sessions/*

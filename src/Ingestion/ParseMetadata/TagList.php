@@ -1,16 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 29.01.18
- * Time: 18:44
- */
 
 namespace Ingestion\ParseMetadata;
 
 
+/**
+ * Class TagList
+ * @package Ingestion\ParseMetadata
+ */
 class TagList
 {
+    /**
+     * @return array
+     */
     public static function getTagList()
     {
         return [

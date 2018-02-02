@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class MusicAlbumArtist
+ * @package App\Models
+ */
 class MusicAlbumArtist extends Model
 {
     /**
@@ -11,6 +15,10 @@ class MusicAlbumArtist extends Model
      */
     protected $table = 'music_album_artists';
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getArtistByAlbumId($id)
     {
         return $this->where('album_id', $id)->first();

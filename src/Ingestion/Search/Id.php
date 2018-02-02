@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 01.02.18
- * Time: 12:15
- */
 
 namespace Ingestion\Search;
 
 use App\Models\MediaGeoRestrict;
-
 
 /**
  * Class Id
@@ -52,7 +45,6 @@ class Id
                     }
                 }
             }
-
         } else {
 
             if ($mediaGeoRestrictInfo === null) {
