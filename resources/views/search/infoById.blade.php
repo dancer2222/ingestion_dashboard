@@ -57,16 +57,35 @@
                                 data-target="#country_code">
                             Show Geo Restriction
                         </button>
-                    </td>
-                    <td>
                         <div id="country_code" class="collapse">
-                            @foreach($country_code as $item)
-                                @if( in_array($item,['US', 'CA', 'GB']) or $item == 'inactive')
-                                    <b style='color: red'>{{$item}}</b>
-                                @else
-                                    {{ $item }}
-                                @endif
-                            @endforeach
+                            <table class="table table-hover">
+                                <tr>
+                                    <td>
+                                        <b style='color: green'>Active</b> --> @foreach($country_code as $item)
+                                            @if($item['status'] == 'active')
+                                                @if( in_array($item['country_code'],['US', 'CA', 'GB']))
+                                                    <b style='color: red'>{{ $item['country_code'] }}</b>
+                                                @else
+                                                    {{ $item['country_code'] }}
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b style='color: green'>Inactive</b> --> @foreach($country_code as $item)
+                                            @if($item['status'] == 'inactive')
+                                                @if( in_array($item['country_code'],['US', 'CA', 'GB']))
+                                                    <b style='color: red'>{{ $item['country_code'] }}</b>
+                                                @else
+                                                    {{ $item['country_code'] }}
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </td>
                 </tr>

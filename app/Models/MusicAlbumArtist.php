@@ -21,6 +21,6 @@ class MusicAlbumArtist extends Model
      */
     public function getArtistByAlbumId($id)
     {
-        return $this->where('album_id', $id)->first();
+        return $this->where('album_id', $id)->get();
     }
 }
