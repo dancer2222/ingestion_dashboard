@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 use Ingestion\Auth\Google\Google;
 
 /**
@@ -11,36 +12,39 @@ use Ingestion\Auth\Google\Google;
  *
  * @package App\Http\Controllers\Auth
  */
-class LoginGoogleController extends Controller {
-
-	/**
+class LoginGoogleController extends Controller
+{
+    /**
 	 * Redirect to Google auth
 	 *
-	 * @param \Ingestion\Auth\Google\Google $google
-	 *
+     * @param Google $google
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
 	public function login(Google $google)
 	{
 		// Redirect user
-		return $google->auth();
+		return redirect($google->getAuthUrl() . '&hd=playster.com');
 	}
 
 
-	/**
-	 * Catch callback from Google after user has authenticated.
-	 * Save user data to session
-	 *
-	 * @param \Ingestion\Auth\Google\Google $google
-	 *
-	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-	 */
-	public function callback(Google $google)
+    /**
+     * Catch callback from Google after user has authenticated.
+     * Save user data to session
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+	public function callback(Request $request, Google $google)
 	{
 		$user = $google->user();
 
 		if ($user && $user->getDomain() === 'playster.com') {
-			Session::put('sessionUser', $user);
+		    $sessionData = [
+		        'accessToken' => $google->getAccessCode(),
+                'user' => $user,
+            ];
+
+			Session::put('sessionUser', $sessionData);
 
 			return redirect('/');
 		}

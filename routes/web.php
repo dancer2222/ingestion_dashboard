@@ -14,7 +14,7 @@
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => [env('APP_AUTH_TYPE')]], function() {
     Route::get('/', function() {
         return view('welcome');
     });
@@ -65,3 +65,6 @@ Auth::routes();
 Route::match(['post', 'get'], 'register', function() {
     return redirect('login');
 });
+
+Route::get('auth/google/login', 'Auth\\LoginGoogleController@login')->name('google.login');
+Route::get('auth/google/callback', 'Auth\\LoginGoogleController@callback')->name('google.callback');
