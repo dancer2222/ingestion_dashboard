@@ -30,7 +30,7 @@ class Audiobooks
         $info = new Audiobook();
         $info = $info->getInfoById($id);
 
-        if ($info == null or $info->isEmpty() == true) {
+        if ($info->isEmpty()) {
 
             $message = 'This [id] = ' . $id . '  not found in Audiobooks database';
 

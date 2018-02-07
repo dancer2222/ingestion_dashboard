@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Ingestion\Search\Id;
+use Ingestion\Search\GeoRestrict;
 
 /**
  * Class SearchController
@@ -26,11 +26,10 @@ class SearchController extends Controller
                 return back()->with('message', $message);
             }
 
-            $country_codeUnique = Id::search($request->id);
             $className = new \ReflectionMethod("Ingestion\Search\\" . ucfirst($request->type), 'searchInfoById');
 
             try {
-                $dataForView = $className->invoke(null, $request->id, $request->type, $country_codeUnique,
+                $dataForView = $className->invoke(null, $request->id, $request->type, GeoRestrict::search($request->id),
                     $request->type);
             } catch (\Exception $exception) {
 

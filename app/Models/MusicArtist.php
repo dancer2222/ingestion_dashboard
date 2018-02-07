@@ -21,6 +21,6 @@ class MusicArtist extends Model
      */
     public function getNameArtistByArtistId($id)
     {
-        return $this->where('id', $id)->first()->toArray();
+        return $this->where('id', $id)->get();
     }
 }

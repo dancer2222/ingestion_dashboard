@@ -35,15 +35,22 @@ class Albums
         $musicArtist = $musicAlbumArtists->getArtistByAlbumId($id);
         $nameMusicArtist = [];
 
-        if ($musicArtist != null) {
-            $musicArtistName = new MusicArtist();
-            $nameMusicArtist = $musicArtistName->getNameArtistByArtistId($musicArtist['artist_id']);
+        if (!$musicArtist->isEmpty()) {
+            foreach ($musicArtist as $artist) {
+                $musicArtistName = new MusicArtist();
+                $nameMusicArtists = $musicArtistName->getNameArtistByArtistId($artist['artist_id']);
+                if (!$nameMusicArtists->isEmpty()) {
+                    foreach ($nameMusicArtists as $name) {
+                        $nameMusicArtist = '[ '. $name['name'] . ' ]';
+                    }
+                }
+            }
         }
 
         $info = new Album();
         $info = $info->getInfoById($id);
 
-        if ($info == null or $info->isEmpty() == true) {
+        if ($info->isEmpty()) {
             $message = 'This [id] = ' . $id . '  not found in Albums database';
             throw new \Exception($message);
         } elseif (count($info) == 1) {
@@ -80,7 +87,7 @@ class Albums
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems,
-            'artistName'                   => $nameMusicArtist['name'],
+            'artistName'                   => $nameMusicArtist,
             'tracks'                       => $tracks
         ];
 

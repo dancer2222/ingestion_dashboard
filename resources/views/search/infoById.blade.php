@@ -50,26 +50,7 @@
                 @else
                     @include('search.sections.infoById.presentInfo.optionsNo')
                 @endif
-                <tr>
-                    <td>Geo Restriction</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-success" data-toggle="collapse"
-                                data-target="#country_code">
-                            Show Geo Restriction
-                        </button>
-                    </td>
-                    <td>
-                        <div id="country_code" class="collapse">
-                            @foreach($country_code as $item)
-                                @if( in_array($item,['US', 'CA', 'GB']) or $item == 'inactive')
-                                    <b style='color: red'>{{$item}}</b>
-                                @else
-                                    {{ $item }}
-                                @endif
-                            @endforeach
-                        </div>
-                    </td>
-                </tr>
+                @include('search.sections.infoById.geoRestriction')
             </table>
         </div>
     @endif

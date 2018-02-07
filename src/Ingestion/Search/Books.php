@@ -35,7 +35,7 @@ class Books
 
         $info = $info->getInfoById($id);
 
-        if ($info == null or $info->isEmpty() == true) {
+        if ($info->isEmpty()) {
             $message = 'This [id] = ' . $id . '  not found in Books database';
             throw new \Exception($message);
         } elseif (count($info) == 1) {

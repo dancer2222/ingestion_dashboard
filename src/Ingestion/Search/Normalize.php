@@ -9,6 +9,10 @@
 namespace Ingestion\Search;
 
 
+/**
+ * Class Normalize
+ * @package Ingestion\Search
+ */
 class Normalize
 {
     /**
