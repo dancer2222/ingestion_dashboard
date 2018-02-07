@@ -13,7 +13,7 @@ class Google {
 	/**
 	 * @var \Google_Client
 	 */
-	private $client;
+	public $client;
 
 	/**
 	 * @var \GuzzleHttp\Client
@@ -25,33 +25,55 @@ class Google {
 	 */
 	private $request;
 
-	/**
-	 * @var string
-	 */
-	private $url;
-
+    /**
+     * Google constructor.
+     * @param Google_Client $client
+     * @param Guzzle $guzzle
+     * @param Request $request
+     */
 	public function __construct(Google_Client $client, Guzzle $guzzle, Request $request) {
 		$this->client = $client;
 		$this->guzzle = $guzzle;
 		$this->request = $request;
 	}
 
-	private function redirect()
+    /**
+     * @param string|array $token
+     */
+    public function setAccessToken($token)
+    {
+        $this->client->setAccessToken($token);
+    }
+
+    public function fetchAccessTokenWithAuthCode(string $authCode)
+    {
+        $accessToken = $this->client->fetchAccessTokenWithAuthCode($authCode);
+        $this->setAccessToken($accessToken);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAccessCode()
+    {
+        return $this->client->getAccessToken();
+    }
+
+
+    /**
+     * @return string
+     */
+	public function getAuthUrl(): string
 	{
-		return redirect($this->url);
+
+	    return $this->client->createAuthUrl();
 	}
 
-	public function auth()
-	{
-		$this->url = $this->client->createAuthUrl([
-			Google_Service_Oauth2::PLUS_ME,
-			Google_Service_Oauth2::USERINFO_EMAIL,
-			Google_Service_Oauth2::USERINFO_PROFILE,
-		]);
-
-		return $this->redirect();
-	}
-
+    /**
+     * Get user
+     *
+     * @return array|User
+     */
 	public function user()
 	{
 		try {

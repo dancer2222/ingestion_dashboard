@@ -48,8 +48,8 @@ if (! function_exists('googleUser')) {
 	 */
 	function googleUser()
 	{
-		if (session()->has('sessionUser')) {
-			return session('sessionUser');
+		if (session()->has('sessionUser.user')) {
+			return session('sessionUser.user');
 		}
 	}
 }

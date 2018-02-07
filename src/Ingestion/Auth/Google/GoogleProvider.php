@@ -7,6 +7,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Google_Client;
 use GuzzleHttp\Client as Guzzle;
 use Illuminate\Http\Request;
+use Google_Service_Oauth2;
+use Google_Service_Directory;
 
 class GoogleProvider extends ServiceProvider
 {
@@ -38,7 +40,7 @@ class GoogleProvider extends ServiceProvider
 	{
 		parent::__construct($app);
 
-		$this->config = config('services.google');
+		$this->config = config('services.google.secret_file');
 	}
 
 	/**
@@ -60,7 +62,20 @@ class GoogleProvider extends ServiceProvider
 	public function register()
 	{
 		$this->app->singleton(Google::class, function ($app) {
-			$gClient = new Google_Client($this->config);
+			$gClient = new Google_Client();
+            $gClient->setApplicationName('Ingestion Dashboard Api');
+
+			$gClient->setRedirectUri(config('services.google.redirect_uri'));
+			$gClient->setClientId(config('services.google.client_id'));
+			$gClient->setClientSecret(config('services.google.client_secret'));
+
+            $gClient->setScopes([
+                Google_Service_Oauth2::PLUS_ME,
+                Google_Service_Oauth2::USERINFO_EMAIL,
+                Google_Service_Oauth2::USERINFO_PROFILE,
+            ]);
+            $gClient->setAccessType('offline');
+
 			$guzzle = new Guzzle();
 			$accessToken = [];
 

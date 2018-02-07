@@ -183,6 +183,9 @@ return [
         Aws\Laravel\AwsServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         App\Providers\AwsServiceProvider::class,
+
+        // Debug bar
+        Barryvdh\Debugbar\ServiceProvider::class,
     ],
 
     /*
@@ -233,7 +236,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'AWS' => Aws\Laravel\AwsFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

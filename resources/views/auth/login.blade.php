@@ -9,7 +9,7 @@
             <h4 class="text-muted mt-5">Login with Google</h4>
 
             <div>
-                <a class="btn btn-info" href="{{ action('Auth\\LoginGoogleController@login', ['google']) }}" role="button">
+                <a class="btn btn-info" href="{{ route('google.login') }}" role="button">
                     Google
                 </a>
             </div>
@@ -20,7 +20,7 @@
 
             {{-- Block has been temporarily commented --}}
 
-            {{--<form method="POST" action="{{ route('login') }}">--}}
+            {{--<form method="POST" action="{{ route('google.login') }}">--}}
                 {{--{{ csrf_field() }}--}}
 
                 {{--<div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">--}}
@@ -56,7 +56,7 @@
 
             {{--<h4 class="text-muted mt-5">Login with Google</h4>--}}
 
-            {{--<a class="btn btn-info" href="{{ action('Auth\\LoginSocialController@login', ['google']) }}" role="button">--}}
+            {{--<a class="btn btn-info" href="{{ route('google.login') }}" role="button">--}}
                 {{--Google--}}
             {{--</a>--}}
 
