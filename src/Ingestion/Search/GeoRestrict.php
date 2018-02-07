@@ -18,8 +18,9 @@ class GeoRestrict
     {
         $mediaGeoRestrict = new MediaGeoRestrict();
         $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($id);
+        $countryCode = [];
 
-        if ($mediaGeoRestrictInfo->isEmpty() == true) {
+        if ($mediaGeoRestrictInfo->isEmpty()) {
             $countryCode [] = 'This [id] = ' . $id . '  not found in mediaGeoRestrict';
         } else {
             foreach ($mediaGeoRestrictInfo as $item) {

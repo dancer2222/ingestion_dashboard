@@ -33,7 +33,7 @@ class Movies
         $info = new Movie();
         $info = $info->getInfoById($id);
 
-        if ($info == null or $info->isEmpty() == true) {
+        if ($info->isEmpty()) {
             $message = 'This [id] = ' . $id . '  not found in Movies database';
             throw new \Exception($message);
         } elseif (count($info) == 1) {
