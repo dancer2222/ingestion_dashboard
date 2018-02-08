@@ -19,7 +19,6 @@ class TrackController extends Controller
     {
         try {
             $dataForView = Musics::searchInfoById($id);
-
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found';
 
@@ -34,6 +33,6 @@ class TrackController extends Controller
         $dataForView['option'] = $option;
         $dataForView['id_url'] = $id;
 
-        return view('search.Trakcs', $dataForView);
+        return view('search.Tracks', $dataForView);
     }
 }
