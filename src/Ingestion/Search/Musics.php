@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 23.11.17
- * Time: 12:24
- */
 
 namespace Ingestion\Search;
 
 use App\Models\DataSourceProvider;
 use App\Models\Music;
+use App\Models\MusicFiles;
 
 /**
  * Class Musics
@@ -19,26 +14,41 @@ class Musics
 {
     /**
      * @param $id
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return array
      */
-    public static function searchInfoById($id)
+    public function searchInfoById($id)
     {
         $music = new Music();
+        $musicFiles = new MusicFiles();
+
         $info = $music->getTrackById($id);
-        if ($info === null) {
+
+        if ($info->isEmpty()) {
             return $info;
+        } else {
+            $info = $info->toArray()[0];
         }
+
+        $geoRestrict = $musicFiles->getGeoRestrictMusicFilesById($id);
+        $geoRestrictArrayUnique = [];
+
+        if ($geoRestrict->isEmpty()) {
+            $countryCode [] = 'This [id] = ' . $id . '  not found in mediaGeoRestrict';
+        } else {
+            $geoRestrictArrayUnique = array_map("unserialize",
+                array_unique(array_map("serialize", $geoRestrict->toArray())));
+        }
+
         $http_response_header = get_headers($info['download_url'])[13];
 
         $providerName = new DataSourceProvider();
-
         $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
 
         $result = [
             'providerName'         => $providerName,
             'info'                 => $info,
-            'presentEpub'          => '',
-            'http_response_header' => $http_response_header
+            'http_response_header' => $http_response_header,
+            'country_code'         => $geoRestrictArrayUnique
         ];
 
         return $result;

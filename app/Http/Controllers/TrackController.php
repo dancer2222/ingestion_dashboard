@@ -17,9 +17,9 @@ class TrackController extends Controller
      */
     public function index($id, $option)
     {
+        $music = new Musics();
         try {
-            $dataForView = Musics::searchInfoById($id);
-
+            $dataForView =$music->searchInfoById($id);
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found';
 

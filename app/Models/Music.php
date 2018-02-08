@@ -21,8 +21,7 @@ class Music extends Model
      */
     public function getTrackById($id)
     {
-        $a = $this->where('id', $id)->first();
-        return $a == null ? $a : $a->toArray();
+        return $this->where('id', $id)->get();
     }
 
     /**
