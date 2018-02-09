@@ -7,20 +7,21 @@ use App\Models\Licensor;
 
 /**
  * Class Games
- * @package Ingestion\Reports
+ * @package Ingestion\Search
  */
-class Games
+class Games extends MediaTypeAbstract
 {
     /**
      * @param $id
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
+    public function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $licensor = new Licensor();
         try {
             $info = new Game();
             $info = $info->getInfoById($id);
+            $info = $this->toArray($info, $id, $mediaTypeTitle);
             $imageUrl = config('main.links.image.game') . $id . '.jpg';
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found in Games database';

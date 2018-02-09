@@ -16,7 +16,7 @@ class Musics
      * @param $id
      * @return array
      */
-    public static function searchInfoById($id)
+    public function searchInfoById($id)
     {
         $music = new Music();
         $musicFiles = new MusicFiles();
@@ -42,7 +42,7 @@ class Musics
         $http_response_header = get_headers($info['download_url'])[13];
 
         $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id'])['name'];
+        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
 
         $result = [
             'providerName'         => $providerName,

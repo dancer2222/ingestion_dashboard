@@ -20,19 +20,18 @@ class Album extends Model
      * @param $id
      * @return mixed
      */
-    public static function getInfoById($id)
+    public function getInfoById($id)
     {
-        return DB::table('music_album')->where('id', $id)->get();
+        return $this->where('id', $id)->get();
     }
 
     /**
      * @param $title
      * @return mixed
      */
-    public static function getInfoByTitle($title)
+    public function getInfoByTitle($title)
     {
-        return DB::table('music_album')
-            ->where('title', $title)->get();
+        return $this->where('title', $title)->get();
     }
 
     /**
@@ -40,10 +39,9 @@ class Album extends Model
      *
      * @return mixed
      */
-    public static function getInfoByUpc($upc)
+    public function getInfoByUpc($upc)
     {
-        return DB::table('music_album')
-            ->where('upc', $upc)->get();
+        return $this->where('upc', $upc)->get();
     }
 
     /**

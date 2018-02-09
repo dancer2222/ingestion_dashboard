@@ -39,6 +39,6 @@ class Brightcove extends Model
     {
         return $this->where('id', $id)
             ->select('brightcove_id')
-            ->first();
+            ->get();
     }
 }

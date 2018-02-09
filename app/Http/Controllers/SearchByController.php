@@ -19,8 +19,8 @@ class SearchByController extends Controller
     public function index(Request $request)
     {
         $info = $this->switchType($request->type, $request->input, $request->mediaType);
-
         $result = count($info);
+
         if ($result == 0) {
             $message = 'Not found ' . $request->type . ' witch  - ' . $request->input;
 
@@ -29,7 +29,7 @@ class SearchByController extends Controller
         } elseif ($result == 1) {
 
             return redirect()->route('search',
-                ['id' => $info[0]->id, 'type' => $request->type, 'option' => $request->option]);
+                ['id' => $info[0]['id'], 'type' => $request->type, 'option' => $request->option]);
 
         } else {
 
@@ -50,8 +50,11 @@ class SearchByController extends Controller
         $mediaTypeTitle = ucfirst($type);
         $mediaType = ucfirst($mediaType);
         $mediaTypeTitle = substr($mediaTypeTitle, 0, -1);
-        $className = new \ReflectionMethod("App\Models\\" . $mediaTypeTitle, 'getInfoBy' . $mediaType);
 
-        return $className->invoke(null, $input, lcfirst($mediaTypeTitle));
+        $className = "App\Models\\" . $mediaTypeTitle;
+
+        $reflectionMethod = new \ReflectionMethod($className, 'getInfoBy' . $mediaType);
+
+        return $reflectionMethod->invoke(new $className(), $input, lcfirst($mediaTypeTitle));
     }
 }

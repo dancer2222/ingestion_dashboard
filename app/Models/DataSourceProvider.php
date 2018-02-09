@@ -21,10 +21,8 @@ class DataSourceProvider extends Model
      */
     public function getDataSourceProviderName($id)
     {
-        $allInfo = $this->select('name')
+        return  $this->select('name')
             ->where('id', $id)
-            ->first();
-
-        return count($allInfo) ? $allInfo : null;
+            ->first()['name'];
     }
 }

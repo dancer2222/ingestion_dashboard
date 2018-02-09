@@ -20,19 +20,18 @@ class Book extends Model
      * @param $id
      * @return mixed
      */
-    public static function getInfoById($id)
+    public function getInfoById($id)
     {
-        return DB::table('book')->where('id', $id)->get();
+        return $this->where('id', $id)->get();
     }
 
     /**
      * @param $title
      * @return mixed
      */
-    public static function getInfoByTitle($title)
+    public function getInfoByTitle($title)
     {
-        return DB::table('book')
-            ->where('title', $title)->get();
+        return $this->where('title', $title)->get();
     }
 
     /**
@@ -40,10 +39,9 @@ class Book extends Model
      *
      * @return mixed
      */
-    public static function getInfoByIsbn($isbn)
+    public function getInfoByIsbn($isbn)
     {
-        return DB::table('book')
-            ->where('isbn', $isbn)->get();
+        return $this->where('isbn', $isbn)->get();
     }
 
     /**

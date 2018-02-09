@@ -13,7 +13,7 @@ use App\Models\QaBatch;
  * Class Movies
  * @package Ingestion\Reports
  */
-class Movies
+class Movies extends MediaTypeAbstract
 {
     /**
      * @param $id
@@ -24,34 +24,29 @@ class Movies
      * @return array
      * @throws \Exception
      */
-    public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
+    public function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
         $brightcove = new Brightcove();
-
         $info = new Movie();
-        $info = $info->getInfoById($id);
 
-        if ($info->isEmpty()) {
-            $message = 'This [id] = ' . $id . '  not found in Movies database';
-            throw new \Exception($message);
-        } elseif (count($info) == 1) {
-            $info = $info[0];
-        }
+        $info = $info->getInfoById($id);
+        $info = $this->toArray($info, $id, $mediaTypeTitle);
+
         //all info by batch_id
-        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
-        $licensorName = $licensor->getNameLicensorById($info->licensor_id);
+        $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
+        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
         $imageUrl = config('main.links.image.movie') . $id . '.jpg';
         $brightcove_id = $brightcove->getBrightcoveId($id);
 
-        if ($brightcove_id != null) {
-            $brightcove_id = $brightcove_id->brightcove_id;
+        if (!$brightcove_id->isEmpty()) {
+            $brightcove_id = $brightcove_id[0]->toArray()['brightcove_id'];
         }
 
         if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {
             $providerName = new DataSourceProvider();
-            $providerName = $providerName->getDataSourceProviderName($batchInfo['data_source_provider_id'])['name'];
+            $providerName = $providerName->getDataSourceProviderName($batchInfo['data_source_provider_id']);
             $batchInfo['title'] = explode($providerName . '_', $batchInfo['title'], 2)[1];
 
             // Create links to aws bucket
@@ -61,6 +56,7 @@ class Movies
             }
             $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo['title'] . ' ./';
             $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo['title'];
+
             // Create object for aws bucket
             $object = $licensorName . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();

@@ -26,10 +26,11 @@ class SearchController extends Controller
                 return back()->with('message', $message);
             }
 
-            $className = new \ReflectionMethod("Ingestion\Search\\" . ucfirst($request->type), 'searchInfoById');
+            $className = "Ingestion\Search\\" . ucfirst($request->type);
+            $reflectionMethod = new \ReflectionMethod($className, 'searchInfoById');
 
             try {
-                $dataForView = $className->invoke(null, $request->id, $request->type, GeoRestrict::search($request->id),
+                $dataForView = $reflectionMethod->invoke(new $className(), $request->id, $request->type, GeoRestrict::search($request->id),
                     $request->type);
             } catch (\Exception $exception) {
 

@@ -22,6 +22,8 @@ class Licensor extends Model
     public function getNameLicensorById($id)
     {
         return $this->select('name')
-            ->where('id', $id)->first()->toArray()['name'];
+            ->where('id', $id)
+            ->first()
+            ->toArray()['name'];
     }
 }
