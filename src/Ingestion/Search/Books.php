@@ -14,7 +14,7 @@ use Aws\S3\S3Client;
  * Class Books
  * @package Ingestion\Reports
  */
-class Books
+class Books extends MediaTypeAbstract
 {
     /**
      * @param $id
@@ -25,7 +25,7 @@ class Books
      * @return array
      * @throws \Exception
      */
-    public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
+    public function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
@@ -34,40 +34,33 @@ class Books
         $info = new Book();
 
         $info = $info->getInfoById($id);
-
-        if ($info->isEmpty()) {
-            $message = 'This [id] = ' . $id . '  not found in Books database';
-            throw new \Exception($message);
-        } elseif (count($info) == 1) {
-            $info = $info[0];
-        }
-
+        $info = $this->toArray($info, $id, $mediaTypeTitle);
         $langId = $mediaLenguage->getBookLanguageId($id);
         $langName = $maLanguage->getLanguageNameByLanguageId($langId['language_id'])['name'];
-        $info->language = $langName;
+        $info['language'] = $langName;
 
         //all info by batch_id
-        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
-        $licensorName = $licensor->getNameLicensorById($info->licensor_id);
+        $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
+        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
 
-        if (isset($info->data_origin_id)) {
-            $imageUrl = config('main.links.image.book') . $info->data_origin_id . '.jpg';
+        if (isset($info['data_origin_id'])) {
+            $imageUrl = config('main.links.image.book') . $info['data_origin_id'] . '.jpg';
         } else {
-            $isbn = explode('1000', $info->id, 2)[1];
+            $isbn = explode('1000', $info['id'], 2)[1];
             $imageUrl = config('main.links.image.book') . $isbn . '.jpg';
         }
 
         if ($batchInfo != null) {
-            $batchInfo['title'] = explode($info->source . '_', $batchInfo['title'], 2)[1];
+            $batchInfo['title'] = explode($info['source'] . '_', $batchInfo['title'], 2)[1];
 
             // Create links to aws bucket
-            $licensorNameToArray = Normalize::normalizeBucketName($info->source);
+            $licensorNameToArray = Normalize::normalizeBucketName($info['source']);
             if ($licensorNameToArray != null) {
-                $info->source = $licensorNameToArray;
+                $info['source'] = $licensorNameToArray;
             }
-            $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $batchInfo['title'] . ' ./';
-            $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $batchInfo['title'];
-            $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info->source . '/' . $info->isbn . '.jpg';
+            $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.books') . '/' . $info['source'] . '/' . $batchInfo['title'] . ' ./';
+            $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info['source'] . '/' . $batchInfo['title'];
+            $linkImageInBucket = config('main.links.aws.ls') . config('main.links.aws.bucket.books') . '/' . $info['source'] . '/' . $info['isbn'] . '.jpg';
             $s3 = new S3Client([
                 'version'     => 'latest',
                 'region'      => 'us-east-1',
@@ -78,14 +71,14 @@ class Books
             ]);
 
             $response = $s3->doesObjectExist(config('main.links.aws.bucket.books'),
-                $info->source . '/' . $info->isbn . '.jpg');
+                $info['source'] . '/' . $info['isbn'] . '.jpg');
             $presentEpub = $s3->doesObjectExist(config('main.links.aws.bucket.books'),
-                $info->source . '/' . $info->download_url);
+                $info['source'] . '/' . $info['download_url']);
 
             // Create object for aws bucket
-            $object = $info->source . '/' . $batchInfo['title'];
+            $object = $info['source'] . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($info->isbn);
+            $failedItems = $failedItems->getFailedItems($info['isbn']);
         } else {
             $linkCopy = null;
             $linkShow = null;

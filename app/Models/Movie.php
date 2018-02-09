@@ -20,19 +20,18 @@ class Movie extends Model
      * @param $id
      * @return mixed
      */
-    public static function getInfoById($id)
+    public function getInfoById($id)
     {
-        return DB::table('movie')->where('id', $id)->get();
+        return $this->where('id', $id)->get();
     }
 
     /**
      * @param $title
      * @return mixed
      */
-    public static function getInfoByTitle($title)
+    public function getInfoByTitle($title)
     {
-        return DB::table('movie')
-            ->where('title', $title)->get();
+        return $this->where('title', $title)->get();
     }
 
     /**

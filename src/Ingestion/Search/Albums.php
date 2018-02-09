@@ -15,7 +15,7 @@ use App\Models\QaBatch;
  * Class Albums
  * @package Ingestion\Reports
  */
-class Albums
+class Albums extends MediaTypeAbstract
 {
     /**
      * @param $id
@@ -25,12 +25,13 @@ class Albums
      * @return array
      * @throws \Exception
      */
-    public static function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
+    public function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
     {
         $licensor = new Licensor();
         $qaBatches = new QaBatch();
         $musicAlbumArtists = new MusicAlbumArtist();
         $music = new Music();
+
         $tracks = $music->getMusicByAlbumId($id);
         $musicArtist = $musicAlbumArtists->getArtistByAlbumId($id);
         $nameMusicArtist = [];
@@ -41,7 +42,7 @@ class Albums
                 $nameMusicArtists = $musicArtistName->getNameArtistByArtistId($artist['artist_id']);
                 if (!$nameMusicArtists->isEmpty()) {
                     foreach ($nameMusicArtists as $name) {
-                        $nameMusicArtist = '[ '. $name['name'] . ' ]';
+                        $nameMusicArtist = '[ ' . $name['name'] . ' ]';
                     }
                 }
             }
@@ -49,15 +50,9 @@ class Albums
 
         $info = new Album();
         $info = $info->getInfoById($id);
+        $info = $this->toArray($info, $id, $mediaTypeTitle);
 
-        if ($info->isEmpty()) {
-            $message = 'This [id] = ' . $id . '  not found in Albums database';
-            throw new \Exception($message);
-        } elseif (count($info) == 1) {
-            $info = $info[0];
-        }
-
-        $licensorName = $licensor->getNameLicensorById($info->licensor_id);
+        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
         $idLink = substr($id, -7);
         $firstSymbol = substr($idLink, 0, 1);
 
@@ -66,10 +61,10 @@ class Albums
         }
 
         $imageUrl = config('main.links.image.album') . $idLink . '.jpg';
-        $batchInfo = $qaBatches->getAllByBatchId($info->batch_id);
+        $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
 
         $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info->data_source_provider_id)->name;
+        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
 
         if ($batchInfo != null) {
             $failedItems = new FailedItems();
