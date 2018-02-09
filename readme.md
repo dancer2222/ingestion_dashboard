@@ -58,9 +58,9 @@ BRIGHTCOVE_CLIENT_SECRET=
 
 Also you need to add Google credentials to `.env` file
 ```dotenv
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_REDIRECT_URI=http://127.0.0.1:7771/oauth2/callback/google
+GOOGLE_API_CLIENT_ID=
+GOOGLE_API_CLIENT_SECRET=
+GOOGLE_API_REDIRECT_URI="http://localhost:8877/auth/google/callback
 ```
 
 Now you can access to web interface. Check it in your browser: 
