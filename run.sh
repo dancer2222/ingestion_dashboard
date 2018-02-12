@@ -27,10 +27,10 @@ composer install
 
 # Set correct permissions
 chgrp -R www-data /code/dashboard
-chown -R :www-data /code/dashboard
+chown -R ida:www-data /code/dashboard
 find /code/dashboard -type f -exec chmod 664 {} \;
 find /code/dashboard -type d -exec chmod 775 {} \;
-chown -R :www-data /code/dashboard/storage/logs
+chown -R ida:www-data /code/dashboard/storage/logs
 
 rm /etc/nginx/sites-available/default
 rm /etc/nginx/sites-enabled/default

@@ -18,4 +18,4 @@ tests/Feature/
 /storage/framework/sessions/*
 /storage/framework/cache/*
 /storage/framework/views/*
-/storage/framework/debugbar/*
+/storage/debugbar/*
