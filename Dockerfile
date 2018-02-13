@@ -28,7 +28,7 @@ COPY ./dashboard.conf /etc/nginx/sites-enabled/default.conf
 EXPOSE 7771
 
 WORKDIR /code/dashboard
-RUN composer install --no-dev
+RUN composer install
 
 VOLUME ["/code/dashboard"]
 
