@@ -19,3 +19,5 @@ tests/Feature/
 /storage/framework/cache/*
 /storage/framework/views/*
 /storage/debugbar/*
+
+composer.lock
