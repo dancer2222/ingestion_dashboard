@@ -19,18 +19,15 @@ mkdir -p storage/framework/sessions
 mkdir -p storage/framework/views
 mkdir -p storage/framework/cache
 
-# Generate artisan key
-php artisan key:generate
-
-# Install dependencies
-composer install
-
 # Set correct permissions
 chgrp -R www-data /code/dashboard
-chown -R :www-data /code/dashboard
+chown -R ida:www-data /code/dashboard
 find /code/dashboard -type f -exec chmod 664 {} \;
 find /code/dashboard -type d -exec chmod 775 {} \;
-chown -R :www-data /code/dashboard/storage/logs
+chown -R ida:www-data /code/dashboard/storage/logs
+
+# Generate artisan key
+php artisan key:generate
 
 rm /etc/nginx/sites-available/default
 rm /etc/nginx/sites-enabled/default

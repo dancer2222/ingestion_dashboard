@@ -15,7 +15,7 @@ RUN curl -L -o /tmp/memcached.tar.gz "https://github.com/php-memcached-dev/php-m
 	&& curl https://getcomposer.org/installer | php -- \
 	&& mv composer.phar /usr/local/bin/composer \
 	&& chmod +x /usr/local/bin/composer \
-    && adduser ida
+	&& adduser ida
 
 COPY ./php.ini /usr/local/etc/php/php.ini
 COPY ./ /code/dashboard
@@ -28,7 +28,7 @@ COPY ./dashboard.conf /etc/nginx/sites-enabled/default.conf
 EXPOSE 7771
 
 WORKDIR /code/dashboard
-RUN composer install --no-dev
+RUN composer install
 
 VOLUME ["/code/dashboard"]
 
