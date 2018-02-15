@@ -11,10 +11,18 @@
 |
 */
 
+// Monitor
+Route::get('/monitor', function () {
+    return response()->json([
+       'ingestion_dashboard_api' => 'ok',
+       'version' => 'unknown',
+    ]);
+});
+
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => [env('APP_AUTH_TYPE')]], function() {
+Route::group(['middleware' => ['auth']], function() {
     Route::get('/', function() {
         return view('welcome');
     });
