@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /code/dashboard
+cd /var/www/html/dashboard
 
 # Create '.env' file if it isn't exist
 if [ ! -f .env ]; then
@@ -12,24 +12,25 @@ if [ ! -f storage/logs/laravel.log ]; then
 	touch storage/logs/laravel.log
 fi
 
-# Create necessary folders
+# Create necessary folders and files
 mkdir -p bootstrap/cache
 mkdir -p storage/framework
 mkdir -p storage/framework/sessions
 mkdir -p storage/framework/views
 mkdir -p storage/framework/cache
 
-# Generate artisan key
-php artisan key:generate
-
-# Install dependencies
-composer install
+touch storage/logs/laravel.log
 
 # Set correct permissions
-chgrp -R www-data /code/dashboard
-chown -R :www-data /code/dashboard
-find /code/dashboard -type f -exec chmod 664 {} \;
-find /code/dashboard -type d -exec chmod 775 {} \;
+chgrp -R nginx /var/www/html/dashboard
+chown -R ida:nginx /var/www/html/dashboard
+find /var/www/html/dashboard -type f -exec chmod 664 {} \;
+find /var/www/html/dashboard -type d -exec chmod 775 {} \;
+chown -R ida:nginx /var/www/html/dashboard/storage/logs
 
-# Run php-fpm
-docker-php-entrypoint php-fpm
+# Generate artisan key
+php artisan key:generate
+php artisan config:cache
+
+# Start supervisord and services
+exec /usr/bin/supervisord -n -c /etc/supervisord.conf

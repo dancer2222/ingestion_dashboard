@@ -39,6 +39,21 @@ return [
             'prefix' => '',
         ],
 
+        'mysql_users' => [
+            'driver' => 'mysql',
+            'host' => env('DB_USERS_HOST', '127.0.0.1'),
+            'port' => env('DB_USERS_PORT', '3306'),
+            'database' => env('DB_USERS_DATABASE', 'forge'),
+            'username' => env('DB_USERS_USERNAME', 'forge'),
+            'password' => env('DB_USERS_PASSWORD', ''),
+            'unix_socket' => env('DB_USERS_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'mysql_prod' => [
             'driver' => 'mysql',
             'host' => env('DB_PROD_HOST', '127.0.0.1'),
