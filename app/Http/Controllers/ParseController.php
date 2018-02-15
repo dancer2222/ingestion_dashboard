@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
-use Ingestion\ParseMetadata\Parse;
+use Ingestion\Parse\ParseMetadata;
 
 
 /**
@@ -56,7 +56,7 @@ class ParseController extends Controller
         }
 
         try {
-            $parse = new Parse();
+            $parse = new ParseMetadata();
             $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
             $result = $parse->index($request->batchTitle, $this->dataType, $request->id, $request->title,
                 $this->filepath);

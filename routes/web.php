@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/report', 'BatchReportController@index');
     });
 
+    Route::group(['prefix' => 'aws'], function() {
+        Route::get('/show', 'Aws\\AwsNotificationsController@index');
+    });
+
     //Tools route
     Route::group(['prefix' => 'tools'], function() {
         Route::get('/', function() {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ingestion\ParseMetadata;
+namespace Ingestion\Parse;
 
 use Aws\S3\S3Client;
 use Aws\Result;
@@ -8,10 +8,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ArrayToXml\ArrayToXml;
 
 /**
- * Class Parse
- * @package Ingestion\Parse
+ * Class ParseMetadata
+ * @package Ingestion\ParseMetadata
  */
-class Parse
+class ParseMetadata
 {
     /**
      * @var array
@@ -24,7 +24,7 @@ class Parse
     protected $isShortTags = false;
 
     /**
-     * Parse constructor.
+     * ParseMetadata constructor.
      */
     public function __construct()
     {
@@ -146,7 +146,6 @@ class Parse
         try {
 
             $xml = simplexml_load_file($filepath);
-
         } catch (\Exception $exception) {
 
             return $exception->getMessage();
@@ -154,7 +153,9 @@ class Parse
 
         $idByBucket = explode(1000, $id)[1];
         foreach ($xml as $value) {
-            if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket or $value->{$this->getTagName('RecordReference')} == $idByBucket) {
+            if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
+                or $value->{$this->getTagName('RecordReference')} == $idByBucket
+                or $value->{$this->getTagName('ProductIdentifier')}->b244 == $idByBucket) {
                 $messages [] = $value;
             }
         }

@@ -76,6 +76,26 @@ class RabbitMQ
     }
 
     /**
+     * @return $this
+     */
+    public function readMessage()
+    {
+        $callback = function($msg) {
+            echo " [x] Received ", $msg->body, "\n";
+            sleep(substr_count($msg->body, '.'));
+            echo " [x] Done", "\n";
+        };
+        $this->channel->basic_qos(null, 1, null);
+        $this->channel->basic_consume($this->queue, '', false, false, false, false, $callback);
+
+        while(count($this->channel->callbacks)) {
+            $this->channel->wait();
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $message
      * @param $config
      * @return $this

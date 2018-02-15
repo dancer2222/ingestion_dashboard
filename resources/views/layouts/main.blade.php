@@ -63,6 +63,9 @@
             <li class="nav-item dropdown">
                 <a href="{{ action('ToolsController@index') }}" class="nav-link">Tools</a>
             </li>
+            <li class="nav-item dropdown">
+                <a href="{{ action('Aws\\AwsNotificationsController@index') }}" class="nav-link">Aws Notifications</a>
+            </li>
         </ul>
 
         <form class="form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">

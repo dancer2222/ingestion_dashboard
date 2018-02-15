@@ -1,6 +1,6 @@
 <?php
 
-namespace Ingestion\ParseMetadata;
+namespace Ingestion\Parse;
 
 
 /**
@@ -263,7 +263,7 @@ class TagList
             'b334'                        => 'ProductFormFeatureType',
             'b335'                        => 'ProductFormFeatureValue',
             'b221'                        => 'ProductIDType',
-            'ProductIdentifier'           => 'ProductIdentifier',
+            'productidentifier'           => 'ProductIdentifier',
             'b225'                        => 'ProductPackaging',
             'productpart'                 => 'ProductPart',
             'x455'                        => 'ProductRelationCode',
