@@ -40,16 +40,30 @@ if (! function_exists('isAuth')) {
 	}
 }
 
-if (! function_exists('googleUser')) {
+if (! function_exists('getUser')) {
 	/**
 	 * Return the user was authenticated through google
 	 *
 	 * @return User
 	 */
-	function googleUser()
+	function getUser()
 	{
 		if (session()->has('sessionUser.user')) {
 			return session('sessionUser.user');
 		}
+
+		return auth()->user();
 	}
+}
+
+if (! function_exists('urlLastItem')) {
+    /**
+     * Return the last segment of url
+     *
+     * @return string
+     */
+    function urlLastItem()
+    {
+        return request()->segment(count(request()->segments()));
+    }
 }

@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use EntrustUserTrait;
 
     protected $connection = 'mysql_users';
 
@@ -30,8 +32,18 @@ class User extends Authenticatable
     ];
 
     public function __construct(array $attributes = []) {
-	    $this->connection = config('database.default');
+	    $this->connection = 'mysql_users';
 
 	    parent::__construct($attributes);
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getPhotoUrl()
+    {
+        return '';
     }
 }
