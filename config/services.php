@@ -41,4 +41,12 @@ return [
         'client_secret' => env('BRIGHTCOVE_CLIENT_SECRET'),
     ],
 
+    'rabbitAdjuster' => [
+        'host'     => '172.22.0.1',
+        'port'     => '5672',
+        'user'     => 'guest',
+        'password' => 'guest',
+        'queue'    => 'note'
+    ]
+
 ];

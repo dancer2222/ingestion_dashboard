@@ -2,6 +2,7 @@
 
 namespace Ingestion\Tools;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -49,7 +50,7 @@ class RabbitMQ
         if (!$config['queue']) {
             throw new \Exception('Queue cannot be empty');
         }
-
+        $this->queue = $config['queue'];
         $this->connection = new AMQPStreamConnection(
             $config['host'],
             $config['port'],
@@ -76,23 +77,17 @@ class RabbitMQ
     }
 
     /**
-     * @return $this
+     * @return array
      */
     public function readMessage()
     {
-        $callback = function($msg) {
-            echo " [x] Received ", $msg->body, "\n";
-            sleep(substr_count($msg->body, '.'));
-            echo " [x] Done", "\n";
-        };
-        $this->channel->basic_qos(null, 1, null);
-        $this->channel->basic_consume($this->queue, '', false, false, false, false, $callback);
-
-        while(count($this->channel->callbacks)) {
-            $this->channel->wait();
+        $messages = [];
+        list($this->queue, $countMessages) = $this->channel->queue_declare($this->queue, false, true, false, false);
+        for ($i = 0; $i < $countMessages; $i++) {
+            $messages []=$this->channel->basic_get($this->queue, true, null)->body;
         }
 
-        return $this;
+        return $messages;
     }
 
     /**

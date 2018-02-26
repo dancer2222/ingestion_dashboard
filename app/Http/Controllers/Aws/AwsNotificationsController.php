@@ -18,14 +18,13 @@ class AwsNotificationsController extends Controller
     public function index()
     {
         $notifications = new AwsNotifications();
+
         try {
-            $notifications->read();
-            $message = file_get_contents('download/scratch.json');
-            $products = $notifications->parse($message);
+            $products = $notifications->parse($notifications->read());
         } catch (\Exception $exception) {
             return back()->with('message', $exception->getMessage());
         }
 
-        return view('aws.calendar', ['products' => $products]);
+        return view('aws.notifications', ['products' => $products]);
     }
 }

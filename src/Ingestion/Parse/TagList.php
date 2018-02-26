@@ -12,7 +12,7 @@ class TagList
     /**
      * @return array
      */
-    public static function getTagList()
+    public static function getTagList() : array
     {
         return [
             'addressee'                   => 'Addressee',
