@@ -6,16 +6,30 @@
     @include('search.sections.message.errorGreen')
     @include('search.sections.message.error')
     <div class="container col-xs-8">
+        <h3>Search by <span
+                    class="defaultDatabase">{{ config('database.default') }}</span></h3>
+        <form method="POST" class="form-control-feedback"
+              action="{{ action('Aws\\AwsNotificationsController@getInfo') }}">
+            <div class="row">
+                <div class="col">
+                    <input type="date" class="form-control" name="date"
+                           value="{{ \Carbon\Carbon::createFromDate()->format('Y-m-d')}}">
+                </div>
+                <div class="col">
+                    <select name="bucket" class="form-control">
+                        <option value="playster-content-ingestion">playster-content-ingestion</option>
+                        <option value="playster-book-service-dump">playster-book-service-dump</option>
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <br>
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+            <a type="button" class="btn btn-outline-success" href="{{ action('Aws\\AwsNotificationsController@index') }}">All notifications</a>
+        </form>
+        <br>
         @if(isset($products))
-            @foreach($products as $que)
-                @foreach($que as $product)
-                    <div class="alert alert-danger">
-                        @foreach($product as $value => $a)
-                            <p>{{ $value }} - {{ $a }}</p>
-                        @endforeach
-                    </div>
-                @endforeach
-            @endforeach
+            @include('aws.parseNotifications', $products)
         @endif
     </div>
 @endsection

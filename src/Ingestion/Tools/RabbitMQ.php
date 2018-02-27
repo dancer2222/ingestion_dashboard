@@ -83,8 +83,12 @@ class RabbitMQ
     {
         $messages = [];
         list($this->queue, $countMessages) = $this->channel->queue_declare($this->queue, false, true, false, false);
+
         for ($i = 0; $i < $countMessages; $i++) {
-            $messages []=$this->channel->basic_get($this->queue, true, null)->body;
+            $body = $this->channel->basic_get($this->queue, true, null)->body;
+            if ($body) {
+                $messages []= $body;
+            }
         }
 
         return $messages;

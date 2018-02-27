@@ -48,7 +48,8 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     Route::group(['prefix' => 'aws'], function() {
-        Route::get('/show', 'Aws\\AwsNotificationsController@index');
+        Route::get('/show/', 'Aws\\AwsNotificationsController@index')->name('notifications');
+        Route::post('/showSelect/{date?}', 'Aws\\AwsNotificationsController@getInfo');
     });
 
     //Tools route

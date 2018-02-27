@@ -112,7 +112,22 @@ return [
             'prefix' => '',
             'strict' => true,
             'engine' => null,
-        ],        
+        ],
+
+        'mysql_local_ingestion' => [
+            'driver' => 'mysql',
+            'host' => env('DB_LOCAL_HOST_ING', '127.0.0.1'),
+            'port' => env('DB_LOCAL_PORT_ING', '3306'),
+            'database' => env('DB_LOCAL_DATABASE_ING', 'forge'),
+            'username' => env('DB_LOCAL_USERNAME_ING', 'forge'),
+            'password' => env('DB_LOCAL_PASSWORD_ING', ''),
+            'unix_socket' => env('DB_LOCAL_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
 
         'pgsql' => [
             'driver' => 'pgsql',

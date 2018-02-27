@@ -2,6 +2,8 @@
 
 namespace Ingestion\Parse;
 
+use App\Models\AwsNotication;
+use Carbon\Carbon;
 use Ingestion\Tools\RabbitMQ;
 
 /**
@@ -10,7 +12,6 @@ use Ingestion\Tools\RabbitMQ;
  */
 class AwsNotifications
 {
-
     /**
      * @return array|\Exception|string
      */
@@ -26,16 +27,16 @@ class AwsNotifications
         }
 
         return $message;
-
     }
 
     /**
      * @param $messages
      * @return array
      */
-    public function parse($messages): array
+    public function parse(array $messages): array
     {
         $allProduct = [];
+
         foreach ($messages as $message) {
             $messagesSecond = json_decode($message);
             $product = [];
@@ -47,8 +48,7 @@ class AwsNotifications
                     foreach ($item->body as $message) {
                         foreach ($message as $value) {
                             $value->info = [
-                                'date'      => $item->date,
-                                'eventTime' => $value->eventTime,
+                                'eventTime' => Carbon::parse($value->eventTime),
                                 'eventName' => $value->eventName,
                                 'bucket'    => $value->s3->bucket->name,
                                 'key'       => $value->s3->object->key,
@@ -59,9 +59,25 @@ class AwsNotifications
                     }
                 }
             }
+
             $allProduct [] = $product;
         }
 
         return $allProduct;
+    }
+
+    /**
+     * @param $allProduct
+     * @return bool|string
+     */
+    public function store($allProduct)
+    {
+        foreach ($allProduct as $product) {
+            foreach ($product as $item) {
+                AwsNotication::create($item);
+            }
+        }
+
+        return false;
     }
 }
