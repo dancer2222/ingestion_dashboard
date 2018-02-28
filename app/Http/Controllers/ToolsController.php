@@ -18,7 +18,7 @@ class ToolsController extends Controller
      */
     public function index(Request $request)
     {
-        $data = include public_path() . '/someconfig.php';
+        $data = include public_path() . '/tmp/someconfig.php';
 
         $commands = [];
 

@@ -14,10 +14,12 @@ public/fonts/
 storage/framework/
 tests/Feature/
 .env
+/storage/debugbar/*
+composer.lock
 
 /storage/framework/sessions/*
 /storage/framework/cache/*
 /storage/framework/views/*
-/storage/debugbar/*
 
-composer.lock
+
+

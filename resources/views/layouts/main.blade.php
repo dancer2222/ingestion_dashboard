@@ -63,6 +63,9 @@
             <li class="nav-item dropdown">
                 <a href="{{ action('ToolsController@index') }}" class="nav-link">Tools</a>
             </li>
+            <li class="nav-item dropdown">
+                <a href="{{ action('Aws\\AwsNotificationsController@index') }}" class="nav-link">Aws Notifications</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav ml-auto">

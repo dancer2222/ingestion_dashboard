@@ -23,7 +23,7 @@ return [
         ]
     ],
     'rabbitMq' => [
-        'host'     => '10.0.10.63',
+        'host'     => '172.22.0.1',
         'port'     => '5672',
         'user'     => 'guest',
         'password' => 'guest',

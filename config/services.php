@@ -41,9 +41,18 @@ return [
         'client_secret' => env('BRIGHTCOVE_CLIENT_SECRET'),
     ],
 
+    'rabbitAdjuster' => [
+        'host'     => '172.22.0.1',
+        'port'     => '5672',
+        'user'     => 'guest',
+        'password' => 'guest',
+        'queue'    => 'aws-notifications'
+    ]
+
 	'google' => [
 		'client_id' => env('GOOGLE_API_CLIENT_ID'),
 		'client_secret' => env('GOOGLE_API_CLIENT_SECRET'),
         'redirect_uri' => env('GOOGLE_API_REDIRECT_URI'),
 	],
+
 ];

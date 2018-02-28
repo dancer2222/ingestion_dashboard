@@ -13,9 +13,12 @@ class Games extends MediaTypeAbstract
 {
     /**
      * @param $id
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param string $mediaTypeTitle
+     * @param string $country_code
+     * @param string $mediaGeoRestrictGetMediaType
+     * @return array
      */
-    public function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
+    public function searchInfoById($id, string $mediaTypeTitle, $country_code, string $mediaGeoRestrictGetMediaType) : array
     {
         $licensor = new Licensor();
         try {
