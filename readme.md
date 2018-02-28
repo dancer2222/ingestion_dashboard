@@ -15,8 +15,8 @@ $ chmod +x /usr/local/bin/docker-compose
 Clone the project:
 ```bash
 $ git clone https://github.com/[username]/ingestion_dashboard_api 
-$ cd ingestion_dashboard_api
-$ composer install --ignore-platform-reqs
+$ cd ingestion_dashboard_api/docker
+$ docker-compose up -d
 ```
 
 Make `.env` file in the `docker` folder and set the correct values:
@@ -49,15 +49,6 @@ DB_QA_USERNAME= Your username on qa
 DB_QA_PASSWORD= Your password on qa
 ```
 
-For local connection
-```dotenv
-DB_LOCAL_HOST=br_mysql
-DB_LOCAL_PORT=3306
-DB_LOCAL_DATABASE=playster_content  
-DB_LOCAL_USERNAME=root // value you set in `docker/.env` file
-DB_LOCAL_PASSWORD=123 // value you set in `docker/.env` file
-```
-
 And also you need to add the Brightcove credentials to `.env` file.
 ```dotenv
 BRIGHTCOVE_ACCOUNT_ID=
@@ -65,33 +56,11 @@ BRIGHTCOVE_CLIENT_ID=
 BRIGHTCOVE_CLIENT_SECRET= 
 ```
 
-Make sure that the directories within `storage` and `bootstrap/cache` are writable by web server or Laravel will not run.
-Run these commands from root directory if it isn't:
-```bash
-$ sudo chmod -R 775 bootstrap/cache
-$ sudo chmod -R 775 storage
-$ sudo chown -R $USER:www-data bootstrap/cache
-$ sudo chown -R $USER:www-data storage
-```
-
-You should use the `php artisan key:generate` command to generate key to use Laravel's encrypter. 
-
-Running the containers and migrations:
-```bash
-$ docker-compose up -d br_web
-$ docker-compose exec br_php bash
-// Before next step make sure that the database exists if you use project on your local.
-// If the database doesn't exist you should create it with the name you set in `.env` file in the **root directory** of the project.
-$ php artisan migrate --database mysql_local // Run inside the container
-```
-
-Create a new user:
-```bash
-$ cd docker
-$ docker-compose exec br_php bash
-// Run inside the container
-$ php artisan make:user // Create a new user to access to dashboard
-// Then you will be asked to enter the username, email and password.
+Also you need to add Google credentials to `.env` file
+```dotenv
+GOOGLE_API_CLIENT_ID=
+GOOGLE_API_CLIENT_SECRET=
+GOOGLE_API_REDIRECT_URI="http://localhost:8877/auth/google/callback
 ```
 
 Now you can access to web interface. Check it in your browser: 
