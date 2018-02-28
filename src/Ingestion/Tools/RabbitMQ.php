@@ -96,13 +96,12 @@ class RabbitMQ
 
     /**
      * @param $message
-     * @param $config
      * @return $this
      */
-    public function putMessage($message, $config)
+    public function putMessage($message)
     {
         $msg = new AMQPMessage($message);
-        $this->channel->basic_publish($msg, '', $config['queue']);
+        $this->channel->basic_publish($msg, '', $this->queue);
 
         return $this;
     }
