@@ -14,7 +14,7 @@ class GeoRestrict
      * @param $id
      * @return array
      */
-    public static function search($id)
+    public static function search($id) : array
     {
         $mediaGeoRestrict = new MediaGeoRestrict();
         $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($id);

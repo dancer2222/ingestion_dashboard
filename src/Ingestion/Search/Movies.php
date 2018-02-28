@@ -17,14 +17,13 @@ class Movies extends MediaTypeAbstract
 {
     /**
      * @param $id
-     * @param $mediaTypeTitle
-     * @param $country_code
-     * @param $mediaGeoRestrictGetMediaType
-     *
+     * @param string $mediaTypeTitle
+     * @param string $country_code
+     * @param string $mediaGeoRestrictGetMediaType
      * @return array
      * @throws \Exception
      */
-    public function searchInfoById($id, $mediaTypeTitle, $country_code, $mediaGeoRestrictGetMediaType)
+    public function searchInfoById($id, string $mediaTypeTitle, $country_code, string $mediaGeoRestrictGetMediaType) : array
     {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();

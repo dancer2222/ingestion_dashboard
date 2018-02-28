@@ -14,11 +14,11 @@ abstract class MediaTypeAbstract
     /**
      * @param Collection $collection
      * @param $id
-     * @param $mediaTypeTitle
-     * @return mixed
+     * @param string $mediaTypeTitle
+     * @return array
      * @throws Exception
      */
-    protected function toArray(Collection $collection, $id, $mediaTypeTitle)
+    protected function toArray(Collection $collection, $id, string $mediaTypeTitle) : array
     {
         if ($collection->isEmpty()) {
 

@@ -18,7 +18,7 @@ class ToolsController extends Controller
      */
     public function index(Request $request)
     {
-        $data = include public_path() . '/someconfig.php';
+        $data = include public_path() . '/tmp/someconfig.php';
 
         $commands = [];
 
@@ -68,13 +68,14 @@ class ToolsController extends Controller
         $message = \GuzzleHttp\json_encode($message);
 
         try {
-            $rabbit = new RabbitMQ(config('main.rabbitMq'));
-            $rabbit->putMessage((string)$message, config('main.rabbitMq'))->closeConnection();
+            $rabbit = new RabbitMQ(config('services.rabbitMq'));
+            $rabbit->createChanel();
+            $rabbit->putMessage((string)$message)->closeConnection();
         } catch (\Exception $exception) {
 
             return back()->with(['message' => $exception->getMessage(), 'status' => 'error']);
         }
 
-        return back()->with('message', $message);
+        return back()->with('message', $message . ' - message published');
     }
 }
