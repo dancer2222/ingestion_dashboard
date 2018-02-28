@@ -14,7 +14,8 @@ public/fonts/
 storage/framework/
 tests/Feature/
 .env
-config/debugbar.php
+/storage/debugbar/*
+composer.lock
 
 /storage/framework/sessions/*
 /storage/framework/cache/*

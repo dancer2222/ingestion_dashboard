@@ -46,7 +46,7 @@ return [
         'port'     => '5672',
         'user'     => 'guest',
         'password' => 'guest',
-        'queue'    => 'note'
+        'queue'    => 'aws-notifications'
     ]
 
 ];
