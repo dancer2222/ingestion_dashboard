@@ -6,5 +6,5 @@ use Zizaco\Entrust\EntrustPermission;
 
 class Permission extends EntrustPermission
 {
-    protected $connection = 'mysql_users';
+    protected $connection = 'mysql_local_ingestion';
 }

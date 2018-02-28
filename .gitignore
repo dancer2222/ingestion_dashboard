@@ -20,4 +20,6 @@ tests/Feature/
 /storage/framework/views/*
 /storage/debugbar/*
 
+bootstrap/dev/*
+
 composer.lock

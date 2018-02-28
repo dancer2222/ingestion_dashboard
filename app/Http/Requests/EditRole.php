@@ -25,9 +25,9 @@ class EditRole extends FormRequest
     {
         return [
             'name' => 'required|min:4|max:191',
-            'display_name' => 'required|unique:mysql_users.roles,name',
+            'display_name' => 'required|unique:mysql_local_ingestion.roles,name',
             'description' => 'required|max:191',
-            'permissions.*' => 'exists:mysql_users.permissions,id'
+            'permissions.*' => 'exists:mysql_local_ingestion.permissions,id'
         ];
     }
 }

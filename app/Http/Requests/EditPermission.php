@@ -25,7 +25,7 @@ class EditPermission extends FormRequest
     {
         return [
             'name' => 'required|min:4|max:191',
-            'display_name' => 'required|unique:mysql_users.permissions,name',
+            'display_name' => 'required|unique:mysql_local_ingestion.permissions,name',
             'description' => 'required|max:191',
         ];
     }

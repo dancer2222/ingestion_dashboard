@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
     public function down()
     {
         if (app()->environment('local')) {
-            Schema::connection('mysql_users')->dropIfExists('users');
+            Schema::dropIfExists('users');
         }
     }
 }

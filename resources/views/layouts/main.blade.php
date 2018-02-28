@@ -100,6 +100,7 @@
 
 <footer class="container-fluid">
 
+    @if (app()->environment('local'))
     <div class="col-12 footer-toolbar-container fixed-bottom">
         <span class="db-dropdown-container">
             Current DB:
@@ -118,6 +119,7 @@
             </span>
         </span>
     </div>
+    @endif
 
 </footer>
 

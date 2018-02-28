@@ -25,9 +25,9 @@ class CreateUser extends FormRequest
     {
         return [
             'name' => 'required|min:4|max:191',
-            'email' => 'required|unique:mysql_users.users,email|email',
+            'email' => 'required|unique:mysql_local_ingestion.users,email|email',
             'password' => 'required|confirmed|min:6|max:191',
-            'roles.*' => 'exists:mysql_users.roles,id'
+            'roles.*' => 'exists:mysql_local_ingestion.roles,id'
         ];
     }
 }

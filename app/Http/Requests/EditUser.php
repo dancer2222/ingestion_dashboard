@@ -26,9 +26,9 @@ class EditUser extends FormRequest
     {
         return [
             'name' => 'required|min:4|max:191',
-            'email' => Rule::unique('mysql_users.users')->ignore(request()->id, 'id') . '|email',
+            'email' => Rule::unique('mysql_local_ingestion.users')->ignore(request()->id, 'id') . '|email',
             'password' => 'confirmed|min:6|max:191',
-            'roles.*' => 'exists:mysql_users.roles,id'
+            'roles.*' => 'exists:mysql_local_ingestion.roles,id'
         ];
     }
 }

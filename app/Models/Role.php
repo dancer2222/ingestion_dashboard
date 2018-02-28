@@ -6,5 +6,5 @@ use Zizaco\Entrust\EntrustRole;
 
 class Role extends EntrustRole
 {
-    protected $connection = 'mysql_users';
+    protected $connection = 'mysql_local_ingestion';
 }
