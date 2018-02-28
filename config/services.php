@@ -56,4 +56,11 @@ return [
         'password' => env('RABBITMQ_PASSWORD'),
         'queue'    => env('RABBITMQ_QUEUE')
     ]
+
+	'google' => [
+		'client_id' => env('GOOGLE_API_CLIENT_ID'),
+		'client_secret' => env('GOOGLE_API_CLIENT_SECRET'),
+        'redirect_uri' => env('GOOGLE_API_REDIRECT_URI'),
+	],
+
 ];

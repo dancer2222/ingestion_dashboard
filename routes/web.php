@@ -11,6 +11,14 @@
 |
 */
 
+// Monitor
+Route::get('/monitor', function () {
+    return response()->json([
+       'ingestion_dashboard_api' => 'ok',
+       'version' => 'unknown',
+    ]);
+});
+
 /**
  * Routes under 'auth' middleware
  */
@@ -70,3 +78,6 @@ Auth::routes();
 Route::match(['post', 'get'], 'register', function() {
     return redirect('login');
 });
+
+Route::get('auth/google/login', 'Auth\\LoginGoogleController@login')->name('google.login');
+Route::get('auth/google/callback', 'Auth\\LoginGoogleController@callback')->name('google.callback');

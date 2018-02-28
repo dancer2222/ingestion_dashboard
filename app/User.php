@@ -9,8 +9,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $connection = 'mysql_local';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -28,4 +26,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function __construct(array $attributes = []) {
+	    $this->connection = config('database.default');
+
+	    parent::__construct($attributes);
+    }
 }

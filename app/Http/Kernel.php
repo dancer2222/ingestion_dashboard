@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\BrightcoveNotifications;
+use App\Http\Middleware\GoogleAuth;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -52,12 +53,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+//        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+//        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+//        'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+//        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'api.brightcove.notifications' => BrightcoveNotifications::class,
+	    'google.auth' => GoogleAuth::class,
     ];
 }
