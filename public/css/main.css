@@ -17,7 +17,8 @@ footer {
 }
 
 body {
-  font-size: 0.9rem;
+    font-size: 0.9rem;
+    background-color: #f1f1f1;
 }
 .table {
   background-color: white;
@@ -39,7 +40,39 @@ h3 span {
     border-radius: 10px;
 }
 
+.container {
+    background: transparent;
+}
 
+.border-ida {
+    border-color: #5d6dc3;
+}
+
+.container-ida {
+    background: #fff;
+    box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
+}
+
+.header-ida {
+    color: rgba(0, 0, 0, 0.47);
+    text-transform: uppercase;
+    font-family: "Roboto", sans-serif;
+}
+
+.navbar-custom {
+    background: linear-gradient(to top, #5d6dc3, #3c86d8);
+    box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
+}
+
+.navbar-custom .nav-link, .navbar-custom .navbar-brand {
+    /*padding: 0;*/
+    /*line-height: 70px;*/
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.container-fluid-navbar {
+    margin-bottom: 90px;
+}
 
 
 

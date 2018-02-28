@@ -79,15 +79,20 @@ function changeDbConnection(connectionName) {
 }
 
 $(document).ready(function () {
-  // Register event listener to change db connection button
-   $('.change-db').on('click', function () {
+    // Register event listener to change db connection button
+    $('.change-db').on('click', function () {
         changeDbConnection($(this).text());
     });
 
-   $('[type=submit]').on('click', function () {
+    $('[type=submit]').on('click', function () {
        $('body').css({'cursor': 'progress'});
-   })
+    });
 
+    // Admin Area
+    $('#password-changing-enable').on('click', function () {
+        $('input#password').attr('disabled', false);
+        $('input#password_confirmation').attr('disabled', false);
+    });
 });
 
 

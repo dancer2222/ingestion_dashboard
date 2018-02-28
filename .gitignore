@@ -22,5 +22,4 @@ composer.lock
 /storage/framework/cache/*
 /storage/framework/views/*
 
-
-
+composer.lock

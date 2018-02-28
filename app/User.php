@@ -4,10 +4,14 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use EntrustUserTrait;
+
+    protected $connection = 'mysql_local_ingestion';
 
     /**
      * The attributes that are mass assignable.
@@ -28,8 +32,16 @@ class User extends Authenticatable
     ];
 
     public function __construct(array $attributes = []) {
-	    $this->connection = config('database.default');
-
 	    parent::__construct($attributes);
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getPhotoUrl()
+    {
+        return '';
     }
 }

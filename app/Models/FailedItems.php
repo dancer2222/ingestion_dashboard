@@ -13,7 +13,7 @@ class FailedItems extends Model
     /**
      * @var string
      */
-    protected $connection = 'ingestion';
+    protected $connection = 'mysql_local_ingestion';
 
     /**
      * @var string
