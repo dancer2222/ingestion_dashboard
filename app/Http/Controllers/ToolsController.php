@@ -69,12 +69,13 @@ class ToolsController extends Controller
 
         try {
             $rabbit = new RabbitMQ(config('main.rabbitMq'));
+            $rabbit->createChanel();
             $rabbit->putMessage((string)$message, config('main.rabbitMq'))->closeConnection();
         } catch (\Exception $exception) {
 
             return back()->with(['message' => $exception->getMessage(), 'status' => 'error']);
         }
 
-        return back()->with('message', $message);
+        return back()->with('message', $message . ' - message published');
     }
 }
