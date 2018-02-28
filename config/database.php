@@ -129,6 +129,21 @@ return [
             'engine' => null,
         ],
 
+        'mysql_local_content' => [
+            'driver' => 'mysql',
+            'host' => env('DB_LOCAL_HOST_CON', '127.0.0.1'),
+            'port' => env('DB_LOCAL_PORT_CON', '3306'),
+            'database' => env('DB_LOCAL_DATABASE_CON', 'forge'),
+            'username' => env('DB_LOCAL_USERNAME_CON', 'forge'),
+            'password' => env('DB_LOCAL_PASSWORD_CON', ''),
+            'unix_socket' => env('DB_LOCAL_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

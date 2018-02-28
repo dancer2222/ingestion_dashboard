@@ -42,11 +42,19 @@ return [
     ],
 
     'rabbitAdjuster' => [
-        'host'     => '172.22.0.1',
-        'port'     => '5672',
-        'user'     => 'guest',
-        'password' => 'guest',
-        'queue'    => 'aws-notifications'
+        'host'     => env('RABBITMQ_ADJUSTER_HOST'),
+        'port'     => env('RABBITMQ_ADJUSTER_PORT'),
+        'user'     => env('RABBITMQ_ADJUSTER_LOGIN'),
+        'password' => env('RABBITMQ_ADJUSTER_PASSWORD'),
+        'queue'    => env('RABBITMQ_ADJUSTER_QUEUE')
+    ],
+
+    'rabbitMq' => [
+        'host'     => env('RABBITMQ_HOST'),
+        'port'     => env('RABBITMQ_PORT'),
+        'user'     => env('RABBITMQ_LOGIN'),
+        'password' => env('RABBITMQ_PASSWORD'),
+        'queue'    => env('RABBITMQ_QUEUE')
     ]
 
 	'google' => [

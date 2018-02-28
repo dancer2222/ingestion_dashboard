@@ -47,6 +47,9 @@
             @break
 
             @case('status')
+            @if('books' === $mediaTypeTitle)
+                @include('search.sections.infoById.books.booksButton')
+            @else
             <tr>
                 <td>{{ $value }}</td>
                 @if($item == 'inactive')
@@ -55,6 +58,7 @@
                     <td style="color: green">{{ $item }}</td>
                 @endif
             </tr>
+            @endif
             @break
 
             @case('download_url')
