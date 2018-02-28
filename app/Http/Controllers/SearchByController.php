@@ -33,7 +33,7 @@ class SearchByController extends Controller
 
         } else {
 
-            return view('search.title', ['info' => $info, 'type' => $request->type]);
+            return view('search.title', ['info' => $info->toArray(), 'type' => $request->type]);
         }
     }
 
