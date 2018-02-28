@@ -70,7 +70,7 @@ class ToolsController extends Controller
         try {
             $rabbit = new RabbitMQ(config('services.rabbitMq'));
             $rabbit->createChanel();
-            $rabbit->putMessage((string)$message, config('services.rabbitMq'))->closeConnection();
+            $rabbit->putMessage((string)$message)->closeConnection();
         } catch (\Exception $exception) {
 
             return back()->with(['message' => $exception->getMessage(), 'status' => 'error']);
