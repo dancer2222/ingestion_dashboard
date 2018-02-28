@@ -22,11 +22,4 @@ return [
             'audiobook' => 'https://prod-image-resizer-v1-cdn1.playster.com/audiobook/findaway/square/'
         ]
     ],
-    'rabbitMq' => [
-        'host'     => '10.0.10.63',
-        'port'     => '5672',
-        'user'     => 'guest',
-        'password' => 'guest',
-        'queue'    => 'ingestion-tools'
-    ]
 ];

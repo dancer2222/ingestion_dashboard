@@ -68,9 +68,9 @@ class ToolsController extends Controller
         $message = \GuzzleHttp\json_encode($message);
 
         try {
-            $rabbit = new RabbitMQ(config('main.rabbitMq'));
+            $rabbit = new RabbitMQ(config('services.rabbitMq'));
             $rabbit->createChanel();
-            $rabbit->putMessage((string)$message, config('main.rabbitMq'))->closeConnection();
+            $rabbit->putMessage((string)$message, config('services.rabbitMq'))->closeConnection();
         } catch (\Exception $exception) {
 
             return back()->with(['message' => $exception->getMessage(), 'status' => 'error']);
