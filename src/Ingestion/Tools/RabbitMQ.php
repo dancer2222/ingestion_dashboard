@@ -2,6 +2,7 @@
 
 namespace Ingestion\Tools;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -49,7 +50,7 @@ class RabbitMQ
         if (!$config['queue']) {
             throw new \Exception('Queue cannot be empty');
         }
-
+        $this->queue = $config['queue'];
         $this->connection = new AMQPStreamConnection(
             $config['host'],
             $config['port'],
@@ -76,14 +77,31 @@ class RabbitMQ
     }
 
     /**
+     * @return array
+     */
+    public function readMessage()
+    {
+        $messages = [];
+        list($this->queue, $countMessages) = $this->channel->queue_declare($this->queue, false, true, false, false);
+
+        for ($i = 0; $i < $countMessages; $i++) {
+            $body = $this->channel->basic_get($this->queue, true, null)->body;
+            if ($body) {
+                $messages []= $body;
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
      * @param $message
-     * @param $config
      * @return $this
      */
-    public function putMessage($message, $config)
+    public function putMessage($message)
     {
         $msg = new AMQPMessage($message);
-        $this->channel->basic_publish($msg, '', $config['queue']);
+        $this->channel->basic_publish($msg, '', $this->queue);
 
         return $this;
     }

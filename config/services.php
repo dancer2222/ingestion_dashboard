@@ -41,9 +41,26 @@ return [
         'client_secret' => env('BRIGHTCOVE_CLIENT_SECRET'),
     ],
 
+    'rabbitAdjuster' => [
+        'host'     => env('RABBITMQ_ADJUSTER_HOST'),
+        'port'     => env('RABBITMQ_ADJUSTER_PORT'),
+        'user'     => env('RABBITMQ_ADJUSTER_LOGIN'),
+        'password' => env('RABBITMQ_ADJUSTER_PASSWORD'),
+        'queue'    => env('RABBITMQ_ADJUSTER_QUEUE')
+    ],
+
+    'rabbitMq' => [
+        'host'     => env('RABBITMQ_HOST'),
+        'port'     => env('RABBITMQ_PORT'),
+        'user'     => env('RABBITMQ_LOGIN'),
+        'password' => env('RABBITMQ_PASSWORD'),
+        'queue'    => env('RABBITMQ_QUEUE')
+    ]
+
 	'google' => [
 		'client_id' => env('GOOGLE_API_CLIENT_ID'),
 		'client_secret' => env('GOOGLE_API_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_API_REDIRECT_URI'),
 	],
+
 ];

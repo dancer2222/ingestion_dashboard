@@ -16,7 +16,7 @@ class Musics
      * @param $id
      * @return array
      */
-    public function searchInfoById($id)
+    public function searchInfoById($id) : array
     {
         $music = new Music();
         $musicFiles = new MusicFiles();

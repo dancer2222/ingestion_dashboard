@@ -13,9 +13,7 @@ class SearchController extends Controller
 {
     /**
      * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     * @throws \ReflectionException
+     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -27,7 +25,12 @@ class SearchController extends Controller
             }
 
             $className = "Ingestion\Search\\" . ucfirst($request->type);
-            $reflectionMethod = new \ReflectionMethod($className, 'searchInfoById');
+
+            try {
+                $reflectionMethod = new \ReflectionMethod($className, 'searchInfoById');
+            } catch (\ReflectionException $exception) {
+                return view('search.infoById')->withErrors($exception->getMessage());
+            }
 
             try {
                 $dataForView = $reflectionMethod->invoke(new $className(), $request->id, $request->type, GeoRestrict::search($request->id),
