@@ -30,40 +30,46 @@ class AwsNotifications
     }
 
     /**
-     * @param $messages
+     * @param array $messages
      * @return array
+     * @throws \Exception
      */
     public function parse(array $messages): array
     {
-        $allProduct = [];
+        if (!is_array($messages)) {
+            $allProduct = [];
 
-        foreach ($messages as $message) {
-            $messagesSecond = json_decode($message);
-            $product = [];
-            foreach ($messagesSecond as &$item) {
-                if ($item->body) {
-                    $position = strpos($item->body, '}}}]}');
-                    $item->body = json_decode(substr($item->body, 0, $position) . '}}}]}');
+            foreach ($messages as $message) {
+                $messagesSecond = json_decode($message);
+                $product = [];
+                foreach ($messagesSecond as &$item) {
+                    if ($item->body) {
+                        $position = strpos($item->body, '}}}]}');
+                        $item->body = json_decode(substr($item->body, 0, $position) . '}}}]}');
 
-                    foreach ($item->body as $message) {
-                        foreach ($message as $value) {
-                            $value->info = [
-                                'eventTime' => Carbon::parse($value->eventTime),
-                                'eventName' => $value->eventName,
-                                'bucket'    => $value->s3->bucket->name,
-                                'key'       => $value->s3->object->key,
-                                'size'      => $value->s3->object->size . ' bytes'
-                            ];
-                            $product [] = $value->info;
+                        foreach ($item->body as $message) {
+                            foreach ($message as $value) {
+                                $value->info = [
+                                    'eventTime' => Carbon::parse($value->eventTime),
+                                    'eventName' => $value->eventName,
+                                    'bucket'    => $value->s3->bucket->name,
+                                    'key'       => $value->s3->object->key,
+                                    'size'      => $value->s3->object->size . ' bytes'
+                                ];
+                                $product [] = $value->info;
+                            }
                         }
                     }
                 }
+
+                $allProduct [] = $product;
             }
 
-            $allProduct [] = $product;
+            return $allProduct;
+        } else {
+            throw new \Exception('incorrect data form Rabbit message');
         }
 
-        return $allProduct;
     }
 
     /**
