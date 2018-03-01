@@ -36,10 +36,10 @@ class AwsNotifications
      */
     public function parse(array $messages): array
     {
-        if (!is_array($messages)) {
-            $allProduct = [];
+        $allProduct = [];
 
-            foreach ($messages as $message) {
+        foreach ($messages as $key => $message) {
+            try {
                 $messagesSecond = json_decode($message);
                 $product = [];
                 foreach ($messagesSecond as &$item) {
@@ -63,13 +63,14 @@ class AwsNotifications
                 }
 
                 $allProduct [] = $product;
-            }
+            } catch (\Exception $exception) {
+                unset($messages[$key]);
 
-            return $allProduct;
-        } else {
-            throw new \Exception('incorrect data form Rabbit message');
+                $this->parse($messages);
+            }
         }
 
+        return $allProduct;
     }
 
     /**
