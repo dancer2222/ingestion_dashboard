@@ -17,18 +17,6 @@
 
     {{-- Custom css --}}
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <style>
-        @if (App::environment('local1'))
-        .first-img {
-            background: url({{asset('images/ob.jpg')}}) no-repeat center center fixed;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-size: cover;
-        }
-        @endif
-
-    </style>
 </head>
 <body class="first-img">
 
