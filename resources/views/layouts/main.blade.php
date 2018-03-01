@@ -129,6 +129,7 @@
 {{-- Libs scripts --}}
 <script src="{{asset('js/jquery.min.js')}}"></script>
 <script src="{{ asset('lib/tether/tether-1.4.0.min.js') }}"></script>
+<script src="{{ asset('lib/bootstrap/4.0/libs/popover.min.js') }}"></script>
 <script src="{{ asset('lib/bootstrap/4.0/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('lib/notify-bootstrap/notify.min.js') }}"></script>
 
