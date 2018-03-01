@@ -3,66 +3,70 @@
     @if(null == $item)
 
     @else
+        <tr>
         @switch($value)
             @case('description')
-            <tr>
+
                 <td><a href="" data-toggle="collapse"
                        data-target="#description" class="badge badge-success">{{ $value }}</a><br></td>
-                <td id="description" class="collapse">
-                    {{ $item }}
+                <td>
+                    <div id="description" class="collapse">{{ $item }}</div>
                 </td>
-            </tr>
+                <td></td>
+
             @break
 
             @case('licensor_id')
-            <tr>
+
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
                 <td>{{ $licensorName }}</td>
-            </tr>
+
             @break
 
             @case('data_source_provider_id')
-            <tr>
+
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
                 <td>{{ $providerName }}</td>
-            </tr>
+
             @break
 
             @case('date_added')
-            <tr>
+
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
                 <td>{{ date('Y-m-d', $item)}}</td>
-            </tr>
+
             @break
 
             @case('emedia_release_date')
-            <tr>
+
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
                 <td>{{ date('Y-m-d', $item)}}</td>
-            </tr>
+
             @break
 
             @case('status')
             @if('books' === $mediaTypeTitle)
                 @include('search.sections.infoById.books.booksButton')
             @else
-            <tr>
+
                 <td>{{ $value }}</td>
                 @if($item == 'inactive')
                     <td style="color: red">{{ $item }}</td>
                 @else
                     <td style="color: green">{{ $item }}</td>
                 @endif
-            </tr>
+
+                <td></td>
+
             @endif
             @break
 
             @case('download_url')
-            <tr>
+
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
                 @if(isset($presentEpub))
@@ -74,11 +78,11 @@
                         <td style="color: red">Not present in the bucket</td>
                     @endif
                 @endif
-            </tr>
+
             @break
 
             @case('batch_id')
-            <tr>
+
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
                 <td>
@@ -89,14 +93,15 @@
                         <button type="submit" class="btn btn-success">Get batch report</button>
                     </form>
                 </td>
-            </tr>
+
             @break
 
             @default
-            <tr>
+
                 <td>{{ $value }}</td>
                 <td>{{ $item }}</td>
-            </tr>
+                <td></td>
         @endswitch
+        </tr>
     @endif
 @endforeach
