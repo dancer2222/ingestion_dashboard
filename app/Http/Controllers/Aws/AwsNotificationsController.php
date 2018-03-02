@@ -23,7 +23,6 @@ class AwsNotificationsController extends Controller
             $notifications = new AwsNotifications();
             $notifications->store($notifications->parse($notifications->read()));
         } catch (\Exception $exception) {
-
             return view('aws.notifications')->withErrors($exception->getMessage());
         }
 

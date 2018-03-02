@@ -32,7 +32,13 @@ class ParseController extends Controller
     {
         try {
             $this->dataType = explode('.', $request->batchTitle, 2)[1];
-            $this->filepath = "download/$request->batchTitle";
+            $downloadPath = public_path("tmp/download");
+            if (!file_exists($downloadPath)) {
+                mkdir($downloadPath, 0777,true);
+                @chmod($downloadPath, 0777);
+            }
+
+            $this->filepath = $downloadPath.'/'.$request->batchTitle;
         } catch (\Exception $exception) {
 
             return redirect(action('SearchController@index', ['id' => $request->id, 'type' => '']))->with('message',
@@ -57,7 +63,10 @@ class ParseController extends Controller
 
         try {
             $parse = new ParseMetadata();
-            $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
+            if (!file_exists($this->filepath)) {
+                $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
+            }
+
             $result = $parse->index($request->batchTitle, $this->dataType, $request->id, $request->title,
                 $this->filepath);
 
