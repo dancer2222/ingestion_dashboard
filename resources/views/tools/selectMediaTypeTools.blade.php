@@ -70,7 +70,11 @@
                                 {{ $argumentName }}
                             </label>
 
-                            <small id="arguments-{{$argumentName}}-help" class="{{$isRequired ? '' : 'hidden'}} form-text text-muted">It was checked automatically since this argument is required</small>
+                            @if ($isRequired)
+                            <small id="arguments-{{$argumentName}}-help" class="{{$isRequired ? '' : 'hidden'}} form-text text-muted">
+                                It was checked automatically since this argument is required
+                            </small>
+                            @endif
                         </div>
 
                     @endforeach

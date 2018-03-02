@@ -20,7 +20,7 @@ class MakeUser extends Command
      *
      * @var string
      */
-    protected $description = 'Makes a new user';
+    protected $description = 'Create a new user';
 
     /**
      * @var User
@@ -46,14 +46,41 @@ class MakeUser extends Command
      */
     public function handle()
     {
-        $name = $this->ask('Name');
+        if ($this->checkIfAdminAlreadyExist()) {
+            $this->warn('Admin already created.');
+            $this->warn('Please use existing credentials to access to app.');
+
+            return;
+        }
+
         $email = $this->ask('Email');
         $password = Hash::make($this->secret('Password'));
 
-        $this->user->fill([
-            'name' => $name,
-            'password' => $password,
-            'email' => $email
-        ])->save();
+        try {
+            $result = $this->user->fill([
+                'name' => 'Admin',
+                'password' => $password,
+                'email' => $email
+            ])->save();
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+
+            return;
+        }
+
+        if (!$result) {
+            $this->error('An error occurred while creating user.');
+        }
+
+        $this->info('User has been successfully created!');
+
+        return;
+    }
+
+    private function checkIfAdminAlreadyExist()
+    {
+        $admin = User::whereName('Admin')->first();
+
+        return $admin;
     }
 }

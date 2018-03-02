@@ -28,41 +28,71 @@ $ cp .env.example .env
 If `.env` file doesn't exist in the **root directory** of the project you should run `$ cp .env.example .env`.
 Set the correct values to database connection.
 ```dotenv
-DB_CONNECTION=mysql_prod
+DB_CONNECTION=dweb
 ```
 
-For prod connection
+Put right values:
 ```dotenv
-DB_PROD_HOST= Prod host
-DB_PROD_PORT=3306
-DB_PROD_DATABASE=playster_content
-DB_PROD_USERNAME= Your username on prod
-DB_PROD_PASSWORD= Your password on prod
-```
+DB_LOCAL_INGESTION_HOST=dmysql
+DB_LOCAL_INGESTION_PORT=3306
+DB_LOCAL_INGESTION_DATABASE=playster_ingestion
+DB_LOCAL_INGESTION_USERNAME=root
+DB_LOCAL_INGESTION_PASSWORD=123
 
-For qa connection
-```dotenv
-DB_QA_HOST= QA host
-DB_QA_PORT=3306
-DB_QA_DATABASE=playster_content
-DB_QA_USERNAME= Your username on qa
-DB_QA_PASSWORD= Your password on qa
-```
+DB_LOCAL_CONTENT_HOST=
+DB_LOCAL_CONTENT_PORT=3306
+DB_LOCAL_CONTENT_DATABASE=playster_content
+DB_LOCAL_CONTENT_USERNAME=
+DB_LOCAL_CONTENT_PASSWORD=
 
-And also you need to add the Brightcove credentials to `.env` file.
-```dotenv
 BRIGHTCOVE_ACCOUNT_ID=
 BRIGHTCOVE_CLIENT_ID=
-BRIGHTCOVE_CLIENT_SECRET= 
-```
+BRIGHTCOVE_CLIENT_SECRET=
 
-Also you need to add Google credentials to `.env` file
-```dotenv
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_REGION=
+
+RABBITMQ_HOST=
+RABBITMQ_PORT=5672
+RABBITMQ_VHOST=/
+RABBITMQ_LOGIN=
+RABBITMQ_PASSWORD=
+RABBITMQ_QUEUE=ingestion-tools
+
 GOOGLE_API_CLIENT_ID=
 GOOGLE_API_CLIENT_SECRET=
-GOOGLE_API_REDIRECT_URI="http://localhost:8877/auth/google/callback
+GOOGLE_API_REDIRECT_URI="http://localhost:7771/social/callback/google"
+```
+
+Install dependencies
+```bash
+composer install --ignore-platform-reqs
+```
+
+Go to `http://127.0.0.1:7772`, login and create `playster_ingestion` database.
+
+Make admin if it wasn't created before:
+```bash
+cd docker
+docker-compose exec dweb bash
+php artisan migrate --database=mysql_local_ingestion
+php artisan make:admin
+```
+
+If everything is ok, we continue.
+Run seeds:
+```bash
+cd docker
+docker-compose exec dweb bash
+php artisan db:seed --class=DatabaseSeeder --database=mysql_local_ingestion
+```
+
+Generate key:
+```bash
+php artisan key:generate
 ```
 
 Now you can access to web interface. Check it in your browser: 
-- dashboard: `http://127.0.0.1:[NGINX_PORT]`. Login with your credentials
-- phpmyadmin: `http://127.0.0.1:[PMA_PORT]`. Login using the values you set in `docker/.env` file.
+- dashboard: `http://127.0.0.1:7771`. Login with your credentials
+- phpmyadmin: `http://127.0.0.1:7772`. Login using the values you set in `docker/.env` file.

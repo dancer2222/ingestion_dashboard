@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,8 +12,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call([
-             UsersTableSeeder::class,
-         ]);
+        DB::beginTransaction();
+
+        try {
+            $this->call([
+                RoleSeeder::class,
+                PermissionSeeder::class,
+                PermissionRoleSeeder::class,
+                RoleUserSeeder::class,
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            echo 'An error occurred while seeding ' . __CLASS__ . PHP_EOL;
+            echo $e->getMessage() . PHP_EOL;
+            die;
+        }
+
+        DB::commit();
     }
 }
