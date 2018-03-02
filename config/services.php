@@ -55,7 +55,7 @@ return [
         'user'     => env('RABBITMQ_LOGIN'),
         'password' => env('RABBITMQ_PASSWORD'),
         'queue'    => env('RABBITMQ_QUEUE')
-    ]
+    ],
 
 	'google' => [
 		'client_id' => env('GOOGLE_API_CLIENT_ID'),
