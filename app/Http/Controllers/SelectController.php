@@ -31,7 +31,7 @@ class SelectController extends Controller
                     break;
 
                 case 'audiobooks':
-                    $selectedTypes = ['id', 'title', 'dataOriginId'];
+                    $selectedTypes = ['id', 'title', 'dataOriginId', 'isbn'];
                     break;
 
                 case 'albums':

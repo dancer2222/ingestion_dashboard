@@ -50,7 +50,7 @@ class Audiobook extends Model
      */
     public function getInfoByIsbn($isbn)
     {
-        return $this->where('isbn', $isbn)->get();
+       return $this->where('id', AudioBookProduct::getIdByIsbn($isbn)->audio_book_id)->get();
     }
 
     /**
