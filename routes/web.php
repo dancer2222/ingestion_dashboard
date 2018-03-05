@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth']], function() {
         })->name('admin');
 
         // Manage users
-        Route::group(['middleware' => 'ability:false,create-users,edit-users,delete-users'], function () {
+        Route::group(['middleware' => 'permission:create-users,edit-users,delete-users'], function () {
             Route::get('/users', 'UsersController@list')->name('admin.users.list');
             Route::get('/users/{id}/edit', 'UsersController@showEdit')->name('admin.users.showEdit');
             Route::post('/users/{id}/edit', 'UsersController@edit')->name('admin.users.edit');

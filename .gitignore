@@ -1,7 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
-public/tmp/*
+/public/tmp/
 /storage/*.key
 /vendor
 /.idea
@@ -15,8 +15,7 @@ public/fonts/
 storage/framework/
 tests/Feature/
 .env
-/storage/debugbar/*
-composer.lock
+/storage/debugbar/
 
 /storage/framework/sessions/*
 /storage/framework/cache/*

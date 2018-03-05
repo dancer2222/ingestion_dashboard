@@ -8,34 +8,34 @@ services:
     volumes:
       - "./../:/var/www/html/dashboard"
     ports:
-      - "${NGINX_PORT}:80"
+      - "8686:80"
     working_dir: /var/www/html/dashboard
-    links:
-      - dpma
-      - dmysql
-  dmysql:
-    image: mysql/mysql-server:5.6
-    container_name: dmysql
-    volumes:
-      - "${MYSQL_PATH_TO_STORE_DB_LOCAL}:/var/lib/mysql"
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_ROOT_HOST: "%"
-    ports:
-      - "3306:3306"
-  dpma:
-    image: phpmyadmin/phpmyadmin
-    container_name: dpma
-    volumes:
-      - /sessions
-    restart: always
-    environment:
-      PMA_HOST: dmysql
-      PMA_PORT: 3306
-    ports:
-      - "${PMA_PORT}:80"
-    links:
-      - dmysql
+#    links:
+#      - dpma
+#      - dmysql
+#  dmysql:
+#    image: mysql/mysql-server:5.6
+#    container_name: dmysql
+#    volumes:
+#      - "${MYSQL_PATH_TO_STORE_DB_LOCAL}:/var/lib/mysql"
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_USER: ${MYSQL_USER}
+#      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_ROOT_HOST: "%"
+#    ports:
+#      - "3306:3306"
+#  dpma:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: dpma
+#    volumes:
+#      - /sessions
+#    restart: always
+#    environment:
+#      PMA_HOST: dmysql
+#      PMA_PORT: 3306
+#    ports:
+#      - "${PMA_PORT}:80"
+#    links:
+#      - dmysql

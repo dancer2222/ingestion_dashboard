@@ -30,7 +30,7 @@ chown -R ida:nginx /var/www/html/dashboard/storage/logs
 
 # Generate artisan key
 php artisan key:generate
-php artisan config:cache
+php artisan cache:clear
 
 # Start supervisord and services
 exec /usr/bin/supervisord -n -c /etc/supervisord.conf

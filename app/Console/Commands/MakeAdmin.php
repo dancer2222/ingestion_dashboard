@@ -6,14 +6,14 @@ use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
-class MakeUser extends Command
+class MakeAdmin extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:user';
+    protected $signature = 'make:admin';
 
     /**
      * The console command description.
