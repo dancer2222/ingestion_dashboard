@@ -9,6 +9,11 @@ class AwsNotication extends Model
     /**
      * @var string
      */
+    protected $connection = 'mysql_local_ingestion';
+
+    /**
+     * @var string
+     */
     protected $table = 'aws_notifications';
 
     /**

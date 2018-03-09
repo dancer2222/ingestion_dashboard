@@ -4,7 +4,7 @@ cd /var/www/html/dashboard
 
 # Create '.env' file if it isn't exist
 if [ ! -f .env ]; then
-	cp .env.example .env
+	cp ./.env.prod .env
 fi
 
 # Create 'laravel.log' file if it isn't exist
