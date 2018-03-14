@@ -5,29 +5,28 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>
-        @yield('title', 'Dashboard')
+        @yield('title', 'Ingestion Dashboard')
     </title>
 
+    {{-- Fontawesome Icons --}}
+    <link href="{{ asset('lib/fontawesome-5.0.6/css/fontawesome-all.min.css') }}" rel="stylesheet">
+
     {{-- Libs css --}}
-    <link rel="stylesheet" href="{{ asset('lib/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('lib/bootstrap/4.0/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('lib/animate/animate.css') }}">
 
     {{-- Custom css --}}
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <style>
-        .first-img {
-            background: url({{asset('images/ob.jpg')}}) no-repeat center center fixed;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-size: cover;
-        }
-
-    </style>
 </head>
 <body class="first-img">
 
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded mb-5 fixed-top">
+<div class="container-fluid container-fluid-navbar">
+    <nav class="navbar navbar-expand-lg navbar-custom mb-5 fixed-top">
+    @if(!auth()->check())
+        <a class="navbar-brand mx-auto" href="#">
+            Ingestion Dashboard
+        </a>
+    @else
     <a class="navbar-brand" href="{{ url('/') }}">
         <img src="{{ asset('images/elephant-logo.png') }}" width="50" height="30" alt="">
     </a>
@@ -37,15 +36,6 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        @if(Auth::guest())
-
-        <div class="navbar-nav col-12">
-            <span class="navbar-text text-center col-12">
-                Sign in
-            </span>
-        </div>
-
-        @else
 
         <ul class="navbar-nav mr-auto ">
             <li class="nav-item dropdown">
@@ -68,20 +58,40 @@
             </li>
         </ul>
 
-        <form class="form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ auth()->user()->getName() }}
+                    <i class="fas fa-user-circle fa-lg"></i>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item disabled" href="#">Profile <small>coming soon</small></a>
+
+                    <a class="dropdown-item" href="{{ route('admin') }}">Admin area</a>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" onclick="$('#logout').submit()">Sign out</a>
+                </div>
+            </li>
+        </ul>
+
+        <form id="logout" class="d-none form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">
             {{ csrf_field() }}
             <button type="submit" class="btn btn-sm btn-outline-primary">Sign out</button>
         </form>
 
-        @endif
-
     </div>
+
+    @endif
 </nav>
-<br><br><br><br>
+</div>
+
 @yield('content')
 
 <footer class="container-fluid">
 
+    @if (app()->environment('local'))
     <div class="col-12 footer-toolbar-container fixed-bottom">
         <span class="db-dropdown-container">
             Current DB:
@@ -100,13 +110,15 @@
             </span>
         </span>
     </div>
+    @endif
 
 </footer>
 
 {{-- Libs scripts --}}
 <script src="{{asset('js/jquery.min.js')}}"></script>
 <script src="{{ asset('lib/tether/tether-1.4.0.min.js') }}"></script>
-<script src="{{ asset('lib/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('lib/bootstrap/4.0/libs/popover.min.js') }}"></script>
+<script src="{{ asset('lib/bootstrap/4.0/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('lib/notify-bootstrap/notify.min.js') }}"></script>
 
 {{-- Custom scripts --}}

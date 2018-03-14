@@ -21,5 +21,5 @@ return [
             'album'     => 'https://prod-image-resizer-v1-cdn1.playster.com/album/7digital/',
             'audiobook' => 'https://prod-image-resizer-v1-cdn1.playster.com/audiobook/findaway/square/'
         ]
-    ],
+    ]
 ];

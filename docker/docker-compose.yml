@@ -1,48 +1,41 @@
 version: "2"
 
 services:
-  br_web:
-#    image: nginx
-    container_name: br_web
-    build: ./nginx
+  # Nginx container
+  dweb:
+    build: ./web
+    container_name: dweb
     volumes:
-      - "${PATH_TO_LOCAL_PROJECT}:${PATH_TO_PROJECT_INSIDE_CONTAINER}"
-      - "./dashboard.conf:/etc/nginx/conf.d/nginx.conf:ro"
+      - "./../:/var/www/html/dashboard"
     ports:
-      - "${NGINX_PORT}:80"
-    working_dir: ${PATH_TO_PROJECT_INSIDE_CONTAINER}
-    links:
-      - br_php
-      - br_mysql
-      - br_pma
-  br_mysql:
-    image: mysql:latest
-    container_name: br_mysql
-    volumes:
-      - "${MYSQL_PATH_TO_STORE_DB_LOCAL}:/var/lib/mysql"
-    environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      MYSQL_USER: "${MYSQL_USER}"
-    ports:
-      - "3308:${MYSQL_PORT}"
-  br_pma:
-    image: "phpmyadmin/phpmyadmin:latest"
-    container_name: br_pma
-    restart: always
-    volumes:
-      - /sessions
-    environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      PMA_HOST: "br_mysql"
-    ports:
-      - "${PMA_PORT}:80"
-    links:
-      - br_mysql
-  br_php:
-    build: ./php
-    container_name: br_php
-    volumes:
-      - "${PATH_TO_LOCAL_PROJECT}:${PATH_TO_PROJECT_INSIDE_CONTAINER}"
-    working_dir: ${PATH_TO_PROJECT_INSIDE_CONTAINER}
-    links:
-      - br_mysql
+      - "8686:80"
+    working_dir: /var/www/html/dashboard
+#    links:
+#      - dpma
+#      - dmysql
+#  dmysql:
+#    image: mysql/mysql-server:5.6
+#    container_name: dmysql
+#    volumes:
+#      - "${MYSQL_PATH_TO_STORE_DB_LOCAL}:/var/lib/mysql"
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_USER: ${MYSQL_USER}
+#      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_ROOT_HOST: "%"
+#    ports:
+#      - "3306:3306"
+#  dpma:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: dpma
+#    volumes:
+#      - /sessions
+#    restart: always
+#    environment:
+#      PMA_HOST: dmysql
+#      PMA_PORT: 3306
+#    ports:
+#      - "${PMA_PORT}:80"
+#    links:
+#      - dmysql

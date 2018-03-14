@@ -19,10 +19,12 @@
             @endif
         </div>
     </td>
+    <td></td>
 </tr>
 @if(isset($brightcove_id))
     <tr>
         <td>Brightcove_id</td>
         <td>{{ $brightcove_id }}</td>
+        <td></td>
     </tr>
 @endif

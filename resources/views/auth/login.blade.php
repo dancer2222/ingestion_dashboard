@@ -3,40 +3,89 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-xs-10 offset-xs-1 col-md-4 offset-md-4 mt-5">
 
-            <form method="POST" action="{{ route('login') }}">
-                {{ csrf_field() }}
+        <div class="col-md-4 mx-auto">
+            <div class="card border-ida">
 
-                <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                    <label for="formGroupExampleInput">Email</label>
-                    <input type="email" class="form-control" id="input-email" name="email" value="{{ old('email') }}" required autofocus>
-                    @if ($errors->has('email'))
-                        <div class="form-control-feedback">{{ $errors->first('email') }}</div>
-                    @endif
+                <div class="card-header bg-light text-center">
+                    <h4>Sign in</h4>
                 </div>
 
-                <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                    <label for="input-password">Password</label>
-                    <input type="password" class="form-control" id="input-password" name="password" required>
-                    @if ($errors->has('email'))
-                        <div class="form-control-feedback">{{ $errors->first('password') }}</div>
-                    @endif
+                <div class="card-body">
+
+                    <p class="card-text">
+
+                        @if ($errors->has('any'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ $errors->first('any') }}
+
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
+
+                        <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                            {{ csrf_field() }}
+
+                            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                <label for="email" class="control-label">E-Mail Address</label>
+
+                                <div class="">
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+
+                                    @if ($errors->has('email'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('email') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                <label for="password" class="control-label">Password</label>
+
+                                <div class="">
+                                    <input id="password" type="password" class="form-control" name="password" required>
+
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{--<div class="form-group">--}}
+                                {{--<div class="col-md-6 col-md-offset-4">--}}
+                                    {{--<div class="checkbox">--}}
+                                        {{--<label>--}}
+                                            {{--<input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me--}}
+                                        {{--</label>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+
+                            <div class="form-group">
+                                <div class="">
+                                    <button type="submit" class="btn btn-primary">
+                                        Submit
+                                    </button>
+
+                                    {{--<a class="btn btn-link" href="{{ route('password.request') }}">--}}
+                                        {{--Forgot Your Password?--}}
+                                    {{--</a>--}}
+                                </div>
+                            </div>
+                        </form>
+                    </p>
+
                 </div>
 
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" id=""
-                               name="remember" {{ old('remember') ? 'checked' : '' }}>
-                        Remember me
-                    </label>
+                <div class="card-footer">
+                    <a href="{{ route('social.auth', ['provider' => 'google']) }}" class="btn btn-info">Google+</a>
                 </div>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Sign in</button>
-                </div>
-            </form>
-
+            </div>
         </div>
     </div>
 </div>

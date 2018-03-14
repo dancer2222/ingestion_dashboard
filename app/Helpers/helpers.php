@@ -1,5 +1,7 @@
 <?php
 
+use Ingestion\Auth\Google\User;
+
 if (! function_exists('getDbConnections')) {
 	/**
 	 * Get current database connection
@@ -23,5 +25,45 @@ if (! function_exists('getDbConnections')) {
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
+    }
+}
+
+if (! function_exists('isAuth')) {
+	/**
+	 * Check if user has been stored in the session
+	 *
+	 * @return array
+	 */
+	function isAuth()
+	{
+		return session()->has('sessionUser');
+	}
+}
+
+if (! function_exists('getUser')) {
+	/**
+	 * Return the user was authenticated through google
+	 *
+	 * @return User
+	 */
+	function getUser()
+	{
+		if (session()->has('sessionUser.user')) {
+			return session('sessionUser.user');
+		}
+
+		return auth()->user();
+	}
+}
+
+if (! function_exists('urlLastItem')) {
+    /**
+     * Return the last segment of url
+     *
+     * @return string
+     */
+    function urlLastItem()
+    {
+        return request()->segment(count(request()->segments()));
     }
 }
