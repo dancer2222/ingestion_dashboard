@@ -3,6 +3,7 @@
 namespace Ingestion\Search;
 
 use App\Models\MediaGeoRestrict;
+use App\Models\MediaType;
 
 /**
  * Class GeoRestrict
@@ -14,10 +15,10 @@ class GeoRestrict
      * @param $id
      * @return array
      */
-    public static function search($id) : array
+    public static function search($id, $type) : array
     {
         $mediaGeoRestrict = new MediaGeoRestrict();
-        $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($id);
+        $mediaGeoRestrictInfo = $mediaGeoRestrict->getAllGeoRestrictionInfo($id, MediaType::getIdByTitle($type));
         $countryCode = [];
 
         if ($mediaGeoRestrictInfo->isEmpty()) {

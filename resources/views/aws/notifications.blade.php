@@ -28,7 +28,7 @@
             <a type="button" class="btn btn-outline-success" href="{{ action('Aws\\AwsNotificationsController@index') }}">All notifications</a>
         </form>
         <br>
-        @if(isset($products))
+        @if(isset($products[0]))
             @include('aws.parseNotifications', $products)
         @endif
     </div>

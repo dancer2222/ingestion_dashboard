@@ -19,8 +19,10 @@ class MediaGeoRestrict extends Model
      * @param $id
      * @return mixed
      */
-    public function getAllGeoRestrictionInfo($id)
+    public function getAllGeoRestrictionInfo($id, $type)
     {
-        return $this->where('media_id', $id)->get();
+        return $this->where('media_id', $id)
+            ->where('media_type', $type)
+            ->get();
     }
 }
