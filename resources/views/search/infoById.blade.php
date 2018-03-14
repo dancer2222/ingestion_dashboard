@@ -39,6 +39,7 @@
                         <tr>
                             <td>Brightcove_id</td>
                             <td>{{ $brightcove_id }}</td>
+                            <td></td>
                         </tr>
                 @elseif('books' === $mediaTypeTitle and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.booksPresentBatchInfo')
