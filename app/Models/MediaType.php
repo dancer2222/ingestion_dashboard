@@ -30,10 +30,10 @@ class MediaType extends Model
      * @param $title
      * @return mixed
      */
-    public function getIdByTitle($title)
+    public static function getIdByTitle($title)
     {
         return DB::table('media_types')
             ->select('media_type_id')
-            ->where('title', $title)->get();
+            ->where('title', $title)->first()->media_type_id;
     }
 }

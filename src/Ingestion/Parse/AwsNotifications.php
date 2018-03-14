@@ -4,6 +4,7 @@ namespace Ingestion\Parse;
 
 use App\Models\AwsNotication;
 use Carbon\Carbon;
+use Exception;
 use Ingestion\Tools\RabbitMQ;
 
 /**
@@ -13,15 +14,27 @@ use Ingestion\Tools\RabbitMQ;
 class AwsNotifications
 {
     /**
+     * @var
+     */
+    private $rabbit;
+
+    /**
+     * AwsNotifications constructor.
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        $this->rabbit = new RabbitMQ(config('services.rabbitAdjuster'));
+    }
+
+    /**
      * @return array|\Exception|string
      */
     public function read()
     {
         try {
-            $rabbit = new RabbitMQ(config('services.rabbitAdjuster'));
-            $rabbit->createChanel();
-            $message = $rabbit->readMessage();
-            $rabbit->closeConnection();
+            $this->rabbit->createChanel();
+            $message = $this->rabbit->readMessage();
         } catch (\Exception $exception) {
             return $exception->getMessage();
         }
@@ -79,12 +92,17 @@ class AwsNotifications
      */
     public function store($allProduct)
     {
-        foreach ($allProduct as $product) {
-            foreach ($product as $item) {
-                AwsNotication::create($item);
+        try {
+            foreach ($allProduct as $product) {
+                foreach ($product as $item) {
+                    AwsNotication::create($item);
+                }
             }
+        } catch (Exception $exception) {
+            return $exception->getMessage();
         }
 
+        $this->rabbit->closeConnection();
         return false;
     }
 }

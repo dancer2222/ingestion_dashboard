@@ -33,7 +33,7 @@ class SearchController extends Controller
             }
 
             try {
-                $dataForView = $reflectionMethod->invoke(new $className(), $request->id, $request->type, GeoRestrict::search($request->id),
+                $dataForView = $reflectionMethod->invoke(new $className(), $request->id, $request->type, GeoRestrict::search($request->id, $request->type),
                     $request->type);
             } catch (\Exception $exception) {
 

@@ -35,6 +35,11 @@
                 </tr>
                 @if('movies' === $mediaTypeTitle and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.moviesPresentBatchInfo')
+                @elseif('movies' === $mediaTypeTitle and isset($brightcove_id))
+                        <tr>
+                            <td>Brightcove_id</td>
+                            <td>{{ $brightcove_id }}</td>
+                        </tr>
                 @elseif('books' === $mediaTypeTitle and $batchInfo != null)
                     @include('search.sections.infoById.presentInfo.booksPresentBatchInfo')
                 @elseif('audiobooks' === $mediaTypeTitle and $batchInfo != null)
