@@ -16,6 +16,24 @@ $app = new Illuminate\Foundation\Application(
 );
 
 /*
+ *--------------------------------------------------------------------------
+ * Environment QA/Prod
+ *--------------------------------------------------------------------------
+ *
+ * Check if the file .env is present in /conf/ folder
+ * It'll be mean the environment isn't local
+ */
+$envPath = '/conf/';
+$envFile = '.env';
+
+if (file_exists($envPath . $envFile)) {
+    $app->useEnvironmentPath($envPath);
+
+    $dotenv = new \Dotenv\Dotenv($envPath, $envFile);
+    $dotenv->load();
+}
+
+/*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
 |--------------------------------------------------------------------------
