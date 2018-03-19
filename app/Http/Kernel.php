@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\BrightcoveNotifications;
 use App\Http\Middleware\GoogleAuth;
+use App\Http\Middleware\HttpsProtocol;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -37,6 +38,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
 	        \App\Http\Middleware\DatabaseConfig::class,
+            HttpsProtocol::class,
         ],
 
         'api' => [
