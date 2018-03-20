@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ secure_asset('images/favicon.ico') }}" />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>
@@ -9,14 +9,14 @@
     </title>
 
     {{-- Fontawesome Icons --}}
-    <link href="{{ asset('lib/fontawesome-5.0.6/css/fontawesome-all.min.css') }}" rel="stylesheet">
+    <link href="{{ secure_asset('lib/fontawesome-5.0.6/css/fontawesome-all.min.css') }}" rel="stylesheet">
 
     {{-- Libs css --}}
-    <link rel="stylesheet" href="{{ asset('lib/bootstrap/4.0/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('lib/animate/animate.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('lib/bootstrap/4.0/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('lib/animate/animate.css') }}">
 
     {{-- Custom css --}}
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('css/main.css') }}">
 </head>
 <body class="first-img">
 
@@ -28,7 +28,7 @@
         </a>
     @else
     <a class="navbar-brand" href="{{ url('/') }}">
-        <img src="{{ asset('images/elephant-logo.png') }}" width="50" height="30" alt="">
+        <img src="{{ secure_asset('images/elephant-logo.png') }}" width="50" height="30" alt="">
     </a>
 
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,14 +115,14 @@
 </footer>
 
 {{-- Libs scripts --}}
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<script src="{{ asset('lib/tether/tether-1.4.0.min.js') }}"></script>
-<script src="{{ asset('lib/bootstrap/4.0/libs/popover.min.js') }}"></script>
-<script src="{{ asset('lib/bootstrap/4.0/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('lib/notify-bootstrap/notify.min.js') }}"></script>
+<script src="{{secure_asset('js/jquery.min.js')}}"></script>
+<script src="{{ secure_asset('lib/tether/tether-1.4.0.min.js') }}"></script>
+<script src="{{ secure_asset('lib/bootstrap/4.0/libs/popover.min.js') }}"></script>
+<script src="{{ secure_asset('lib/bootstrap/4.0/js/bootstrap.min.js') }}"></script>
+<script src="{{ secure_asset('lib/notify-bootstrap/notify.min.js') }}"></script>
 
 {{-- Custom scripts --}}
-<script src="{{asset('js/main.js')}}"></script>
+<script src="{{secure_asset('js/main.js')}}"></script>
 
 </body>
 </html>
