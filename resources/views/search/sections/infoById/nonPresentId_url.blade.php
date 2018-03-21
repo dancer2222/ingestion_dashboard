@@ -16,7 +16,7 @@
         </div>
 
         <div class="col-6 mt-2">
-            <form id="form_tools" action="{{ route('sel') }}" method="get" class="form">
+            <form id="form_tools" action="{{ ida_route('sel') }}" method="get" class="form">
                 <div class="form-group">
                     <h3>
                         <label for="select_type">Select media type</label>

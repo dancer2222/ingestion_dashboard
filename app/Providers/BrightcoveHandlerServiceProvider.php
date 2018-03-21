@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Brightcove\API\Client;
+use Brightcove\API\Exception\AuthenticationException;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Ingestion\Brightcove\BrightcoveHandler;
@@ -37,8 +38,6 @@ class BrightcoveHandlerServiceProvider extends ServiceProvider
     public function __construct(Application $app)
     {
         parent::__construct($app);
-
-        $this->config = config('services.brightcove');
     }
 
     /**
@@ -59,8 +58,10 @@ class BrightcoveHandlerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(BrightcoveHandler::class, function ($app) {
+            $this->config = config('services.brightcove');
             $this->session = $app->make('session');
             $client = $this->getClient();
+
             $cms = new CMS($client, $this->config['account_id']);
 
             return new BrightcoveHandler($cms, app('request'));
@@ -71,6 +72,7 @@ class BrightcoveHandlerServiceProvider extends ServiceProvider
      * Returns Client instance
      *
      * @return Client
+     * @throws \Brightcove\API\Exception\AuthenticationException
      */
     private function getClient(): Client
     {

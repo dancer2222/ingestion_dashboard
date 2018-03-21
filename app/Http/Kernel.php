@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Brightcove;
 use App\Http\Middleware\BrightcoveNotifications;
 use App\Http\Middleware\GoogleAuth;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -64,5 +65,6 @@ class Kernel extends HttpKernel
         'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
+        'brightcove' => Brightcove::class,
     ];
 }

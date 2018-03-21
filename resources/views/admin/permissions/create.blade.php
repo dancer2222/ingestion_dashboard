@@ -45,7 +45,7 @@
             </div>
 
 
-            <form action="{{ route('admin.permissions.create') }}" method="post" class="col-12">
+            <form action="{{ ida_route('admin.permissions.create') }}" method="post" class="col-12">
                 {{ csrf_field() }}
 
                 <div class="form-group">
@@ -82,7 +82,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <a href="{{ route('admin.permissions.list') }}" class="btn btn-outline-secondary">Cancel</a>
+                <a href="{{ ida_route('admin.permissions.list') }}" class="btn btn-outline-secondary">Cancel</a>
             </form>
         </div>
     </div>
