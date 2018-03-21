@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Brightcove
-    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove'], function() {
+    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|hr']], function() {
         Route::get('/', 'ContentController@index');
         Route::get('/videos', 'ContentController@videos');
         Route::get('/folders', 'ContentController@folders');
@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Reports
-    Route::group(['prefix' => 'reports'], function() {
+    Route::group(['middleware' => 'role:admin|tester', 'prefix' => 'reports'], function() {
 
         Route::get('/', function() {
             return redirect(route('search'));
@@ -93,13 +93,13 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/report', 'BatchReportController@index');
     });
 
-    Route::group(['prefix' => 'aws'], function() {
+    Route::group(['prefix' => 'aws', 'middleware' => 'role:admin|ingester'], function() {
         Route::get('/show/', 'Aws\\AwsNotificationsController@index')->name('notifications');
         Route::post('/showSelect/{date?}', 'Aws\\AwsNotificationsController@getInfo');
     });
 
     //Tools route
-    Route::group(['prefix' => 'tools'], function() {
+    Route::group(['prefix' => 'tools', 'middleware' => 'role:admin|ingester'], function() {
         Route::get('/', function() {
             return redirect(route('tools'));
         });
@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     //Ajax requests
-    Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
+    //Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
 });
 
 Auth::routes();

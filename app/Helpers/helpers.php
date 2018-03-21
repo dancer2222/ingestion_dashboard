@@ -32,7 +32,7 @@ if (! function_exists('isAuth')) {
 	/**
 	 * Check if user has been stored in the session
 	 *
-	 * @return array
+	 * @return bool
 	 */
 	function isAuth()
 	{
@@ -65,5 +65,38 @@ if (! function_exists('urlLastItem')) {
     function urlLastItem()
     {
         return request()->segment(count(request()->segments()));
+    }
+}
+
+if (! function_exists('ida_route')) {
+
+    /**
+     * Secure route if the environment isn't local
+     *
+     * @param string $name
+     * @param array $params
+     * @return string
+     */
+    function ida_route(string $name, array $params = [])
+    {
+        if (app()->isLocal()) {
+            return route($name, $params);
+        }
+
+        return secure_url(route($name, $params, false));
+    }
+}
+
+if (! function_exists('ida_asset')) {
+
+    /**
+     * Secure route if the environment isn't local
+     *
+     * @param string $path
+     * @return string
+     */
+    function ida_asset(string $path)
+    {
+        return asset($path, !app()->isLocal());
     }
 }

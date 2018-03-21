@@ -8,7 +8,7 @@
         <div class="row container-ida">
 
             <div class="col-12 p-3 mb-3 border-bottom">
-                <form id="form_tools" action="{{ route('tools.index') }}" method="get" class="form-inline">
+                <form id="form_tools" action="{{ ida_route('tools.index') }}" method="get" class="form-inline">
                     <div class="form-group">
                         <h3 class="mx-sm-3">
                             <label for="tool_type">

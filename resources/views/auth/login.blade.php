@@ -25,14 +25,14 @@
                         </div>
                         @endif
 
-                        <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                        <form class="form-horizontal" method="POST" action="{{ ida_route('login') }}">
                             {{ csrf_field() }}
 
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                 <label for="email" class="control-label">E-Mail Address</label>
 
                                 <div class="">
-                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus autocomplete="on">
 
                                     @if ($errors->has('email'))
                                         <span class="help-block">
@@ -46,7 +46,7 @@
                                 <label for="password" class="control-label">Password</label>
 
                                 <div class="">
-                                    <input id="password" type="password" class="form-control" name="password" required>
+                                    <input id="password" type="password" class="form-control" name="password" required autocomplete="on">
 
                                     @if ($errors->has('password'))
                                         <span class="help-block">
@@ -72,7 +72,7 @@
                                         Submit
                                     </button>
 
-                                    {{--<a class="btn btn-link" href="{{ route('password.request') }}">--}}
+                                    {{--<a class="btn btn-link" href="{{ ida_route('password.request') }}">--}}
                                         {{--Forgot Your Password?--}}
                                     {{--</a>--}}
                                 </div>
@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="card-footer">
-                    <a href="{{ route('social.auth', ['provider' => 'google']) }}" class="btn btn-info">Google+</a>
+                    <a href="{{ ida_route('social.auth', ['provider' => 'google']) }}" class="btn btn-info">Google+</a>
                 </div>
             </div>
         </div>

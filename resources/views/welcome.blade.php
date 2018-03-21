@@ -3,11 +3,7 @@
 @section('title', 'Home')
 
 @section('content')
-    @if(Session::has('message'))
-        <div class="alert alert-danger">
-            {{  Session::get('message') }}
-        </div>
-    @endif
+
     {{--<div class="container">--}}
         {{--<div class="row align-items-center welcome-container">--}}
             {{--<div class="col">--}}

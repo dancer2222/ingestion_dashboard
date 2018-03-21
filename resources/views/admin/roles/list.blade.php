@@ -15,7 +15,7 @@
                 </h3>
 
                 <div class="pull-right">
-                    <a href="{{ route('admin.roles.showCreate') }}" class="btn btn-sm btn-success" title="Add new role">
+                    <a href="{{ ida_route('admin.roles.showCreate') }}" class="btn btn-sm btn-success" title="Add new role">
                         Add new
                         <i class="fas fa-lock"></i>
                     </a>
@@ -45,7 +45,7 @@
                         <td>{{ $role->description }}</td>
                         <td>
 
-                            <a href="{{ route('admin.roles.showEdit', ['id' => $role->id]) }}" title="Edit role">
+                            <a href="{{ ida_route('admin.roles.showEdit', ['id' => $role->id]) }}" title="Edit role">
                                 <i class="fas fa-edit text-info"></i>
                             </a>
 
@@ -58,7 +58,7 @@
                     </tr>
 
                     {{-- Form Delete user --}}
-                    <form action="{{ route('admin.roles.delete', ['id' => $role->id]) }}" id="form-delete-role-{{ $role->id }}" method="post" class="hidden">
+                    <form action="{{ ida_route('admin.roles.delete', ['id' => $role->id]) }}" id="form-delete-role-{{ $role->id }}" method="post" class="hidden">
                         {{ csrf_field() }}
                     </form>
                 @endforeach

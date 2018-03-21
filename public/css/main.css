@@ -35,13 +35,13 @@ h3 span {
 }
 
 .container {
-    background-color: white;
     padding: 10px 20px 10px 20px;
     border-radius: 10px;
+    background: transparent;
 }
 
-.container {
-    background: transparent;
+.ida-gradient {
+    background: linear-gradient(to top, #5d6dc3, #3c86d8);
 }
 
 .border-ida {
@@ -60,7 +60,6 @@ h3 span {
 }
 
 .navbar-custom {
-    background: linear-gradient(to top, #5d6dc3, #3c86d8);
     box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
 }
 

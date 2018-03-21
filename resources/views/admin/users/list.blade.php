@@ -15,7 +15,7 @@
                 </h3>
 
                 <div class="pull-right">
-                    <a href="{{ route('admin.users.showCreate') }}" class="btn btn-sm btn-success" title="Add new user">
+                    <a href="{{ ida_route('admin.users.showCreate') }}" class="btn btn-sm btn-success" title="Add new user">
                         Add new
                         <i class="fas fa-user-plus"></i>
                     </a>
@@ -44,7 +44,7 @@
                         <td>{{ $user->email }}</td>
                         <td>
 
-                            <a href="{{ route('admin.users.showEdit', ['user' => $user->id]) }}" title="Edit user">
+                            <a href="{{ ida_route('admin.users.showEdit', ['user' => $user->id]) }}" title="Edit user">
                                 <i class="fas fa-edit text-info"></i>
                             </a>
 
@@ -57,7 +57,7 @@
                     </tr>
 
                     {{-- Form Delete user --}}
-                    <form action="{{ route('admin.users.delete', ['user' => $user->id]) }}" id="form-delete-user-{{ $user->id }}" method="post" class="hidden">
+                    <form action="{{ ida_route('admin.users.delete', ['user' => $user->id]) }}" id="form-delete-user-{{ $user->id }}" method="post" class="hidden">
                         {{ csrf_field() }}
                     </form>
                 @endforeach
