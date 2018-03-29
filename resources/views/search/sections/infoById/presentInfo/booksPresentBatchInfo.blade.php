@@ -15,7 +15,7 @@
         <div id="link" class="collapse">
             {{ $linkCopy }}
             <form method="POST" class="form-group" id="form"
-                  action="{{ action('ParseController@index') }}" target="_blank">
+                  action="{{ ida_route('reports.parse.index') }}" target="_blank">
                 <input type="hidden" id="bucket" name="bucket" value="{{ config('main.links.aws.bucket.books') }}">
                 <input type="hidden" id="object" name="object" value="{{ $object }}">
                 <input type="hidden" id="batchTitle" name="batchTitle"

@@ -63,25 +63,27 @@ class ParseController extends Controller
 
         try {
             $parse = new ParseMetadata();
+
             if (!file_exists($this->filepath)) {
                 $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
             }
 
-            $result = $parse->index($request->batchTitle, $this->dataType, $request->id, $request->title,
-                $this->filepath);
-
+            $result = $parse->index(
+                $request->batchTitle,
+                $this->dataType,
+                $request->id,
+                $request->title,
+                $this->filepath
+            );
         } catch (\Exception $exception) {
-
-            return redirect(action('SearchController@index', ['id' => $request->id, 'type' => '']))->with('message',
-                $exception->getMessage());
+            return redirect(ida_route('search', ['id' => $request->id, 'type' => '']))
+                ->with('message', $exception->getMessage());
         }
 
         if ($this->dataType == 'xml' or $this->dataType == 'COT') {
-
             return response($result)->header('Content-Type', 'text/xml');
 
         } else {
-
             return view('search.metadata', ['messages' => $result]);
         }
     }

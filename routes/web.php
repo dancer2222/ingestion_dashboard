@@ -27,13 +27,13 @@ Route::group(['middleware' => ['auth', 'https.protocol']], function() {
         return view('welcome');
     });
     Route::get('/home', function() {
-        return redirect('brightcove');
+        return redirect(ida_route('brightcove.index'));
     })->name('home');
 
     // Admin area
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => []], function () {
         Route::get('/', function () {
-            return redirect(route('admin.users.list'));
+            return redirect(ida_route('admin.users.list'));
         })->name('admin');
 
         // Manage users
@@ -68,40 +68,38 @@ Route::group(['middleware' => ['auth', 'https.protocol']], function() {
 
     // Brightcove
     Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|hr']], function() {
-        Route::get('/', 'ContentController@index');
-        Route::get('/videos', 'ContentController@videos');
-        Route::get('/folders', 'ContentController@folders');
-        Route::get('/folders/{folder}', 'ContentController@folder');
+        Route::get('/', 'ContentController@index')->name('brightcove.index');
+        Route::get('/videos', 'ContentController@videos')->name('brightcove.videos');
+        Route::get('/folders', 'ContentController@folders')->name('brightcove.folders');
+        Route::get('/folders/{folder}', 'ContentController@folder')->name('brightcove.folder');
     });
 
     // Reports
     Route::group(['middleware' => 'role:admin|tester', 'prefix' => 'reports'], function() {
 
         Route::get('/', function() {
-            return redirect(route('search'));
+            return redirect(ida_route('search'));
         });
         //Select search
         Route::get('/sel', 'SelectController@index')->name('sel');
-
         Route::get('/search/{id?}/{type?}', 'SearchController@index')->name('search');
-        Route::post('/search', 'SearchController@indexRedirect');
 
-        Route::post('/show', 'ParseController@index');
-        Route::get('/track/{id?}/{option?}', 'TrackController@index');
+        Route::post('/show', 'ParseController@index')->name('reports.parse.index');
+        Route::get('/track/{id?}/{option?}', 'TrackController@index')->name('reports.track.index');
 
-        Route::post('/searchBy/{title?}', 'SearchByController@index');
-        Route::post('/report', 'BatchReportController@index');
+        Route::post('/searchBy/{title?}', 'SearchByController@index')->name('reports.search_by_title');
+        Route::post('/report', 'BatchReportController@index')->name('reports.batch_report');
     });
 
-    Route::group(['prefix' => 'aws', 'middleware' => 'role:admin|ingester'], function() {
-        Route::get('/show/', 'Aws\\AwsNotificationsController@index')->name('notifications');
-        Route::post('/showSelect/{date?}', 'Aws\\AwsNotificationsController@getInfo');
+    Route::group(['prefix' => 'aws', 'middleware' => 'role:admin|ingester', 'namespace' => 'Aws'], function() {
+        Route::get('/show/', 'AwsNotificationsController@index')->name('aws.index');
+        Route::post('/showSelect/{date?}', 'AwsNotificationsController@getInfo')->name('aws.info');
     });
 
     //Tools route
     Route::group(['prefix' => 'tools', 'middleware' => 'role:admin|ingester'], function() {
         Route::get('/', function() {
-            return redirect(route('tools'));
+            return redirect(ida_route('tools'));
         });
         Route::get('/select', 'ToolsController@index')->name('tools.index');
         Route::post('/select/{command?}', 'ToolsController@doIt')->name('tools.do');

@@ -46,7 +46,7 @@
 
         <div class="col-6 mt-2">
             <form method="POST" class="form-control-feedback"
-                  action="{{ action('BatchReportController@index') }}">
+                  action="{{ ida_route('reports.batch_report') }}">
                 <div class="form-group">
                     <h3>
                         <label for="batch_id">
@@ -70,7 +70,7 @@
                     <hr>
 
                     <form method="POST" class="form-control-feedback form-control border-0"
-                          action="{{ action('SearchByController@index') }}">
+                          action="{{ ida_route('reports.search_by_title') }}">
                         <div class="form-group">
                             <h3 class="text-muted">
                                 <label for="{{$type}}">
