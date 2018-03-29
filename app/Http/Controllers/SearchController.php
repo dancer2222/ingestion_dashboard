@@ -37,7 +37,7 @@ class SearchController extends Controller
                     new $className(),
                     $request->id,
                     $request->type,
-                    GeoRestrict::search($request->id),
+                    GeoRestrict::search($request->id, $request->type),
                     $request->type
                 );
             } catch (\Exception $exception) {

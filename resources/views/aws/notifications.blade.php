@@ -28,7 +28,7 @@
             <a type="button" class="btn btn-outline-success" href="{{ ida_route('aws.index') }}">All notifications</a>
         </form>
         <br>
-        @if(isset($products))
+        @if(isset($products[0]))
             @include('aws.parseNotifications', $products)
         @endif
     </div>

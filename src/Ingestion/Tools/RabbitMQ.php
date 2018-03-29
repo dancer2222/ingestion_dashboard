@@ -2,7 +2,6 @@
 
 namespace Ingestion\Tools;
 
-use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -82,6 +81,7 @@ class RabbitMQ
     public function readMessage()
     {
         $messages = [];
+
         list($this->queue, $countMessages) = $this->channel->queue_declare($this->queue, false, true, false, false);
 
         for ($i = 0; $i < $countMessages; $i++) {
