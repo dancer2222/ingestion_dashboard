@@ -45,7 +45,7 @@
         @foreach($commands as $command => $item)
 
             <div class="col-6">
-                <form method="POST" class="" action="{{ action('ToolsController@doIt', ['command' => $command ]) }}">
+                <form method="POST" class="" action="{{ ida_route('tools.do', ['command' => $command ]) }}">
                     <legend class="col-form-label col-sm-2 pt-0">
                         <h3>
                         {{ $command }}

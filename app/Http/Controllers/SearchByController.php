@@ -25,14 +25,13 @@ class SearchByController extends Controller
             $message = 'Not found ' . $request->type . ' witch  - ' . $request->input;
 
             return back()->with('message', $message);
-
         } elseif ($result == 1) {
-
-            return redirect()->route('search',
-                ['id' => $info[0]['id'], 'type' => $request->type, 'option' => $request->option]);
-
+            return redirect()->route('search', [
+                'id' => $info[0]['id'],
+                'type' => $request->type,
+                'option' => $request->option
+            ]);
         } else {
-
             return view('search.title', ['info' => $info->toArray(), 'type' => $request->type]);
         }
     }

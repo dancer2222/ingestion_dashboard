@@ -21,7 +21,7 @@
                 <li class="nav-item">
                     <a class="nav-link rounded-0 {{ request()->segment(2) == 'roles' ? 'active' : '' }}" href="{{ ida_route('admin.roles.list') }}">
                         Roles
-                        <i class="fas fa-exclamation-triangle text-danger pull-right" title="Dangerous area"></i>
+                        <i class="fas fa-exclamation-triangle text-danger float-right" title="Dangerous area"></i>
                     </a>
                 </li>
 
@@ -29,7 +29,7 @@
                 <li class="nav-item">
                     <a class="nav-link rounded-0 {{ request()->segment(2) == 'permissions' ? 'active' : '' }}" href="{{ ida_route('admin.permissions.list') }}">
                         Permissions
-                        <i class="fas fa-exclamation-triangle text-danger pull-right" title="Dangerous area"></i>
+                        <i class="fas fa-exclamation-triangle text-danger float-right" title="Dangerous area"></i>
                     </a>
                 </li>
             </ul>

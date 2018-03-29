@@ -43,18 +43,18 @@
                    href="#">Brightcove</a>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownBrightcove">
-                    <a class="dropdown-item" href="{{ action('Brightcove\\ContentController@folders') }}">Folders</a>
+                    <a class="dropdown-item" href="{{ ida_route('brightcove.folders') }}">Folders</a>
                 </div>
             </li>
 
             <li class="nav-item dropdown">
-                <a href="{{ action('SearchController@index') }}" class="nav-link">Search</a>
+                <a href="{{ ida_route('search') }}" class="nav-link">Search</a>
             </li>
             <li class="nav-item dropdown">
-                <a href="{{ action('ToolsController@index') }}" class="nav-link">Tools</a>
+                <a href="{{ ida_route('tools.index') }}" class="nav-link">Tools</a>
             </li>
             <li class="nav-item dropdown">
-                <a href="{{ action('Aws\\AwsNotificationsController@index') }}" class="nav-link">Aws Notifications</a>
+                <a href="{{ ida_route('aws.index') }}" class="nav-link">Aws Notifications</a>
             </li>
         </ul>
 
