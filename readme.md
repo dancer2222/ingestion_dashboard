@@ -85,3 +85,12 @@ php artisan db:seed --class=DatabaseSeeder --database=mysql_local_ingestion
 
 Now you can access to web interface. Check it in your browser: 
 - dashboard: `http://127.0.0.1:8686`. Login with your credentials
+
+
+# Troubleshooting
+### (Local) App constantly redirects to https:
+```bash
+php artisan config:clear 
+```
+
+if it doesn't work just change environment to `local` and then run `php artisan config:clear`
