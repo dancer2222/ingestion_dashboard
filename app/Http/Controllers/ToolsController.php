@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Ingestion\Tools\RabbitMQ;
+use Bschmitt\Amqp\Facades\Amqp;
 
 /**
  * Class ToolsController
@@ -68,9 +68,7 @@ class ToolsController extends Controller
         $message = \GuzzleHttp\json_encode($message);
 
         try {
-            $rabbit = new RabbitMQ(config('services.rabbitMq'));
-            $rabbit->createChanel();
-            $rabbit->putMessage((string)$message)->closeConnection();
+            Amqp::publish('ingestion-tools', (string)$message, ['queue' => 'ingestion-tools']);
         } catch (\Exception $exception) {
 
             return back()->with(['message' => $exception->getMessage(), 'status' => 'error']);

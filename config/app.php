@@ -168,6 +168,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
 	    Ingestion\Auth\Google\GoogleProvider::class,
+        Bschmitt\Amqp\AmqpServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -235,5 +236,6 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'Amqp' => Bschmitt\Amqp\Facades\Amqp::class,
     ],
 ];
