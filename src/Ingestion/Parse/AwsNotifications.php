@@ -2,6 +2,7 @@
 
 namespace Ingestion\Parse;
 
+use Illuminate\Support\Facades\DB;
 use Bschmitt\Amqp\Facades\Amqp;
 use App\Models\AwsNotication;
 use Carbon\Carbon;
@@ -14,93 +15,83 @@ use Exception;
 class AwsNotifications
 {
     /**
-     * @return bool|string
+     * Read messages from queue 'adjuster'
      */
     public function read()
     {
-        try {
-            Amqp::consume('adjuster', function($message, $resolver) {
+        Amqp::consume('adjuster', function($message, $resolver) {
+            $messages = [];
 
-                $messages = $this->parse(json_decode($message->body));
+            if (isset($message->body) && $message->body) {
+                $body = json_decode($message->body);
 
-                if ($messages && false !== $this->store($messages)) {
-                    $resolver->acknowledge($message);
-                } else {
-                    $resolver->reject($message, true);
+                if ($body && is_array($body)) {
+                    $messages = $this->parse($body);
                 }
+            }
 
-                $resolver->stopWhenProcessed();
-            });
-        } catch (\Exception $exception) {
-            return $exception->getMessage();
-        }
+            if ($messages) {
+                $this->store($messages);
 
-        return false;
+                $resolver->acknowledge($message);
+            } else {
+                $resolver->reject($message, true);
+            }
+
+            $resolver->stopWhenProcessed();
+        });
     }
 
     /**
-     * @param $messages
+     * Fetch aws objects from message using regex
+     *
+     * @param array $messages
      * @return array
      */
-    public function parse($messages): array
+    public function parse(array $messages): array
     {
-        $allProduct = [];
-        $product = [];
+        $records = [];
 
         try {
             foreach ($messages as $key => $message) {
-                foreach ($message as &$item) {
-                    $position = strpos($item, '}}}]}');
+                preg_match("/({.*{?{?{?\[?}?}?}?]?})/", $message->body, $matches);
 
-                    if ($position !== false) {
-                        $item = json_decode(substr($item, 0, $position) . '}}}]}');
+                if (preg_last_error() === PREG_NO_ERROR && count($matches) > 0) {
+                    $awsObj = json_decode(array_reverse($matches)[0]);
 
-                        foreach ($item as $value) {
-                            foreach ($value as $argument) {
-                                $product = [
-                                    'eventTime' => Carbon::parse($argument->eventTime),
-                                    'eventName' => $argument->eventName,
-                                    'bucket'    => $argument->s3->bucket->name,
-                                    'key'       => $argument->s3->object->key,
-                                    'size'      => $argument->s3->object->size . ' bytes'
-                                ];
-
-                            }
+                    if (json_last_error() === JSON_ERROR_NONE && $awsObj && isset($awsObj->Records) && count($awsObj->Records)) {
+                        foreach ($awsObj->Records as $record) {
+                            $records[] = [
+                                'eventTime' => Carbon::parse($record->eventTime),
+                                'eventName' => $record->eventName,
+                                'bucket'    => $record->s3->bucket->name,
+                                'key'       => $record->s3->object->key,
+                                'size'      => $record->s3->object->size . ' bytes'
+                            ];
                         }
-                    } else {
-                        $product = [
-                            'eventTime' => Carbon::parse($message->date),
-                            'eventName' => 'Fail delivery',
-                            'bucket'    => $message->from,
-                            'key'       => 'false',
-                            'size'      => 0 . ' bytes'
-                        ];
                     }
-
-                    $allProduct [] = $product;
                 }
             }
         } catch (Exception $exception) {
+            logger()->critical("An error occurred while parsing aws messages from queue 'adjuster'" . $exception->getMessage());
+
             return [];
         }
 
-        return $allProduct;
+        return $records;
     }
 
     /**
-     * @param $allProduct
-     * @return bool|string
+     * Store messages to database
+     *
+     * @param array $records
      */
-    public function store($allProduct)
+    public function store(array $records)
     {
-        try {
-            foreach ($allProduct as $product) {
-                AwsNotication::create($product);
-            }
-        } catch (Exception $exception) {
-            return $exception->getMessage();
+        foreach ($records as $record) {
+            DB::transaction(function () use ($record) {
+                AwsNotication::create($record);
+            });
         }
-
-        return false;
     }
 }
