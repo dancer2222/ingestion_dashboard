@@ -2,10 +2,10 @@
 
 namespace Ingestion\Parse;
 
+use Bschmitt\Amqp\Facades\Amqp;
 use App\Models\AwsNotication;
 use Carbon\Carbon;
 use Exception;
-use Ingestion\Tools\RabbitMQ;
 
 /**
  * Class AwsNotifications
@@ -14,73 +14,74 @@ use Ingestion\Tools\RabbitMQ;
 class AwsNotifications
 {
     /**
-     * @var
-     */
-    private $rabbit;
-
-    /**
-     * AwsNotifications constructor.
-     * @throws \Exception
-     */
-    public function __construct()
-    {
-        $this->rabbit = new RabbitMQ(config('services.rabbitAdjuster'));
-    }
-
-    /**
-     * @return array|\Exception|string
+     * @return bool|string
      */
     public function read()
     {
         try {
-            $this->rabbit->createChanel();
-            $message = $this->rabbit->readMessage();
+            Amqp::consume('adjuster', function($message, $resolver) {
+
+                $messages = $this->parse(json_decode($message->body));
+
+                if ($messages && false !== $this->store($messages)) {
+                    $resolver->acknowledge($message);
+                } else {
+                    $resolver->reject($message, true);
+                }
+
+                $resolver->stopWhenProcessed();
+            });
         } catch (\Exception $exception) {
             return $exception->getMessage();
         }
 
-        return $message;
+        return false;
     }
 
     /**
-     * @param array $messages
+     * @param $messages
      * @return array
-     * @throws \Exception
      */
-    public function parse(array $messages): array
+    public function parse($messages): array
     {
         $allProduct = [];
+        $product = [];
 
-        foreach ($messages as $key => $message) {
-            try {
-                $messagesSecond = json_decode($message);
-                $product = [];
-                foreach ($messagesSecond as &$item) {
-                    if ($item->body) {
-                        $position = strpos($item->body, '}}}]}');
-                        $item->body = json_decode(substr($item->body, 0, $position) . '}}}]}');
+        try {
+            foreach ($messages as $key => $message) {
+                foreach ($message as &$item) {
+                    $position = strpos($item, '}}}]}');
 
-                        foreach ($item->body as $message) {
-                            foreach ($message as $value) {
-                                $value->info = [
-                                    'eventTime' => Carbon::parse($value->eventTime),
-                                    'eventName' => $value->eventName,
-                                    'bucket'    => $value->s3->bucket->name,
-                                    'key'       => $value->s3->object->key,
-                                    'size'      => $value->s3->object->size . ' bytes'
+                    if ($position !== false) {
+                        $item = json_decode(substr($item, 0, $position) . '}}}]}');
+
+                        foreach ($item as $value) {
+                            foreach ($value as $argument) {
+                                $product = [
+                                    'eventTime' => Carbon::parse($argument->eventTime),
+                                    'eventName' => $argument->eventName,
+                                    'bucket'    => $argument->s3->bucket->name,
+                                    'key'       => $argument->s3->object->key,
+                                    'size'      => $argument->s3->object->size . ' bytes'
                                 ];
-                                $product [] = $value->info;
+
                             }
                         }
+                    } else {
+                        $product = [
+                            'eventTime' => Carbon::parse($message->date),
+                            'eventName' => 'Fail delivery',
+                            'bucket'    => $message->from,
+                            'key'       => 'false',
+                            'size'      => 0 . ' bytes'
+                        ];
                     }
+
+                    $allProduct [] = $product;
                 }
-
-                $allProduct [] = $product;
-            } catch (\Exception $exception) {
-                unset($messages[$key]);
-
-                $this->parse($messages);
             }
+        } catch (Exception $exception) {
+            return [];
         }
 
         return $allProduct;
@@ -94,15 +95,12 @@ class AwsNotifications
     {
         try {
             foreach ($allProduct as $product) {
-                foreach ($product as $item) {
-                    AwsNotication::create($item);
-                }
+                AwsNotication::create($product);
             }
         } catch (Exception $exception) {
             return $exception->getMessage();
         }
 
-        $this->rabbit->closeConnection();
         return false;
     }
 }

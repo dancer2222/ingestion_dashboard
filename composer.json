@@ -22,7 +22,8 @@
         "php-amqplib/php-amqplib": ">=2.6.1",
         "socialiteproviders/google": "~3.0",
         "spatie/array-to-xml": "^2.7",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "bschmitt/laravel-amqp": "1.*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
