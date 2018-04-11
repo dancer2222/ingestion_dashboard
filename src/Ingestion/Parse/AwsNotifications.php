@@ -30,9 +30,7 @@ class AwsNotifications
                 }
             }
 
-            if ($messages) {
-                $this->store($messages);
-
+            if ($messages && $this->store($messages)) {
                 $resolver->acknowledge($message);
             } else {
                 $resolver->reject($message, true);
@@ -73,7 +71,7 @@ class AwsNotifications
                 }
             }
         } catch (Exception $exception) {
-            logger()->critical("An error occurred while parsing aws messages from queue 'adjuster'" . $exception->getMessage());
+            logger()->critical("An error occurred while parsing aws messages from queue 'adjuster'. " . $exception->getMessage());
 
             return [];
         }
@@ -85,13 +83,26 @@ class AwsNotifications
      * Store messages to database
      *
      * @param array $records
+     * @return bool
      */
-    public function store(array $records)
+    public function store(array $records): bool
     {
-        foreach ($records as $record) {
-            DB::transaction(function () use ($record) {
+        try {
+            DB::beginTransaction();
+
+            foreach ($records as $record) {
                 AwsNotication::create($record);
-            });
+            }
+
+            DB::commit();
+
+            return true;
+        } catch (Exception $e) {
+            DB::rollback();
+
+            logger()->critical('An error occurred while storing aws messages'. $e->getMessage());
+
+            return false;
         }
     }
 }
