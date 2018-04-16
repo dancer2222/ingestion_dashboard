@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Bschmitt\Amqp\Facades\Amqp;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ToolsController
@@ -18,23 +19,27 @@ class ToolsController extends Controller
      */
     public function index(Request $request)
     {
-        $data = include public_path() . '/tmp/someconfig.php';
-
         $commands = [];
+        $errors = [];
+        $configName = config('api.ingestion.tools.config_file_name');
+        $config = @unserialize(Storage::get("tmp/$configName"));
+
+        if (!$config || !is_array($config)) {
+            $errors[] = "Config can't be read.";
+            $config = [];
+        }
 
         if ($request->has('type') && $request->has('action')) {
 
-            $commands = array_where($data['commands'], function($value, $key) use ($request) {
+            $commands = array_where($config['params'], function($value, $key) use ($request) {
 
-                $items = explode(':', $key);
-                $type = strpos($items[0], $request->type);
-                $action = strpos($items[1], $request->action);
+                preg_match("/^$request->type:$request->action:.*/", $key, $matches);
 
-                return $type !== false && $action !== false && $action === 0;
+                return $matches;
             });
         }
 
-        return view('tools.selectMediaTypeTools', ['data' => $data, 'commands' => $commands]);
+        return view('tools.selectMediaTypeTools', ['data' => $config, 'commands' => $commands])->withErrors($errors);
     }
 
     /**
@@ -53,7 +58,7 @@ class ToolsController extends Controller
             'name'   => $command[2]
         ];
 
-        $options = $request->has('params') ? $request->params : [];
+        $options = $request->has('options') ? $request->options : [];
 
         foreach ($options as $param => $value) {
             $message['extra']['options'][$param] = $value;
@@ -65,9 +70,9 @@ class ToolsController extends Controller
             $message['extra']['arguments'][] = $param;
         }
 
-        $message = \GuzzleHttp\json_encode($message);
-
         try {
+            $message = \GuzzleHttp\json_encode($message);
+
             Amqp::publish('ingestion-tools', (string)$message, ['queue' => 'ingestion-tools']);
         } catch (\Exception $exception) {
 
@@ -75,5 +80,30 @@ class ToolsController extends Controller
         }
 
         return back()->with('message', $message . ' - message published');
+    }
+
+    /**
+     * Gets uploaded file, process it and return data separated by a comma
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function optionValueFromFile(Request $request)
+    {
+        if ($request->hasFile('optionData') && $request->file('optionData')->isValid()) {
+            $file = $request->file('optionData');
+
+            $data = file_get_contents($file->getRealPath());
+            $patterns = [
+                '/(\s+)/',
+                '/(\R+)/',
+                '/(\r|\n)/',
+                '/(,+)/',
+            ];
+            $data = preg_replace($patterns, ',', $data);
+            $data = trim($data, ' ,\r\n');
+
+            return response()->json(['data' => $data], 200);
+        }
     }
 }

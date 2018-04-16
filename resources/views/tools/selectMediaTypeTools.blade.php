@@ -3,7 +3,8 @@
 @section('title', 'Folders')
 
 @section('content')
-    @include('search.sections.message.errorGreen')
+    @include('search.sections.message.error')
+
     <div class="container">
         <div class="row container-ida">
 
@@ -42,73 +43,119 @@
 
         @if($commands)
 
-        @foreach($commands as $command => $item)
+        <div class="col">
+            <div class="row pb-3" id="tools-accordion">
 
-            <div class="col-6">
-                <form method="POST" class="" action="{{ ida_route('tools.do', ['command' => $command ]) }}">
-                    <legend class="col-form-label col-sm-2 pt-0">
-                        <h3>
-                        {{ $command }}
-                        </h3>
-                    </legend>
+            @foreach($commands as $commandName => $params)
 
-                    @foreach($data['params'][$command]['arguments'] as $argumentName => $argumentValue)
-                        @php
-                            $isRequired = isset($argumentValue['isRequired']) && $argumentValue['isRequired'];
-                        @endphp
+                @php
+                    $commandId = str_replace(':', '_', $commandName);
+                    $toolTarget = $commandId . '-' . $loop->iteration;
+                @endphp
 
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox"
-                                   {{ $isRequired ? 'disabled checked' : '' }}
-                                   id="arguments-{{$argumentName}}"
-                                   name="arguments[{{$argumentName}}]"
-                                   value="{{ $isRequired ? 'on' : '' }}"
-                                   class="custom-control-input">
-
-
-                            <label class="custom-control-label" for="arguments-{{$argumentName}}">
-                                {{ $argumentName }}
-                            </label>
-
-                            @if ($isRequired)
-                            <small id="arguments-{{$argumentName}}-help" class="{{$isRequired ? '' : 'hidden'}} form-text text-muted">
-                                It was checked automatically since this argument is required
-                            </small>
-                            @endif
-                        </div>
-
-                    @endforeach
-
-                    @foreach($data['params'][$command]['options'] as $optionName => $optionValue)
-                        @php
-                            $isRequired = isset($argumentValue['isRequired']) && $argumentValue['isRequired'];
-                        @endphp
-
-                        <div class="form-group">
-                            <h5>
-                                <label for="option-{{$optionName}}">
-                                    {{ $optionName }}
-                                </label>
+                    <div class="card col-11 p-0 mx-auto">
+                        <div class="card-header" id="{{ $commandId }}">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#{{ $toolTarget }}" aria-expanded="false" aria-controls="{{$toolTarget}}">
+                                    {{ $commandName }}
+                                </button>
                             </h5>
-
-                            <input class="form-control" type="text"
-                                   id="option-{{$optionName}}"
-                                   name="params[{{$optionName}}]"
-                                    {{ $isRequired ? 'required' : ''}}>
-
-                            <small class="form-text text-muted">
-                                {{ $optionValue['description'] }}
-                            </small>
                         </div>
 
-                    @endforeach
+                        <div id="{{ $toolTarget }}" class="collapse" aria-labelledby="{{ $commandId }}" data-parent="#tools-accordion">
+                            <div class="card-body">
 
-                    <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <button type="submit" class="btn btn-default mb-3">Submit</button>
-                </form>
-            </div>
+                                <form method="POST" class="" action="{{ ida_route('tools.do', ['command' => $commandName ]) }}">
+
+                                    {{-- Tool Arguments --}}
+                                    @if($params['arguments'])
+
+                                        @foreach($params['arguments'] as $argumentName => $argumentParams)
+                                            @php
+                                                $isRequired = isset($argumentParams['isRequired']) && $argumentParams['isRequired'];
+                                            @endphp
+
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox"
+                                                    {{ $isRequired ? 'disabled checked' : '' }}
+                                                    id="arguments-{{$argumentName}}"
+                                                    name="arguments[{{$argumentName}}]"
+                                                    value="{{ $isRequired ? 'on' : '' }}"
+                                                    class="custom-control-input">
+
+
+                                                <label class="custom-control-label" for="arguments-{{$argumentName}}">
+                                                    {{ $argumentName }} {{ $isRequired ? '*' : '' }}
+                                                </label>
+
+                                                @if ($isRequired)
+                                                    <small id="arguments-{{$argumentName}}-help" class="{{$isRequired ? '' : 'hidden'}} form-text text-muted">
+                                                        It was checked automatically since this argument is required
+                                                    </small>
+                                                @endif
+                                            </div>
+                                        @endforeach
+
+                                        <hr>
+
+                                    @endif
+
+                                    {{-- Tool options --}}
+                                    @foreach($params['options'] as $optionName => $optionParams)
+                                        @php
+                                            $isRequired = isset($optionParams['isRequired']) && $optionParams['isRequired'];
+                                        @endphp
+
+                                        <div class="form-group tool-options-group">
+                                            <h5>
+                                                <label for="option-{{$optionName}}">
+                                                    {{ $optionName }} {{ $isRequired ? '*' : '' }}
+                                                </label>
+
+                                                <a href="#" class="text-info float-right tool-option-from-file tool-options-buttons"
+                                                    role="button"
+                                                    data-toggle="popover"
+                                                    data-trigger="hover"
+                                                    data-container="body"
+                                                    data-content="Upload file with your data separated by a comma, space or new line. (It's usually used for ids)"
+                                                    data-trigger-file="{{ $commandId . '_' . $optionName . '_file' }}">
+                                                    <i class="fas fa-upload"></i>
+                                                </a>
+                                            </h5>
+
+                                            <input class="form-control" type="text"
+                                                id="option-{{$optionName}}"
+                                                name="options[{{$optionName}}]"
+                                                {{ $isRequired ? 'required' : ''}}>
+
+                                            <small class="form-text text-muted">
+                                                {{ $optionParams['description'] }}
+                                            </small>
+
+                                            <input type="file"
+                                                   name="{{ $commandId . '_' . $optionName . '_file' }}"
+                                                   id="{{ $commandId . '_' . $optionName . '_file' }}"
+                                                   class="options_file_input"
+                                                   data-url="{{ ida_route('tools.optionFromFile') }}"
+                                                   data-option-name="{{ $optionName }}"
+                                                   hidden>
+                                        </div>
+
+                                    @endforeach
+
+                                    {{ csrf_field() }}
+
+                                    <button type="submit" class="btn btn-default mb-3">Submit</button>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
 
             @endforeach
+            </div>
+        </div>
 
         </div>
         @else

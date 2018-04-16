@@ -98,11 +98,9 @@ Route::group(['middleware' => ['auth', 'https.protocol']], function() {
 
     //Tools route
     Route::group(['prefix' => 'tools', 'middleware' => 'role:admin|ingester'], function() {
-        Route::get('/', function() {
-            return redirect(ida_route('tools.index'));
-        });
-        Route::get('/select', 'ToolsController@index')->name('tools.index');
+        Route::get('/', 'ToolsController@index')->name('tools.index');
         Route::post('/select/{command?}', 'ToolsController@doIt')->name('tools.do');
+        Route::post('/optionFromFile', 'ToolsController@optionValueFromFile')->name('tools.optionFromFile');
     });
 
     //Ajax requests
