@@ -23,9 +23,9 @@ class AudioBookProduct extends Model
     public static function getIdByIsbn($isbn)
     {
         return  DB::table('audio_book_products as abp')
-        ->select('audio_book_id')
-        ->leftJoin('product_audio_book as pab', 'abp.product_id', 'pab.id')
-        ->where('pab.isbn', $isbn)
-        ->first();
+            ->select('audio_book_id')
+            ->leftJoin('product_audio_book as pab', 'abp.product_id', 'pab.id')
+            ->where('pab.isbn', $isbn)
+            ->first();
     }
 }

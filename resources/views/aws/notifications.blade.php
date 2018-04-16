@@ -6,8 +6,10 @@
     @include('search.sections.message.errorGreen')
     @include('search.sections.message.error')
     <div class="container col-xs-8">
-        <h3>Search by <span
-                    class="defaultDatabase">{{ config('database.default') }}</span></h3>
+        <h3>Search by
+            <span class="defaultDatabase">{{ config('database.default') }}</span>
+        </h3>
+
         <form method="POST" class="form-control-feedback"
               action="{{ ida_route('aws.info') }}">
             <div class="row">
