@@ -73,6 +73,20 @@ h3 span {
     margin-bottom: 90px;
 }
 
+.tool-options-buttons {
+    opacity: 0.2;
 
+    -webkit-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
 
+    -webkit-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
+}
 
+.tool-options-group:hover .tool-options-buttons {
+    opacity: 1;
+}

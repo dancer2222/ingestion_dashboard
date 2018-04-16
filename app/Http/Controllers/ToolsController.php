@@ -81,4 +81,29 @@ class ToolsController extends Controller
 
         return back()->with('message', $message . ' - message published');
     }
+
+    /**
+     * Gets uploaded file, process it and return data separated by a comma
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function optionValueFromFile(Request $request)
+    {
+        if ($request->hasFile('optionData') && $request->file('optionData')->isValid()) {
+            $file = $request->file('optionData');
+
+            $data = file_get_contents($file->getRealPath());
+            $patterns = [
+                '/(\s+)/',
+                '/(\R+)/',
+                '/(\r|\n)/',
+                '/(,+)/',
+            ];
+            $data = preg_replace($patterns, ',', $data);
+            $data = trim($data, ' ,\r\n');
+
+            return response()->json(['data' => $data], 200);
+        }
+    }
 }

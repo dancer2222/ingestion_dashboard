@@ -66,7 +66,6 @@
                             <div class="card-body">
 
                                 <form method="POST" class="" action="{{ ida_route('tools.do', ['command' => $commandName ]) }}">
-                                    {{ csrf_field() }}
 
                                     {{-- Tool Arguments --}}
                                     @if($params['arguments'])
@@ -107,23 +106,44 @@
                                             $isRequired = isset($optionParams['isRequired']) && $optionParams['isRequired'];
                                         @endphp
 
-                                        <div class="form-group">
+                                        <div class="form-group tool-options-group">
                                             <h5>
                                                 <label for="option-{{$optionName}}">
                                                     {{ $optionName }} {{ $isRequired ? '*' : '' }}
                                                 </label>
+
+                                                <a href="#" class="text-info float-right tool-option-from-file tool-options-buttons"
+                                                    role="button"
+                                                    data-toggle="popover"
+                                                    data-trigger="hover"
+                                                    data-container="body"
+                                                    data-content="Upload file with your data separated by a comma, space or new line. (It's usually used for ids)"
+                                                    data-trigger-file="{{ $commandId . '_' . $optionName . '_file' }}">
+                                                    <i class="fas fa-upload"></i>
+                                                </a>
                                             </h5>
 
-                                        <input class="form-control" type="text"
-                                            id="option-{{$optionName}}"
-                                            name="options[{{$optionName}}]"
-                                            {{ $isRequired ? 'required' : ''}}>
+                                            <input class="form-control" type="text"
+                                                id="option-{{$optionName}}"
+                                                name="options[{{$optionName}}]"
+                                                {{ $isRequired ? 'required' : ''}}>
 
                                             <small class="form-text text-muted">
                                                 {{ $optionParams['description'] }}
                                             </small>
+
+                                            <input type="file"
+                                                   name="{{ $commandId . '_' . $optionName . '_file' }}"
+                                                   id="{{ $commandId . '_' . $optionName . '_file' }}"
+                                                   class="options_file_input"
+                                                   data-url="{{ ida_route('tools.optionFromFile') }}"
+                                                   data-option-name="{{ $optionName }}"
+                                                   hidden>
                                         </div>
+
                                     @endforeach
+
+                                    {{ csrf_field() }}
 
                                     <button type="submit" class="btn btn-default mb-3">Submit</button>
                                 </form>
