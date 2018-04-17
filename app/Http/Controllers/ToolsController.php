@@ -22,14 +22,18 @@ class ToolsController extends Controller
         $commands = [];
         $errors = [];
         $configName = config('api.ingestion.tools.config_file_name');
-        $config = @unserialize(Storage::get("tmp/$configName"));
+        $configPath = "tmp/$configName";
 
-        if (!$config || !is_array($config)) {
+        if (Storage::exists($configPath)) {
+            $config = @unserialize(Storage::get($configPath));
+        }
+
+        if (!isset($config) || !is_array($config)) {
             $errors[] = "Config can't be read.";
             $config = [];
         }
 
-        if ($request->has('type') && $request->has('action')) {
+        if ($request->has('type') && $request->has('action') && isset($config['params'])) {
 
             $commands = array_where($config['params'], function($value, $key) use ($request) {
 

@@ -145,6 +145,9 @@ $(document).ready(function () {
 
         formData.append('optionData', inputFile.files[0]);
 
+        var formClosest = $(inputFile).closest('form');
+        var inputToPaste = formClosest.find('#option-' + inputFile.dataset.optionName);
+
         $.ajax({
             url: url,
             method: 'post',
@@ -152,17 +155,16 @@ $(document).ready(function () {
             contentType: false,
             data: formData,
             success: function (response) {
-                var formClosest = $(inputFile).closest('form');
-                var inputToPaste = formClosest.find('#option-' + inputFile.dataset.optionName);
-
                 inputToPaste.val(response.data);
+
+                inputFile.value = null;
             },
             error: function (error) {
                 console.log(error);
 
                 notify('Cannot process the uploaded file.');
 
-                inputFile.files = [];
+                inputFile.value = null;
             }
         });
 

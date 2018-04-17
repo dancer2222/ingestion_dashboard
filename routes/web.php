@@ -107,7 +107,9 @@ Route::group(['middleware' => ['auth', 'https.protocol']], function() {
     //Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
 });
 
-Auth::routes();
+Route::group(['middleware' => 'https.protocol'], function () {
+    Auth::routes();
+});
 
 Route::any('register', function() {
     return redirect('login');

@@ -19,9 +19,11 @@
 
                         <select name="type" id="tool_type" onchange="$('#form_tools').submit();"
                                 class="form-control">
-                            @foreach($data['types'] as $type)
-                                <option value="{{ $type }}" {{ request()->has('type') && request()->get('type') == $type ? 'selected' : '' }}>{{ $type }}</option>
-                            @endforeach
+                            @if(isset($data['types']))
+                                @foreach($data['types'] as $type)
+                                    <option value="{{ $type }}" {{ request()->has('type') && request()->get('type') == $type ? 'selected' : '' }}>{{ $type }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
 
@@ -33,9 +35,11 @@
 
                         <select name="action" id="tool_action" onchange="$('#form_tools').submit();"
                                 class="form-control">
-                            @foreach($data['actions'] as $action)
-                                <option value="{{ $action }}" {{ request()->has('action') && request()->get('action') == $action ? 'selected' : '' }}>{{ $action }}</option>
-                            @endforeach
+                            @if(isset($data['actions']))
+                                @foreach($data['actions'] as $action)
+                                    <option value="{{ $action }}" {{ request()->has('action') && request()->get('action') == $action ? 'selected' : '' }}>{{ $action }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                 </form>
@@ -117,7 +121,7 @@
                                                     data-toggle="popover"
                                                     data-trigger="hover"
                                                     data-container="body"
-                                                    data-content="Upload file with your data separated by a comma, space or new line. (It's usually used for ids)"
+                                                    data-content="Upload file* with your data separated by a comma, space or new line. (It's usually used for ids) *xls, csv are not currently supported."
                                                     data-trigger-file="{{ $commandId . '_' . $optionName . '_file' }}">
                                                     <i class="fas fa-upload"></i>
                                                 </a>
