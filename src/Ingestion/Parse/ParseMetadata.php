@@ -4,10 +4,8 @@ namespace Ingestion\Parse;
 
 use Aws\S3\S3Client;
 use Aws\Result;
-use function dd;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ArrayToXml\ArrayToXml;
-use function var_dump;
 
 /**
  * Class ParseMetadata
