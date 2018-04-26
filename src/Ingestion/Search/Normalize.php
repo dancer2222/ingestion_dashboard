@@ -41,6 +41,7 @@ class Normalize
             'HarperCollinsUS'    => 'harper-collins-us',
             'ThomasNelson'       => 'harper-collins-us/Thomas_Nelson',
             'GrupoNelson'        => 'harper-collins-us/Grupo_Nelson',
+            'MVDEntertainment'   => 'mvd',
             'hasbro'             => 'hasbro',
             'IDW'                => 'idwpub',
             'IPG'                => 'IPG',

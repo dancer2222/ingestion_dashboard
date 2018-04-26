@@ -108,6 +108,8 @@ class ParseMetadata
                     }
                 } elseif (isset($item['series_name'])) {
                     $resultExcel [] = $item;
+                } elseif (isset($value['movie_titleseries_title'])) {
+                    $resultExcel [] = $value;
                 }
             }
         }
