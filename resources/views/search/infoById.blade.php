@@ -52,9 +52,6 @@
                     @elseif('albums' === $mediaTypeTitle)
                         @include('search.sections.infoById.albums.albumsInfo')
                     @endif
-                    @if(isset($batchInfo) and $batchInfo != null)
-                        @include('search.sections.infoById.presentInfo.presentBatchInfoImportDate')
-                    @endif
                     @if('yes' === $option)
                         @include('search.sections.infoById.presentInfo.optionsYes')
                     @else

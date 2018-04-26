@@ -1,7 +1,7 @@
 @foreach($info as $value => $item)
     <tr>
-    @switch($value)
-        @case('description')
+        @switch($value)
+            @case('description')
 
             <td><a href="" data-toggle="collapse" data-target="#description"
                    class="badge badge-success">{{ $value }}</a><br>
@@ -11,57 +11,82 @@
             </td>
             <td></td>
 
-        @break
+            @break
 
-        @case('licensor_id')
+            @case('licensor_id')
 
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td>{{ $licensorName }}</td>
 
-        @break
+            @break
 
-        @case('data_source_provider_id')
+            @case('data_source_provider_id')
 
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td>{{ $providerName }}</td>
 
-        @break
+            @break
 
-        @case('date_added')
-
-            <td>{{ $value }}</td>
-            <td>{{ $item }}</td>
-            <td>{{ date('Y-m-d', $item)}}</td>
-
-        @break
-
-        @case('emedia_release_date')
+            @case('date_added')
 
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td>{{ date('Y-m-d', $item)}}</td>
 
-        @break
+            @break
 
-        @case('status')
-        @if('books' === $mediaTypeTitle)
-            @include('search.sections.infoById.books.booksButton')
-        @else
+            @case('emedia_release_date')
 
             <td>{{ $value }}</td>
-            @if($item == 'inactive')
-                <td style="color: red">{{ $item }}</td>
+            <td>{{ $item }}</td>
+            <td>{{ date('Y-m-d', $item)}}</td>
+
+            @break
+
+            @case('status')
+            @if('books' === $mediaTypeTitle)
+                @include('search.sections.infoById.books.booksButton')
             @else
-                <td style="color: green">{{ $item }}</td>
+
+                <td>{{ $value }}</td>
+                @if($item == 'inactive')
+                    <td style="color: red">{{ $item }}</td>
+                @else
+                    <td style="color: green">{{ $item }}</td>
+                @endif
+
+                <td>
+                    <button type="button" class="btn btn-outline-success" data-toggle="collapse"
+                            data-target="#statusInfo">Status info
+                    </button>
+                </td>
+                <td id="statusInfo" class="collapse">
+                    @if(!is_null($statusInfo))
+                        <table>
+                            <tr>
+                                <th style="background-color: #2ca02c">old_value</th>
+                                <th style="background-color: #2ca02c">new_value</th>
+                                <th style="background-color: #2ca02c">date_added</th>
+                            </tr>
+                            @foreach($statusInfo as $changes)
+                                <tr>
+                                    <td>{{ $changes->old_value}}</td>
+                                    <td>{{ $changes->new_value }}</td>
+                                    <td>{{ date('Y-m-d', $changes->date_added) }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    @else
+                        Not info
+                    @endif
+                </td>
+
             @endif
-            <td></td>
+            @break
 
-        @endif
-        @break
-
-        @case('download_url')
+            @case('download_url')
 
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
@@ -75,12 +100,12 @@
                 @endif
             @endif
 
-        @break
+            @break
 
-        @case('batch_id')
+            @case('batch_id')
 
             <td>{{ $value }}</td>
-            <td>{{ $item }}</td>
+            <td>{{ $item }} [{{ $batchInfo['import_date'] }}]</td>
             <td>
                 <form method="POST" class="form-group" id="report"
                       action="{{ ida_route('reports.batch_report') }}">
@@ -90,13 +115,13 @@
                 </form>
             </td>
 
-        @break
+            @break
 
-        @default
+            @default
 
             <td>{{ $value }}</td>
             <td>{{ $item }}</td>
             <td></td>
-    @endswitch
+        @endswitch
     </tr>
 @endforeach

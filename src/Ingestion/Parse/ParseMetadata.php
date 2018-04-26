@@ -4,8 +4,10 @@ namespace Ingestion\Parse;
 
 use Aws\S3\S3Client;
 use Aws\Result;
+use function dd;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ArrayToXml\ArrayToXml;
+use function var_dump;
 
 /**
  * Class ParseMetadata
@@ -108,6 +110,8 @@ class ParseMetadata
                     }
                 } elseif (isset($item['series_name'])) {
                     $resultExcel [] = $item;
+                } elseif (isset($value['movie_titleseries_title'])) {
+                    $resultExcel [] = $value;
                 }
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TrackingStatusChanges;
 use Illuminate\Http\Request;
 use Ingestion\Search\GeoRestrict;
 
@@ -22,6 +23,15 @@ class SearchController extends Controller
                 $message = 'This [id] = [' . $request->id . '] must contain only digits';
 
                 return back()->with('message', $message);
+            }
+
+            $changeStatus = new TrackingStatusChanges();
+            $statusInfo = $changeStatus->getInfoById($request->id);
+
+            if (!$statusInfo->isEmpty()) {
+                $statusInfo->toArray();
+            } else {
+                $statusInfo = null;
             }
 
             $className = "Ingestion\Search\\" . ucfirst($request->type);
@@ -45,6 +55,7 @@ class SearchController extends Controller
             }
 
             $dataForView['option'] = $request->option;
+            $dataForView['statusInfo'] = $statusInfo;
 
             return view('search.infoById', $dataForView);
         }
