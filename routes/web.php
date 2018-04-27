@@ -22,7 +22,7 @@ Route::get('/monitor', function () {
 /**
  * Routes under 'auth' middleware
  */
-Route::group(['middleware' => ['auth', 'https.protocol']], function() {
+Route::group(['middleware' => ['auth']], function() {
     Route::get('/', function() {
         return view('welcome');
     });
