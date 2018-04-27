@@ -107,12 +107,10 @@ Route::group(['middleware' => ['auth', 'https.protocol']], function() {
     //Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
 });
 
-Route::group(['middleware' => 'https.protocol'], function () {
-    Auth::routes();
-});
+Auth::routes();
 
 Route::any('register', function() {
-    return redirect('login');
+    return redirect(ida_route('login'));
 });
 
 Route::get('social/auth/{provider}', 'Auth\\SocialController@redirectToProvider')->name('social.auth');
