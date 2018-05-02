@@ -78,6 +78,7 @@ class Albums extends MediaTypeAbstract
             'mediaTypeTitle'               => $mediaTypeTitle,
             'licensorName'                 => $licensorName,
             'info'                         => $info,
+            'batchInfo'                    => $batchInfo,
             'providerName'                 => $providerName,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
