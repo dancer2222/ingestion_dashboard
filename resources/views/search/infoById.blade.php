@@ -16,7 +16,7 @@
             <div class="row container-ida">
                 <table class="table table-hover">
                     <tr style="background-color: #2ca02c">
-                        <th >
+                        <th>
                             Field name
                         </th>
                         <th>
@@ -44,7 +44,7 @@
                             <td>Brightcove_id</td>
                             <td>{{ $brightcove_id }}</td>
                             <td></td>
-                        </tr>    
+                        </tr>
                     @elseif('books' === $mediaTypeTitle and $batchInfo != null)
                         @include('search.sections.infoById.presentInfo.booksPresentBatchInfo')
                     @elseif('audiobooks' === $mediaTypeTitle and $batchInfo != null)
@@ -52,6 +52,7 @@
                     @elseif('albums' === $mediaTypeTitle)
                         @include('search.sections.infoById.albums.albumsInfo')
                     @endif
+                    @include('search.sections.infoById.metadata')
                     @if('yes' === $option)
                         @include('search.sections.infoById.presentInfo.optionsYes')
                     @else
@@ -59,6 +60,6 @@
                     @endif
                     @include('search.sections.infoById.geoRestriction')
                 </table>
-        </div>
+            </div>
     @endif
 @endsection

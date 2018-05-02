@@ -19,12 +19,6 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         if (isset($request->id) && isset($request->type)) {
-            if (!is_numeric($request->id)) {
-                $message = 'This [id] = [' . $request->id . '] must contain only digits';
-
-                return back()->with('message', $message);
-            }
-
             $changeStatus = new TrackingStatusChanges();
             $statusInfo = $changeStatus->getInfoById($request->id);
 
