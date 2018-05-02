@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MediaMetadata;
+use App\Models\MediaType;
 use App\Models\TrackingStatusChanges;
 use Illuminate\Http\Request;
 use Ingestion\Search\GeoRestrict;
@@ -19,10 +21,10 @@ class SearchController extends Controller
     public function index(Request $request)
     {
         if (isset($request->id) && isset($request->type)) {
-            if (!is_numeric($request->id)) {
-                $message = 'This [id] = [' . $request->id . '] must contain only digits';
-
-                return back()->with('message', $message);
+            $metadataInfo = new MediaMetadata();
+            $metadata = $metadataInfo->getMetadata($request->id, MediaType::getIdByTitle($request->type));
+            if (!is_null($metadata)) {
+                $metadata = json_decode($metadata->toArray()['metadata']);
             }
 
             $changeStatus = new TrackingStatusChanges();
@@ -56,6 +58,7 @@ class SearchController extends Controller
 
             $dataForView['option'] = $request->option;
             $dataForView['statusInfo'] = $statusInfo;
+            $dataForView['metadata'] = $metadata;
 
             return view('search.infoById', $dataForView);
         }
