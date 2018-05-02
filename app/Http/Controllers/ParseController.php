@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MediaMetadata;
+use App\Models\MediaType;
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
 use Ingestion\Parse\ParseMetadata;
@@ -86,5 +88,21 @@ class ParseController extends Controller
         } else {
             return view('search.metadata', ['messages' => $result]);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function getMetadataIntoDatabase(Request $request)
+    {
+        $metadataInfo = new MediaMetadata();
+        $metadata = $metadataInfo->getMetadata($request->id, MediaType::getIdByTitle($request->type));
+        if (!is_null($metadata)) {
+            $metadataResult = json_decode($metadata->toArray()['metadata']);
+            dd($metadataResult);
+        }
+
+        return response('This metadata not found in database')->header('Content-Type', 'text');
     }
 }

@@ -52,9 +52,7 @@
                     @elseif('albums' === $mediaTypeTitle)
                         @include('search.sections.infoById.albums.albumsInfo')
                     @endif
-                    @if(isset($metadata))
-                        @include('search.sections.infoById.metadata')
-                    @endif
+                    @include('search.sections.infoById.metadata')
                     @if('yes' === $option)
                         @include('search.sections.infoById.presentInfo.optionsYes')
                     @else
