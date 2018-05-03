@@ -19,9 +19,17 @@
                     For User
                 </th>
                 @if('yes' === $option)
-                    @include('search.sections.infoById.presentInfo.optionsYes')
+                    @foreach($info as $value => $item)
+                        @if(null == $item)
+
+                        @else
+                            @include('search.sections.infoById.albums.trackInfo')
+                        @endif
+                    @endforeach
                 @else
-                    @include('search.sections.infoById.presentInfo.optionsNo')
+                    @foreach($info as $value => $item)
+                        @include('search.sections.infoById.albums.trackInfo')
+                    @endforeach
                 @endif
                 <tr>
                     <td>Geo Restriction</td>
