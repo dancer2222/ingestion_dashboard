@@ -157,7 +157,8 @@ class ParseMetadata
         foreach ($xml as $value) {
             if ($value->{$this->getTagName('ProductIdentifier')}->IDValue == $idByBucket
                 or $value->{$this->getTagName('RecordReference')} == $idByBucket
-                or $value->{$this->getTagName('ProductIdentifier')}->b244 == $idByBucket) {
+                or $value->{$this->getTagName('ProductIdentifier')}->b244 == $idByBucket
+                or (string)$value->ProductIdentifier->IDValue == $idByBucket) {
                 $messages [] = $value;
             }
         }
