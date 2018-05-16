@@ -99,19 +99,7 @@ class ParseMetadata
         $resultExcel = [];
 
         foreach ($results as $result => $value) {
-
-            foreach ($value as $item) {
-
-                if (isset($value['title'])) {
-                    if ($title == $value['title']) {
-                        $resultExcel [] = $value;
-                    }
-                } elseif (isset($item['series_name'])) {
-                    $resultExcel [] = $item;
-                } elseif (isset($value['movie_titleseries_title'])) {
-                    $resultExcel [] = $value;
-                }
-            }
+            $resultExcel []= $value;
         }
 
         return array_unique($resultExcel);
