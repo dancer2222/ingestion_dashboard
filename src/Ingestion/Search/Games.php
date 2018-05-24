@@ -25,7 +25,7 @@ class Games extends MediaTypeAbstract
             $info = new Game();
             $info = $info->getInfoById($id);
             $info = $this->toArray($info, $id, $mediaTypeTitle);
-            $imageUrl = config('main.links.image.game') . $id . '.jpg';
+            $imageUrl = config('main.links.image') . 'game/' . $id . '.jpg';
         } catch (\Exception $exception) {
             $message = 'This [id] = ' . $id . '  not found in Games database';
             return view('search.infoById', ['message' => $message]);

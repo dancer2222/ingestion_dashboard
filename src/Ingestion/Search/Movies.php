@@ -36,7 +36,7 @@ class Movies extends MediaTypeAbstract
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
         $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
-        $imageUrl = config('main.links.image.movie') . $id . '.jpg';
+        $imageUrl = config('main.links.image') . 'movie/' . $id . '.jpg';
         $brightcove_id = $brightcove->getBrightcoveId($id);
 
         if (!$brightcove_id->isEmpty()) {
