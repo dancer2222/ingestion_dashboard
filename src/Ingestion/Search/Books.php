@@ -43,10 +43,9 @@ class Books extends MediaTypeAbstract
         $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
 
         if (isset($info['data_origin_id'])) {
-            $imageUrl = config('main.links.image.book') . $info['data_origin_id'] . '.jpg';
+            $imageUrl = config('main.links.image') . 'book/' . $info['data_origin_id'] . '.jpg';
         } else {
-            $isbn = explode('1000', $info['id'], 2)[1];
-            $imageUrl = config('main.links.image.book') . $isbn . '.jpg';
+            $imageUrl = config('main.links.image.book') . $info['isbn'] . '.jpg';
         }
 
         if ($batchInfo != null) {

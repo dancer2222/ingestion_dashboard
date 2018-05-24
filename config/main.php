@@ -14,12 +14,6 @@ return [
                 'movies' => 'playster-content-ingestion'
             ]
         ],
-        'image'    => [
-            'book'      => 'https://prod-image-resizer-v1-cdn1.playster.com/book/',
-            'movie'     => 'https://prod-image-resizer-v1-cdn1.playster.com/movie/',
-            'game'      => 'https://prod-image-resizer-v1-cdn1.playster.com/game/',
-            'album'     => 'https://prod-image-resizer-v1-cdn1.playster.com/album/7digital/',
-            'audiobook' => 'https://prod-image-resizer-v1-cdn1.playster.com/audiobook/findaway/square/'
-        ]
+        'image'    => 'https://prod-image-resizer-v1-cdn1.playster.com/'
     ]
 ];

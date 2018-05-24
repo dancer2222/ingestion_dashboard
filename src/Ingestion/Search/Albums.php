@@ -60,7 +60,7 @@ class Albums extends MediaTypeAbstract
             $idLink = substr($id, -6);
         }
 
-        $imageUrl = config('main.links.image.album') . $idLink . '.jpg';
+        $imageUrl = config('main.links.image') . 'album/7digital/' . $idLink . '.jpg';
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
 
         $providerName = new DataSourceProvider();
@@ -68,7 +68,7 @@ class Albums extends MediaTypeAbstract
 
         if ($batchInfo != null) {
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($id);
+            $failedItems = $failedItems->getFailedItems($info['data_origin_id']);
         } else {
             $failedItems = null;
         }
