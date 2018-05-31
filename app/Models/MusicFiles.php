@@ -22,7 +22,7 @@ class MusicFiles extends Model
     public function getGeoRestrictMusicFilesById($id)
     {
         return $this->where('music_id', $id)
-            ->select('region', 'status')
+            ->select('region', 'status', 'available_date')
             ->get();
     }
 

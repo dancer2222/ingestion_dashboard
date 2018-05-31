@@ -46,6 +46,10 @@ class SearchByController extends Controller
      */
     public function switchType($type, $input, $mediaType)
     {
+        if ($mediaType == 'upc' || $mediaType == 'dataOriginId' || $mediaType == 'isbn' || $mediaType == 'id') {
+            $input = preg_replace("/[^0-9]/", '', $input);
+        }
+
         $mediaTypeTitle = ucfirst($type);
         $mediaType = ucfirst($mediaType);
         $mediaTypeTitle = substr($mediaTypeTitle, 0, -1);
