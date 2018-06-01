@@ -25,7 +25,7 @@
                         </div>
                         @endif
 
-                        <form class="form-horizontal" method="POST" action="{{ ida_route('login') }}">
+                        <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                             {{ csrf_field() }}
 
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -72,7 +72,7 @@
                                         Submit
                                     </button>
 
-                                    {{--<a class="btn btn-link" href="{{ ida_route('password.request') }}">--}}
+                                    {{--<a class="btn btn-link" href="{{ route('password.request') }}">--}}
                                         {{--Forgot Your Password?--}}
                                     {{--</a>--}}
                                 </div>
@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="card-footer">
-                    <a href="{{ ida_route('social.auth', ['provider' => 'google']) }}" class="btn btn-info">Google+</a>
+                    <a href="{{ route('social.auth', ['provider' => 'google']) }}" class="btn btn-info">Google+</a>
                 </div>
             </div>
         </div>

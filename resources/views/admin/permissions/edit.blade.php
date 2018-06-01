@@ -45,7 +45,7 @@
             </div>
 
 
-            <form action="{{ ida_route('admin.permissions.edit', ['id' => $permission->id]) }}" method="post" class="col-12">
+            <form action="{{ route('admin.permissions.edit', ['id' => $permission->id]) }}" method="post" class="col-12">
                 {{ csrf_field() }}
 
                 <div class="form-group">

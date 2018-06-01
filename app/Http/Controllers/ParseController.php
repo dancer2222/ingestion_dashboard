@@ -76,7 +76,7 @@ class ParseController extends Controller
                 $this->filepath
             );
         } catch (\Exception $exception) {
-            return redirect(ida_route('search', ['id' => $request->id, 'type' => '']))
+            return redirect(route('search', ['id' => $request->id, 'type' => '']))
                 ->with('message', $exception->getMessage());
         }
 

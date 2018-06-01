@@ -14,7 +14,7 @@
                 </h3>
 
                 <div class="pull-right">
-                    <a href="{{ ida_route('admin.users.showCreate') }}" class="btn btn-sm btn-success" title="Add new user">
+                    <a href="{{ route('admin.users.showCreate') }}" class="btn btn-sm btn-success" title="Add new user">
                         New user
                         <i class="fas fa-user-plus"></i>
                     </a>
@@ -52,7 +52,7 @@
             </div>
 
 
-            <form action="{{ ida_route('admin.users.edit', ['id' => $user->id]) }}" method="post" class="col-12">
+            <form action="{{ route('admin.users.edit', ['id' => $user->id]) }}" method="post" class="col-12">
                 {{ csrf_field() }}
 
                 <div class="form-group">

@@ -16,7 +16,7 @@
         </div>
 
         <div class="col-6 mt-2">
-            <form id="form_tools" action="{{ ida_route('sel') }}" method="get" class="form">
+            <form id="form_tools" action="{{ route('sel') }}" method="get" class="form">
                 <div class="form-group">
                     <h3>
                         <label for="select_type">Select media type</label>
@@ -46,7 +46,7 @@
 
         <div class="col-6 mt-2">
             <form method="POST" class="form-control-feedback"
-                  action="{{ ida_route('reports.batch_report') }}">
+                  action="{{ route('reports.batch_report') }}">
                 <div class="form-group">
                     <h3>
                         <label for="batch_id">
@@ -70,7 +70,7 @@
                     <hr>
 
                     <form method="POST" class="form-control-feedback form-control border-0"
-                          action="{{ ida_route('reports.search_by_title') }}">
+                          action="{{ route('reports.search_by_title') }}">
                         <div class="form-group">
                             <h3 class="text-muted">
                                 <label for="{{$type}}">

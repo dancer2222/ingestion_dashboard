@@ -11,7 +11,7 @@
         </h3>
 
         <form method="POST" class="form-control-feedback"
-              action="{{ ida_route('aws.info') }}">
+              action="{{ route('aws.info') }}">
             <div class="row">
                 <div class="col">
                     <input type="date" class="form-control" name="date"
@@ -27,7 +27,7 @@
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             <br>
             <button type="submit" class="btn btn-outline-success">Submit</button>
-            <a type="button" class="btn btn-outline-success" href="{{ ida_route('aws.index') }}">All notifications</a>
+            <a type="button" class="btn btn-outline-success" href="{{ route('aws.index') }}">All notifications</a>
         </form>
         <br>
         @if(isset($products[0]))
