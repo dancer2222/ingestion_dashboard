@@ -3,6 +3,7 @@ FROM richarvey/nginx-php-fpm
 RUN apk add --update \
     autoconf \
     file \
+    nano \
     g++ \
     gcc \
     libc-dev \
