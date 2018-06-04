@@ -7,7 +7,7 @@
         <ul class="list-group">
             @foreach($tracks as $track)
                 <li class="list-group-item">
-                    <a href="{{ ida_route('reports.track.index', [
+                    <a href="{{ route('reports.track.index', [
                                 'id' => $track['id'],
                                 'option' => 'yes']) }}"
                        style="color: #b6a338; text-decoration: none; font-weight: bold;"

@@ -105,7 +105,7 @@
         <td>{{ $item }} [{{ $batchInfo['import_date'] }}]</td>
         <td>
             <form method="POST" class="form-group" id="report"
-                  action="{{ ida_route('reports.batch_report') }}">
+                  action="{{ route('reports.batch_report') }}">
                 <input type="hidden" id="batch_id" name="batch_id" value="{{ $item }}">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <button type="submit" class="btn btn-success">Get batch report</button>

@@ -70,4 +70,14 @@ $app->singleton(
 |
 */
 
+// Monolog customization
+$app->configureMonologUsing(function ($monolog) {
+    $streamHandler = new \Monolog\Handler\StreamHandler(
+        sys_get_temp_dir() . '/ida.log'
+    );
+    $lineFormatter = new \Monolog\Formatter\LineFormatter(null, null, true, true);
+
+    $monolog->pushHandler($streamHandler->setFormatter($lineFormatter));
+});
+
 return $app;

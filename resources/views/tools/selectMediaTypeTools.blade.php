@@ -9,7 +9,7 @@
         <div class="row container-ida">
 
             <div class="col-12 p-3 mb-3 border-bottom">
-                <form id="form_tools" action="{{ ida_route('tools.index') }}" method="get" class="form-inline">
+                <form id="form_tools" action="{{ route('tools.index') }}" method="get" class="form-inline">
                     <div class="form-group">
                         <h3 class="mx-sm-3">
                             <label for="tool_type">
@@ -69,7 +69,7 @@
                         <div id="{{ $toolTarget }}" class="collapse" aria-labelledby="{{ $commandId }}" data-parent="#tools-accordion">
                             <div class="card-body">
 
-                                <form method="POST" class="" action="{{ ida_route('tools.do', ['command' => $commandName ]) }}">
+                                <form method="POST" class="" action="{{ route('tools.do', ['command' => $commandName ]) }}">
 
                                     {{-- Tool Arguments --}}
                                     @if($params['arguments'])
@@ -140,7 +140,7 @@
                                                    name="{{ $commandId . '_' . $optionName . '_file' }}"
                                                    id="{{ $commandId . '_' . $optionName . '_file' }}"
                                                    class="options_file_input"
-                                                   data-url="{{ ida_route('tools.optionFromFile') }}"
+                                                   data-url="{{ route('tools.optionFromFile') }}"
                                                    data-option-name="{{ $optionName }}"
                                                    hidden>
                                         </div>

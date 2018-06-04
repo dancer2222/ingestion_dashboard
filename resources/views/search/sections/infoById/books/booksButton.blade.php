@@ -13,7 +13,7 @@
     <td class="{{ $cssClass }}">{{ $item }}</td>
     <td>
         <form method="POST" class="form-control-feedback"
-              action="{{ ida_route('tools.do') }}">
+              action="{{ route('tools.do') }}">
             <input type="hidden" name="command" value="books:{{ $tool }}:byISBN">
             <input class="form-control" type="hidden" name="params[isbn]" value="{{ $info['isbn'] }}">
             <input type="hidden" name="_token" value="{{csrf_token()}}">

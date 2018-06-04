@@ -27,13 +27,13 @@ Route::group(['middleware' => ['auth']], function() {
         return view('welcome');
     });
     Route::get('/home', function() {
-        return redirect(ida_route('brightcove.index'));
+        return redirect(route('brightcove.index'));
     })->name('home');
 
     // Admin area
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => []], function () {
         Route::get('/', function () {
-            return redirect(ida_route('admin.users.list'));
+            return redirect(route('admin.users.list'));
         })->name('admin');
 
         // Manage users
@@ -78,7 +78,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['middleware' => 'role:admin|tester', 'prefix' => 'reports'], function() {
 
         Route::get('/', function() {
-            return redirect(ida_route('search'));
+            return redirect(route('search'));
         });
         //Select search
         Route::get('/sel', 'SelectController@index')->name('sel');
@@ -111,7 +111,7 @@ Route::group(['middleware' => ['auth']], function() {
 Auth::routes();
 
 Route::any('register', function() {
-    return redirect(ida_route('login'));
+    return redirect(route('login'));
 });
 
 Route::get('social/auth/{provider}', 'Auth\\SocialController@redirectToProvider')->name('social.auth');
