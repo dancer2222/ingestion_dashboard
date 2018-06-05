@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
+    private $table = 'roles';
+
     /**
      * Run the database seeds.
      *
@@ -12,7 +14,11 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert([
+        DB::table('permission_role')->delete();
+        DB::table('role_user')->delete();
+        DB::table($this->table)->delete();
+
+        DB::table($this->table)->insert([
             [
                 'name' => 'admin',
                 'display_name' => 'Administrator',
@@ -29,9 +35,9 @@ class RoleSeeder extends Seeder
                 'description' => 'Developers from ingestion team',
             ],
             [
-                'name' => 'hr',
-                'display_name' => 'HR manager',
-                'description' => 'HR manager',
+                'name' => 'pm',
+                'display_name' => 'pm',
+                'description' => 'Project manager',
             ],
         ]);
     }

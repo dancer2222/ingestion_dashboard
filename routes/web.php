@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Brightcove
-    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|hr']], function() {
+    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|pm']], function() {
         Route::get('/', 'ContentController@index')->name('brightcove.index');
         Route::get('/videos', 'ContentController@videos')->name('brightcove.videos');
         Route::get('/folders', 'ContentController@folders')->name('brightcove.folders');
