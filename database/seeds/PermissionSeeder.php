@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 
 class PermissionSeeder extends Seeder
 {
+    private $table = 'permissions';
     /**
      * Run the database seeds.
      *
@@ -12,7 +13,9 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('permissions')->insert([
+        DB::table($this->table)->delete();
+
+        DB::table($this->table)->insert([
 
             // Users
             [
