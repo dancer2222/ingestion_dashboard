@@ -18,6 +18,7 @@ RUN apk add --update \
     && docker-php-ext-install memcached \
     && docker-php-source delete \
     && apk del --no-cache zlib-dev cyrus-sasl-dev \
+    && apk add --update nodejs \
 
     # Clear
     && rm -rf /tmp/* /var/cache/apk/*

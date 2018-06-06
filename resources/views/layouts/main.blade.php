@@ -47,15 +47,24 @@
                 </div>
             </li>
 
+            @permission('basic-search')
             <li class="nav-item dropdown">
                 <a href="{{ route('search') }}" class="nav-link">Search</a>
             </li>
+            @endpermission
+
+            @permission('view-tools')
             <li class="nav-item dropdown">
                 <a href="{{ route('tools.index') }}" class="nav-link">Tools</a>
             </li>
+            @endpermission
+
+            @permission('view-notifications')
             <li class="nav-item dropdown">
                 <a href="{{ route('aws.index') }}" class="nav-link">Aws Notifications</a>
             </li>
+            @endpermission
+
         </ul>
 
         <ul class="navbar-nav ml-auto">
@@ -66,11 +75,14 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item disabled" href="#">Profile <small>coming soon</small></a>
 
+                    @role('admin')
                     <a class="dropdown-item" href="{{ route('admin') }}">Admin area</a>
 
+
                     <div class="dropdown-divider"></div>
+                    @endrole
+
                     <a class="dropdown-item" href="#" onclick="$('#logout').submit()">Sign out</a>
                 </div>
             </li>
