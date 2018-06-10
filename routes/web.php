@@ -24,7 +24,7 @@ Route::get('/monitor', function () {
  */
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/', function() {
-        return view('welcome');
+        return view('template_v2.welcome');
     });
     Route::get('/home', function() {
         return redirect(route('brightcove.index'));
