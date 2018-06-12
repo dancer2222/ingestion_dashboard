@@ -6,6 +6,9 @@
 <html lang="en">
 
 <head>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -15,7 +18,7 @@
     <meta name="author" content="">
 
     {{-- Favicon icon --}}
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("$templatePrefix/images/favicon.png") }}">
+    <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ asset("$templatePrefix/images/favicon.ico") }}" />
 
     {{-- Title --}}
     <title>@yield('title', env('APP_NAME'))</title>
@@ -80,6 +83,8 @@
         {{-- Content container --}}
         <div class="container-fluid">
 
+            @include('template_v2.layouts.errors', ['errors' => $errors])
+
             @yield('content')
 
         </div>
@@ -95,29 +100,28 @@
 
 </div>
 
-{{--@section('scripts')--}}
-    {{-- jQuery --}}
-    <script src="{{ asset("$templatePrefix/js/lib/jquery/jquery.min.js") }}"></script>
+{{-- jQuery --}}
+<script src="{{ asset("$templatePrefix/js/lib/jquery/jquery.min.js") }}"></script>
 
-    {{-- Bootstrap --}}
-    <script src="{{ asset("$templatePrefix/js/lib/bootstrap/js/popper.min.js") }}"></script>
-    <script src="{{ asset("$templatePrefix/js/lib/bootstrap/js/bootstrap.min.js") }}"></script>
+{{-- Bootstrap --}}
+<script src="{{ asset("$templatePrefix/js/lib/bootstrap/js/popper.min.js") }}"></script>
+<script src="{{ asset("$templatePrefix/js/lib/bootstrap/js/bootstrap.min.js") }}"></script>
 
-    {{-- Slimscroll --}}
-    <script src="{{ asset("$templatePrefix/js/jquery.slimscroll.js") }}"></script>
+{{-- Slimscroll --}}
+<script src="{{ asset("$templatePrefix/js/jquery.slimscroll.js") }}"></script>
 
-    {{-- Menu sidebar --}}
-    <script src="{{ asset("$templatePrefix/js/sidebarmenu.js") }}"></script>
+{{-- Menu sidebar --}}
+<script src="{{ asset("$templatePrefix/js/sidebarmenu.js") }}"></script>
 
-    {{-- Stiky kit --}}
-    <script src="{{ asset("$templatePrefix/js/lib/sticky-kit-master/dist/sticky-kit.min.js") }}"></script>
+{{-- Stiky kit --}}
+<script src="{{ asset("$templatePrefix/js/lib/sticky-kit-master/dist/sticky-kit.min.js") }}"></script>
 
-    {{-- Additional scripts --}}
-    @stack('scripts')
+{{-- Additional scripts --}}
+@stack('scripts')
 
-    {{-- Custom js --}}
-    <script src="{{ asset("$templatePrefix/js/scripts.js") }}"></script>
-{{--@endsection--}}
+{{-- Custom js --}}
+<script src="{{ asset("$templatePrefix/js/scripts.js") }}"></script>
+<script src="{{ asset("$templatePrefix/js/app.js") }}"></script>
 
 </body>
 </html>

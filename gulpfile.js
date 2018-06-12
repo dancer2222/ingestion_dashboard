@@ -44,7 +44,7 @@ gulp.task('theme:assets', function () {
 });
 
 gulp.task('theme:css:libs', function () {
-    return gulp.src(path.join(__dirname, paths.src, 'css/lib/**/*.css'))
+    return gulp.src(path.join(__dirname, paths.src, 'css/lib/**/*.css'), {since: gulp.lastRun('theme:css:libs')})
         .pipe(cleanCSS())
         .pipe(gulp.dest(path.join(__dirname, paths.dest, 'css/lib')));
 });
@@ -54,6 +54,12 @@ gulp.task('theme:minify', function () {
         .pipe(cleanCSS())
         .pipe(concat('theme.min.css'))
         .pipe(gulp.dest(path.join(__dirname, paths.dest, 'css')));
+});
+
+gulp.task('build:js', function () {
+    return gulp.src('./resources/assets/js/app.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('./public/theme_v2/js'));
 });
 
 gulp.task('build:theme', gulp.series(gulp.parallel('theme:less', 'theme:css:libs', 'theme:assets', 'theme:js'), 'theme:minify'));
