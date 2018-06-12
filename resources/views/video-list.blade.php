@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('template_v2.layouts.main')
 
 @section('title', 'List of videos')
 

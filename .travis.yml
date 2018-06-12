@@ -9,14 +9,14 @@ services:
 
 before_install:
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
-  - docker build -f Dockerfile -t $REPO:$TRAVIS_BRANCH .
-  - docker run -d -p 80:80 $REPO:$TRAVIS_BRANCH
+  - docker build -f Dockerfile -t $REPO:$TRAVIS_TAG .
+  - docker run -d -p 80:80 $REPO:$TRAVIS_TAG
   - docker ps -a
 
 after_success:
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker push $REPO:$TRAVIS_BRANCH
+  - docker push $REPO:$TRAVIS_TAG
   - tar -czf build.tar.gz *
   - rm -rf `ls | grep -v build.tar.gz`
 

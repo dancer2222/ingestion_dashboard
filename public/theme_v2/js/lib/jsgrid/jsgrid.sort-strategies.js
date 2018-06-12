@@ -1,0 +1,1 @@
+!function(n,r,t){var e=function(n){return null!=n},u={string:function(n,r){return e(n)||e(r)?e(n)?e(r)?(""+n).localeCompare(""+r):1:-1:0},number:function(n,r){return n-r},date:function(n,r){return n-r},numberAsString:function(n,r){return parseFloat(n)-parseFloat(r)}};n.sortStrategies=u}(jsGrid,jQuery);
