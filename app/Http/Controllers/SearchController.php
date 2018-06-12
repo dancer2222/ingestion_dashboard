@@ -18,7 +18,7 @@ class SearchController extends Controller
      */
     public function index(Request $request)
     {
-        if (isset($request->id) && isset($request->type)) {
+        if (isset($request->id, $request->type)) {
             $changeStatus = new TrackingStatusChanges();
             $statusInfo = $changeStatus->getInfoById($request->id);
 
