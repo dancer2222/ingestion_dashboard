@@ -14,16 +14,17 @@
         "ext-xml": "*",
         "aws/aws-sdk-php-laravel": "~3.1",
         "brightcove/api": "^1.0",
+        "bschmitt/laravel-amqp": "1.*",
         "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "~2.1.0",
         "php-amqplib/php-amqplib": ">=2.6.1",
         "socialiteproviders/google": "~3.0",
         "spatie/array-to-xml": "^2.7",
-        "zizaco/entrust": "5.2.x-dev",
-        "bschmitt/laravel-amqp": "1.*"
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "^7.0",
+        "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",

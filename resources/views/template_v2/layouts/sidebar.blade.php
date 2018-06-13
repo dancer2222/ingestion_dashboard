@@ -78,6 +78,29 @@
             </li>
             @endpermission
 
+            @role('admin', 'ingester')
+            <li>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fab fa-php"></i>
+                    <span class="hide-menu">
+                        Ingestion
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a class="has-arrow" href="#">Rabbitmq</a>
+
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('indexation.index') }}">Indexation</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            @endrole
+
 
             {{--<li class="nav-label">Apps</li>--}}
             {{--<li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">Email</span></a>--}}
