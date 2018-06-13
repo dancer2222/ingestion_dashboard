@@ -84,6 +84,7 @@
         <div class="container-fluid">
 
             @include('template_v2.layouts.errors', ['errors' => $errors])
+            @include('template_v2.layouts.status')
 
             @yield('content')
 

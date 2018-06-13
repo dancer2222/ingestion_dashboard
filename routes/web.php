@@ -106,6 +106,17 @@ Route::group(['middleware' => ['auth']], function() {
 
     //Ajax requests
     //Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
+
+    // Ingestion tools
+    Route::group(['prefix' => 'ingestion', 'middleware' => 'role:admin|ingester', 'namespace' => 'Ingestion'], function () {
+        // Rabbitmq
+        Route::group(['prefix' => 'rabbitmq', 'namespace' => 'Rabbitmq'], function () {
+            Route::group(['prefix'=> 'indexation'], function () {
+                Route::get('/', 'IndexationController@index')->name('indexation.index');
+                Route::post('/', 'IndexationController@store')->name('indexation.store');
+            });
+        });
+    });
 });
 
 Auth::routes();

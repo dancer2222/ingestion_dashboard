@@ -3,20 +3,38 @@
     <nav class="sidebar-nav">
         <ul id="sidebarnav">
             <li class="nav-devider"></li>
+            <li class="nav-label">Menu</li>
 
             {{-- Search --}}
             <li>
-                <a class="" href="{{ route('search') }}">
+                <a class="has-arrow " href="#" aria-expanded="false">
                     <i class="fa fa-search"></i>
                     <span class="hide-menu">
                         Search
                     </span>
                 </a>
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('sel', ['type' => 'movies']) }}">Movies</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('sel', ['type' => 'audiobooks']) }}">Audiobooks</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('sel', ['type' => 'books']) }}">Books</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('sel', ['type' => 'albums']) }}">Albums</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('sel', ['type' => 'games']) }}">Games</a>
+                    </li>
+                </ul>
             </li>
 
             {{-- Brightcove --}}
             <li>
-                <a class="has-arrow" href="{{ route('search') }}">
+                <a class="has-arrow " href="#" aria-expanded="false">
                     <i class="fa fa-video"></i>
                     <span class="hide-menu">
                         Brightcove
@@ -32,7 +50,7 @@
             {{-- Aws --}}
             @permission('view-notifications')
             <li>
-                <a class="has-arrow" href="{{ route('search') }}">
+                <a class="has-arrow " href="#" aria-expanded="false">
                     <i class="fab fa-aws"></i>
                     <span class="hide-menu">
                         Aws
@@ -48,7 +66,7 @@
             {{--Tools --}}
             @permission('view-tools')
             <li>
-                <a class="has-arrow" href="{{ route('search') }}">
+                <a class="has-arrow " href="#" aria-expanded="false">
                     <i class="fa fas fa-wrench"></i>
                     <span class="hide-menu">
                         Tools
@@ -59,6 +77,29 @@
                 </ul>
             </li>
             @endpermission
+
+            @role('admin', 'ingester')
+            <li>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fab fa-php"></i>
+                    <span class="hide-menu">
+                        Ingestion
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a class="has-arrow" href="#">Rabbitmq</a>
+
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('indexation.index') }}">Indexation</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            @endrole
 
 
             {{--<li class="nav-label">Apps</li>--}}
