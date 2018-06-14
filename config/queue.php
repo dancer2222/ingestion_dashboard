@@ -66,7 +66,7 @@ return [
 
         'rabbitmq' => [
             'driver' => 'rabbitmq',
-            'dsn' => env('RABBITMQ_DSN', null),
+            'dsn' => null,
             'host' => env('RABBITMQ_HOST', '127.0.0.1'),
             'port' => env('RABBITMQ_PORT', 5672),
 
@@ -85,15 +85,15 @@ return [
                     /*
                     * Determine if exchange should be created if it does not exist.
                     */
-                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+                    'declare' => true,
 
                     /*
                     * Read more about possible values at https://www.rabbitmq.com/tutorials/amqp-concepts.html
                     */
                     'type' => env('RABBITMQ_EXCHANGE_TYPE', \Interop\Amqp\AmqpTopic::TYPE_DIRECT),
-                    'passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false),
-                    'durable' => env('RABBITMQ_EXCHANGE_DURABLE', true),
-                    'auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false),
+                    'passive' => false,
+                    'durable' => true,
+                    'auto_delete' => false,
                     'arguments' => env('RABBITMQ_EXCHANGE_ARGUMENTS'),
                 ],
 
@@ -107,20 +107,20 @@ return [
                     /*
                     * Determine if queue should be created if it does not exist.
                     */
-                    'declare' => env('RABBITMQ_QUEUE_DECLARE', true),
+                    'declare' => true,
 
                     /*
                     * Determine if queue should be binded to the exchange created.
                     */
-                    'bind' => env('RABBITMQ_QUEUE_DECLARE_BIND', true),
+                    'bind' => true,
 
                     /*
                     * Read more about possible values at https://www.rabbitmq.com/tutorials/amqp-concepts.html
                     */
-                    'passive' => env('RABBITMQ_QUEUE_PASSIVE', false),
-                    'durable' => env('RABBITMQ_QUEUE_DURABLE', true),
-                    'exclusive' => env('RABBITMQ_QUEUE_EXCLUSIVE', false),
-                    'auto_delete' => env('RABBITMQ_QUEUE_AUTODELETE', false),
+                    'passive' => false,
+                    'durable' => true,
+                    'exclusive' => false,
+                    'auto_delete' => false,
                     'arguments' => env('RABBITMQ_QUEUE_ARGUMENTS'),
                 ],
             ],
@@ -142,14 +142,14 @@ return [
 
         'indexation' => [
             'driver' => 'rabbitmq',
-            'dsn' => env('RABBITMQ_DSN', null),
+            'dsn' => null,
             'factory_class' => \Enqueue\AmqpLib\AmqpConnectionFactory::class,
 
             'host' => env('RABBITMQ_HOST', '127.0.0.1'),
             'port' => env('RABBITMQ_PORT', 5672),
 
-            'queue' => env('RABBITMQ_INDEXATION_QUEUE'),
-            'vhost' => env('RABBITMQ_INDEXATION_VHOST', '/'),
+            'queue' => 'batch-to-index',
+            'vhost' => 'qa-capi-index-us',
 
             'login'	=> env('RABBITMQ_LOGIN', 'guest'),
             'password' => env('RABBITMQ_PASSWORD', 'guest'),
@@ -157,32 +157,32 @@ return [
             'options' => [
                 'exchange' => [
                     'name' => env('RABBITMQ_EXCHANGE_NAME'),
-                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+                    'declare' => true,
                     'type' => env('RABBITMQ_EXCHANGE_TYPE', \Interop\Amqp\AmqpTopic::TYPE_DIRECT),
-                    'passive' => env('RABBITMQ_EXCHANGE_PASSIVE', false),
-                    'durable' => env('RABBITMQ_EXCHANGE_DURABLE', true),
-                    'auto_delete' => env('RABBITMQ_EXCHANGE_AUTODELETE', false),
+                    'passive' => false,
+                    'durable' => true,
+                    'auto_delete' => false,
                     'arguments' => env('RABBITMQ_EXCHANGE_ARGUMENTS'),
                 ],
                 'queue' => [
                     'name' => env('RABBITMQ_QUEUE', 'default'),
-                    'declare' => env('RABBITMQ_QUEUE_DECLARE', true),
-                    'bind' => env('RABBITMQ_QUEUE_DECLARE_BIND', true),
-                    'passive' => env('RABBITMQ_QUEUE_PASSIVE', false),
-                    'durable' => env('RABBITMQ_QUEUE_DURABLE', true),
-                    'exclusive' => env('RABBITMQ_QUEUE_EXCLUSIVE', false),
-                    'auto_delete' => env('RABBITMQ_QUEUE_AUTODELETE', false),
+                    'declare' => true,
+                    'bind' => true,
+                    'passive' => false,
+                    'durable' => true,
+                    'exclusive' => false,
+                    'auto_delete' => false,
                     'arguments' => env('RABBITMQ_QUEUE_ARGUMENTS'),
                 ],
             ],
-            'sleep_on_error' => env('RABBITMQ_ERROR_SLEEP', 5),
+            'sleep_on_error' => 5,
             'ssl_params' => [
-                'ssl_on' => env('RABBITMQ_SSL', false),
-                'cafile' => env('RABBITMQ_SSL_CAFILE', null),
-                'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
-                'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
-                'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
-                'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
+                'ssl_on' => false,
+                'cafile' => null,
+                'local_cert' => null,
+                'local_key' => null,
+                'verify_peer' => true,
+                'passphrase' => null,
             ],
         ],
     ],
