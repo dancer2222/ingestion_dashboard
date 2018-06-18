@@ -56,7 +56,7 @@ class Audiobook extends Model
             return $this->where('id', $result->audio_book_id)->get();
         }
 
-        return null;
+        return [];
     }
 
     /**
