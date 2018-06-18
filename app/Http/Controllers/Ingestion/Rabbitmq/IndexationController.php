@@ -14,6 +14,11 @@ class IndexationController extends Controller
     const MESSAGE = '{"message":{"action":"%1$s","version":4,"id":"%2$s","objectType":"%3$s","extra":[]}}';
 
     /**
+     * @var string|array
+     */
+    private $errors;
+
+    /**
      * Display a form to send messages to queue.
      *
      * @return \Illuminate\Http\Response
@@ -32,6 +37,7 @@ class IndexationController extends Controller
      */
     public function store(IndexationRequest $request, QueueManager $queueManager)
     {
+        $messagesCount = 0;
         $action = $request->action;
         $type = $request->type;
         $ids = explode(',', str_replace(' ', '', $request->id));
@@ -41,17 +47,26 @@ class IndexationController extends Controller
                 $message = sprintf(self::MESSAGE, $action, $id, $type);
 
                 try {
-                    $queueManager->connection('indexation')->pushRaw($message,'batch-to-index');
+                    $result = $queueManager->connection('indexation')->pushRaw(
+                        $message,
+                        config('queue.connections.indexation.queue')
+                    );
+
+                    if ($result) {
+                        $messagesCount++;
+                    }
                 } catch (\Exception $e) {
-                    return back()->withErrors($e->getMessage())->withInput();
+                    $this->errors[] = $e->getMessage();
                 }
             }
         }
 
+        $host = config('queue.connections.indexation.host');
         $vhost = config('queue.connections.indexation.vhost');
         $queue = config('queue.connections.indexation.queue');
 
-        return view('template_v2.ingestion.Rabbitmq.indexation')
-            ->with('status', "Messages were successfully sent to the queue: '$queue' (vhost: $vhost)");
+        return view('template_v2.ingestion.Rabbitmq.indexation', [
+            'status' => "$messagesCount messages were successfully sent to the queue: '$queue' (vhost: $vhost, host: $host)",
+        ])->withErrors($this->errors);
     }
 }
