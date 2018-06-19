@@ -186,6 +186,7 @@ return [
         SocialiteProviders\Manager\ServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         \VladimirYuldashev\LaravelQueueRabbitMQ\LaravelQueueRabbitMQServiceProvider::class,
+        \App\Providers\LibraryThingHelperProvider::class,
     ],
 
     /*

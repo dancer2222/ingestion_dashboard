@@ -101,6 +101,30 @@
             </li>
             @endrole
 
+            <li class="nav-label">Misc</li>
+
+            <li>
+
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fas fa-tags"></i>
+                    <span class="hide-menu">
+                        Tags
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a class="has-arrow" href="#">Library Thing</a>
+
+                        <ul aria-expanded="false" class="collapse">
+                            <li>
+                                <a href="{{ route('librarything.index') }}">Xml feeds</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
 
             {{--<li class="nav-label">Apps</li>--}}
             {{--<li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">Email</span></a>--}}
