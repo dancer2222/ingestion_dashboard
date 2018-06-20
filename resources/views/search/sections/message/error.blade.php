@@ -9,7 +9,6 @@
     <div id="failedItem" class="collapse text-left">
         <div class="row">
             <div class="container col-xs-8">
-                <h3 style="color: red">Failed items</h3>
                 <table class="display nowrap table table-hover table-striped table-bordered dataTable" border="2px">
                     <tr>
                         @foreach($messages[0] as $item => $a)
@@ -22,7 +21,11 @@
                         <tr>
                             @foreach($message as $value)
                                 <td>
-                                    <p style="font-size: 12px">{{ $value }}</p>
+                                    @if($message['status'] === 'active')
+                                        <p style="color: red">{{ $value }}</p>
+                                    @else
+                                        <p style="color: green">{{ $value }}</p>
+                                    @endif
                                 </td>
                             @endforeach
                         </tr>

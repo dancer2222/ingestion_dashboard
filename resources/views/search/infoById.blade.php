@@ -11,7 +11,7 @@
 </style>
     @include('search.sections.message.errorGreen')
 
-    @if(isset($message))
+    @if(isset($messages))
         @include('search.sections.message.error')
     @endif
 
@@ -33,10 +33,9 @@
                     <div class="card-body">
 
                         <div class="table-responsive">
-
                             <table class="table table-hover text-dark">
                                 <thead>
-                                <tr style="background-color: #2ca02c">
+                                <tr style="background-color:{{ 'active' === $info['status'] ?  '#2ca02c' : 'red'}}">
                                     <th>
                                         Field name
                                     </th>
