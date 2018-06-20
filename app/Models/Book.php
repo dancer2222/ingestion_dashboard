@@ -79,4 +79,26 @@ class Book extends Model
             ->groupBy('b.id')
             ->get();
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function setStatusInactiveInBook($id)
+    {
+        $this->timestamps = false;
+
+        return $this->where('id', $id)->update(['status' => 'inactive']);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function setStatus($id, $status)
+    {
+        $this->timestamps = false;
+
+        return $this->where('id', $id)->update(['status' => $status]);
+    }
 }

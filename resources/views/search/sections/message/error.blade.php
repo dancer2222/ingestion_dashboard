@@ -1,33 +1,19 @@
 <div class="container">
-    <div class="row">
-        @if(Session::has('message'))
-            <div class="alert alert-success col-12">
-                {{  Session::get('message') }}
 
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger col-12">
+    <a href="" data-toggle="collapse"
+       data-target="#failedItem" class="btn btn-primary btn-lg btn-block">
+        Failed Items
+    </a>
+    <br>
 
-                {{ implode('', $errors->all(':message')) }}
-
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-
-            </div>
-        @endif
-
-        @if(isset($messages))
+    <div id="failedItem" class="collapse text-left">
+        <div class="row">
             <div class="container col-xs-8">
                 <h3 style="color: red">Failed items</h3>
-                <table class="table table-danger" border="2px">
+                <table class="display nowrap table table-hover table-striped table-bordered dataTable" border="2px">
                     <tr>
                         @foreach($messages[0] as $item => $a)
-                            <th style="background-color: #2ca02c">
+                            <th>
                                 {{ $item }}
                             </th>
                         @endforeach
@@ -43,7 +29,7 @@
                     @endforeach
                 </table>
             </div>
-        @endif
-    </div>
 
+        </div>
+    </div>
 </div>

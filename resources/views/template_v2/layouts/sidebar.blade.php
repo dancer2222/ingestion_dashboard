@@ -99,6 +99,24 @@
                     </li>
                 </ul>
             </li>
+            <li>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fa fa-flag"></i>
+                    <span class="hide-menu">
+                        Black list
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('blackList.indexAdd') }}">Add to the list</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('blackList.indexRemove') }}">Remove from the list</a>
+                    </li>
+                </ul>
+
+            </li>
             @endrole
 
 

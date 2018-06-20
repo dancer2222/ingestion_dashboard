@@ -117,6 +117,14 @@ Route::group(['middleware' => ['auth']], function() {
             });
         });
     });
+
+    Route::group(['prefix' => 'blackList', 'middleware' => 'role:admin|ingester', 'namespace' => 'BlackList'], function() {
+        Route::get('/add', 'BlackListController@indexAdd')->name('blackList.indexAdd');
+        Route::post('/add', 'BlackListController@store')->name('blackList.store');
+        Route::get('/remove', 'BlackListController@indexRemove')->name('blackList.indexRemove');
+        Route::post('/remove', 'BlackListController@update')->name('blackList.update');
+    });
+
 });
 
 Auth::routes();
