@@ -53,7 +53,6 @@ class LibraryThingData extends Command
             $bar->start($dl_total_size);
             $bar->advance($dl_size_so_far);
         });
-
         $extractedFiles = $this->helper->decompressBz2Files($downloadedFiles);
         $this->helper->saveLastModificationDate($downloadedFiles);
 

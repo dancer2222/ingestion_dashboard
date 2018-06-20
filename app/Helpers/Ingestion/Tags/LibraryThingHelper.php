@@ -125,7 +125,7 @@ class LibraryThingHelper
             }
 
             if (file_exists($localFilePath)) {
-                $downloadedFiles[] = $localFilePath;
+                $downloadedFiles[] = $filename;
             }
         }
 
@@ -140,10 +140,10 @@ class LibraryThingHelper
     {
         $decompressedFiles = [];
 
-        foreach ($filesToDecompress as $filepath) {
-            exec("bzip2 -d -s -k -f $filepath");
+        foreach ($filesToDecompress as $filename) {
+            exec("bzip2 -d -s -k -f $this->configDir/$filename");
 
-            $decompressedFilePath = rtrim($filepath, '.bz2');
+            $decompressedFilePath = rtrim($filename, '.bz2');
 
             if (file_exists($decompressedFilePath)) {
                 $decompressedFiles[] = $decompressedFilePath;

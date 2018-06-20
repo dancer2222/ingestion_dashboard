@@ -10,6 +10,7 @@ RUN apk add --update \
     pkgconf \
     re2c \
     zlib-dev \
+    bzip2-dev \
     libmemcached-dev \
     cyrus-sasl-dev \
     && git clone --branch php7 https://github.com/php-memcached-dev/php-memcached.git /usr/src/php/ext/memcached/ \
