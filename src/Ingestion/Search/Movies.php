@@ -51,13 +51,13 @@ class Movies extends MediaTypeAbstract
             // Create links to aws bucket
             $licensorNameToArray = Normalize::normalizeBucketName($licensorName);
             if ($licensorNameToArray != null) {
-                $licensorName = $licensorNameToArray;
+                $licensorNameByBucket = $licensorNameToArray;
             }
-            $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo['title'] . ' ./';
-            $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.movies') . '/' . $licensorName . '/' . $batchInfo['title'];
+            $linkCopy = config('main.links.aws.cp') . config('main.links.aws.bucket.movies') . '/' . $licensorNameByBucket . '/' . $batchInfo['title'] . ' ./';
+            $linkShow = config('main.links.aws.ls') . config('main.links.aws.bucket.movies') . '/' . $licensorNameByBucket . '/' . $batchInfo['title'];
 
             // Create object for aws bucket
-            $object = $licensorName . '/' . $batchInfo['title'];
+            $object = $licensorNameByBucket . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();
             $failedItems = $failedItems->getFailedItems($id);
         } else {
