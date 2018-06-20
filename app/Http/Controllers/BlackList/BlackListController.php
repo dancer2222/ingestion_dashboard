@@ -43,32 +43,32 @@ class BlackListController extends Controller
 
         $book = new Book();
         $audiobook = new Audiobook();
-        $unHandledIds = '';
-        $handleIds = '';
+        $unHandledIds = [];
+        $handledIds = [];
         $ids = explode(',', str_replace(' ', '', $request->id));
 
         try {
             foreach ($ids as $id) {
                 if ('book' == $request->mediaType) {
                     if ($book->getInfoById($id)->isEmpty()) {
-                        $unHandledIds .= $id . '|';
+                        $unHandledIds[] = $id;
 
                         continue;
                     }
 
-                    BookBlackList::create([
+                    BookBlackList::updateOrCreate([
                         'book_id' => (int)$id,
                         'status'  => 'active'
                     ]);
 
                     $book->setStatus($id, 'inactive');
-                    $handleIds .= $id;
+                    $handledIds[] = $id;
 
                     continue;
                 }
 
                 if ($audiobook->getInfoById($id)->isEmpty()) {
-                    $unHandledIds .= $id . '|';
+                    $unHandledIds[] = $id;
 
                     continue;
                 }
@@ -79,7 +79,7 @@ class BlackListController extends Controller
                 ]);
 
                 $audiobook->setStatus($id, 'inactive');
-                $handleIds .= $id;
+                $handledIds[] = $id;
 
                 continue;
             }
@@ -95,12 +95,12 @@ class BlackListController extends Controller
             ' ' .
             Auth::user()->email .
             ' Blacklist added id(s): ' .
-            $handleIds);
+            implode(', ', $handledIds));
 
-        $msg = 'This id(s) - ' . $handleIds . ' added to BlackList';
+        $msg = 'This id(s) - ' . implode(', ', $handledIds) . ' added to BlackList';
 
-        if ('' !== $unHandledIds) {
-                $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
+        if (!empty($unHandledIds)) {
+                $msg = $msg . ', not found this id(s) - ' . implode(', ', $unHandledIds);
         }
 
         return back()->with('message', $msg);
@@ -119,35 +119,35 @@ class BlackListController extends Controller
 
         $book = new Book();
         $audiobook = new Audiobook();
-        $unHandledIds = '';
-        $handleIds = '';
+        $unHandledIds = [];
+        $handledIds = [];
         $ids = explode(',', str_replace(' ', '', $request->id));
 
         try {
             foreach ($ids as $id) {
                 if ('book' == $request->mediaType) {
                     if ($book->getInfoById($id)->isEmpty()) {
-                        $unHandledIds .= $id . '|';
+                        $unHandledIds[] = $id;
 
                         continue;
                     }
 
                     BookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
                     $book->setStatus($id, 'active');
-                    $handleIds .= $id;
+                    $handledIds[] = $id;
 
                     continue;
                 }
 
                 if ($audiobook->getInfoById($id)->isEmpty()) {
-                    $unHandledIds .= $id . '|';
+                    $unHandledIds[] = $id;
 
                     continue;
                 }
 
                 AudioBookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
                 $audiobook->setStatus($id, 'active');
-                $handleIds .= $id;
+                $handledIds[] = $id;
 
                 continue;
             }
@@ -163,12 +163,12 @@ class BlackListController extends Controller
             ' ' .
             Auth::user()->email .
             ' removed from Blacklist id(s): ' .
-            $handleIds);
+            implode(', ', $handledIds));
 
-        $msg = 'This id(s) - ' . $handleIds . ' remove from BlackList';
+        $msg = 'This id(s) - ' . implode(', ', $handledIds) . ' removed from BlackList';
 
-        if ('' !== $unHandledIds) {
-            $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
+        if (!empty($unHandledIds)) {
+            $msg = $msg . ', not found this id(s) - ' . implode(', ', $unHandledIds);
         }
 
         return back()->with('message', $msg);
