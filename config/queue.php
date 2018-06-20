@@ -148,8 +148,8 @@ return [
             'host' => env('RABBITMQ_HOST', '127.0.0.1'),
             'port' => env('RABBITMQ_PORT', 5672),
 
-            'queue' => 'batch-to-index',
-            'vhost' => 'qa-capi-index-us',
+            'queue' => env('RABBITMQ_INDEXATION_QUEUE', 'batch-to-index'),
+            'vhost' => env('RABBITMQ_INDEXATION_VHOST', 'prod-capi-index-us'),
 
             'login'	=> env('RABBITMQ_LOGIN', 'guest'),
             'password' => env('RABBITMQ_PASSWORD', 'guest'),

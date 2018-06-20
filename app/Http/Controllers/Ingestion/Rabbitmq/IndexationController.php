@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ingestion\Rabbitmq;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingestion\Rabbitmq\IndexationRequest;
-use Illuminate\Queue\QueueManager;
+use Ingestion\Rabbitmq\Indexation;
 
 class IndexationController extends Controller
 {
@@ -32,33 +32,17 @@ class IndexationController extends Controller
      * Send a message in queue.
      *
      * @param $request IndexationRequest
-     * @param $queueManager QueueManager
+     * @param $indexation Indexation
      * @return \Illuminate\Http\Response
      */
-    public function store(IndexationRequest $request, QueueManager $queueManager)
+    public function store(IndexationRequest $request, Indexation $indexation)
     {
         $messagesCount = 0;
-        $action = $request->action;
-        $type = $request->type;
-        $ids = explode(',', str_replace(' ', '', $request->id));
 
-        foreach ($ids as $id) {
-            if ($id) {
-                $message = sprintf(self::MESSAGE, $action, $id, $type);
-
-                try {
-                    $result = $queueManager->connection('indexation')->pushRaw(
-                        $message,
-                        config('queue.connections.indexation.queue')
-                    );
-
-                    if ($result) {
-                        $messagesCount++;
-                    }
-                } catch (\Exception $e) {
-                    $this->errors[] = $e->getMessage();
-                }
-            }
+        try {
+            $messagesCount = $indexation->push($request->action, $request->type, $request->id);
+        } catch (\Exception $e) {
+            $this->errors[] = $e->getMessage();
         }
 
         $host = config('queue.connections.indexation.host');
@@ -66,7 +50,7 @@ class IndexationController extends Controller
         $queue = config('queue.connections.indexation.queue');
 
         return view('template_v2.ingestion.Rabbitmq.indexation', [
-            'status' => "$messagesCount messages were successfully sent to the queue: '$queue' (vhost: $vhost, host: $host)",
+            'status' => "$messagesCount messages were sent to the queue: '$queue' (vhost: $vhost, host: $host)",
         ])->withErrors($this->errors);
     }
 }
