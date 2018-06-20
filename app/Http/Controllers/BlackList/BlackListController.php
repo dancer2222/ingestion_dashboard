@@ -48,44 +48,20 @@ class BlackListController extends Controller
         $ids = explode(',', str_replace(' ', '', $request->id));
 
         foreach ($ids as $id) {
-            if ($id) {
-                if ('book' == $request->mediaType) {
-                    if ($book->getInfoById($id)->isEmpty()) {
-                        $unHandleIds .= $id . '|';
-
-                        continue;
-                    }
-
-                    try {
-                        BookBlackList::create([
-                            'book_id' => (int)$id,
-                            'status'  => 'active'
-                        ]);
-
-                        $book->setStatus($id, 'inactive');
-                        $handleIds .= $id;
-                    } catch (Exception $e) {
-                        $message = 'An error occurred while storing this id ' . $id . $e->getMessage();
-                        logger()->critical($message);
-                        return back()->with('message', $message);
-                    }
-
-                    continue;
-                }
-
-                if ($audiobook->getInfoById($id)->isEmpty()) {
+            if ('book' == $request->mediaType) {
+                if ($book->getInfoById($id)->isEmpty()) {
                     $unHandleIds .= $id . '|';
 
                     continue;
                 }
 
                 try {
-                    AudioBookBlackList::create([
-                        'audio_book_id' => (int)$id,
-                        'status'        => 'active'
+                    BookBlackList::create([
+                        'book_id' => (int)$id,
+                        'status'  => 'active'
                     ]);
 
-                    $audiobook->setStatus($id, 'inactive');
+                    $book->setStatus($id, 'inactive');
                     $handleIds .= $id;
                 } catch (Exception $e) {
                     $message = 'An error occurred while storing this id ' . $id . $e->getMessage();
@@ -95,6 +71,28 @@ class BlackListController extends Controller
 
                 continue;
             }
+
+            if ($audiobook->getInfoById($id)->isEmpty()) {
+                $unHandleIds .= $id . '|';
+
+                continue;
+            }
+
+            try {
+                AudioBookBlackList::create([
+                    'audio_book_id' => (int)$id,
+                    'status'        => 'active'
+                ]);
+
+                $audiobook->setStatus($id, 'inactive');
+                $handleIds .= $id;
+            } catch (Exception $e) {
+                $message = 'An error occurred while storing this id ' . $id . $e->getMessage();
+                logger()->critical($message);
+                return back()->with('message', $message);
+            }
+
+            continue;
         }
 
         logger()->info('User - ' .
@@ -130,36 +128,16 @@ class BlackListController extends Controller
         $ids = explode(',', str_replace(' ', '', $request->id));
 
         foreach ($ids as $id) {
-            if ($id) {
-                if ('book' == $request->mediaType) {
-                    if ($book->getInfoById($id)->isEmpty()) {
-                        $unHandleIds .= $id . '|';
-
-                        continue;
-                    }
-
-                    try {
-                        BookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
-                        $book->setStatus($id, 'active');
-                        $handleIds .= $id;
-                    } catch (Exception $e) {
-                        $message = 'An error occurred while updating this id ' . $id . $e->getMessage();
-                        logger()->critical($message);
-                        return back()->with('message', $message);
-                    }
-
-                    continue;
-                }
-
-                if ($audiobook->getInfoById($id)->isEmpty()) {
+            if ('book' == $request->mediaType) {
+                if ($book->getInfoById($id)->isEmpty()) {
                     $unHandleIds .= $id . '|';
 
                     continue;
                 }
 
                 try {
-                    AudioBookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
-                    $audiobook->setStatus($id, 'active');
+                    BookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
+                    $book->setStatus($id, 'active');
                     $handleIds .= $id;
                 } catch (Exception $e) {
                     $message = 'An error occurred while updating this id ' . $id . $e->getMessage();
@@ -169,6 +147,24 @@ class BlackListController extends Controller
 
                 continue;
             }
+
+            if ($audiobook->getInfoById($id)->isEmpty()) {
+                $unHandleIds .= $id . '|';
+
+                continue;
+            }
+
+            try {
+                AudioBookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
+                $audiobook->setStatus($id, 'active');
+                $handleIds .= $id;
+            } catch (Exception $e) {
+                $message = 'An error occurred while updating this id ' . $id . $e->getMessage();
+                logger()->critical($message);
+                return back()->with('message', $message);
+            }
+
+            continue;
         }
 
         logger()->info('User - ' .

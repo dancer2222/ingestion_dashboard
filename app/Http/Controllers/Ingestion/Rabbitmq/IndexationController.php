@@ -43,21 +43,19 @@ class IndexationController extends Controller
         $ids = explode(',', str_replace(' ', '', $request->id));
 
         foreach ($ids as $id) {
-            if ($id) {
-                $message = sprintf(self::MESSAGE, $action, $id, $type);
+            $message = sprintf(self::MESSAGE, $action, $id, $type);
 
-                try {
-                    $result = $queueManager->connection('indexation')->pushRaw(
-                        $message,
-                        config('queue.connections.indexation.queue')
-                    );
+            try {
+                $result = $queueManager->connection('indexation')->pushRaw(
+                    $message,
+                    config('queue.connections.indexation.queue')
+                );
 
-                    if ($result) {
-                        $messagesCount++;
-                    }
-                } catch (\Exception $e) {
-                    $this->errors[] = $e->getMessage();
+                if ($result) {
+                    $messagesCount++;
                 }
+            } catch (\Exception $e) {
+                $this->errors[] = $e->getMessage();
             }
         }
 
