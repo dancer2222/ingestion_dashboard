@@ -86,9 +86,9 @@ class BlackListController extends Controller
         } catch (Exception $e) {
             $message = 'An error occurred while storing this id ' . $id . $e->getMessage();
             logger()->critical($message);
+
             return back()->with('message', $message);
         }
-
 
         logger()->info('User - ' .
             Auth::user()->name .
@@ -100,8 +100,7 @@ class BlackListController extends Controller
         $msg = 'This id(s) - ' . $handleIds . ' added to BlackList';
 
         if ('' !== $unHandledIds) {
-            return back()->with('message',
-                $msg . ', not found this id(s) - ' . $unHandledIds);
+                $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
         }
 
         return back()->with('message', $msg);
@@ -155,9 +154,9 @@ class BlackListController extends Controller
         } catch (Exception $e) {
             $message = 'An error occurred while updating this id ' . $id . $e->getMessage();
             logger()->critical($message);
+
             return back()->with('message', $message);
         }
-
 
         logger()->info('User - ' .
             Auth::user()->name .
@@ -169,8 +168,7 @@ class BlackListController extends Controller
         $msg = 'This id(s) - ' . $handleIds . ' remove from BlackList';
 
         if ('' !== $unHandledIds) {
-            return back()->with('message',
-                $msg . ', not found this id(s) - ' . $unHandledIds);
+            $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
         }
 
         return back()->with('message', $msg);
