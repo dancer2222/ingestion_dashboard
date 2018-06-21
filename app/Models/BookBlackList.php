@@ -14,5 +14,5 @@ class BookBlackList extends Model
 
     protected $fillable = ['book_id', 'status'];
 
-    protected $primaryKey = 'audio_book_id';
+    protected $primaryKey = 'book_id';
 }
