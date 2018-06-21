@@ -27,7 +27,6 @@ chown -R ida:nginx /var/www/html/dashboard
 find /var/www/html/dashboard -type f -exec chmod 664 {} \;
 find /var/www/html/dashboard -type d -exec chmod 775 {} \;
 chown -R ida:nginx /var/www/html/dashboard/storage/logs
-chmod 777 /tmp/ida.log
 
 # Generate artisan key
 php artisan key:generate

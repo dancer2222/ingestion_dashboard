@@ -48,7 +48,9 @@
 
         @case('status')
         @if('books' === $mediaTypeTitle)
-            @include('search.sections.infoById.books.booksButton')
+            @include('search.sections.infoById.status.buttons')
+        @elseif('audiobooks' === $mediaTypeTitle)
+            @include('search.sections.infoById.status.buttons')
         @else
 
             <td>{{ $value }}</td>
