@@ -13,6 +13,9 @@ before_install:
   - docker run -d -p 80:80 $REPO:$TRAVIS_TAG
   - docker ps -a
 
+install:
+  - composer global require hirak/prestissimo;
+
 after_success:
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"

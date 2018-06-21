@@ -109,10 +109,10 @@
 
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('blackList.indexAdd') }}">Add to the list</a>
+                        <a href="{{ route('blackList.indexAdd') }}">Add</a>
                     </li>
                     <li>
-                        <a href="{{ route('blackList.indexRemove') }}">Remove from the list</a>
+                        <a href="{{ route('blackList.indexRemove') }}">Remove</a>
                     </li>
                 </ul>
 

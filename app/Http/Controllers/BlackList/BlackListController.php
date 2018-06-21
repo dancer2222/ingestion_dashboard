@@ -57,8 +57,9 @@ class BlackListController extends Controller
                     }
 
                     BookBlackList::updateOrCreate([
-                        'book_id' => (int)$id,
-                        'status'  => 'active'
+                        'book_id' => (int)$id
+                    ], [
+                        'status' => 'active'
                     ]);
 
                     $book->setStatus($id, 'inactive');
@@ -73,9 +74,10 @@ class BlackListController extends Controller
                     continue;
                 }
 
-                AudioBookBlackList::create([
-                    'audio_book_id' => (int)$id,
-                    'status'        => 'active'
+                AudioBookBlackList::updateOrCreate([
+                    'audio_book_id'=> (int)$id,
+                ], [
+                    'status' => 'active'
                 ]);
 
                 $audiobook->setStatus($id, 'inactive');
