@@ -125,6 +125,10 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/remove', 'BlackListController@update')->name('blackList.update');
     });
 
+    Route::group(['prefix' => 'status', 'middleware' => 'role:admin|ingester', 'namespace' => 'Status'], function() {
+        Route::post('/changeStatus', 'ChangeStatusController@changeStatus')->name('changeStatus');
+    });
+
 });
 
 Auth::routes();
