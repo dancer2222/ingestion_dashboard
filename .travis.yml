@@ -8,13 +8,11 @@ services:
   - docker
 
 before_install:
+  - composer global require hirak/prestissimo;
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
   - docker build -f Dockerfile -t $REPO:$TRAVIS_TAG .
   - docker run -d -p 80:80 $REPO:$TRAVIS_TAG
   - docker ps -a
-
-install:
-  - composer global require hirak/prestissimo;
 
 after_success:
   - export REPO=infrasystems/$(echo $TRAVIS_REPO_SLUG |cut -d "/" -f2)
