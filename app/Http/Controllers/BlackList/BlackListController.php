@@ -10,6 +10,8 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Ingestion\Rabbitmq\Indexation;
+use Ingestion\Rabbitmq\Manager;
 
 /**
  * Class BlackListController
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class BlackListController extends Controller
 {
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -32,9 +35,10 @@ class BlackListController extends Controller
 
     /**
      * @param Request $request
+     * @param Indexation $indexation
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, Indexation $indexation)
     {
         $this->validate($request, [
             'id'        => 'required|min:5|string',
@@ -49,7 +53,7 @@ class BlackListController extends Controller
 
         try {
             foreach ($ids as $id) {
-                if ('book' == $request->mediaType) {
+                if ('books' == $request->mediaType) {
                     if ($book->getInfoById($id)->isEmpty()) {
                         $unHandledIds[] = $id;
 
@@ -63,6 +67,7 @@ class BlackListController extends Controller
                     ]);
 
                     $book->setStatus($id, 'inactive');
+                    $indexation->push('updateSingle', 'books',$id);
                     $handledIds[] = $id;
 
                     continue;
@@ -81,6 +86,7 @@ class BlackListController extends Controller
                 ]);
 
                 $audiobook->setStatus($id, 'inactive');
+                $indexation->push('updateSingle', 'audiobooks',$id);
                 $handledIds[] = $id;
 
                 continue;
@@ -110,9 +116,10 @@ class BlackListController extends Controller
 
     /**
      * @param Request $request
+     * @param Indexation $indexation
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function update(Request $request, Indexation $indexation)
     {
         $this->validate($request, [
             'id'        => 'required|min:5|string',
@@ -127,7 +134,7 @@ class BlackListController extends Controller
 
         try {
             foreach ($ids as $id) {
-                if ('book' == $request->mediaType) {
+                if ('books' == $request->mediaType) {
                     if ($book->getInfoById($id)->isEmpty()) {
                         $unHandledIds[] = $id;
 
@@ -136,6 +143,7 @@ class BlackListController extends Controller
 
                     BookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
                     $book->setStatus($id, 'active');
+                    $indexation->push('updateSingle', 'books',$id);
                     $handledIds[] = $id;
 
                     continue;
@@ -149,6 +157,7 @@ class BlackListController extends Controller
 
                 AudioBookBlackList::select('audio_book_id', $id)->update(['status' => 'inactive']);
                 $audiobook->setStatus($id, 'active');
+                $indexation->push('updateSingle', 'audiobooks',$id);
                 $handledIds[] = $id;
 
                 continue;
