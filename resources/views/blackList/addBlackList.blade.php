@@ -39,7 +39,7 @@
                                             <small id="emailHelp" class="form-text text-info">Add to Black list by Id
                                             </small>
                                         </div>
-                                        <input type="hidden" name="mediaType" id="mediaType" value="book">
+                                        <input type="hidden" name="mediaType" id="mediaType" value="books">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <button type="submit" class="btn btn-outline-secondary">Submit</button>
                                     </form>
@@ -91,7 +91,7 @@
                                             <small id="emailHelp" class="form-text text-info">Add to Black list by Id
                                             </small>
                                         </div>
-                                        <input type="hidden" name="mediaType" id="mediaType" value="audiobook">
+                                        <input type="hidden" name="mediaType" id="mediaType" value="audiobooks">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <button type="submit" class="btn btn-outline-secondary">Submit</button>
                                     </form>
