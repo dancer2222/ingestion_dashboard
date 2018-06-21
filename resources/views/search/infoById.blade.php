@@ -5,6 +5,7 @@
 @section('content')
 <style>
     tbody tr td {
+        font-size: 14px;
         font-family: Poppins,sans-serif;
         color: #2f3d4a;
     }
