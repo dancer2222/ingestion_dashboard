@@ -1,13 +1,14 @@
 <tr>
     <td>{{ $value }}</td>
+
     @php
         if ($item == 'inactive') {
-            $tool = 'activate';
+            $command = 'active';
             $blackList = 'blackList.update';
             $status = 'Remove from BlackList';
             $cssClass = 'text-danger';
         } else {
-            $tool = 'deactivate';
+            $command = 'inactive';
             $blackList = 'blackList.store';
             $status = 'Add in BlackList';
             $cssClass = 'text-success';
@@ -17,19 +18,25 @@
     <td class="{{ $cssClass }}">{{ $item }}</td>
     <td>
         <form method="POST" class="form-inline"
-              action="{{ route('tools.do') }}" style="display: inline-block">
-            <input type="hidden" name="command" value="books:{{ $tool }}:byISBN">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <button type="submit" class="btn btn-outline-success">{{ ucfirst($tool) }}</button>
-        </form>
-
-        <form method="POST" class="form-inline"
-              action="{{ route($blackList) }}" style="display: inline-block">
+              action="{{ route('changeStatus') }}" style="display: inline-block">
             <input type="hidden" name="id" value="{{ $info['id'] }}">
+            <input type="hidden" name="command" value="{{ $command }}">
             <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <button type="submit" class="btn btn-outline-success">{{ ucfirst($status) }}</button>
+            <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">Change
+                status to {{ ucfirst($command) }}</button>
         </form>
+
+        @if('books' === $mediaTypeTitle or 'audiobooks' === $mediaTypeTitle)
+            <form method="POST" class="form-inline"
+                  action="{{ route($blackList) }}" style="display: inline-block">
+                <input type="hidden" name="id" value="{{ $info['id'] }}">
+                <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <button type="submit"
+                        class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">{{ ucfirst($status) }}</button>
+            </form>
+        @endif
 
         <button type="button" class="btn btn-outline-success" data-toggle="collapse"
                 data-target="#statusInfo">Status info

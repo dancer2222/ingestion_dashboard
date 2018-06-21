@@ -67,4 +67,15 @@ class Movie extends Model
             ->groupBy('m.id')
             ->get();
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function setStatus($id, $status)
+    {
+        $this->timestamps = false;
+
+        return $this->where('id', $id)->update(['status' => $status]);
+    }
 }
