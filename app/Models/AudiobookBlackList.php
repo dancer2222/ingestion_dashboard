@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class AudioBookBlackList
+ * Class AudiobookBlackList
  * @package App\Models
  */
-class AudioBookBlackList extends Model
+class AudiobookBlackList extends Model
 {
     protected $table = 'audio_book_blacklist';
 
