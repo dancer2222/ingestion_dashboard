@@ -4,37 +4,48 @@
     @php
         if ($item == 'inactive') {
             $command = 'active';
-            $blackList = 'blackList.update';
-            $status = 'Remove from BlackList';
             $cssClass = 'text-danger';
         } else {
             $command = 'inactive';
-            $blackList = 'blackList.store';
-            $status = 'Add in BlackList';
             $cssClass = 'text-success';
+        }
+
+        if ($blackListStatus == 'inactive') {
+            $commandBlackList = 'active';
+            $blacklistButtonName = 'Add to BlackList';
+        } else {
+            $commandBlackList = 'inactive';
+            $blacklistButtonName = 'Remove from BlackList';
         }
     @endphp
 
+
     <td class="{{ $cssClass }}">{{ $item }}</td>
     <td>
-        <form method="POST" class="form-inline"
-              action="{{ route('changeStatus') }}" style="display: inline-block">
-            <input type="hidden" name="id" value="{{ $info['id'] }}">
-            <input type="hidden" name="command" value="{{ $command }}">
-            <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">Change
-                status to {{ ucfirst($command) }}</button>
-        </form>
-
-        @if('books' === $mediaTypeTitle or 'audiobooks' === $mediaTypeTitle)
+        @if('inactive' === $blackListStatus)
             <form method="POST" class="form-inline"
-                  action="{{ route($blackList) }}" style="display: inline-block">
+                  action="{{ route('changeStatus') }}" style="display: inline-block">
                 <input type="hidden" name="id" value="{{ $info['id'] }}">
+                <input type="hidden" name="command" value="{{ $command }}">
+                <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">Set {{ ucfirst($command) }}</button>
+            </form>
+        @else
+            <b>Unblacklist to activate</b> &nbsp;
+        @endif
+        @if('books' === $mediaTypeTitle or 'audiobooks' === $mediaTypeTitle)
+            @if('audiobooks' === $mediaTypeTitle)
+                <?php $mediaTypeTitle = 'audio_books'?>
+            @endif
+            <form method="POST" class="form-inline"
+                  action="{{ route('blackList.blackList') }}" style="display: inline-block">
+                <input type="hidden" name="id" value="{{ $info['id'] }}">
+                <input type="hidden" name="command" value="{{ $commandBlackList }}">
                 <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <button type="submit"
-                        class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">{{ ucfirst($status) }}</button>
+                        class="btn btn-outline-{{ 'inactive' === $blackListStatus ?  'danger' : 'success'}} }}">{{ ucfirst($blacklistButtonName) }}</button>
             </form>
         @endif
 

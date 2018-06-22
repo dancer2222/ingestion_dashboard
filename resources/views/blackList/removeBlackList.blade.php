@@ -27,7 +27,7 @@
                                 <div class="card-body">
 
                                     <form method="POST" class="form-control-feedback"
-                                          action="{{ route('blackList.update') }}">
+                                          action="{{ route('blackList.blackList') }}">
                                         <div class="form-group">
                                             <h3>
                                                 <label for="batch_id">
@@ -41,6 +41,7 @@
                                             </small>
                                         </div>
                                         <input type="hidden" name="mediaType" id="mediaType" value="books">
+                                        <input type="hidden" name="command" value="inactive">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <button type="submit" class="btn btn-outline-secondary">Submit</button>
                                     </form>
@@ -79,7 +80,7 @@
                                 <div class="card-body">
 
                                     <form method="POST" class="form-control-feedback"
-                                          action="{{ route('blackList.update') }}">
+                                          action="{{ route('blackList.blackList') }}">
                                         <div class="form-group">
                                             <h3>
                                                 <label for="batch_id">
@@ -92,7 +93,8 @@
                                             <small id="emailHelp" class="form-text text-info">Add to Black list by Id
                                             </small>
                                         </div>
-                                        <input type="hidden" name="mediaType" id="mediaType" value="audiobooks">
+                                        <input type="hidden" name="mediaType" id="mediaType" value="audio_books">
+                                        <input type="hidden" name="command" value="inactive">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <button type="submit" class="btn btn-outline-secondary">Submit</button>
                                     </form>
