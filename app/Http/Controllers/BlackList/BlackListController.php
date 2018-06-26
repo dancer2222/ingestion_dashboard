@@ -162,7 +162,7 @@ class BlackListController extends Controller
         if ($request->model == 'book') {
             $classNameByAuthorName = "App\Models\Author";
         } else {
-            $classNameByAuthorName = "App\Models\\" . 'Author'. str_replace('_', '', $request->model);
+            $classNameByAuthorName = "App\Models\\" . 'Author' . str_replace('_', '', $request->model);
         }
 
         $authorName = $classNameByAuthorName::find($id)->name;
@@ -187,6 +187,7 @@ class BlackListController extends Controller
                 ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName]);
         }
 
-        return view('blackList.removeBlackListByAuthorSelect', ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName]);
+        return view('blackList.removeBlackListByAuthorSelect',
+            ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName]);
     }
 }

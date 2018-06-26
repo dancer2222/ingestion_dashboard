@@ -8,7 +8,7 @@
     <div class="row">
 
         <div class="col-md-12">
-            <h2 style="color: red">Select {{ $mediaType }} from author: <i style="color: green">{{ $authorName }}</i></h2>
+            <h2 style="color: red">Select {{ $mediaType }} to add BlackList by author: <i style="color: green">{{ $authorName }}</i></h2>
             <div class="card">
                 <form method="POST" class="form-control-feedback"
                       action="{{ route('blackList.blackList') }}">
