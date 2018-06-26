@@ -120,8 +120,11 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::group(['prefix' => 'blackList', 'middleware' => 'role:admin|ingester', 'namespace' => 'BlackList'], function() {
         Route::get('/add', 'BlackListController@indexAdd')->name('blackList.indexAdd');
-        Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
         Route::get('/remove', 'BlackListController@indexRemove')->name('blackList.indexRemove');
+        Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
+        Route::get('/addByAuthor', 'BlackListController@indexAddByAuthor')->name('blackList.indexAddByAuthor');
+        Route::get('/removeByAuthor', 'BlackListController@indexAddRemoveByAuthor')->name('blackList.indexRemoveByAuthor');
+        Route::post('/blackListByAuthor', 'BlackListController@blackListByAuthor')->name('blackList.blackListByAuthor');
     });
 
     Route::group(['prefix' => 'status', 'middleware' => 'role:admin|ingester', 'namespace' => 'Status'], function() {

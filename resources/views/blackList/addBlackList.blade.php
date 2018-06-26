@@ -48,30 +48,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{--<div class="col-6">--}}
-                        {{--<div class="card">--}}
-                        {{--<div class="card-body">--}}
-
-                        {{--<form method="POST" class="form-control-feedback"--}}
-                        {{--action="{{ route('reports.batch_report') }}">--}}
-                        {{--<div class="form-group">--}}
-                        {{--<h3>--}}
-                        {{--<label for="batch_id">--}}
-                        {{--Add to Black list by Author--}}
-                        {{--</label>--}}
-                        {{--</h3>--}}
-
-                        {{--<input type="text" class="form-control" id="batch_id" name="batch_id" placeholder="Type author">--}}
-
-                        {{--<small id="emailHelp" class="form-text text-info">Add to Black list by Author</small>--}}
-                        {{--</div>--}}
-                        {{--<input type="hidden" name="_token" value="{{csrf_token()}}">--}}
-                        {{--<button type="submit" class="btn btn-outline-secondary">Submit</button>--}}
-                        {{--</form>--}}
-
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
                     </div>
                     <div class="tab-pane  p-20" id="audiobook" role="tabpanel">
                         <div class="col-6">
@@ -101,30 +77,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{--<div class="col-6">--}}
-                        {{--<div class="card">--}}
-                        {{--<div class="card-body">--}}
-
-                        {{--<form method="POST" class="form-control-feedback"--}}
-                        {{--action="{{ route('reports.batch_report') }}">--}}
-                        {{--<div class="form-group">--}}
-                        {{--<h3>--}}
-                        {{--<label for="batch_id">--}}
-                        {{--Add to Black list by Author--}}
-                        {{--</label>--}}
-                        {{--</h3>--}}
-
-                        {{--<input type="text" class="form-control" id="batch_id" name="batch_id" placeholder="Type author">--}}
-
-                        {{--<small id="emailHelp" class="form-text text-info">Add to Black list by Author</small>--}}
-                        {{--</div>--}}
-                        {{--<input type="hidden" name="_token" value="{{csrf_token()}}">--}}
-                        {{--<button type="submit" class="btn btn-outline-secondary">Submit</button>--}}
-                        {{--</form>--}}
-
-                        {{--</div>--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
                     </div>
                 </div>
             </div>
