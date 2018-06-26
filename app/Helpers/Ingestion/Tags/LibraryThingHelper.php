@@ -18,7 +18,7 @@ class LibraryThingHelper
 
     private $feeds = [
         'works_to_isbn_current.xml.bz2',
-        'worktotags_current.xml.bz2',
+//        'worktotags_current.xml.bz2',
     ];
 
     public function __construct(Guzzle $guzzle)
@@ -43,6 +43,17 @@ class LibraryThingHelper
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getFeeds(): array
+    {
+        return $this->feeds;
+    }
+
+    /**
+     * @return array
+     */
     public function checkForUpdates(): array
     {
         if (!$this->config) {
@@ -78,6 +89,7 @@ class LibraryThingHelper
     }
 
     /**
+     * TODO: Consider to remove this method
      * @return array
      */
     public function checkForLocalFeeds(): array
@@ -141,7 +153,7 @@ class LibraryThingHelper
         $decompressedFiles = [];
 
         foreach ($filesToDecompress as $filename) {
-            exec("bzip2 -d -s -k -f $this->configDir/$filename");
+            exec("bzip2 -d $this->configDir/$filename");
 
             $decompressedFilePath = rtrim($filename, '.bz2');
 
