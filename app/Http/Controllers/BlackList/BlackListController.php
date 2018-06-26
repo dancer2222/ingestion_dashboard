@@ -145,18 +145,28 @@ class BlackListController extends Controller
      */
     public function blackListByAuthor(Request $request)
     {
-        $name = $request->author_id;
+        $id = $request->author_id;
 
         $modelName = ucfirst(str_replace('_', '', $request->model));
         $className = "App\Models\\" . $modelName . 'author';
+
         $reflectionMethod = new \ReflectionMethod($className, 'getIdByAuthorId');
-        $idAuthor = $reflectionMethod->invoke(new $className(), $name);
+        $idAuthor = $reflectionMethod->invoke(new $className(), $id);
 
         if ($idAuthor->isEmpty()) {
-            return back()->with('message', 'This author id: ' . $name . ' not found in database');
+            return back()->with('message', 'This author id: ' . $id . ' not found in database');
         }
 
         $idAuthor = $idAuthor->toArray();
+
+        if ($request->model == 'book') {
+            $classNameByAuthorName = "App\Models\Author";
+        } else {
+            $classNameByAuthorName = "App\Models\\" . 'Author'. str_replace('_', '', $request->model);
+        }
+
+        $authorName = $classNameByAuthorName::find($id)->name;
+
         $info = [];
 
         $classNameSecond = "App\Models\\" . $modelName;
@@ -174,9 +184,9 @@ class BlackListController extends Controller
         if ('active' === $request->command) {
 
             return view('blackList.addBlackListByAuthorSelect',
-                ['info' => $info, 'mediaType' => $request->model . 's']);
+                ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName]);
         }
 
-        return view('blackList.removeBlackListByAuthorSelect', ['info' => $info, 'mediaType' => $request->model . 's']);
+        return view('blackList.removeBlackListByAuthorSelect', ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName]);
     }
 }

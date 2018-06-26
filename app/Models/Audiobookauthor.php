@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Aaudiobookauthor extends Model
+class Audiobookauthor extends Model
 {
     protected $table = 'audio_book_authors';
 

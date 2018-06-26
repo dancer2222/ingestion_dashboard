@@ -4,14 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Authoraudiobook
+ * @package App\Models
+ */
 class Authoraudiobook extends Model
 {
     protected $table = 'author_audio_book';
-
-    public function getIdByName($name)
-    {
-        return $this->select('id')
-            ->where('name', $name)
-            ->get();
-    }
 }
