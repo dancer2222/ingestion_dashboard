@@ -5,10 +5,9 @@
 @section('content')
 
     @include('search.sections.message.errorGreen')
-
     <div class="row">
         <div class="col-md-12">
-            <h1 style="color: red">Remove</h1>
+            <h1 style="color: red">Remove by author id</h1>
             <div class="card">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
@@ -27,21 +26,22 @@
                                 <div class="card-body">
 
                                     <form method="POST" class="form-control-feedback"
-                                          action="{{ route('blackList.blackList') }}">
+                                          action="{{ route('blackList.blackListByAuthor') }}">
                                         <div class="form-group">
                                             <h3>
                                                 <label for="batch_id">
-                                                    Add to Black list by Id
+                                                    Add to BlackList by Author id
                                                 </label>
                                             </h3>
 
-                                            <input type="" class="form-control" id="id" name="id" placeholder="Type id">
+                                            <input type="text" class="form-control" id="author_id" name="author_id" placeholder="Type name">
 
-                                            <small id="emailHelp" class="form-text text-info">Add to Black list by Id
+                                            <small id="emailHelp" class="form-text text-info">Add to Black list by Author id
                                             </small>
                                         </div>
-                                        <input type="hidden" name="mediaType" id="mediaType" value="books">
+                                        <input type="hidden" name="mediaType" id="mediaType" value="book">
                                         <input type="hidden" name="command" value="inactive">
+                                        <input type="hidden" name="model" value="book">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <button type="submit" class="btn btn-outline-secondary">Submit</button>
                                     </form>
@@ -56,21 +56,22 @@
                                 <div class="card-body">
 
                                     <form method="POST" class="form-control-feedback"
-                                          action="{{ route('blackList.blackList') }}">
+                                          action="{{ route('blackList.blackListByAuthor') }}">
                                         <div class="form-group">
                                             <h3>
                                                 <label for="batch_id">
-                                                    Add to Black list by Id
+                                                    Add to BlackList by Author id
                                                 </label>
                                             </h3>
 
-                                            <input type="" class="form-control" id="id" name="id" placeholder="Type id">
+                                            <input type="text" class="form-control" id="author_id" name="author_id" placeholder="Type name">
 
-                                            <small id="emailHelp" class="form-text text-info">Add to Black list by Id
+                                            <small id="emailHelp" class="form-text text-info">Add to Black list by Author id
                                             </small>
                                         </div>
                                         <input type="hidden" name="mediaType" id="mediaType" value="audio_books">
                                         <input type="hidden" name="command" value="inactive">
+                                        <input type="hidden" name="model" value="audio_book">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <button type="submit" class="btn btn-outline-secondary">Submit</button>
                                     </form>
@@ -83,5 +84,4 @@
             </div>
         </div>
     </div>
-
 @endsection

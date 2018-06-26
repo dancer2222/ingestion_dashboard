@@ -22,9 +22,28 @@ class BlackListController extends Controller
         return view('blackList.addBlackList');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function indexRemove()
     {
         return view('blackList.removeBlackList');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function indexAddByAuthor()
+    {
+        return view('blackList.addBlackListByAuthor');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function indexAddRemoveByAuthor()
+    {
+        return view('blackList.removeBlackListByAuthor');
     }
 
     /**
@@ -34,26 +53,30 @@ class BlackListController extends Controller
      */
     public function blackList(Request $request, Indexation $indexation)
     {
-        $this->validate($request, [
-            'id'        => 'required|min:5|string',
-            'mediaType' => 'required|string',
-            'command'   => 'required|string',
-        ]);
+        if (isset($request->media)) {
+            $medias = $request->media;
+            $ids = [];
+            foreach ($medias as $media => &$item) {
+                if (isset($item['checked'])) {
+                    $ids[] = $item['id'];
+                }
+            }
+        } else {
+            $ids = explode(',', str_replace(' ', '', $request->id));
+        }
 
         $command = $request->command;
-
         $oppositeCommand = 'active';
         if ('active' === $command) {
             $oppositeCommand = 'inactive';
         }
 
-        $mediaTypeByIndexation = str_replace('_', '',$request->mediaType);
+        $mediaTypeByIndexation = str_replace('_', '', $request->mediaType);
         $mediaTypeTitleOne = substr($request->mediaType, 0, -1);
-        $mediaType = str_replace('_', '',$mediaTypeTitleOne);
+        $mediaType = str_replace('_', '', $mediaTypeTitleOne);
         $mediaTypeTitle = ucfirst($mediaType);
         $unHandledIds = [];
         $handledIds = [];
-        $ids = explode(',', str_replace(' ', '', $request->id));
 
         try {
             foreach ($ids as $id) {
@@ -104,6 +127,56 @@ class BlackListController extends Controller
             $msg = $msg . ', not found this id(s) - ' . implode(', ', $unHandledIds);
         }
 
+        if (isset($request->media) && $command === 'active') {
+
+            return redirect(route('blackList.indexAddByAuthor'))->with('message', $msg);
+        } elseif (isset($request->media) && $command === 'inactive') {
+
+            return redirect(route('blackList.indexRemoveByAuthor'))->with('message', $msg);
+        }
+
         return back()->with('message', $msg);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @throws \ReflectionException
+     */
+    public function blackListByAuthor(Request $request)
+    {
+        $name = $request->author_id;
+
+        $modelName = ucfirst(str_replace('_', '', $request->model));
+        $className = "App\Models\\" . $modelName . 'author';
+        $reflectionMethod = new \ReflectionMethod($className, 'getIdByAuthorId');
+        $idAuthor = $reflectionMethod->invoke(new $className(), $name);
+
+        if ($idAuthor->isEmpty()) {
+            return back()->with('message', 'This author id: ' . $name . ' not found in database');
+        }
+
+        $idAuthor = $idAuthor->toArray();
+        $info = [];
+
+        $classNameSecond = "App\Models\\" . $modelName;
+        $reflectionMethod = new \ReflectionMethod($classNameSecond, 'getInfoById');
+
+        foreach ($idAuthor as $itenInfo) {
+            foreach ($itenInfo as $value) {
+                $info[] = [
+                    'id'    => $reflectionMethod->invoke(new $classNameSecond(), $value)[0]->id,
+                    'title' => $reflectionMethod->invoke(new $classNameSecond(), $value)[0]->title
+                ];
+            }
+        }
+
+        if ('active' === $request->command) {
+
+            return view('blackList.addBlackListByAuthorSelect',
+                ['info' => $info, 'mediaType' => $request->model . 's']);
+        }
+
+        return view('blackList.removeBlackListByAuthorSelect', ['info' => $info, 'mediaType' => $request->model . 's']);
     }
 }

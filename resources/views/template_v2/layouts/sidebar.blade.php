@@ -114,6 +114,12 @@
                     <li>
                         <a href="{{ route('blackList.indexRemove') }}">Remove</a>
                     </li>
+                    <li>
+                        <a href="{{ route('blackList.indexAddByAuthor') }}">Add by author id</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('blackList.indexRemoveByAuthor') }}">Remove by author id</a>
+                    </li>
                 </ul>
 
             </li>
