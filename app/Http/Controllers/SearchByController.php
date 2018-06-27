@@ -28,8 +28,7 @@ class SearchByController extends Controller
         } elseif ($result == 1) {
             return redirect()->route('search', [
                 'id' => $info[0]['id'],
-                'type' => $request->type,
-                'option' => $request->option
+                'type' => $request->type
             ]);
         } else {
             return view('search.title', ['info' => $info->toArray(), 'type' => $request->type]);

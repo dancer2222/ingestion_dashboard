@@ -56,6 +56,7 @@
 
         <td>{{ $value }}</td>
         <td>{{ $item }}</td>
+
         @if(isset($presentEpub))
             @if($presentEpub == 1)
                 <td style="color: green">Present in the bucket</td>

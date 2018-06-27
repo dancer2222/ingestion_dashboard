@@ -77,11 +77,9 @@
                                     @include('search.sections.infoById.albums.albumsInfo')
                                 @endif
                                 @include('search.sections.infoById.metadata')
-                                @if('yes' === $option)
-                                    @include('search.sections.infoById.presentInfo.optionsYes')
-                                @else
-                                    @include('search.sections.infoById.presentInfo.optionsNo')
-                                @endif
+
+                                @include('search.sections.infoById.presentInfo.optionsYes')
+
                                 @include('search.sections.infoById.geoRestriction')
 
                                 </tbody>

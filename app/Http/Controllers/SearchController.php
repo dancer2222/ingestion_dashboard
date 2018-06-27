@@ -48,7 +48,6 @@ class SearchController extends Controller
                 return view('search.infoById')->withErrors($exception->getMessage());
             }
 
-            $dataForView['option'] = $request->option;
             $dataForView['statusInfo'] = $statusInfo;
 
             return view('search.infoById', $dataForView);

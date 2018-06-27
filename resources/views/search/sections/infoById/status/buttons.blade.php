@@ -19,7 +19,6 @@
         }
     @endphp
 
-
     <td class="{{ $cssClass }}">{{ $item }}</td>
 
     <td>
@@ -51,6 +50,7 @@
             </form>
         @endif
         @endrole
+
         <button type="button" class="btn btn-outline-success" data-toggle="collapse"
                 data-target="#statusInfo">Status info
         </button>

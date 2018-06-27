@@ -107,13 +107,6 @@
                                 <input type="text" class="form-control"  name="input" id="{{$type}}">
                             </div>
 
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" name="option" value="yes" checked>
-                                    <label class="custom-control-label" for="customCheck1">Don`t show empty value</label>
-                                </div>
-                            </div>
-
                         </div>
 
                         <div class="form-actions">
