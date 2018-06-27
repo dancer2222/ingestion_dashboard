@@ -61,6 +61,8 @@ class BlackListController extends Controller
             $oppositeCommand = 'inactive';
         }
 
+        $sts = $oppositeCommand;
+
         $mediaTypeByIndexation = str_replace('_', '', $request->mediaType);
         $mediaTypeTitleOne = substr($request->mediaType, 0, -1);
         $mediaType = str_replace('_', '', $mediaTypeTitleOne);
@@ -70,22 +72,25 @@ class BlackListController extends Controller
             $medias = $request->media;
             $ids = [];
             foreach ($medias as $media => &$item) {
-                if (!isset($item['checked'])) {
-
-                    if ($mediaType == 'book') {
-                        $classNameByAuthorName = "App\Models\Author";
-                    } else {
-                        $classNameByAuthorName = "App\Models\Author{$mediaType}";
-                    }
-
-                    $reflectionMethodSet = new \ReflectionMethod($classNameByAuthorName, 'setStatus');
-
-                    $reflectionMethodSet->invoke(new $classNameByAuthorName(), $request->authorId, $oppositeCommand);
-
-                } else {
+                if (isset($item['checked'])) {
                     $ids[] = $item['id'];
+                } elseif (!isset($item['checked']) && $request->action === 'add') {
+                    $sts = $command;
+                } else {
+                    $sts = $oppositeCommand;
                 }
             }
+
+            if ($mediaType == 'book') {
+                $classNameByAuthorName = "App\Models\Author";
+            } else {
+                $classNameByAuthorName = "App\Models\Author{$mediaType}";
+            }
+
+            $reflectionMethodSet = new \ReflectionMethod($classNameByAuthorName, 'setStatus');
+
+            $reflectionMethodSet->invoke(new $classNameByAuthorName(), $request->authorId, $sts);
+
         } else {
             $ids = explode(',', str_replace(' ', '', $request->id));
         }
@@ -189,7 +194,7 @@ class BlackListController extends Controller
 
         foreach ($idAuthor as $itemInfo) {
             foreach ($itemInfo as $value) {
-                if (!$mediaCollection = $classNameSecond::find($value)){
+                if (!$mediaCollection = $classNameSecond::find($value)) {
                     continue;
                 }
 
@@ -203,7 +208,11 @@ class BlackListController extends Controller
         if ('active' === $command) {
 
             return view('blackList.addBlackListByAuthorSelect',
-                ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName, 'authorId' => $id]);
+                ['info'       => $info,
+                 'mediaType'  => $request->model . 's',
+                 'authorName' => $authorName,
+                 'authorId'   => $id
+                ]);
         }
 
         return view('blackList.removeBlackListByAuthorSelect',
