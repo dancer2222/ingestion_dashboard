@@ -78,7 +78,7 @@
             </li>
             @endpermission
 
-            @role('admin', 'ingester')
+            @role(['admin', 'ingester'])
             <li>
                 <a class="has-arrow" href="#" aria-expanded="false">
                     <i class="fab fa-php"></i>

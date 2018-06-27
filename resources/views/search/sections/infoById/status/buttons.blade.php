@@ -23,7 +23,7 @@
     <td class="{{ $cssClass }}">{{ $item }}</td>
 
     <td>
-        @role('admin', 'ingester')
+        @role(['admin', 'ingester'])
         @if('inactive' === $blackListStatus)
             <form method="POST" class="form-inline"
                   action="{{ route('changeStatus') }}" style="display: inline-block">
