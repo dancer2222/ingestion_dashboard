@@ -21,7 +21,9 @@
 
 
     <td class="{{ $cssClass }}">{{ $item }}</td>
+
     <td>
+        @role(['admin', 'ingester'])
         @if('inactive' === $blackListStatus)
             <form method="POST" class="form-inline"
                   action="{{ route('changeStatus') }}" style="display: inline-block">
@@ -48,7 +50,7 @@
                         class="btn btn-outline-{{ 'inactive' === $blackListStatus ?  'danger' : 'success'}} }}">{{ ucfirst($blacklistButtonName) }}</button>
             </form>
         @endif
-
+        @endrole
         <button type="button" class="btn btn-outline-success" data-toggle="collapse"
                 data-target="#statusInfo">Status info
         </button>

@@ -31,7 +31,7 @@
                                         <div class="form-group">
                                             <h3>
                                                 <label for="batch_id">
-                                                    Add to Black list by Id
+                                                    Remove from BlackList by Id
                                                 </label>
                                             </h3>
 
@@ -60,7 +60,7 @@
                                         <div class="form-group">
                                             <h3>
                                                 <label for="batch_id">
-                                                    Add to Black list by Id
+                                                    Remove from BlackList by Id
                                                 </label>
                                             </h3>
 

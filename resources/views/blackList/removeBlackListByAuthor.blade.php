@@ -60,7 +60,7 @@
                                         <div class="form-group">
                                             <h3>
                                                 <label for="batch_id">
-                                                    Add to BlackList by Author id
+                                                    Remove from BlackList by Author id
                                                 </label>
                                             </h3>
 
