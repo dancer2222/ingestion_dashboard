@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Gmail\Reader\IngestionTracking;
 use App\Console\Commands\Librarything\LibraryThingData;
 use App\Console\Commands\Librarything\LibraryThingDataXmlParse;
 use App\Console\Commands\MakeAdmin;
@@ -19,6 +20,7 @@ class Kernel extends ConsoleKernel
         MakeAdmin::class,
         LibraryThingData::class,
         LibraryThingDataXmlParse::class,
+        IngestionTracking::class,
     ];
 
     /**
