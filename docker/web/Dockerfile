@@ -44,6 +44,8 @@ EXPOSE 7771
 
 WORKDIR /var/www/html/dashboard
 
+COPY ./supervisor-ida.conf /etc/supervisor/conf.d/
+
 VOLUME ["/var/www/html/dashboard"]
 
 CMD ["/dashboard-run.sh"]
