@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\BookLibrarythingData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -31,6 +32,26 @@ class LibrarythingWorkToIsbn implements ShouldQueue
      */
     public function handle()
     {
-        logger(implode(', ', $this->data));
+        foreach ($this->data as $datum) {
+            $workcode = $datum['workcode'] ?? '';
+            $isbns = $datum['isbns'] ?? [];
+
+            if (!$workcode || !$isbns) {
+                logger()->error('LIBRARYTHING_DATA ISBN LISTENER: Missing workcode or isbns.');
+                $this->delete();
+
+                continue;
+            }
+
+            foreach ($isbns as $isbn) {
+                try {
+                    BookLibrarythingData::updateOrCreate(
+                        ['isbn_10' => $isbn, 'workcode' => $workcode]
+                    );
+                } catch (\Exception $e) {
+                    logger()->critical("LIBRARYTHING_DATA ISBN LISTENER: {$e->getMessage()}");
+                }
+            }
+        }
     }
 }

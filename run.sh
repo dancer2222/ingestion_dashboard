@@ -30,7 +30,6 @@ chown -R ida:nginx /var/www/html/dashboard/storage/logs
 
 # Generate artisan key
 php artisan key:generate
-php artisan optimize
 php artisan config:cache
 
 # Start supervisord and services

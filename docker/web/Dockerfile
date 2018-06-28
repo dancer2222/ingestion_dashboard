@@ -10,7 +10,6 @@ RUN apk add --update \
     pkgconf \
     re2c \
     zlib-dev \
-    bzip2-dev \
     libmemcached-dev \
     cyrus-sasl-dev \
     && git clone --branch php7 https://github.com/php-memcached-dev/php-memcached.git /usr/src/php/ext/memcached/ \
@@ -44,6 +43,8 @@ ADD ./nginx.conf /etc/nginx/sites-enabled/default.conf
 EXPOSE 7771
 
 WORKDIR /var/www/html/dashboard
+
+COPY ./supervisor-ida.conf /etc/supervisor/conf.d/
 
 VOLUME ["/var/www/html/dashboard"]
 

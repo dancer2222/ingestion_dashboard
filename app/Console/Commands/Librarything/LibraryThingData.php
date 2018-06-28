@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Librarything;
 
 use App\Helpers\Ingestion\Tags\LibraryThingHelper;
 use Illuminate\Console\Command;

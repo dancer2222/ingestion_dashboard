@@ -11,16 +11,38 @@ class LibraryThingHelper
     const CREDENTIALS = ['green', 'beluga'];
     const BASE_URL = 'http://www.librarything.com/files/green';
 
+    /**
+     * @var Guzzle
+     */
     private $guzzle;
+
+    /**
+     * @var string
+     */
     private $configDir;
+
+    /**
+     * @var string Full path to config file (/logs/librarything/config)
+     */
     private $configFile;
+
+    /**
+     * @var array|mixed
+     */
     private $config = [];
 
+    /**
+     * @var array
+     */
     private $feeds = [
         'works_to_isbn_current.xml.bz2',
-//        'worktotags_current.xml.bz2',
+        'worktotags_current.xml.bz2',
     ];
 
+    /**
+     * LibraryThingHelper constructor.
+     * @param Guzzle $guzzle
+     */
     public function __construct(Guzzle $guzzle)
     {
         $this->guzzle = $guzzle;
@@ -34,6 +56,9 @@ class LibraryThingHelper
         }
     }
 
+    /**
+     * Creates the necessary tmp folders
+     */
     public function makeDataFolder()
     {
         if (!file_exists($this->configDir) && !is_dir($this->configDir)) {
