@@ -161,6 +161,7 @@ class LibraryThingDataXmlParse extends Command
     private function parseWorkToIsbnXml(\XMLReader $xmlReader)
     {
         $counter = 0;
+        $batchesCounter = 0;
         $batches = [];
 
         while ($xmlReader->read()) {
@@ -180,11 +181,13 @@ class LibraryThingDataXmlParse extends Command
                 unset($isbns['@attributes']);
 
                 $counter++;
+                $batchesCounter++;
 
-                if (\count($batches) === $this->limit) {
+                if ($batchesCounter >= $this->limit) {
                     LibrarythingWorkToIsbn::dispatch($batches)->onQueue('librarything-isbn');
 
                     $batches = [];
+                    $batchesCounter = 0;
                 }
 
                 $batches[] = [
