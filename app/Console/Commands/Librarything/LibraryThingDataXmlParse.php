@@ -146,8 +146,9 @@ class LibraryThingDataXmlParse extends Command
                     $this->info("$counter tags were processed.");
                 }
             } catch (\Exception $e) {
+                $this->error($e->getMessage());
                 logger()->critical("LIBRARYTHING_DATA TAGS: {$e->getMessage()}");
-                exit(1);
+                continue;
             }
         }
     }
@@ -168,7 +169,13 @@ class LibraryThingDataXmlParse extends Command
             }
 
             try {
-                $workXml = new \SimpleXMLElement(trim($xmlReader->readInnerXml()));
+                $innerXml = $xmlReader->readInnerXml();
+                
+                if (!$innerXml) {
+                    continue;
+                }
+
+                $workXml = new \SimpleXMLElement(trim($innerXml));
                 $isbns = (array)$workXml->isbn;
                 unset($isbns['@attributes']);
 
@@ -189,8 +196,9 @@ class LibraryThingDataXmlParse extends Command
                     $this->info("$counter isbns were processed.");
                 }
             } catch (\Exception $e) {
+                $this->error($e->getMessage());
                 logger()->critical("LIBRARYTHING_DATA ISBNS: {$e->getMessage()}");
-                exit(1);
+                continue;
             }
         }
     }
