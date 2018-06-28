@@ -10,7 +10,7 @@
             $cssClass = 'text-success';
         }
 
-        if ($blackListStatus == 'inactive') {
+        if (isset($blackListStatus) && $blackListStatus == 'inactive') {
             $commandBlackList = 'active';
             $blacklistButtonName = 'Add to BlackList';
         } else {
@@ -24,6 +24,7 @@
 
     <td>
         @role(['admin', 'ingester'])
+        @if(isset($blackListStatus))
         @if('inactive' === $blackListStatus)
             <form method="POST" class="form-inline"
                   action="{{ route('changeStatus') }}" style="display: inline-block">
@@ -36,7 +37,6 @@
         @else
             <b>Unblacklist to activate</b> &nbsp;
         @endif
-        @if('books' === $mediaTypeTitle or 'audiobooks' === $mediaTypeTitle)
             @if('audiobooks' === $mediaTypeTitle)
                 <?php $mediaTypeTitle = 'audio_books'?>
             @endif
