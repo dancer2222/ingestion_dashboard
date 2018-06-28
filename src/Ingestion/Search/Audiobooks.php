@@ -3,6 +3,7 @@
 namespace Ingestion\Search;
 
 use App\Models\Audiobook;
+use App\Models\AudiobookBlackList;
 use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\QaBatch;
@@ -22,13 +23,26 @@ class Audiobooks extends MediaTypeAbstract
      * @return array
      * @throws \Exception
      */
-    public function searchInfoById($id, string $mediaTypeTitle, $country_code, string $mediaGeoRestrictGetMediaType) : array
-    {
+    public function searchInfoById(
+        $id,
+        string $mediaTypeTitle,
+        $country_code,
+        string $mediaGeoRestrictGetMediaType
+    ): array {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
         $info = new Audiobook();
+
         $info = $info->getInfoById($id);
         $info = $this->toArray($info, $id, $mediaTypeTitle);
+
+        $blackList = AudiobookBlackList::find($id);
+
+        if (null == $blackList) {
+            $blackListStatus = 'Not have BlackList status';
+        } else {
+            $blackListStatus = $blackList->status;
+        }
 
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
@@ -55,7 +69,8 @@ class Audiobooks extends MediaTypeAbstract
             'providerName'                 => $providerName,
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
-            'messages'                     => $failedItems
+            'messages'                     => $failedItems,
+            'blackListStatus'              => $blackListStatus
         ];
 
         return $result;

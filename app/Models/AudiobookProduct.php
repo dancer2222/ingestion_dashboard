@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class AudioBookProduct
+ * Class AudiobookProduct
  * @package App\Models
  */
-class AudioBookProduct extends Model
+class AudiobookProduct extends Model
 {
     /**
      * @var string

@@ -31,6 +31,8 @@ RUN curl https://getcomposer.org/installer | php -- \
 	&& mv composer.phar /usr/local/bin/composer \
 	&& chmod +x /usr/local/bin/composer
 
+RUN composer global require hirak/prestissimo;
+
 # Add user
 RUN adduser -D -u 1000 ida
 
@@ -39,6 +41,8 @@ COPY ./ /var/www/html/dashboard
 
 ADD ./run.sh /dashboard-run.sh
 RUN chmod 777 /dashboard-run.sh
+
+RUN touch /tmp/ida.log && chmod 777 /tmp/ida.log
 
 ADD ./nginx.conf /etc/nginx/sites-enabled/default.conf
 

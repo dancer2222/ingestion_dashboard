@@ -76,4 +76,15 @@ class Album extends Model
             ->groupBy('maa.album_id')
             ->get();
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function setStatus($id, $status)
+    {
+        $this->timestamps = false;
+
+        return $this->where('id', $id)->update(['status' => $status]);
+    }
 }

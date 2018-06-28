@@ -50,7 +50,7 @@ class Audiobook extends Model
      */
     public function getInfoByIsbn($isbn)
     {
-        $result = AudioBookProduct::getIdByIsbn($isbn);
+        $result = AudiobookProduct::getIdByIsbn($isbn);
 
         if ($result) {
             return $this->where('id', $result->audio_book_id)->get();
@@ -93,5 +93,16 @@ class Audiobook extends Model
             ->where('ab.batch_id', $id)
             ->groupBy('ab.id')
             ->get();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function setStatus($id, $status)
+    {
+        $this->timestamps = false;
+
+        return $this->where('id', $id)->update(['status' => $status]);
     }
 }

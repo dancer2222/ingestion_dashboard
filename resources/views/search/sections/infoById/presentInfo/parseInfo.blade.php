@@ -47,45 +47,9 @@
         @break
 
         @case('status')
-        @if('books' === $mediaTypeTitle)
-            @include('search.sections.infoById.books.booksButton')
-        @else
 
-            <td>{{ $value }}</td>
-            @if($item == 'inactive')
-                <td style="color: red">{{ $item }}</td>
-            @else
-                <td style="color: green">{{ $item }}</td>
-            @endif
+        @include('search.sections.infoById.status.buttons')
 
-            <td>
-                <button type="button" class="btn btn-outline-success" data-toggle="collapse"
-                        data-target="#statusInfo">Status info </button>
-                <br>
-
-                <div id="statusInfo" class="collapse m-t-10">
-                    @if(!is_null($statusInfo))
-                        <table class="table-responsive">
-                            <tr>
-                                <th style="background-color: #2ca02c">old_value</th>
-                                <th style="background-color: #2ca02c">new_value</th>
-                                <th style="background-color: #2ca02c">date_added</th>
-                            </tr>
-                            @foreach($statusInfo as $changes)
-                                <tr>
-                                    <td>{{ $changes->old_value}}</td>
-                                    <td>{{ $changes->new_value }}</td>
-                                    <td>{{ date('Y-m-d', $changes->date_added) }}</td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    @else
-                        Not info
-                    @endif
-                </div>
-            </td>
-
-        @endif
         @break
 
         @case('download_url')
