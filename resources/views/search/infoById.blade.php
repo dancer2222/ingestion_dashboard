@@ -3,13 +3,7 @@
 @section('title', 'Search')
 
 @section('content')
-<style>
-    tbody tr td {
-        font-size: 14px;
-        font-family: Poppins,sans-serif;
-        color: #2f3d4a;
-    }
-</style>
+
     @include('search.sections.message.errorGreen')
 
     @if(isset($messages))
@@ -28,12 +22,10 @@
 
         <div class="row">
             <div class="col-12">
-
                 <div class="card">
                     <div class="card-title"></div>
-                    <div class="card-body">
-
-                        <div class="table-responsive">
+                        <div class="card-body">
+                            <div class="table-responsive">
                             <table class="table table-hover text-dark">
                                 <thead>
                                 <tr style="background-color:{{ 'active' === $info['status'] ?  '#2ca02c' : 'red'}}">
@@ -78,19 +70,16 @@
                                 @endif
                                 @include('search.sections.infoById.metadata')
 
-                                @include('search.sections.infoById.presentInfo.optionsYes')
+                                @include('search.sections.infoById.presentInfo.optionsInfo')
 
                                 @include('search.sections.infoById.geoRestriction')
 
                                 </tbody>
 
                             </table>
-
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
     @endif

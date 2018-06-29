@@ -7,10 +7,10 @@ use App\Http\Controllers\Controller;
 use Ingestion\Rabbitmq\Indexation;
 
 /**
- * Class ChangeStatusController
+ * Class StatusController
  * @package App\Http\Controllers\Status
  */
-class ChangeStatusController extends Controller
+class StatusController extends Controller
 {
     /**
      * @param Request $request

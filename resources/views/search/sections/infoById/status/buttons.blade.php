@@ -10,7 +10,7 @@
             $cssClass = 'text-success';
         }
 
-        if ($blackListStatus == 'inactive') {
+        if (isset($blackListStatus) && $blackListStatus == 'inactive') {
             $commandBlackList = 'active';
             $blacklistButtonName = 'Add to BlackList';
         } else {
@@ -23,19 +23,20 @@
 
     <td>
         @role(['admin', 'ingester'])
-        @if('inactive' === $blackListStatus)
-            <form method="POST" class="form-inline"
-                  action="{{ route('changeStatus') }}" style="display: inline-block">
-                <input type="hidden" name="id" value="{{ $info['id'] }}">
-                <input type="hidden" name="command" value="{{ $command }}">
-                <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">Set {{ ucfirst($command) }}</button>
-            </form>
-        @else
-            <b>Unblacklist to activate</b> &nbsp;
-        @endif
-        @if('books' === $mediaTypeTitle or 'audiobooks' === $mediaTypeTitle)
+        @if(isset($blackListStatus))
+            @if('inactive' === $blackListStatus)
+                <form method="POST" class="form-inline"
+                      action="{{ route('changeStatus') }}" style="display: inline-block">
+                    <input type="hidden" name="id" value="{{ $info['id'] }}">
+                    <input type="hidden" name="command" value="{{ $command }}">
+                    <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">
+                        Set {{ ucfirst($command) }}</button>
+                </form>
+            @else
+                <b>Unblacklist to activate</b> &nbsp;
+            @endif
             @if('audiobooks' === $mediaTypeTitle)
                 <?php $mediaTypeTitle = 'audio_books'?>
             @endif

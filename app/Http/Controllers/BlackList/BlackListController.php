@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\BlackList;
 
+use App\Models\AudiobookBlackList;
+use App\Models\BookBlackList;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -62,7 +64,6 @@ class BlackListController extends Controller
         }
 
         $sts = $oppositeCommand;
-
         $mediaTypeByIndexation = str_replace('_', '', $request->mediaType);
         $mediaTypeTitleOne = substr($request->mediaType, 0, -1);
         $mediaType = str_replace('_', '', $mediaTypeTitleOne);
@@ -71,6 +72,7 @@ class BlackListController extends Controller
         if (isset($request->media)) {
             $medias = $request->media;
             $ids = [];
+
             foreach ($medias as $media => &$item) {
                 if (isset($item['checked'])) {
                     $ids[] = $item['id'];
@@ -88,9 +90,7 @@ class BlackListController extends Controller
             }
 
             $reflectionMethodSet = new \ReflectionMethod($classNameByAuthorName, 'setStatus');
-
             $reflectionMethodSet->invoke(new $classNameByAuthorName(), $request->authorId, $sts);
-
         } else {
             $ids = explode(',', str_replace(' ', '', $request->id));
         }
@@ -100,7 +100,6 @@ class BlackListController extends Controller
 
         try {
             foreach ($ids as $id) {
-
                 $className = "App\Models\\" . $mediaTypeTitle;
                 $reflectionMethod = new \ReflectionMethod($className, 'getInfoById');
 
@@ -119,7 +118,6 @@ class BlackListController extends Controller
                 ]);
 
                 $reflectionMethodSet = new \ReflectionMethod($className, 'setStatus');
-
                 $reflectionMethodSet->invoke(new $className(), $id, $oppositeCommand);
 
                 $indexation->push('updateSingle', $mediaTypeByIndexation, $id);
@@ -208,14 +206,56 @@ class BlackListController extends Controller
         if ('active' === $command) {
 
             return view('blackList.addBlackListByAuthorSelect',
-                ['info'       => $info,
-                 'mediaType'  => $request->model . 's',
-                 'authorName' => $authorName,
-                 'authorId'   => $id
+                [
+                    'info'       => $info,
+                    'mediaType'  => $request->model . 's',
+                    'authorName' => $authorName,
+                    'authorId'   => $id
                 ]);
         }
 
         return view('blackList.removeBlackListByAuthorSelect',
             ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName, 'authorId' => $id]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        return view('blackList.showBlackListInfo');
+    }
+
+    /**
+     * @param $mediaType
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function getInfoFromBlackList($mediaType, Request $request)
+    {
+        $bookBlackList = new BookBlackList();
+        $audiobookBlackList = new AudiobookBlackList();
+
+        if (!is_null($request->id)) {
+
+            if ('books' === $mediaType) {
+                $info = $bookBlackList->getInfoById($request->id);
+            } else {
+                $info = $audiobookBlackList->getInfo();
+            }
+        } else {
+
+            if ('books' === $mediaType) {
+                $info = $bookBlackList->getInfo();
+            } else {
+                $info = $audiobookBlackList->getInfo();
+            }
+        }
+       
+        if ($info->isEmpty()) {
+
+            return back()->with('message', 'Not found ' . $mediaType . ' in BlackList');
+        }
+
+        return view('blackList.showBlackListInfo', ['info' => $info]);
     }
 }

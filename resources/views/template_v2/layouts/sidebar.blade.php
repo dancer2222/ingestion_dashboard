@@ -78,6 +78,35 @@
             </li>
             @endpermission
 
+            <li>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fa fa-flag"></i>
+                    <span class="hide-menu">
+                        Black list
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('blackList.index') }}">Show BlackList</a>
+                    </li>
+                    @role(['admin', 'ingester'])
+                    <li>
+                        <a href="{{ route('blackList.indexAdd') }}">Add</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('blackList.indexRemove') }}">Remove</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('blackList.indexAddByAuthor') }}">Add by author id</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('blackList.indexRemoveByAuthor') }}">Remove by author id</a>
+                    </li>
+                    @endrole
+                </ul>
+            </li>
+
             @role(['admin', 'ingester'])
             <li>
                 <a class="has-arrow" href="#" aria-expanded="false">
@@ -98,30 +127,6 @@
                         </ul>
                     </li>
                 </ul>
-            </li>
-            <li>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <i class="fa fa-flag"></i>
-                    <span class="hide-menu">
-                        Black list
-                    </span>
-                </a>
-
-                <ul aria-expanded="false" class="collapse">
-                    <li>
-                        <a href="{{ route('blackList.indexAdd') }}">Add</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('blackList.indexRemove') }}">Remove</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('blackList.indexAddByAuthor') }}">Add by author id</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('blackList.indexRemoveByAuthor') }}">Remove by author id</a>
-                    </li>
-                </ul>
-
             </li>
             @endrole
 
