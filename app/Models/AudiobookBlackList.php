@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class AudiobookBlackList
@@ -21,7 +20,7 @@ class AudiobookBlackList extends Model {
      */
     public function getInfo() {
 
-        return DB::table('audio_book_blacklist')
+        return $this
                 ->leftJoin('audio_book', 'audio_book_blacklist.audio_book_id', '=', 'audio_book.id')
                 ->leftJoin('audio_book_authors', 'audio_book_blacklist.audio_book_id', '=', 'audio_book_authors.audio_book_id')
                 ->leftJoin('author_audio_book', 'audio_book_authors.author_id', '=', 'author_audio_book.id')
@@ -39,7 +38,7 @@ class AudiobookBlackList extends Model {
 
     public function getInfoById($id) {
 
-        return DB::table('audio_book_blacklist')
+        return $this
                 ->where('audio_book_blacklist.audio_book_id', '=', $id)
                 ->leftJoin('audio_book', 'audio_book_blacklist.audio_book_id', '=', 'audio_book.id')
                 ->leftJoin('audio_book_authors', 'audio_book_blacklist.audio_book_id', '=', 'audio_book_authors.audio_book_id')

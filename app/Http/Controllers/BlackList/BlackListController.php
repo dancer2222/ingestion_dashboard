@@ -240,7 +240,7 @@ class BlackListController extends Controller
             if ('books' === $mediaType) {
                 $info = $bookBlackList->getInfoById($request->id);
             } else {
-                $info = $audiobookBlackList->getInfo();
+                $info = $audiobookBlackList->getInfoById($request->id);
             }
         } else {
 

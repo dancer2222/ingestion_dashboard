@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class BookBlackList
  * @package App\Models
  */
 class BookBlackList extends Model {
+
     protected $table = 'book_blacklist';
 
     protected $fillable = ['book_id', 'status'];
@@ -21,7 +21,7 @@ class BookBlackList extends Model {
      */
     public function getInfo() {
 
-        return DB::table('book_blacklist')
+        return $this
                 ->leftJoin('book', 'book_blacklist.book_id', '=', 'book.id')
                 ->leftJoin('book_authors', 'book_blacklist.book_id', '=', 'book_authors.book_id')
                 ->leftJoin('author', 'book_authors.author_id', '=', 'author.id')
@@ -43,7 +43,7 @@ class BookBlackList extends Model {
      */
     public function getInfoById($id) {
 
-        return DB::table('book_blacklist')
+        return $this
                 ->where('book_blacklist.book_id', '=', $id)
                 ->leftJoin('book', 'book_blacklist.book_id', '=', 'book.id')
                 ->leftJoin('book_authors', 'book_blacklist.book_id', '=', 'book_authors.book_id')

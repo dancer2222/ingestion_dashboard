@@ -2,19 +2,17 @@
 <table class="table table-hover text-dark" border="2px">
     <thead class="thead-dark">
     <tr>
-        @foreach($info[0] as $product => $value)
+        @foreach($info->first()->attributesToArray() as $product => $value)
             <th>
                 {{ $product }}
             </th>
         @endforeach
     </tr>
     </thead>
-    @foreach($info as $product)
+    @foreach($info->all() as $product)
         <tr>
-            @foreach($product as $item => $value)
-                <td>
-                    {{ $value }}
-                </td>
+            @foreach($product->attributesToArray() as $attrName => $attrValue)
+                <td>{{ $attrValue }}</td>
             @endforeach
         </tr>
     @endforeach
