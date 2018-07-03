@@ -3,6 +3,7 @@ FROM richarvey/nginx-php-fpm
 RUN apk add --update \
     autoconf \
     file \
+    nano \
     g++ \
     gcc \
     libc-dev \
@@ -17,6 +18,7 @@ RUN apk add --update \
     && docker-php-ext-install memcached \
     && docker-php-source delete \
     && apk del --no-cache zlib-dev cyrus-sasl-dev \
+    && apk add --update nodejs \
 
     # Clear
     && rm -rf /tmp/* /var/cache/apk/*
@@ -29,6 +31,8 @@ RUN curl https://getcomposer.org/installer | php -- \
 	&& mv composer.phar /usr/local/bin/composer \
 	&& chmod +x /usr/local/bin/composer
 
+RUN composer global require hirak/prestissimo;
+
 # Add user
 RUN adduser -D -u 1000 ida
 
@@ -37,6 +41,8 @@ COPY ./ /var/www/html/dashboard
 
 ADD ./run.sh /dashboard-run.sh
 RUN chmod 777 /dashboard-run.sh
+
+RUN touch /tmp/ida.log && chmod 777 /tmp/ida.log
 
 ADD ./nginx.conf /etc/nginx/sites-enabled/default.conf
 

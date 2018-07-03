@@ -24,16 +24,16 @@ Route::get('/monitor', function () {
  */
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/', function() {
-        return view('welcome');
+        return view('template_v2.welcome');
     });
     Route::get('/home', function() {
-        return redirect(ida_route('brightcove.index'));
+        return redirect(route('brightcove.index'));
     })->name('home');
 
     // Admin area
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => []], function () {
         Route::get('/', function () {
-            return redirect(ida_route('admin.users.list'));
+            return redirect(route('admin.users.list'));
         })->name('admin');
 
         // Manage users
@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Brightcove
-    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|hr']], function() {
+    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|pm']], function() {
         Route::get('/', 'ContentController@index')->name('brightcove.index');
         Route::get('/videos', 'ContentController@videos')->name('brightcove.videos');
         Route::get('/folders', 'ContentController@folders')->name('brightcove.folders');
@@ -78,7 +78,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['middleware' => 'role:admin|tester', 'prefix' => 'reports'], function() {
 
         Route::get('/', function() {
-            return redirect(ida_route('search'));
+            return redirect(route('search'));
         });
         //Select search
         Route::get('/sel', 'SelectController@index')->name('sel');
@@ -106,12 +106,42 @@ Route::group(['middleware' => ['auth']], function() {
 
     //Ajax requests
     //Route::post('/changeDbConnection', 'ConfigureController@changeDbConnection');
+
+    // Ingestion tools
+    Route::group(['prefix' => 'ingestion', 'middleware' => 'role:admin|ingester', 'namespace' => 'Ingestion'], function () {
+        // Rabbitmq
+        Route::group(['prefix' => 'rabbitmq', 'namespace' => 'Rabbitmq'], function () {
+            Route::group(['prefix'=> 'indexation'], function () {
+                Route::get('/', 'IndexationController@index')->name('indexation.index');
+                Route::post('/', 'IndexationController@store')->name('indexation.store');
+            });
+        });
+    });
+
+    Route::group(['prefix' => 'blackList', 'middleware' => 'role:admin|ingester', 'namespace' => 'BlackList'], function() {
+        Route::get('/add', 'BlackListController@indexAdd')->name('blackList.indexAdd');
+        Route::get('/remove', 'BlackListController@indexRemove')->name('blackList.indexRemove');
+        Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
+        Route::get('/addByAuthor', 'BlackListController@indexAddByAuthor')->name('blackList.indexAddByAuthor');
+        Route::get('/removeByAuthor', 'BlackListController@indexAddRemoveByAuthor')->name('blackList.indexRemoveByAuthor');
+        Route::post('/blackListByAuthor', 'BlackListController@blackListByAuthor')->name('blackList.blackListByAuthor');
+    });
+
+    Route::group(['prefix' => 'status', 'middleware' => 'role:admin|ingester', 'namespace' => 'Status'], function() {
+        Route::post('/changeStatus', 'StatusController@changeStatus')->name('changeStatus');
+    });
+
+    Route::group(['prefix' => 'blackList', 'namespace' => 'BlackList'], function() {
+        Route::get('/showBlackList', 'BlackListController@index')->name('blackList.index');
+        Route::get('/infoFromBlackList/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
+    });
+
 });
 
 Auth::routes();
 
 Route::any('register', function() {
-    return redirect(ida_route('login'));
+    return redirect(route('login'));
 });
 
 Route::get('social/auth/{provider}', 'Auth\\SocialController@redirectToProvider')->name('social.auth');

@@ -7,7 +7,7 @@
             {{ $linkCopy }}
             @if($licensorName == 'aenetworks')
             @else
-                <form method="POST" class="form-group" action="{{ ida_route('reports.parse.index') }}">
+                <form method="POST" class="form-group" action="{{ route('reports.parse.index') }}">
                     <input type="hidden" id="bucket" name="bucket" value="{{ config('main.links.aws.bucket.movies') }}">
                     <input type="hidden" id="object" name="object" value="{{ $object }}">
                     <input type="hidden" id="title" name="batchTitle" value="{{ $batchInfo['title'] }}">

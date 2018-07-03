@@ -3,6 +3,7 @@
 namespace Ingestion\Search;
 
 use App\Models\Book;
+use App\Models\BookBlackList;
 use App\Models\FailedItems;
 use App\Models\Licensor;
 use App\Models\MaLanguage;
@@ -37,6 +38,13 @@ class Books extends MediaTypeAbstract
         $langId = $mediaLenguage->getBookLanguageId($id);
         $langName = $maLanguage->getLanguageNameByLanguageId($langId['language_id'])['name'];
         $info['language'] = $langName;
+
+        $blackList = BookBlackList::find($id);
+        if (null == $blackList) {
+            $blackListStatus = 'Not have BlackList status';
+        } else {
+            $blackListStatus = $blackList->status;
+        }
 
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
@@ -102,7 +110,8 @@ class Books extends MediaTypeAbstract
             'linkImageInBucket'            => $linkImageInBucket,
             'messages'                     => $failedItems,
             'presentEpub'                  => $presentEpub,
-            'langName'                     => $langName
+            'langName'                     => $langName,
+            'blackListStatus'              => $blackListStatus
 
         ];
 

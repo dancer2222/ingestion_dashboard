@@ -28,8 +28,7 @@ class SearchByController extends Controller
         } elseif ($result == 1) {
             return redirect()->route('search', [
                 'id' => $info[0]['id'],
-                'type' => $request->type,
-                'option' => $request->option
+                'type' => $request->type
             ]);
         } else {
             return view('search.title', ['info' => $info->toArray(), 'type' => $request->type]);
@@ -46,6 +45,10 @@ class SearchByController extends Controller
      */
     public function switchType($type, $input, $mediaType)
     {
+        if (in_array($mediaType, ['upc', 'dataOriginId', 'isbn', 'id'])) {
+            $input = preg_replace("/[^0-9]/", '', $input);
+        }
+
         $mediaTypeTitle = ucfirst($type);
         $mediaType = ucfirst($mediaType);
         $mediaTypeTitle = substr($mediaTypeTitle, 0, -1);

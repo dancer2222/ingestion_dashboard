@@ -31,7 +31,7 @@ class PermissionRoleSeeder extends Seeder
             $admin = Role::whereName('admin')->firstOrFail();
             $tester = Role::whereName('tester')->firstOrFail();
             $ingester = Role::whereName('ingester')->firstOrFail();
-            $hr = Role::whereName('hr')->firstOrFail();
+            $pm = Role::whereName('pm')->firstOrFail();
 
             // Attach permissions to roles
             $admin->attachPermissions($allPerms);
@@ -50,7 +50,7 @@ class PermissionRoleSeeder extends Seeder
                 $deleteNotifications
             ]);
 
-            $hr->attachPermissions([
+            $pm->attachPermissions([
                 $createUsers,
                 $editUsers,
                 $deleteUsers,

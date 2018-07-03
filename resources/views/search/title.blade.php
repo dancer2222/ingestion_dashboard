@@ -21,7 +21,7 @@
                         </td>
                     @elseif($value == 'id')
                         <td>
-                            <a href="{{ ida_route('search', ['id' => $item, 'type' => $type, 'option' => 'yes']) }}"
+                            <a href="{{ route('search', ['id' => $item, 'type' => $type, 'option' => 'yes']) }}"
                                style="color: #b6a338; text-decoration: none; font-weight: bold;">{{ $item }}</a></td>
                     @else
                         <td>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="shortcut icon" href="{{ ida_asset('images/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>
@@ -9,14 +9,14 @@
     </title>
 
     {{-- Fontawesome Icons --}}
-    <link href="{{ ida_asset('lib/fontawesome-5.0.6/css/fontawesome-all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('lib/fontawesome-5.0.6/css/fontawesome-all.min.css') }}" rel="stylesheet">
 
     {{-- Libs css --}}
-    <link rel="stylesheet" href="{{ ida_asset('lib/bootstrap/4.0/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ ida_asset('lib/animate/animate.css') }}">
+    <link rel="stylesheet" href="{{ asset('lib/bootstrap/4.0/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('lib/animate/animate.css') }}">
 
     {{-- Custom css --}}
-    <link rel="stylesheet" href="{{ ida_asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 </head>
 <body class="first-img">
 
@@ -28,7 +28,7 @@
         </a>
     @else
     <a class="navbar-brand" href="{{ url('/') }}">
-        <img src="{{ ida_asset('images/elephant-logo.png') }}" width="50" height="30" alt="">
+        <img src="{{ asset('images/elephant-logo.png') }}" width="50" height="30" alt="">
     </a>
 
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,19 +43,28 @@
                    href="#">Brightcove</a>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownBrightcove">
-                    <a class="dropdown-item" href="{{ ida_route('brightcove.folders') }}">Folders</a>
+                    <a class="dropdown-item" href="{{ route('brightcove.folders') }}">Folders</a>
                 </div>
             </li>
 
+            @permission('basic-search')
             <li class="nav-item dropdown">
-                <a href="{{ ida_route('search') }}" class="nav-link">Search</a>
+                <a href="{{ route('search') }}" class="nav-link">Search</a>
             </li>
+            @endpermission
+
+            @permission('view-tools')
             <li class="nav-item dropdown">
-                <a href="{{ ida_route('tools.index') }}" class="nav-link">Tools</a>
+                <a href="{{ route('tools.index') }}" class="nav-link">Tools</a>
             </li>
+            @endpermission
+
+            @permission('view-notifications')
             <li class="nav-item dropdown">
-                <a href="{{ ida_route('aws.index') }}" class="nav-link">Aws Notifications</a>
+                <a href="{{ route('aws.index') }}" class="nav-link">Aws Notifications</a>
             </li>
+            @endpermission
+
         </ul>
 
         <ul class="navbar-nav ml-auto">
@@ -66,17 +75,20 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item disabled" href="#">Profile <small>coming soon</small></a>
 
-                    <a class="dropdown-item" href="{{ ida_route('admin') }}">Admin area</a>
+                    @role('admin')
+                    <a class="dropdown-item" href="{{ route('admin') }}">Admin area</a>
+
 
                     <div class="dropdown-divider"></div>
+                    @endrole
+
                     <a class="dropdown-item" href="#" onclick="$('#logout').submit()">Sign out</a>
                 </div>
             </li>
         </ul>
 
-        <form id="logout" class="d-none form-inline pull-xs-right" method="POST" action="{{ ida_route('logout') }}">
+        <form id="logout" class="d-none form-inline pull-xs-right" method="POST" action="{{ route('logout') }}">
             {{ csrf_field() }}
             <button type="submit" class="btn btn-sm btn-outline-primary">Sign out</button>
         </form>
@@ -133,14 +145,14 @@
 </footer>
 
 {{-- Libs scripts --}}
-<script src="{{ida_asset('js/jquery.min.js')}}"></script>
-<script src="{{ ida_asset('lib/tether/tether-1.4.0.min.js') }}"></script>
-<script src="{{ ida_asset('lib/bootstrap/4.0/libs/popover.min.js') }}"></script>
-<script src="{{ ida_asset('lib/bootstrap/4.0/js/bootstrap.min.js') }}"></script>
-<script src="{{ ida_asset('lib/notify-bootstrap/notify.min.js') }}"></script>
+<script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="{{ asset('lib/tether/tether-1.4.0.min.js') }}"></script>
+<script src="{{ asset('lib/bootstrap/4.0/libs/popover.min.js') }}"></script>
+<script src="{{ asset('lib/bootstrap/4.0/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('lib/notify-bootstrap/notify.min.js') }}"></script>
 
 {{-- Custom scripts --}}
-<script src="{{ida_asset('js/main.js')}}"></script>
+<script src="{{asset('js/main.js')}}"></script>
 
 </body>
 </html>

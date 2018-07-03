@@ -42,13 +42,16 @@
                             <table class="table table-hover">
                                 <tr>
                                     <td>
-                                        <b style='color: green'>Active</b> --> @foreach($country_code as $item)
+                                        <b style='color: green'>Active</b> --> <br>@foreach($country_code as &$item)
+                                            @if($item['available_date'] == '0000-00-00')
+                                                <?php $item['available_date'] = 'unavailable for streaming' ?>
+                                            @endif
                                             @if(isset($item['status']))
                                                 @if($item['status'] == 'active')
                                                     @if( in_array($item['region'],['US', 'CA', 'GB']))
-                                                        <b style='color: red'>{{ $item['region'] }}</b>
+                                                        <b style='color: red'>{{ $item['region'] }} [{{ $item['available_date'] }}]</b><br>
                                                     @else
-                                                        {{ $item['region'] }}
+                                                        {{ $item['region'] }} .  [{{ $item['available_date'] }}]<br>
                                                     @endif
                                                 @endif
                                             @else
@@ -59,13 +62,16 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <b style='color: green'>Inactive</b> --> @foreach($country_code as $item)
+                                        <b style='color: green'>Inactive</b> --> <br>@foreach($country_code as &$item)
+                                            @if($item['available_date'] == '0000-00-00')
+                                                <?php $item['available_date'] = 'unavailable for streaming' ?>
+                                            @endif
                                             @if(isset($item['status']))
                                                 @if($item['status'] == 'inactive')
                                                     @if( in_array($item['region'],['US', 'CA', 'GB']))
-                                                        <b style='color: red'>{{ $item['region'] }}</b>
+                                                        <b style='color: red'>{{ $item['region'] }} [{{ $item['available_date'] }}]</b><br>
                                                     @else
-                                                        {{ $item['region'] }}
+                                                        {{ $item['region'] }} [{{ $item['available_date'] }}]<br>
                                                     @endif
                                                 @endif
                                             @else
