@@ -23,6 +23,10 @@ class GmailMessage
      */
     private $messageProps = [];
 
+    /**
+     * GmailMessage constructor.
+     * @param Google_Service_Gmail_Message $message
+     */
     public function __construct(Google_Service_Gmail_Message $message)
     {
         $this->payload = $message->getPayload();
@@ -39,7 +43,7 @@ class GmailMessage
     {
         $body = $this->payload->getBody()->getData() ?? '';
 
-        $this->messageProps['body'] = base64_decode($body, true);
+        $this->messageProps['body'] = base64_decode($body);
     }
 
     /**

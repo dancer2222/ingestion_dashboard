@@ -51,11 +51,11 @@ class Gmail
     /**
      * @param string $userId
      * @param array $optParams
-     * @return Google_Service_Gmail_Message[]
+     * @return \Google_Service_Gmail_ListMessagesResponse
      */
-    public function getMessages(string $userId, array $optParams = []): array
+    public function getMessages(string $userId, array $optParams = []): \Google_Service_Gmail_ListMessagesResponse
     {
-        return $this->gmailUsersMessages->listUsersMessages($userId, $optParams)->getMessages();
+        return $this->gmailUsersMessages->listUsersMessages($userId, $optParams);
     }
 
     /**
@@ -64,7 +64,7 @@ class Gmail
      * @return GmailMessage
      * @throws Google_Exception
      */
-    public function getMessage(string $userId, string $messageId)
+    public function getMessage(string $userId, string $messageId): GmailMessage
     {
         $message = $this->gmailUsersMessages->get($userId, $messageId);
 
@@ -81,7 +81,6 @@ class Gmail
      * @param string $userId
      * @param string $messageId
      * @return mixed
-     * @throws Google_Exception
      */
     public function deleteMessage(string $userId, string $messageId)
     {

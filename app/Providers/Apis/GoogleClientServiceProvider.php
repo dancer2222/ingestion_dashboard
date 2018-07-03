@@ -26,7 +26,7 @@ class GoogleClientServiceProvider extends ServiceProvider
         $this->app->singleton(\Google_Client::class, function () {
             $client = new \Google_Client();
             $client->setAuthConfig(base_path('google_creds.json'));
-            $client->setScopes(['https://mail.google.com/']);
+            $client->setScopes([\Google_Service_Gmail::MAIL_GOOGLE_COM]);
 
             return $client;
         });

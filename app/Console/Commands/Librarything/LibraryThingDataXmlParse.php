@@ -126,7 +126,7 @@ class LibraryThingDataXmlParse extends Command
                     }
 
                     $work['tags'][] = [
-                        'id' => $tagName,
+                        'name' => $tagName,
                         'weight' => $weight,
                     ];
                 }
