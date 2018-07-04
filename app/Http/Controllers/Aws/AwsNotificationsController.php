@@ -19,34 +19,17 @@ class AwsNotificationsController extends Controller
      */
     public function index()
     {
-        try {
-            $notifications = new AwsNotifications();
-            $notifications->read();
-        } catch (\Exception $exception) {
-            return view('aws.notifications')->withErrors($exception->getMessage());
-        }
+        $nowDate = now()->format('Y-m-d');
+        $fromDate = request('from_date', $nowDate);
+        $toDate = request('to_date', $nowDate);
+        $bucket = request('bucket', false);
 
-        return view('aws.notifications', ['products' => AwsNotication::orderBy('eventTime', 'desc')->paginate(10)]);
-    }
+        $notifications = AwsNotication::where('eventTime', '>=', $fromDate)
+            ->where('eventTime', '<=', $toDate)
+            ->where('bucket', $bucket)
+            ->orderBy('eventTime', 'desc')
+            ->paginate(15);
 
-    /**
-     * @param Request $request
-     * @return $this|bool|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function getInfo(Request $request)
-    {
-        if (isset($request->date) && isset($request->bucket)) {
-            if (!AwsNotication::where('eventTime', Carbon::parse($request->date))->where('bucket',
-                $request->bucket)->get()->isEmpty()) {
-                return view('aws.notifications', [
-                    'products' => AwsNotication::where('eventTime', Carbon::parse($request->date))->where('bucket',
-                        $request->bucket)->get()
-                ]);
-            } else {
-                return view('aws.notifications')->withErrors('Not Found notification for this date ' . $request->date);
-            }
-        }
-
-        return view('aws.notifications')->withErrors('Not enough incoming data');
+        return view('aws.notifications', ['notifications' => $notifications]);
     }
 }

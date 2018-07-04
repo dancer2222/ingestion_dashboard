@@ -92,9 +92,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/report', 'BatchReportController@index')->name('reports.batch_report');
     });
 
-    Route::group(['prefix' => 'aws', 'middleware' => 'role:admin|ingester', 'namespace' => 'Aws'], function() {
-        Route::get('/show/', 'AwsNotificationsController@index')->name('aws.index');
-        Route::post('/showSelect/{date?}', 'AwsNotificationsController@getInfo')->name('aws.info');
+    Route::group(['prefix' => 'aws', 'middleware' => 'role:admin|ingester|pm', 'namespace' => 'Aws'], function() {
+        Route::get('/notifications', 'AwsNotificationsController@index')->name('aws.index');
     });
 
     //Tools route

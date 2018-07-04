@@ -6,45 +6,6 @@ $.ajaxSetup({
     url: location.origin
 });
 
-
-// Notify default settings
-// http://bootstrap-notify.remabledesigns.com/
-$.notifyDefaults({
-    element: 'body',
-    position: null,
-    type: "info",
-    allow_dismiss: true,
-    newest_on_top: false,
-    showProgressbar: false,
-    placement: {
-        from: "bottom",
-        align: "right"
-    },
-    offset: 20,
-    spacing: 10,
-    z_index: 1031,
-    delay: 5000,
-    timer: 1000,
-    url_target: '_blank',
-    mouse_over: null,
-    animate: {
-        enter: 'animated fadeInRight', // Animate css https://daneden.github.io/animate.css/
-        exit: 'animated fadeOutDown' // Animate css https://daneden.github.io/animate.css/
-    },
-    onShow: null,
-    onShown: null,
-    onClose: null,
-    onClosed: null,
-    icon_type: 'class'
-});
-
-function notify(message)
-{
-    $.notify({
-        message: message
-    });
-}
-
 /**
  * Redirect using current pathname
  *
@@ -112,7 +73,7 @@ $(document).ready(function () {
         var inputFileId = $(this).data('triggerFile');
 
         if (!inputFileId) {
-            notify('Cannot upload your file. <b>Missed input id.</b>');
+            // notify('Cannot upload your file. <b>Missed input id.</b>'); TODO: Replace with notify of new theme
 
             return false;
         }
@@ -130,7 +91,7 @@ $(document).ready(function () {
         var url = $(this).data('url');
 
         if (!url) {
-            notify('Cannot upload your file. <b>Missed url.</b>');
+            // notify('Cannot upload your file. <b>Missed url.</b>'); TODO: Replace with notify of new theme
 
             return false;
         }
@@ -138,7 +99,7 @@ $(document).ready(function () {
         var formData = new FormData;
 
         if (inputFile.files.length < 1) {
-            notify('File has\'t been uploaded');
+            // notify('File has\'t been uploaded'); TODO: Replace with notify of new theme
 
             return false;
         }
@@ -162,11 +123,42 @@ $(document).ready(function () {
             error: function (error) {
                 console.log(error);
 
-                notify('Cannot process the uploaded file.');
+                // notify('Cannot process the uploaded file.'); TODO: Replace with notify of new theme
 
                 inputFile.value = null;
             }
         });
+
+        return false;
+    });
+
+    // Aws notifications
+    // Aws Filters
+    $('.aws-notifications button#reset').on('click', function (e) {
+        e.preventDefault();
+
+        var form = $('.aws-notifications form');
+        var fromDate = form.find('input[name="from_date"]');
+        var toDate = form.find('input[name="to_date"]');
+        var bucket = form.find('select[name="bucket"]');
+
+        fromDate.val('');
+        toDate.val('');
+        bucket.val('');
+
+        form.find('button[type="submit"]').click();
+    });
+
+    // Aws pagination
+    $('.aws-notifications .pagination li.page-item a.page-link').on('click', function (e) {
+        e.preventDefault();
+
+        var form = $('.aws-notifications form');
+        var inputPage = form.find('input[name="page"]');
+        var page = $(this).text();
+
+        inputPage.val(page);
+        form.find('button[type="submit"]').click();
 
         return false;
     });
