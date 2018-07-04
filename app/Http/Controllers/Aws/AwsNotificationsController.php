@@ -19,17 +19,22 @@ class AwsNotificationsController extends Controller
      */
     public function index()
     {
-        $nowDate = now()->format('Y-m-d');
-        $fromDate = request('from_date', $nowDate);
-        $toDate = request('to_date', $nowDate);
-        $bucket = request('bucket', false);
+        $builder = AwsNotication::orderBy('eventTime', 'desc');
 
-        $notifications = AwsNotication::where('eventTime', '>=', $fromDate)
-            ->where('eventTime', '<=', $toDate)
-            ->where('bucket', $bucket)
-            ->orderBy('eventTime', 'desc')
-            ->paginate(15);
+        if ($fromDate = request('from_date')) {
+            $builder->where('eventTime', '>=', $fromDate);
+        }
 
+        if ($toDate = request('to_date')) {
+            $builder->where('eventTime', '<=', $toDate);
+        }
+
+        if ($bucket = request('bucket')) {
+            $builder->where('bucket', $bucket);
+        }
+
+        $notifications = $builder->paginate(15);
+        
         return view('aws.notifications', ['notifications' => $notifications]);
     }
 }
