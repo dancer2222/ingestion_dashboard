@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Brightcove
-    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|pm']], function() {
+    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|pm|ingester']], function() {
         Route::get('/', 'ContentController@index')->name('brightcove.index');
         Route::get('/videos', 'ContentController@videos')->name('brightcove.videos');
         Route::get('/folders', 'ContentController@folders')->name('brightcove.folders');
@@ -135,7 +135,6 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/showBlackList', 'BlackListController@index')->name('blackList.index');
         Route::get('/infoFromBlackList/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
     });
-
 });
 
 Auth::routes();
