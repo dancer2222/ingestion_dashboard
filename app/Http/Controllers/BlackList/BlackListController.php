@@ -8,43 +8,39 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Ingestion\BlackList\RequestMedia;
 use Ingestion\Rabbitmq\Indexation;
 
 /**
  * Class BlackListController
  * @package App\Http\Controllers\BlackList
  */
-class BlackListController extends Controller
-{
+class BlackListController extends Controller {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function indexAdd()
-    {
+    public function indexAdd() {
         return view('blackList.addBlackList');
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function indexRemove()
-    {
+    public function indexRemove() {
         return view('blackList.removeBlackList');
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function indexAddByAuthor()
-    {
+    public function indexAddByAuthor() {
         return view('blackList.addBlackListByAuthor');
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function indexAddRemoveByAuthor()
-    {
+    public function indexAddRemoveByAuthor() {
         return view('blackList.removeBlackListByAuthor');
     }
 
@@ -52,45 +48,38 @@ class BlackListController extends Controller
      * @param Request $request
      * @param Indexation $indexation
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \ReflectionException
      */
-    public function blackList(Request $request, Indexation $indexation)
-    {
+    public function blackList(Request $request, Indexation $indexation) {
         $command = $request->command;
         $oppositeCommand = 'active';
+        $authorId = $request->authorId;
 
         if ('active' === $command) {
             $oppositeCommand = 'inactive';
         }
 
-        $sts = $oppositeCommand;
         $mediaTypeByIndexation = str_replace('_', '', $request->mediaType);
         $mediaTypeTitleOne = substr($request->mediaType, 0, -1);
         $mediaType = str_replace('_', '', $mediaTypeTitleOne);
         $mediaTypeTitle = ucfirst($mediaType);
 
         if (isset($request->media)) {
-            $medias = $request->media;
-            $ids = [];
+            try {
+                $requestMedia = new RequestMedia();
+                $ids = $requestMedia->getIdsByAuthor(
+                        $request->media,
+                        $mediaType,
+                        $request->action,
+                        $authorId,
+                        $command,
+                        $oppositeCommand
+                );
+            } catch (Exception $e) {
+                $message = 'We have a problem with this author_id ' . $authorId . $e->getMessage();
+                logger()->critical($message);
 
-            foreach ($medias as $media => &$item) {
-                if (isset($item['checked'])) {
-                    $ids[] = $item['id'];
-                } elseif (!isset($item['checked']) && $request->action === 'add') {
-                    $sts = $command;
-                } else {
-                    $sts = $oppositeCommand;
-                }
+                return back()->with('message', $message);
             }
-
-            if ($mediaType == 'book') {
-                $classNameByAuthorName = "App\Models\Author";
-            } else {
-                $classNameByAuthorName = "App\Models\Author{$mediaType}";
-            }
-
-            $reflectionMethodSet = new \ReflectionMethod($classNameByAuthorName, 'setStatus');
-            $reflectionMethodSet->invoke(new $classNameByAuthorName(), $request->authorId, $sts);
         } else {
             $ids = explode(',', str_replace(' ', '', $request->id));
         }
@@ -112,9 +101,9 @@ class BlackListController extends Controller
                 $classNameBlack = "App\Models\\" . $mediaTypeTitle . "BlackList";
 
                 $classNameBlack::updateOrCreate([
-                    $mediaTypeTitleOne . '_id' => (int)$id
+                        $mediaTypeTitleOne . '_id' => (int) $id
                 ], [
-                    'status' => $command
+                        'status' => $command
                 ]);
 
                 $reflectionMethodSet = new \ReflectionMethod($className, 'setStatus');
@@ -133,11 +122,11 @@ class BlackListController extends Controller
         }
 
         logger()->info('User - ' .
-            Auth::user()->name .
-            ' ' .
-            Auth::user()->email .
-            ' Blacklist updated id(s): ' .
-            implode(', ', $handledIds));
+                Auth::user()->name .
+                ' ' .
+                Auth::user()->email .
+                ' Blacklist updated id(s): ' .
+                implode(', ', $handledIds));
 
         $msg = 'This id(s) - ' . implode(', ', $handledIds) . ' updated in BlackList';
 
@@ -159,70 +148,43 @@ class BlackListController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     * @throws \ReflectionException
      */
-    public function blackListByAuthor(Request $request)
-    {
+    public function blackListByAuthor(Request $request) {
         $id = $request->author_id;
         $command = $request->command;
+        $model = $request->model;
 
-        $modelName = ucfirst(str_replace('_', '', $request->model));
-        $className = "App\Models\\" . $modelName . 'author';
+        try {
+            $requestMedia = new RequestMedia();
+            $info = $requestMedia->useBlackListByAuthor($model, $id);
+            $authorName = RequestMedia::getAuthorName($model, $id);
+        } catch (Exception $exception) {
+            $message = 'We have a problem with this author_id ' . $id . $exception->getMessage();
+            logger()->critical($message);
 
-        $reflectionMethod = new \ReflectionMethod($className, 'getIdByAuthorId');
-        $idAuthor = $reflectionMethod->invoke(new $className(), $id);
-
-        if ($idAuthor->isEmpty()) {
-            return back()->with('message', 'This author id: ' . $id . ' not found in database');
+            return back()->with('message', $message);
         }
 
-        $idAuthor = $idAuthor->toArray();
-
-        if ($request->model == 'book') {
-            $classNameByAuthorName = "App\Models\Author";
-        } else {
-            $classNameByAuthorName = "App\Models\\" . 'Author' . str_replace('_', '', $request->model);
-        }
-
-        $authorName = $classNameByAuthorName::find($id)->name;
-
-        $info = [];
-
-        $classNameSecond = "App\Models\\" . $modelName;
-
-        foreach ($idAuthor as $itemInfo) {
-            foreach ($itemInfo as $value) {
-                if (!$mediaCollection = $classNameSecond::find($value)) {
-                    continue;
-                }
-
-                $info[] = [
-                    'id'    => $mediaCollection->id,
-                    'title' => $mediaCollection->title
-                ];
-            }
-        }
 
         if ('active' === $command) {
 
             return view('blackList.addBlackListByAuthorSelect',
-                [
-                    'info'       => $info,
-                    'mediaType'  => $request->model . 's',
-                    'authorName' => $authorName,
-                    'authorId'   => $id
-                ]);
+                    [
+                            'info'       => $info,
+                            'mediaType'  => $model . 's',
+                            'authorName' => $authorName,
+                            'authorId'   => $id
+                    ]);
         }
 
         return view('blackList.removeBlackListByAuthorSelect',
-            ['info' => $info, 'mediaType' => $request->model . 's', 'authorName' => $authorName, 'authorId' => $id]);
+                ['info' => $info, 'mediaType' => $model . 's', 'authorName' => $authorName, 'authorId' => $id]);
     }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
-    {
+    public function index() {
         return view('blackList.showBlackListInfo');
     }
 
@@ -230,8 +192,7 @@ class BlackListController extends Controller
      * @param $mediaType
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function getInfoFromBlackList($mediaType, Request $request)
-    {
+    public function getInfoFromBlackList($mediaType, Request $request) {
         $bookBlackList = new BookBlackList();
         $audiobookBlackList = new AudiobookBlackList();
 
@@ -250,7 +211,7 @@ class BlackListController extends Controller
                 $info = $audiobookBlackList->getInfo();
             }
         }
-       
+
         if ($info->isEmpty()) {
 
             return back()->with('message', 'Not found ' . $mediaType . ' in BlackList');
