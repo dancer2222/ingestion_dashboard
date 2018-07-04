@@ -46,6 +46,8 @@
                             </tbody>
                         </table>
                     </div>
+                    <input type="hidden" name="action" value="remove">
+                    <input type="hidden" name="authorId" value="{{ $authorId }}">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
                 </form>

@@ -11,4 +11,15 @@ use Illuminate\Database\Eloquent\Model;
 class Authoraudiobook extends Model
 {
     protected $table = 'author_audio_book';
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function setStatus($id, $status)
+    {
+        $this->timestamps = false;
+
+        return $this->where('id', $id)->update(['status' => $status]);
+    }
 }

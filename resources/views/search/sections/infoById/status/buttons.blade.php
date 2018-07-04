@@ -19,24 +19,24 @@
         }
     @endphp
 
-
     <td class="{{ $cssClass }}">{{ $item }}</td>
 
     <td>
         @role(['admin', 'ingester'])
         @if(isset($blackListStatus))
-        @if('inactive' === $blackListStatus)
-            <form method="POST" class="form-inline"
-                  action="{{ route('changeStatus') }}" style="display: inline-block">
-                <input type="hidden" name="id" value="{{ $info['id'] }}">
-                <input type="hidden" name="command" value="{{ $command }}">
-                <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">Set {{ ucfirst($command) }}</button>
-            </form>
-        @else
-            <b>Unblacklist to activate</b> &nbsp;
-        @endif
+            @if('inactive' === $blackListStatus)
+                <form method="POST" class="form-inline"
+                      action="{{ route('changeStatus') }}" style="display: inline-block">
+                    <input type="hidden" name="id" value="{{ $info['id'] }}">
+                    <input type="hidden" name="command" value="{{ $command }}">
+                    <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">
+                        Set {{ ucfirst($command) }}</button>
+                </form>
+            @else
+                <b>Unblacklist to activate</b> &nbsp;
+            @endif
             @if('audiobooks' === $mediaTypeTitle)
                 <?php $mediaTypeTitle = 'audio_books'?>
             @endif
@@ -51,6 +51,7 @@
             </form>
         @endif
         @endrole
+
         <button type="button" class="btn btn-outline-success" data-toggle="collapse"
                 data-target="#statusInfo">Status info
         </button>

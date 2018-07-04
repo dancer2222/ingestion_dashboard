@@ -11,4 +11,15 @@ use Illuminate\Database\Eloquent\Model;
 class Author extends Model
 {
     protected $table = 'author';
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function setStatus($id, $status)
+    {
+        $this->timestamps = false;
+
+        return $this->where('id', $id)->update(['status' => $status]);
+    }
 }

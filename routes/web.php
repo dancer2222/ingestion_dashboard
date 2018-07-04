@@ -128,7 +128,12 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     Route::group(['prefix' => 'status', 'middleware' => 'role:admin|ingester', 'namespace' => 'Status'], function() {
-        Route::post('/changeStatus', 'ChangeStatusController@changeStatus')->name('changeStatus');
+        Route::post('/changeStatus', 'StatusController@changeStatus')->name('changeStatus');
+    });
+
+    Route::group(['prefix' => 'blackList', 'namespace' => 'BlackList'], function() {
+        Route::get('/showBlackList', 'BlackListController@index')->name('blackList.index');
+        Route::get('/infoFromBlackList/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
     });
 });
 
