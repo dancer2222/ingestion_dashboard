@@ -92,16 +92,7 @@
                     </li>
                     @role(['admin', 'ingester'])
                     <li>
-                        <a href="{{ route('blackList.indexAdd') }}">Add</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('blackList.indexRemove') }}">Remove</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('blackList.indexAddByAuthor') }}">Add by author id</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('blackList.indexRemoveByAuthor') }}">Remove by author id</a>
+                        <a href="{{ route('blackList.manage') }}">Manage</a>
                     </li>
                     @endrole
                 </ul>
