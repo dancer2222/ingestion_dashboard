@@ -118,14 +118,7 @@ Route::group(['middleware' => ['auth']], function() {
         });
     });
 
-    Route::group(['prefix' => 'blackList', 'middleware' => 'role:admin|ingester', 'namespace' => 'BlackList'], function() {
-        Route::get('/add', 'BlackListController@indexAdd')->name('blackList.indexAdd');
-        Route::get('/remove', 'BlackListController@indexRemove')->name('blackList.indexRemove');
-        Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
-        Route::get('/addByAuthor', 'BlackListController@indexAddByAuthor')->name('blackList.indexAddByAuthor');
-        Route::get('/removeByAuthor', 'BlackListController@indexAddRemoveByAuthor')->name('blackList.indexRemoveByAuthor');
-        Route::post('/blackListByAuthor', 'BlackListController@blackListByAuthor')->name('blackList.blackListByAuthor');
-    });
+
 
     Route::group(['prefix' => 'status', 'middleware' => 'role:admin|ingester', 'namespace' => 'Status'], function() {
         Route::post('/changeStatus', 'StatusController@changeStatus')->name('changeStatus');
@@ -134,6 +127,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['prefix' => 'blackList', 'namespace' => 'BlackList'], function() {
         Route::get('/showBlackList', 'BlackListController@index')->name('blackList.index');
         Route::get('/infoFromBlackList/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
+
+        Route::group(['middleware' => 'role:admin|ingester'], function() {
+            Route::get('/manageBlackList', 'BlackListController@indexManage')->name('blackList.manage');
+            Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
+            Route::post('/blackListSelect', 'BlackListController@blackListSelect')->name('blackList.blackListSelect');
+        });
     });
 
 });

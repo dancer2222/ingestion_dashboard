@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
  * Class BookBlackList
  * @package App\Models
  */
-class BookBlackList extends Model {
+class BookBlackList extends Model
+{
 
     protected $table = 'book_blacklist';
 
@@ -19,7 +20,8 @@ class BookBlackList extends Model {
     /**
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getInfo() {
+    public function getInfo()
+    {
 
         return $this
                 ->leftJoin('book', 'book_blacklist.book_id', '=', 'book.id')
@@ -41,7 +43,8 @@ class BookBlackList extends Model {
      * @param $id
      * @return \Illuminate\Support\Collection
      */
-    public function getInfoById($id) {
+    public function getInfoById($id)
+    {
 
         return $this
                 ->where('book_blacklist.book_id', '=', $id)
