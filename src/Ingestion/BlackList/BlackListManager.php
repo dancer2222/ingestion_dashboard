@@ -30,6 +30,16 @@ class BlackListManager
     private $mediaTypeFromRequest;
 
     /**
+     * @var array
+     */
+    public $handledIds;
+
+    /**
+     * @var array
+     */
+    public $unHandledIds;
+
+    /**
      * BlackListManager constructor.
      * @param string $id
      * @param string $command
@@ -102,20 +112,16 @@ class BlackListManager
      * @param $ids
      * @param $oppositeCommand
      * @param $indexation
-     * @return array
      * @throws \ReflectionException
      */
-    public function addIdsToBlackList($ids, $oppositeCommand, $indexation) : array
+    public function addIdsToBlackList($ids, $oppositeCommand, $indexation)
     {
-        $unHandledIds = [];
-        $handledIds = [];
-
         foreach ($ids as $id) {
             $className = "App\Models\\" . $this->getModel();
             $reflectionMethod = new \ReflectionMethod($className, 'getInfoById');
 
             if ($reflectionMethod->invoke(new $className(), $id, $this->getCommand())->isEmpty()) {
-                $unHandledIds[] = $id;
+                $this->unHandledIds[] = $id;
 
                 continue;
             };
@@ -132,30 +138,19 @@ class BlackListManager
             $reflectionMethodSet->invoke(new $className(), $id, $oppositeCommand);
 
             $indexation->push('updateSingle', str_replace('_', '', $this->getMediaTypeFromRequest()), $id);
-            $handledIds[] = $id;
+            $this->handledIds[] = $id;
 
             continue;
         }
-
-        $allIds = [
-            'unHandledIds' => $unHandledIds,
-            'handledIds' => $handledIds
-        ];
-
-        return $allIds;
     }
 
     /**
      * @param $medias
-     * @param $mediaType
-     * @param $action
-     * @param $authorId
-     * @param $command
      * @param $oppositeCommand
      * @return array
      * @throws \ReflectionException
      */
-    public function getIdsByAuthorSetStatusAuthor($medias, $mediaType, $action,  $authorId, $command, $oppositeCommand) :array
+    public function getIdsByAuthorSetStatusAuthor($medias, $oppositeCommand) :array
     {
         $ids = [];
         $sts = $oppositeCommand;
@@ -163,30 +158,28 @@ class BlackListManager
         foreach ($medias as $media => &$item) {
             if (isset($item['checked'])) {
                 $ids[] = $item['id'];
-            } elseif (!isset($item['checked']) && $action === 'add') {
-                $sts = $command;
+            } elseif (!isset($item['checked']) && $this->getCommand() === 'add') {
+                $sts = $this->getCommand();
             } else {
                 $sts = $oppositeCommand;
             }
         }
 
-        $this->setStatusAuthor($mediaType, $authorId, $sts);
+        $this->setStatusAuthor($sts);
 
         return $ids;
     }
 
     /**
-     * @param $mediaType
-     * @param $authorId
      * @param $sts
      * @throws \ReflectionException
      */
-    private function setStatusAuthor($mediaType, $authorId, $sts)
+    private function setStatusAuthor($sts)
     {
-        $classNameByAuthorName = $this->getClassNameByAuthorName($mediaType);
+        $classNameByAuthorName = $this->getClassNameByAuthorName($this->getMediaType());
 
         $reflectionMethodSet = new \ReflectionMethod($classNameByAuthorName, 'setStatus');
-        $reflectionMethodSet->invoke(new $classNameByAuthorName(), $authorId, $sts);
+        $reflectionMethodSet->invoke(new $classNameByAuthorName(), $this->getId(), $sts);
     }
 
     /**
@@ -209,22 +202,20 @@ class BlackListManager
     }
 
     /**
-     * @param $model
-     * @param $id
      * @return array
      * @throws Exception
      * @throws \ReflectionException
      */
-    public function getInfoByAuthorId($model, $id) : array
+    public function getInfoByAuthorId() : array
     {
-        $modelName = ucfirst(str_replace('_', '', $model));
+        $modelName = ucfirst(str_replace('_', '', $this->getModel()));
         $className = "App\Models\\" . $modelName . 'author';
 
         $reflectionMethod = new \ReflectionMethod($className, 'getIdByAuthorId');
-        $idAuthor = $reflectionMethod->invoke(new $className(), $id);
+        $idAuthor = $reflectionMethod->invoke(new $className(), $this->getId());
 
         if ($idAuthor->isEmpty()) {
-            throw new Exception( 'This author id: ' . $id . ' not found in database');
+            throw new Exception( 'This author id: ' . $this->getId() . ' not found in database');
         }
 
         $idAuthor = $idAuthor->toArray();
@@ -233,19 +224,17 @@ class BlackListManager
     }
 
     /**
-     * @param $ids
-     * @param $model
      * @return array
      * @throws \ReflectionException
      */
-    public function getInfoById($ids, $model) : array
+    public function getInfoById() : array
     {
-        $ids = explode(',', str_replace(' ', '', $ids));
+        $ids = explode(',', str_replace(' ', '', $this->id));
         $info = [];
 
         foreach ($ids as $id) {
 
-            $className = "App\Models\\" . $model;
+            $className = "App\Models\\" . $this->getModel();
             $reflectionMethod = new \ReflectionMethod($className, 'getInfoById');
             $result = $reflectionMethod->invoke(new $className(), $id)->toArray()[0];
 
@@ -261,19 +250,17 @@ class BlackListManager
     }
 
     /**
-     * @param $model
-     * @param $id
-     * @return mixed
+     * @return string
      */
-    public static function getAuthorName($model, $id) : string
+    public function getAuthorName() : string
     {
-        if ($model == 'book') {
+        if ($this->getMediaType() == 'book') {
             $classNameByAuthorName = "App\Models\Author";
         } else {
-            $classNameByAuthorName = "App\Models\\" . 'Author' . str_replace('_', '', $model);
+            $classNameByAuthorName = "App\Models\\" . 'Author' . $this->getMediaType();
         }
 
-        return $classNameByAuthorName::find($id)->name;
+        return $classNameByAuthorName::find($this->id)->name;
     }
 
     /**
