@@ -179,7 +179,7 @@ class BlackListManager
         $classNameByAuthorName = $this->getClassNameByAuthorName($this->getMediaType());
 
         $reflectionMethodSet = new \ReflectionMethod($classNameByAuthorName, 'setStatus');
-        $reflectionMethodSet->invoke(new $classNameByAuthorName(), $this->getId(), $sts);
+        $reflectionMethodSet->invoke(new $classNameByAuthorName(), $this->id, $sts);
     }
 
     /**
@@ -212,10 +212,10 @@ class BlackListManager
         $className = "App\Models\\" . $modelName . 'author';
 
         $reflectionMethod = new \ReflectionMethod($className, 'getIdByAuthorId');
-        $idAuthor = $reflectionMethod->invoke(new $className(), $this->getId());
+        $idAuthor = $reflectionMethod->invoke(new $className(), $this->id);
 
         if ($idAuthor->isEmpty()) {
-            throw new Exception( 'This author id: ' . $this->getId() . ' not found in database');
+            throw new Exception( 'This author id: ' . $this->id . ' not found in database');
         }
 
         $idAuthor = $idAuthor->toArray();
