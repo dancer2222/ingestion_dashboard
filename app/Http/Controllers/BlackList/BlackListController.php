@@ -50,6 +50,7 @@ class BlackListController extends Controller
                 $oppositeCommand = 'inactive';
             }
 
+
             if ($blackListManager->getDataType() === 'author') {
                 $ids = $blackListManager->getIdsByAuthorSetStatusAuthor(
                     $request->media,
@@ -88,6 +89,7 @@ class BlackListController extends Controller
 
         if($blackListManager->getDataType() == 'idType') {
             return back()->with('message', $msg);
+
         }
 
         return redirect(route('blackList.manage'))->with('message', $msg);
