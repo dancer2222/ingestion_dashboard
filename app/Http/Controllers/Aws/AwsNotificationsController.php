@@ -34,7 +34,7 @@ class AwsNotificationsController extends Controller
         }
 
         $notifications = $builder->paginate(15);
-        
+
         return view('aws.notifications', ['notifications' => $notifications]);
     }
 }
