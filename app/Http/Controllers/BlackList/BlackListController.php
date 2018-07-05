@@ -50,11 +50,13 @@ class BlackListController extends Controller
                 $oppositeCommand = 'inactive';
             }
 
-            if ($request->dataType === 'author') {
+            if ($blackListManager->getDataType() === 'author') {
                 $ids = $blackListManager->getIdsByAuthorSetStatusAuthor(
-                        $request->media,
-                        $oppositeCommand
+                    $request->media,
+                    $oppositeCommand
                 );
+            } elseif($blackListManager->getDataType() == 'idType') {
+                $ids = (array)$blackListManager->getId();
             } else {
                 $ids = $blackListManager->getIdsById($request->media);
             }
@@ -82,6 +84,10 @@ class BlackListController extends Controller
 
         if (!empty($unHandledIds)) {
             $msg = $msg . ', not found this id(s) - ' . implode(', ', $unHandledIds);
+        }
+
+        if($blackListManager->getDataType() == 'idType') {
+            return back()->with('message', $msg);
         }
 
         return redirect(route('blackList.manage'))->with('message', $msg);

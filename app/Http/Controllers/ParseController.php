@@ -7,7 +7,7 @@ use App\Models\MediaType;
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
 use Ingestion\Parse\ParseMetadata;
-
+use Spatie\ArrayToXml\ArrayToXml;
 
 /**
  * Class ParseController
@@ -35,16 +35,16 @@ class ParseController extends Controller
         try {
             $this->dataType = explode('.', $request->batchTitle, 2)[1];
             $downloadPath = public_path("tmp/download");
-            if (!file_exists($downloadPath)) {
-                mkdir($downloadPath, 0777,true);
+            if(!file_exists($downloadPath)) {
+                mkdir($downloadPath, 0777, true);
                 @chmod($downloadPath, 0777);
             }
 
-            $this->filepath = $downloadPath.'/'.$request->batchTitle;
-        } catch (\Exception $exception) {
+            $this->filepath = $downloadPath . '/' . $request->batchTitle;
+        } catch(\Exception $exception) {
 
             return redirect(action('SearchController@index', ['id' => $request->id, 'type' => '']))->with('message',
-                $exception->getMessage());
+                    $exception->getMessage());
         }
 
         return false;
@@ -57,7 +57,7 @@ class ParseController extends Controller
      */
     public function index(Request $request, S3Client $awsS3)
     {
-        if ($this->dataType == 'zip') {
+        if($this->dataType == 'zip') {
             $message = 'This file has an extension `zip` you can look it up in: [public/' . $this->filepath . ']';
 
             return back()->with('message', $message);
@@ -66,23 +66,23 @@ class ParseController extends Controller
         try {
             $parse = new ParseMetadata();
 
-            if (!file_exists($this->filepath)) {
+            if(!file_exists($this->filepath)) {
                 $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
             }
 
             $result = $parse->index(
-                $request->batchTitle,
-                $this->dataType,
-                $request->id,
-                $request->title,
-                $this->filepath
+                    $request->batchTitle,
+                    $this->dataType,
+                    $request->id,
+                    $request->title,
+                    $this->filepath
             );
-        } catch (\Exception $exception) {
+        } catch(\Exception $exception) {
             return redirect(route('search', ['id' => $request->id, 'type' => '']))
-                ->with('message', $exception->getMessage());
+                    ->with('message', $exception->getMessage());
         }
 
-        if ($this->dataType == 'xml' or $this->dataType == 'COT') {
+        if($this->dataType == 'xml' or $this->dataType == 'COT') {
             return response($result)->header('Content-Type', 'text/xml');
 
         } else {
@@ -98,9 +98,11 @@ class ParseController extends Controller
     {
         $metadataInfo = new MediaMetadata();
         $metadata = $metadataInfo->getMetadata($request->id, MediaType::getIdByTitle($request->type));
-        if (!is_null($metadata)) {
-            $metadataResult = json_decode($metadata->toArray()['metadata']);
-            dd($metadataResult);
+        if(!is_null($metadata)) {
+            $arrayMetadata = json_decode($metadata->metadata, true);
+
+            return response(ArrayToXml::convert($arrayMetadata, 'product'))
+                    ->header('Content-Type', 'text/xml');
         }
 
         return response('This metadata not found in database')->header('Content-Type', 'text');
