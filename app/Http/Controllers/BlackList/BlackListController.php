@@ -37,8 +37,13 @@ class BlackListController extends Controller
         ]);
 
         try {
-            $blackListManager = new BlackListManager($request->id, $request->command, $request->dataType,
-                    $request->mediaType);
+            $blackListManager = new BlackListManager(
+                $request->id,
+                $request->command,
+                $request->dataType,
+                $request->mediaType
+            );
+
             $oppositeCommand = 'active';
 
             if ('active' === $blackListManager->getCommand()) {
@@ -46,46 +51,37 @@ class BlackListController extends Controller
             }
 
             if ($request->dataType === 'author') {
-
                 $ids = $blackListManager->getIdsByAuthorSetStatusAuthor(
                         $request->media,
-                        $blackListManager->getMediaType(),
-                        $blackListManager->getCommand(),
-                        $blackListManager->getId(),
-                        $blackListManager->getCommand(),
                         $oppositeCommand
                 );
-
             } else {
                 $ids = $blackListManager->getIdsById($request->media);
             }
+
+            $blackListManager->addIdsToBlackList($ids, $oppositeCommand, $indexation);
         } catch (Exception $e) {
-            $message = 'We have a problem with this author_id ' . $blackListManager->getId() . $e->getMessage();
+            $message = 'We have a problem with this id ' . $blackListManager->getId() . ' ' .$e->getMessage();
             logger()->critical($message);
 
             return back()->with('message', $message);
         }
 
-        try {
-            $allIds = $blackListManager->addIdsToBlackList($ids, $oppositeCommand, $indexation);
-        } catch (Exception $e) {
-            $message = 'An error occurred while updating this id ' . $blackListManager->getId() . $e->getMessage();
-            logger()->critical($message);
-
-            return back()->with('message', $message);
-        }
+        $handledIds = $blackListManager->handledIds;
 
         logger()->info('User - ' .
                 Auth::user()->name .
                 ' ' .
                 Auth::user()->email .
                 ' Blacklist updated id(s): ' .
-                implode(', ', $allIds['handledIds']));
+                implode(', ', $handledIds));
 
-        $msg = 'This id(s) - ' . implode(', ', $allIds['handledIds']) . ' updated in BlackList';
+        $msg = 'This id(s) - ' . implode(', ', $handledIds) . ' updated in BlackList';
+
+        $unHandledIds = $blackListManager->unHandledIds;
 
         if (!empty($unHandledIds)) {
-            $msg = $msg . ', not found this id(s) - ' . implode(', ', $allIds['unHandledIds']);
+            $msg = $msg . ', not found this id(s) - ' . implode(', ', $unHandledIds);
         }
 
         return redirect(route('blackList.manage'))->with('message', $msg);
@@ -102,17 +98,19 @@ class BlackListController extends Controller
         ]);
 
         try {
-            $blackListManager = new BlackListManager($request->id, $request->command, $request->dataType,
-                    $request->mediaType);
+            $blackListManager = new BlackListManager(
+                $request->id,
+                $request->command,
+                $request->dataType,
+                $request->mediaType
+            );
 
             if ('author' == $blackListManager->getDataType()) {
-                $info = $blackListManager->getInfoByAuthorId($blackListManager->getModel(), $blackListManager->getId());
-                $authorName = BlackListManager::getAuthorName($blackListManager->getMediaType(),
-                                $blackListManager->getId()) . ' author';
-
+                $info = $blackListManager->getInfoByAuthorId();
+                $authorName = $blackListManager->getAuthorName() . ' author';;
             } else {
                 $authorName = '';
-                $info = $blackListManager->getInfoById($blackListManager->getId(), $blackListManager->getModel());
+                $info = $blackListManager->getInfoById();
             }
         } catch (Exception $exception) {
             $message = 'We have a problem with this id ' . $blackListManager->getId() . ' ' . $exception->getMessage();
@@ -121,12 +119,12 @@ class BlackListController extends Controller
             return back()->with('message', $message);
         }
         return view('blackList.manageBlackListSelect', [
-                'info'       => $info,
-                'mediaType'  => $blackListManager->getMediaType() . 's',
-                'authorName' => $authorName,
-                'id'         => $blackListManager->getId(),
-                'command'    => $blackListManager->getCommand(),
-                'dataType'   => $blackListManager->getDataType()
+             'info'       => $info,
+             'mediaType'  => $blackListManager->getMediaType() . 's',
+             'authorName' => $authorName,
+             'id'         => $blackListManager->getId(),
+             'command'    => $blackListManager->getCommand(),
+             'dataType'   => $blackListManager->getDataType()
         ]);
     }
 
