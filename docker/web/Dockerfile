@@ -40,7 +40,7 @@ COPY ./ /var/www/html/dashboard
 ADD ./run.sh /dashboard-run.sh
 RUN chmod 777 /dashboard-run.sh
 
-RUN touch /tmp/ida.log && chmod 777 /tmp/ida.log
+RUN touch /logs/ida.log && chmod 777 /logs/ida.log
 
 ADD ./nginx.conf /etc/nginx/sites-enabled/default.conf
 
