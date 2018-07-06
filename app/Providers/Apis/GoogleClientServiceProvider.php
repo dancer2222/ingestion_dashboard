@@ -23,10 +23,12 @@ class GoogleClientServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (file_exists(env('GOOGLE_API_CREDS_FILE'))) {
-            $this->app->singleton(\Google_Client::class, function () {
+        $filepath = env('GOOGLE_API_CREDS_FILE') ?: '/conf/google_creds.json';
+
+        if (file_exists($filepath)) {
+            $this->app->singleton(\Google_Client::class, function () use ($filepath) {
                 $client = new \Google_Client();
-                $client->setAuthConfig(base_path('google_creds.json'));
+                $client->setAuthConfig($filepath);
                 $client->setScopes([\Google_Service_Gmail::MAIL_GOOGLE_COM]);
 
                 return $client;
