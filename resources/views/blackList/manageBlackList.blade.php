@@ -31,10 +31,10 @@
                                             <label class="input-group-text" for="inputGroupSelect01">Action</label>
                                         </div>
                                         <select class="custom-select" name="command">
-                                            <option value="active" {{ 'active' == \Illuminate\Support\Facades\Request::session()->get('command') ? 'selected' : '' }}>
+                                            <option value="active" {{ 'active' == session()->get('command') ? 'selected' : '' }}>
                                                 Add
                                             </option>
-                                            <option value="inactive" {{ 'inactive' == \Illuminate\Support\Facades\Request::session()->get('command') ? 'selected' : '' }}>
+                                            <option value="inactive" {{ 'inactive' == session()->get('command') ? 'selected' : '' }}>
                                                 Remove
                                             </option>
                                         </select>
@@ -42,10 +42,10 @@
                                             <label class="input-group-text" for="inputGroupSelect01">Type data</label>
                                         </div>
                                         <select class="custom-select" name="dataType">
-                                            <option value="ids" {{ 'ids' == \Illuminate\Support\Facades\Request::session()->get('dataType') ? 'selected' : '' }}>
+                                            <option value="ids" {{ 'ids' == session()->get('dataType') ? 'selected' : '' }}>
                                                 Ids
                                             </option>
-                                            <option value="author" {{ 'author' == \Illuminate\Support\Facades\Request::session()->get('dataType') ? 'selected' : '' }}>
+                                            <option value="author" {{ 'author' == session()->get('dataType') ? 'selected' : '' }}>
                                                 Author id
                                             </option>
                                         </select>
@@ -53,10 +53,10 @@
                                             <label class="input-group-text" for="inputGroupSelect01">MediaType</label>
                                         </div>
                                         <select class="custom-select" name="mediaType">
-                                            <option value="books" {{ 'books' == \Illuminate\Support\Facades\Request::session()->get('mediaType') ? 'selected' : '' }}>
+                                            <option value="books" {{ 'books' == session()->get('mediaType') ? 'selected' : '' }}>
                                                 books
                                             </option>
-                                            <option value="audio_books" {{ 'audio_books' == \Illuminate\Support\Facades\Request::session()->get('mediaType') ? 'selected' : '' }}>
+                                            <option value="audio_books" {{ 'audio_books' == session()->get('mediaType') ? 'selected' : '' }}>
                                                 audiobooks
                                             </option>
                                         </select>

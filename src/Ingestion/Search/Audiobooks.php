@@ -52,6 +52,7 @@ class Audiobooks extends MediaTypeAbstract
 
         $providerName = new DataSourceProvider();
         $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
+
         if ($batchInfo != null) {
             $failedItems = new FailedItems();
             $failedItems = $failedItems->getFailedItems($info['data_origin_id']);
