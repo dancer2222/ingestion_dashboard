@@ -39,7 +39,7 @@ class Audiobooks extends MediaTypeAbstract
         $blackList = AudiobookBlackList::find($id);
 
         if (null == $blackList) {
-            $blackListStatus = 'Not have BlackList status';
+            $blackListStatus = '';
         } else {
             $blackListStatus = $blackList->status;
         }

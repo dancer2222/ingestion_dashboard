@@ -104,6 +104,10 @@ class BlackListController extends Controller
         ]);
 
         try {
+            $request->session()->put('command', $request->command);
+            $request->session()->put('dataType', $request->dataType);
+            $request->session()->put('mediaType', $request->mediaType);
+
             $blackListManager = new BlackListManager(
                 $request->id,
                 $request->command,

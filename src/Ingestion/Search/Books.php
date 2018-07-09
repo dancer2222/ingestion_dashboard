@@ -41,7 +41,7 @@ class Books extends MediaTypeAbstract
 
         $blackList = BookBlackList::find($id);
         if (null == $blackList) {
-            $blackListStatus = 'Not have BlackList status';
+            $blackListStatus = '';
         } else {
             $blackListStatus = $blackList->status;
         }
