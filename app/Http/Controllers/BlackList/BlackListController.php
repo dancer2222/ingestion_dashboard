@@ -50,12 +50,14 @@ class BlackListController extends Controller
                 $oppositeCommand = 'inactive';
             }
 
-            if ($blackListManager->getDataType() === 'author') {
+            $dataType = $blackListManager->getDataType();
+
+            if ($dataType === 'author') {
                 $ids = $blackListManager->getIdsByAuthor(
                     $request->media,
                     $oppositeCommand
                 );
-            } elseif ($blackListManager->getDataType() === 'idType') {
+            } elseif ($dataType == 'idType') {
                 $ids = (array)$blackListManager->getId();
             } else {
                 $ids = $blackListManager->getIdsById($request->media);
@@ -85,7 +87,7 @@ class BlackListController extends Controller
             $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
         }
 
-        if ($blackListManager->getDataType() === 'idType') {
+        if ($dataType == 'idType') {
             return back()->with('message', $msg);
         }
 
@@ -114,7 +116,9 @@ class BlackListController extends Controller
                 $request->mediaType
             );
 
-            if ('author' == $blackListManager->getDataType()) {
+            $dataType = $blackListManager->getDataType();
+
+            if ('author' == $dataType) {
                 $info = $blackListManager->getInfoByAuthorId();
                 $authorName = $blackListManager->getAuthorName() . ' author';;
             } else {
@@ -134,7 +138,7 @@ class BlackListController extends Controller
             'authorName' => $authorName,
             'id' => $blackListManager->getId(),
             'command' => $blackListManager->getCommand(),
-            'dataType' => $blackListManager->getDataType()
+            'dataType' => $dataType
         ]);
     }
 
