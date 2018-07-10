@@ -10,7 +10,7 @@
             $cssClass = 'text-success';
         }
 
-        if (isset($blackListStatus) && $blackListStatus == 'inactive') {
+        if (isset($blackListStatus) && $blackListStatus !== 'active') {
             $commandBlackList = 'active';
             $blacklistButtonName = 'Add to BlackList';
         } else {
@@ -24,7 +24,7 @@
     <td>
         @role(['admin', 'ingester'])
         @if(isset($blackListStatus))
-            @if('inactive' === $blackListStatus)
+            @if($blackListStatus !== 'active')
                 <form method="POST" class="form-inline"
                       action="{{ route('changeStatus') }}" style="display: inline-block">
                     <input type="hidden" name="id" value="{{ $info['id'] }}">

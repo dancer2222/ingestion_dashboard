@@ -9,7 +9,6 @@
         <div class="col-md-12">
             <h1 style="color: red">Manage BlackList</h1>
             <div class="card">
-
                 <div class="tab-pane  p-20" id="audiobook" role="tabpanel">
                     <div class="card">
                         <div class="card-body">
@@ -27,29 +26,39 @@
                                         </div>
                                         <input type="text" class="form-control" id="id" name="id" placeholder="Type id">
                                     </div>
-
                                     <div class="input-group mb-3">
-
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Action</label>
                                         </div>
                                         <select class="custom-select" name="command">
-                                            <option value="active">Add</option>
-                                            <option value="inactive">Remove</option>
+                                            <option value="active" {{ 'active' == session()->get('command') ? 'selected' : '' }}>
+                                                Add
+                                            </option>
+                                            <option value="inactive" {{ 'inactive' == session()->get('command') ? 'selected' : '' }}>
+                                                Remove
+                                            </option>
                                         </select>
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Type data</label>
                                         </div>
                                         <select class="custom-select" name="dataType">
-                                            <option value="ids">Ids</option>
-                                            <option value="author">Author id</option>
+                                            <option value="ids" {{ 'ids' == session()->get('dataType') ? 'selected' : '' }}>
+                                                Ids
+                                            </option>
+                                            <option value="author" {{ 'author' == session()->get('dataType') ? 'selected' : '' }}>
+                                                Author id
+                                            </option>
                                         </select>
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">MediaType</label>
                                         </div>
                                         <select class="custom-select" name="mediaType">
-                                            <option value="books">books</option>
-                                            <option value="audio_books">audiobooks</option>
+                                            <option value="books" {{ 'books' == session()->get('mediaType') ? 'selected' : '' }}>
+                                                books
+                                            </option>
+                                            <option value="audio_books" {{ 'audio_books' == session()->get('mediaType') ? 'selected' : '' }}>
+                                                audiobooks
+                                            </option>
                                         </select>
                                     </div>
                                 </div>

@@ -124,14 +124,14 @@ class BlackListManager
                 $this->unHandledIds[] = $id;
 
                 continue;
-            };
+            }
 
             $classNameBlack = "App\Models\\" . $this->getModel() . "BlackList";
 
             $classNameBlack::updateOrCreate([
-                    $this->getMediaTypeExceptLastSymbol() . '_id' => (int) $id
+                $this->getMediaTypeExceptLastSymbol() . '_id' => (int) $id
             ], [
-                    'status' => $this->getCommand()
+                'status' => $this->getCommand()
             ]);
 
             $reflectionMethodSet = new \ReflectionMethod($className, 'setStatus');
@@ -139,8 +139,6 @@ class BlackListManager
 
             $indexation->push('updateSingle', str_replace('_', '', $this->getMediaTypeFromRequest()), $id);
             $this->handledIds[] = $id;
-
-            continue;
         }
     }
 
@@ -150,12 +148,13 @@ class BlackListManager
      * @return array
      * @throws \ReflectionException
      */
-    public function getIdsByAuthorSetStatusAuthor($medias, $oppositeCommand) :array
+    public function getIdsByAuthor($medias, $oppositeCommand) : array
     {
         $ids = [];
         $sts = $oppositeCommand;
 
         foreach ($medias as $media => &$item) {
+
             if (isset($item['checked'])) {
                 $ids[] = $item['id'];
             } elseif (!isset($item['checked']) && $this->getCommand() === 'add') {
@@ -194,8 +193,6 @@ class BlackListManager
             if (isset($item['checked'])) {
                 $ids[] = $item['id'];
             }
-
-            continue;
         }
 
         return $ids;
@@ -233,17 +230,14 @@ class BlackListManager
         $info = [];
 
         foreach ($ids as $id) {
-
             $className = "App\Models\\" . $this->getModel();
             $reflectionMethod = new \ReflectionMethod($className, 'getInfoById');
             $result = $reflectionMethod->invoke(new $className(), $id)->toArray()[0];
 
             $info [] = [
-                    'id'    => $result['id'],
-                    'title' => $result['title'],
+                'id'    => $result['id'],
+                'title' => $result['title'],
             ];
-
-            continue;
         }
 
         return $info;
@@ -274,13 +268,14 @@ class BlackListManager
 
         foreach ($idAuthor as $itemInfo) {
             foreach ($itemInfo as $value) {
+
                 if (!$mediaCollection = $classNameSecond::find($value)) {
                     continue;
                 }
 
                 $info[] = [
-                        'id'    => $mediaCollection->id,
-                        'title' => $mediaCollection->title
+                    'id'    => $mediaCollection->id,
+                    'title' => $mediaCollection->title
                 ];
             }
         }

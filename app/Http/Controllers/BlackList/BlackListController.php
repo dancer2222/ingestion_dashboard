@@ -33,7 +33,7 @@ class BlackListController extends Controller
     public function blackList(Request $request, Indexation $indexation)
     {
         $request->validate([
-                'id' => 'required'
+            'id' => 'required'
         ]);
 
         try {
@@ -52,11 +52,11 @@ class BlackListController extends Controller
 
 
             if ($blackListManager->getDataType() === 'author') {
-                $ids = $blackListManager->getIdsByAuthorSetStatusAuthor(
+                $ids = $blackListManager->getIdsByAuthor(
                     $request->media,
                     $oppositeCommand
                 );
-            } elseif($blackListManager->getDataType() == 'idType') {
+            } elseif ($blackListManager->getDataType() == 'idType') {
                 $ids = (array)$blackListManager->getId();
             } else {
                 $ids = $blackListManager->getIdsById($request->media);
@@ -64,30 +64,29 @@ class BlackListController extends Controller
 
             $blackListManager->addIdsToBlackList($ids, $oppositeCommand, $indexation);
         } catch (Exception $e) {
-            $message = 'We have a problem with this id ' . $blackListManager->getId() . ' ' .$e->getMessage();
+            $message = 'We have a problem with this id ' . $blackListManager->getId() . ' ' . $e->getMessage();
             logger()->critical($message);
 
             return back()->with('message', $message);
         }
 
-        $handledIds = $blackListManager->handledIds;
+        $handledIds = implode(', ', $blackListManager->handledIds);
 
         logger()->info('User - ' .
-                Auth::user()->name .
-                ' ' .
-                Auth::user()->email .
-                ' Blacklist updated id(s): ' .
-                implode(', ', $handledIds));
+            Auth::user()->name .
+            ' ' .
+            Auth::user()->email .
+            ' Blacklist updated id(s): ' .
+            $handledIds);
 
-        $msg = 'This id(s) - ' . implode(', ', $handledIds) . ' updated in BlackList';
-
-        $unHandledIds = $blackListManager->unHandledIds;
+        $msg = 'This id(s) - ' . $handledIds . ' updated in BlackList';
+        $unHandledIds = implode(', ', $blackListManager->unHandledIds);
 
         if (!empty($unHandledIds)) {
-            $msg = $msg . ', not found this id(s) - ' . implode(', ', $unHandledIds);
+            $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
         }
 
-        if($blackListManager->getDataType() == 'idType') {
+        if ($blackListManager->getDataType() == 'idType') {
             return back()->with('message', $msg);
 
         }
@@ -102,10 +101,14 @@ class BlackListController extends Controller
     public function blackListSelect(Request $request)
     {
         $request->validate([
-                'id' => 'required'
+            'id' => 'required'
         ]);
 
         try {
+            $request->session()->put('command', $request->command);
+            $request->session()->put('dataType', $request->dataType);
+            $request->session()->put('mediaType', $request->mediaType);
+
             $blackListManager = new BlackListManager(
                 $request->id,
                 $request->command,
@@ -127,12 +130,12 @@ class BlackListController extends Controller
             return back()->with('message', $message);
         }
         return view('blackList.manageBlackListSelect', [
-             'info'       => $info,
-             'mediaType'  => $blackListManager->getMediaType() . 's',
-             'authorName' => $authorName,
-             'id'         => $blackListManager->getId(),
-             'command'    => $blackListManager->getCommand(),
-             'dataType'   => $blackListManager->getDataType()
+            'info' => $info,
+            'mediaType' => $blackListManager->getMediaType() . 's',
+            'authorName' => $authorName,
+            'id' => $blackListManager->getId(),
+            'command' => $blackListManager->getCommand(),
+            'dataType' => $blackListManager->getDataType()
         ]);
     }
 
@@ -171,7 +174,6 @@ class BlackListController extends Controller
         }
 
         if ($info->isEmpty()) {
-
             return back()->with('message', 'Not found ' . $mediaType . ' in BlackList');
         }
 
