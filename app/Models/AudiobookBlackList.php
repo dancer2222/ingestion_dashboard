@@ -21,22 +21,18 @@ class AudiobookBlackList extends Model
      */
     public function getInfo()
     {
-        return $this
-            ->leftJoin('audio_book', 'audio_book_blacklist.audio_book_id', '=',
-            'audio_book.id')
-            ->leftJoin('audio_book_authors', 'audio_book_blacklist.audio_book_id', '=',
-            'audio_book_authors.audio_book_id')
-            ->leftJoin('author_audio_book',
-            'audio_book_authors.author_id', '=', 'author_audio_book.id')
+        return $this->leftJoin('audio_book', 'audio_book_blacklist.audio_book_id', '=', 'audio_book.id')
+            ->leftJoin('audio_book_authors', 'audio_book_blacklist.audio_book_id', '=', 'audio_book_authors.audio_book_id')
+            ->leftJoin('author_audio_book', 'audio_book_authors.author_id', '=', 'author_audio_book.id')
             ->select([
-            'audio_book_blacklist.audio_book_id',
-            'audio_book.title',
-            'author_audio_book.name',
-            'audio_book_blacklist.status',
-            'audio_book.data_source_provider_id',
-            'created_at',
-            'updated_at'
-        ])->paginate(10);
+                'audio_book_blacklist.audio_book_id',
+                'audio_book.title',
+                'author_audio_book.name',
+                'audio_book_blacklist.status',
+                'audio_book.data_source_provider_id',
+                'created_at',
+                'updated_at'
+            ])->paginate(10);
     }
 
     public function getInfoById($id)

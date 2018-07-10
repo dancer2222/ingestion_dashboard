@@ -80,8 +80,12 @@ gulp.task('clean', function () {
 
 gulp.task('build', gulp.series('clean', 'sass'));
 
-gulp.task('watch', function () {
+gulp.task('watch:css', function () {
     gulp.watch('./resources/assets/sass/**/*.scss', gulp.series('sass'));
+});
+
+gulp.task('watch:js', function () {
+    gulp.watch('./resources/assets/js/**/*.js', gulp.series('build:js'));
 });
 
 gulp.task('serve', function () {
@@ -94,4 +98,4 @@ gulp.task('serve', function () {
     });
 });
 
-gulp.task('dev', gulp.series('build', gulp.parallel('watch', 'serve')));
+gulp.task('dev', gulp.series('build', gulp.parallel('watch:js', 'watch:css', 'serve')));

@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Gmail\Reader\IngestionTracking;
+use App\Console\Commands\Librarything\LibraryThingData;
+use App\Console\Commands\Librarything\LibraryThingDataXmlParse;
 use App\Console\Commands\MakeAdmin;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -15,6 +18,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         MakeAdmin::class,
+        LibraryThingData::class,
+        LibraryThingDataXmlParse::class,
+        IngestionTracking::class,
     ];
 
     /**
@@ -25,8 +31,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+         $schedule->command('inspire')
+                  ->hourly();
     }
 
     /**
