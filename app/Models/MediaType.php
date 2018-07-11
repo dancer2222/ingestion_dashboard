@@ -17,6 +17,14 @@ class MediaType extends Model
     protected $table = 'media_types';
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function batches()
+    {
+        return $this->hasMany(QaBatch::class, 'media_type_id', 'media_type_id');
+    }
+
+    /**
      * @param $media_type_id
      * @return mixed
      */

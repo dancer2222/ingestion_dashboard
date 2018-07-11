@@ -11,13 +11,14 @@ RUN apk add --update \
     re2c \
     zlib-dev \
     libmemcached-dev \
-    cyrus-sasl-dev \
-    && git clone --branch php7 https://github.com/php-memcached-dev/php-memcached.git /usr/src/php/ext/memcached/ \
-    && docker-php-ext-configure memcached \
-    && docker-php-ext-install memcached \
-    && docker-php-source delete \
-    && apk del --no-cache zlib-dev cyrus-sasl-dev \
+    cyrus-sasl-dev
 
+RUN pecl install xdebug-2.6.0 memcached-3.0.4 \
+    && docker-php-ext-enable memcached \
+    && docker-php-ext-enable xdebug \
+    && docker-php-source delete
+
+RUN apk del --no-cache zlib-dev cyrus-sasl-dev \
     # Clear
     && rm -rf /tmp/* /var/cache/apk/*
 
@@ -40,7 +41,8 @@ COPY ./ /var/www/html/dashboard
 ADD ./run.sh /dashboard-run.sh
 RUN chmod 777 /dashboard-run.sh
 
-RUN touch /logs/ida.log && chmod 777 /logs/ida.log
+RUN if [ ! -d /logs ]; then mkdir /logs ; fi
+RUN if [ ! -f /logs/ida.log ]; then touch /logs/ida.log && chmod 777 /logs/ida.log ; fi
 
 ADD ./nginx.conf /etc/nginx/sites-enabled/default.conf
 

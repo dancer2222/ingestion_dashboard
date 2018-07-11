@@ -15,6 +15,7 @@
         "aws/aws-sdk-php-laravel": "~3.1",
         "brightcove/api": "^1.0",
         "bschmitt/laravel-amqp": "1.*",
+        "fale/isbn": "3.x-dev",
         "google/apiclient": "^2.2",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.6.*",

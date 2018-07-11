@@ -10,4 +10,19 @@ class Tag extends Model
     protected $table = 'tag';
     protected $fillable = ['name', 'slug'];
     public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function audiobooks()
+    {
+        return $this->belongsToMany(
+            Audiobook::class,
+            'audio_book_tag',
+            'tag_id',
+            'audio_book_id',
+            'id',
+            'id'
+        );
+    }
 }
