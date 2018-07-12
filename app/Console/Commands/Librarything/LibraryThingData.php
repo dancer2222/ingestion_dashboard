@@ -4,6 +4,7 @@ namespace App\Console\Commands\Librarything;
 
 use App\Helpers\Ingestion\Tags\LibraryThingHelper;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class LibraryThingData extends Command
 {
@@ -71,5 +72,10 @@ class LibraryThingData extends Command
         $this->info('Downloaded: ' . implode(' | ', $downloadedFiles) . ' to /logs/librarything');
 
         $this->helper->saveLastModificationDate($downloadedFiles);
+        $files = $this->helper->decompressBz2Files($downloadedFiles);
+
+        Artisan::call('librarything_data:xml:parse', [
+            '--path' => $files,
+        ]);
     }
 }
