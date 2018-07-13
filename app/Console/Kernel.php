@@ -33,8 +33,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('inspire')
-                  ->hourly();
+        if (!app()->isLocal()) {
+            // Librarything Tags
+            $schedule->command('librarything_data:download')->fridays();
+
+            // Aws notifications
+            $schedule->command('gmail:read:ingestion-tracking')->twiceDaily();
+        }
     }
 
     /**
