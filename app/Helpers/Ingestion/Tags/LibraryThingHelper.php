@@ -178,7 +178,7 @@ class LibraryThingHelper
         $decompressedFiles = [];
 
         foreach ($filesToDecompress as $filename) {
-            $fullPath = $this->configDir/$filename;
+            $fullPath = "$this->configDir/$filename";
 
             exec("bzip2 -d $fullPath");
 
