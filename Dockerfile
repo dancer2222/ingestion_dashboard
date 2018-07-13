@@ -47,10 +47,6 @@ RUN chmod 777 /dashboard-run.sh
 RUN if [ ! -d /logs ]; then mkdir /logs ; fi
 RUN if [ ! -f /logs/ida.log ]; then touch /logs/ida.log && chmod 777 /logs/ida.log ; fi
 
-EXPOSE 7771
-
-VOLUME ["/var/www/html/dashboard"]
-
 WORKDIR /var/www/html/dashboard
 RUN composer install
 
