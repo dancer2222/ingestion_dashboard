@@ -50,6 +50,8 @@ class LibraryThingDataXmlParse extends Command
      */
     public function handle()
     {
+        $this->info("$this->signature started at " . now()->format('Y-m-d H:i:s'));
+
         $this->limit = $this->option('limit');
         $paths = $this->option('path');
 
@@ -82,6 +84,8 @@ class LibraryThingDataXmlParse extends Command
 
                 $this->$method($reader);
 
+                unlink($filepath);
+
                 $this->info(Carbon::now() . " Finished $method");
             } catch (\Exception $e) {
                 $this->error($e->getMessage());
@@ -89,6 +93,8 @@ class LibraryThingDataXmlParse extends Command
                 continue;
             }
         }
+
+        $this->info("$this->signature finished at " . now()->format('Y-m-d H:i:s'));
     }
 
     /**

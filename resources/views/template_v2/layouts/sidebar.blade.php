@@ -79,13 +79,13 @@
                 <a class="has-arrow" href="#" aria-expanded="false">
                     <i class="fa fa-flag"></i>
                     <span class="hide-menu">
-                        Black list
+                        Content blacklist
                     </span>
                 </a>
 
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('blackList.index') }}">Show BlackList</a>
+                        <a href="{{ route('blackList.index') }}">Search</a>
                     </li>
                     @role(['admin', 'ingester'])
                     <li>

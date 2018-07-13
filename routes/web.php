@@ -117,18 +117,17 @@ Route::group(['middleware' => ['auth']], function() {
         });
     });
 
-
-
+    // TODO: rename status to something more suitable
     Route::group(['prefix' => 'status', 'middleware' => 'role:admin|ingester', 'namespace' => 'Status'], function() {
         Route::post('/changeStatus', 'StatusController@changeStatus')->name('changeStatus');
     });
 
     Route::group(['prefix' => 'blackList', 'namespace' => 'BlackList'], function() {
-        Route::get('/showBlackList', 'BlackListController@index')->name('blackList.index');
-        Route::get('/infoFromBlackList/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
+        Route::get('/', 'BlackListController@index')->name('blackList.index');
+        Route::get('/search/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
 
         Route::group(['middleware' => 'role:admin|ingester'], function() {
-            Route::get('/manageBlackList', 'BlackListController@indexManage')->name('blackList.manage');
+            Route::get('/manage', 'BlackListController@indexManage')->name('blackList.manage');
             Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
             Route::post('/blackListSelect', 'BlackListController@blackListSelect')->name('blackList.blackListSelect');
         });
