@@ -46,7 +46,7 @@ class LibrarythingWorkToIsbn implements ShouldQueue
             foreach ($isbns as $isbn) {
                 try {
                     BookLibrarythingData::updateOrCreate(
-                        ['isbn_10' => $isbn, 'workcode' => $workcode]
+                        ['isbn_10' => $isbn], ['workcode' => $workcode]
                     );
                 } catch (\Exception $e) {
                     logger()->critical("LIBRARYTHING_DATA ISBN LISTENER: {$e->getMessage()}");
