@@ -9,6 +9,7 @@ class BookLibrarythingData extends Model
     protected $connection = 'mysql_local_content';
     protected $table = 'book_librarything_datas';
     protected $fillable = ['isbn_10', 'workcode'];
+    protected $primaryKey = 'isbn_10';
     public $timestamps = false;
 
     /**
