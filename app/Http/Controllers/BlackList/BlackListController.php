@@ -50,6 +50,7 @@ class BlackListController extends Controller
                 $oppositeCommand = 'inactive';
             }
 
+
             $dataType = $blackListManager->getDataType();
 
             if ($dataType === 'author') {
@@ -89,6 +90,7 @@ class BlackListController extends Controller
 
         if ($dataType == 'idType') {
             return back()->with('message', $msg);
+
         }
 
         return redirect(route('blackList.manage'))->with('message', $msg);
