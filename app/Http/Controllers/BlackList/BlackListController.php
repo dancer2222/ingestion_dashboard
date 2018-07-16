@@ -153,23 +153,21 @@ class BlackListController extends Controller
     /**
      * @param $mediaType
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @param BookBlackList $bookBlackList
+     * @param AudiobookBlackList $audiobookBlackList
+     * @return mixed
      */
-    public function getInfoFromBlackList($mediaType, Request $request)
+    public function getInfoFromBlackList($mediaType, Request $request, BookBlackList $bookBlackList, AudiobookBlackList $audiobookBlackList)
     {
-        $bookBlackList = new BookBlackList();
-        $audiobookBlackList = new AudiobookBlackList();
         $paginate = $request->get('limit', 10);
 
         if (!is_null($request->id)) {
-
             if ('books' === $mediaType) {
                 $info = $bookBlackList->getInfoById($request->id);
             } else {
                 $info = $audiobookBlackList->getInfoById($request->id);
             }
         } else {
-
             if ('books' === $mediaType) {
                 $info = $bookBlackList->getInfo($paginate);
             } else {
