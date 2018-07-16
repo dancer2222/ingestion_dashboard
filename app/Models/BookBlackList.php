@@ -20,7 +20,7 @@ class BookBlackList extends Model
     /**
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getInfo()
+    public function getInfo($paginate)
     {
         return $this
             ->leftJoin('book', 'book_blacklist.book_id', '=', 'book.id')
@@ -35,7 +35,7 @@ class BookBlackList extends Model
                 'created_at',
                 'updated_at'
             ])
-            ->paginate(10);
+            ->paginate($paginate);
     }
 
     /**

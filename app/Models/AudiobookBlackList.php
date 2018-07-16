@@ -19,20 +19,20 @@ class AudiobookBlackList extends Model
     /**
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getInfo()
+    public function getInfo($paginate)
     {
         return $this->leftJoin('audio_book', 'audio_book_blacklist.audio_book_id', '=', 'audio_book.id')
             ->leftJoin('audio_book_authors', 'audio_book_blacklist.audio_book_id', '=', 'audio_book_authors.audio_book_id')
             ->leftJoin('author_audio_book', 'audio_book_authors.author_id', '=', 'author_audio_book.id')
             ->select([
-                'audio_book_blacklist.audio_book_id',
-                'audio_book.title',
-                'author_audio_book.name',
-                'audio_book_blacklist.status',
-                'audio_book.data_source_provider_id',
-                'created_at',
-                'updated_at'
-            ])->paginate(10);
+            'audio_book_blacklist.audio_book_id',
+            'audio_book.title',
+            'author_audio_book.name',
+            'audio_book_blacklist.status',
+            'audio_book.data_source_provider_id',
+            'created_at',
+            'updated_at'
+        ])->paginate($paginate);
     }
 
     public function getInfoById($id)
