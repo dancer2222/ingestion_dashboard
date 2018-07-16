@@ -12,10 +12,10 @@
                 <div class="row p-t-20">
                     &nbsp; &nbsp;
                     <a href="{{ route('blackList.getInfoFromBlackList', ['mediaType' => 'books']) }} "
-                       class="btn btn-outline-primary">&nbsp;&nbsp; &nbsp;Books&nbsp; &nbsp;&nbsp;</a>
+                       class="btn btn-outline-primary" title="See all books in BlackList">&nbsp;&nbsp; &nbsp;Books&nbsp; &nbsp;&nbsp;</a>
                     &nbsp; &nbsp;
                     <a href="{{ route('blackList.getInfoFromBlackList', ['mediaType' => 'audio_books']) }} "
-                       class="btn btn-outline-primary">Audiobooks</a>
+                       class="btn btn-outline-primary" title="See all audiobooks in BlackList">Audiobooks</a>
                     &nbsp; &nbsp;
                     <form method="get" class="form-control-feedback"
                           action="{{ route('blackList.getInfoFromBlackList', ['mediaType' => 'books']) }}">

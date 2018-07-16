@@ -51,12 +51,14 @@ class BlackListController extends Controller
             }
 
 
-            if ($blackListManager->getDataType() === 'author') {
+            $dataType = $blackListManager->getDataType();
+
+            if ($dataType === 'author') {
                 $ids = $blackListManager->getIdsByAuthor(
                     $request->media,
                     $oppositeCommand
                 );
-            } elseif ($blackListManager->getDataType() == 'idType') {
+            } elseif ($dataType == 'idType') {
                 $ids = (array)$blackListManager->getId();
             } else {
                 $ids = $blackListManager->getIdsById($request->media);
@@ -86,7 +88,7 @@ class BlackListController extends Controller
             $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
         }
 
-        if ($blackListManager->getDataType() == 'idType') {
+        if ($dataType == 'idType') {
             return back()->with('message', $msg);
 
         }
@@ -116,7 +118,9 @@ class BlackListController extends Controller
                 $request->mediaType
             );
 
-            if ('author' == $blackListManager->getDataType()) {
+            $dataType = $blackListManager->getDataType();
+
+            if ('author' == $dataType) {
                 $info = $blackListManager->getInfoByAuthorId();
                 $authorName = $blackListManager->getAuthorName() . ' author';;
             } else {
@@ -129,13 +133,14 @@ class BlackListController extends Controller
 
             return back()->with('message', $message);
         }
+
         return view('blackList.manageBlackListSelect', [
             'info' => $info,
             'mediaType' => $blackListManager->getMediaType() . 's',
             'authorName' => $authorName,
             'id' => $blackListManager->getId(),
             'command' => $blackListManager->getCommand(),
-            'dataType' => $blackListManager->getDataType()
+            'dataType' => $dataType
         ]);
     }
 
@@ -156,6 +161,7 @@ class BlackListController extends Controller
     {
         $bookBlackList = new BookBlackList();
         $audiobookBlackList = new AudiobookBlackList();
+        $paginate = $request->get('limit', 10);
 
         if (!is_null($request->id)) {
 
@@ -167,9 +173,9 @@ class BlackListController extends Controller
         } else {
 
             if ('books' === $mediaType) {
-                $info = $bookBlackList->getInfo();
+                $info = $bookBlackList->getInfo($paginate);
             } else {
-                $info = $audiobookBlackList->getInfo();
+                $info = $audiobookBlackList->getInfo($paginate);
             }
         }
 
@@ -177,6 +183,6 @@ class BlackListController extends Controller
             return back()->with('message', 'Not found ' . $mediaType . ' in BlackList');
         }
 
-        return view('blackList.showBlackListInfo', ['info' => $info]);
+        return view('blackList.showBlackListInfo', ['info' => $info, 'mediaType' => $mediaType]);
     }
 }
