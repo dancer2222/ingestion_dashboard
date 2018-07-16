@@ -131,6 +131,7 @@ class BlackListController extends Controller
 
             return back()->with('message', $message);
         }
+
         return view('blackList.manageBlackListSelect', [
             'info' => $info,
             'mediaType' => $blackListManager->getMediaType() . 's',
@@ -158,6 +159,7 @@ class BlackListController extends Controller
     {
         $bookBlackList = new BookBlackList();
         $audiobookBlackList = new AudiobookBlackList();
+        $paginate = $request->get('limit', 10);
 
         if (!is_null($request->id)) {
 
@@ -169,9 +171,9 @@ class BlackListController extends Controller
         } else {
 
             if ('books' === $mediaType) {
-                $info = $bookBlackList->getInfo();
+                $info = $bookBlackList->getInfo($paginate);
             } else {
-                $info = $audiobookBlackList->getInfo();
+                $info = $audiobookBlackList->getInfo($paginate);
             }
         }
 
@@ -179,6 +181,6 @@ class BlackListController extends Controller
             return back()->with('message', 'Not found ' . $mediaType . ' in BlackList');
         }
 
-        return view('blackList.showBlackListInfo', ['info' => $info]);
+        return view('blackList.showBlackListInfo', ['info' => $info, 'mediaType' => $mediaType]);
     }
 }

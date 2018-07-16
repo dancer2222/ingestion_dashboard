@@ -19,7 +19,7 @@ class AudiobookBlackList extends Model
     /**
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getInfo()
+    public function getInfo($paginate)
     {
         return $this
             ->leftJoin('audio_book', 'audio_book_blacklist.audio_book_id', '=',
@@ -36,7 +36,7 @@ class AudiobookBlackList extends Model
             'audio_book.data_source_provider_id',
             'created_at',
             'updated_at'
-        ])->paginate(10);
+        ])->paginate($paginate);
     }
 
     public function getInfoById($id)
