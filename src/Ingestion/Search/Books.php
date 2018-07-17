@@ -84,7 +84,7 @@ class Books extends MediaTypeAbstract
             // Create object for aws bucket
             $object = $info['source'] . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($info['isbn']);
+            $failedItems = $failedItems->getFailedItems($info['data_origin_id']);
         } else {
             $linkCopy = null;
             $linkShow = null;
