@@ -30,7 +30,11 @@
                             <tr>
                                 <td><input type="hidden" name="media[{{ $item['id'] }}][id]"
                                            value="{{ $item['id'] }}"
-                                           readonly>{{ $item['id'] }}</td>
+                                           readonly><a
+                                        href="{{ route('search', ['id' => $item['id'], 'type' => str_replace('_', '', $mediaType)]) }}"
+                                        class="badge badge-pill badge-secondary"
+                                        title="Click to see more info about this Id"
+                                        target="_blank">{{ $item['id'] }}</a></td>
                                 <td>{{ $item['title'] }}</td>
                                 <td>
                                     <div class="input-group-prepend">
