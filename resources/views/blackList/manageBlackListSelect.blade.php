@@ -4,7 +4,6 @@
 
 @section('content')
 
-    @include('search.sections.message.errorGreen')
     <div class="row">
         <div class="col-md-12">
             <h2 style="color: red">Select {{ $mediaType }} : <i style="color: green">{{ $authorName }}</i></h2>
