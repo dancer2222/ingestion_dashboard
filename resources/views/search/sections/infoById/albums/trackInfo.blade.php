@@ -15,9 +15,15 @@
     </tr>
     @break
 
+    @case('status')
+
+    @include('search.sections.infoById.status.buttons')
+
+    @break
     @default
     <tr>
         <td>{{ $value }}</td>
         <td>{{ $item }}</td>
+        <td></td>
     </tr>
 @endswitch
