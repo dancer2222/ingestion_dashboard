@@ -81,9 +81,9 @@ class BlackListController extends Controller
             $handledIds);
 
         $msg = 'This id(s) - ' . $handledIds . ' updated in BlackList';
-        $unHandledIds = implode(', ', $blackListManager->unHandledIds);
 
         if (!empty($unHandledIds)) {
+            $unHandledIds = implode(', ', $blackListManager->unHandledIds);
             $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
         }
 
@@ -126,7 +126,7 @@ class BlackListController extends Controller
                 $info = $blackListManager->getInfoById();
             }
         } catch (Exception $exception) {
-            $message = 'We have a problem with this id ' . $blackListManager->getId() . ' ' . $exception->getMessage();
+            $message = 'Not found this id ' . $blackListManager->getId() . ' ' . $exception->getMessage();
             logger()->critical($message);
 
             return back()->with('message', $message);
@@ -134,7 +134,7 @@ class BlackListController extends Controller
 
         return view('blackList.manageBlackListSelect', [
             'info' => $info,
-            'mediaType' => $blackListManager->getMediaType() . 's',
+            'mediaType' => $blackListManager->getMediaTypeFromRequest(),
             'authorName' => $authorName,
             'id' => $blackListManager->getId(),
             'command' => $blackListManager->getCommand(),

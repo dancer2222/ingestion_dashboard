@@ -4,8 +4,6 @@
 
 @section('content')
 
-    @include('search.sections.message.errorGreen')
-
     @if(isset($messages))
         @include('search.sections.message.error')
     @endif
