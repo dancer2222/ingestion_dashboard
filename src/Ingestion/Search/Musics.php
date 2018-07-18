@@ -14,13 +14,12 @@ class Musics
 {
     /**
      * @param $id
+     * @param Music $music
+     * @param MusicFiles $musicFiles
      * @return array
      */
-    public function searchInfoById($id) : array
+    public function searchInfoById($id, Music $music, MusicFiles $musicFiles): array
     {
-        $music = new Music();
-        $musicFiles = new MusicFiles();
-
         $info = $music->getTrackById($id);
 
         if ($info->isEmpty()) {
@@ -39,16 +38,13 @@ class Musics
                 array_unique(array_map("serialize", $geoRestrict->toArray())));
         }
 
-        $http_response_header = get_headers($info['download_url'])[13];
-
         $providerName = new DataSourceProvider();
         $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
 
         $result = [
-            'providerName'         => $providerName,
-            'info'                 => $info,
-            'http_response_header' => $http_response_header,
-            'country_code'         => $geoRestrictArrayUnique
+            'providerName' => $providerName,
+            'info' => $info,
+            'country_code' => $geoRestrictArrayUnique
         ];
 
         return $result;

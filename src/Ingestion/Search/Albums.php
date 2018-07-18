@@ -44,6 +44,8 @@ class Albums extends MediaTypeAbstract
                     foreach ($nameMusicArtists as $name) {
                         $nameMusicArtist = '[ ' . $name['name'] . ' ]';
                     }
+                } else {
+                    $nameMusicArtist = 'Indefinitely';
                 }
             }
         }
@@ -84,7 +86,8 @@ class Albums extends MediaTypeAbstract
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems,
             'artistName'                   => $nameMusicArtist,
-            'tracks'                       => $tracks
+            'tracks'                       => $tracks,
+            'blackListStatus'              => ''
         ];
 
         return $result;

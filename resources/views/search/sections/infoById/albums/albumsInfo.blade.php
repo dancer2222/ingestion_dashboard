@@ -3,15 +3,13 @@
     </button>
 
     <div id="music" class="collapse">
-        <h4>Click to track for more info</h4>
         <ul class="list-group">
             @foreach($tracks as $track)
                 <li class="list-group-item">
                     <a href="{{ route('reports.track.index', [
-                                'id' => $track['id'],
-                                'option' => 'yes']) }}"
+                                'id' => $track['id']]) }}"
                        style="color: #b6a338; text-decoration: none; font-weight: bold;"
-                       class="list-group-item list-group-item-action">
+                       class="list-group-item list-group-item-action" title="Click to track for more info">
                         <span style="color: #761c19">[id]</span>- {{ $track['id'] }}
                         |&nbsp;<span style="color: #761c19">[Title]</span>- {{ $track['title'] }}
                         |&nbsp;<span style="color: #761c19">[Date Added]</span> - {{ $track['date_added'] }}
@@ -23,5 +21,6 @@
         </ul>
     </div>
     <td>artist Name</td>
+    <td></td>
     <td>{{ $artistName }}</td>
 </tr>
