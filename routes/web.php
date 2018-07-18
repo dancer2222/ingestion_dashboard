@@ -81,8 +81,7 @@ Route::group(['middleware' => ['auth']], function() {
             return redirect(route('search'));
         });
         //Select search
-        Route::get('/sel', 'SelectController@index')->name('sel');
-        Route::get('/search/{id?}/{type?}', 'SearchController@index')->name('search');
+        Route::get('/search/{contentType?}/{valueType?}/{value?}', 'SearchController@index')->name('search');
 
         Route::post('/show', 'ParseController@index')->name('reports.parse.index');
         Route::post('/metadata', 'ParseController@getMetadataIntoDatabase')->name('reports.parse.getMetadataIntoDatabase');

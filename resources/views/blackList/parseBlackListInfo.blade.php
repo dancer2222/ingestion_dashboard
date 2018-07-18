@@ -52,7 +52,7 @@
                 @foreach($product->attributesToArray() as $attrName => $attrValue)
                     @if($attrName === 'book_id' || $attrName === 'audio_book_id')
                         <td>
-                            <a href="{{ route('search', ['id' => $attrValue, 'type' => str_replace('_', '', $mediaType)]) }}"
+                            <a href="{{ route('search', ['type' => str_replace('_', '', $mediaType), 'valueType' => 'id','id' => $attrValue]) }}"
                                title="Click to see info about this Id"><span
                                         class="badge badge-pill badge-secondary">{{ $attrValue }}</span></a>
                         </td>
