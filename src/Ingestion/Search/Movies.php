@@ -81,7 +81,8 @@ class Movies extends MediaTypeAbstract
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems,
-            'brightcove_id'                => $brightcove_id
+            'brightcove_id'                => $brightcove_id,
+            'blackListStatus'              => ''
         ];
 
         return $result;

@@ -1,14 +1,12 @@
-@extends('layouts.main')
+@extends('template_v2.layouts.main')
 
-@section('title', 'Folders')
+@section('title', 'Search')
 
 @section('content')
-    @include('search.sections.message.error')
-    @include('search.sections.infoById.nonPresentId_url')
     <br>
     @if(isset($info))
         <div class="container">
-            <table class="table table-hover">
+            <table class="table table-hover text-dark">
                 <th style="background-color: #2ca02c">
                     Field name
                 </th>
@@ -18,21 +16,18 @@
                 <th style="background-color: #2ca02c">
                     For User
                 </th>
-                @if('yes' === $option)
-                    @foreach($info as $value => $item)
-                        @if(null == $item)
 
-                        @else
-                            @include('search.sections.infoById.albums.trackInfo')
-                        @endif
-                    @endforeach
-                @else
-                    @foreach($info as $value => $item)
+                @foreach($info as $value => $item)
+                    @if(null == $item)
+
+                    @else
                         @include('search.sections.infoById.albums.trackInfo')
-                    @endforeach
-                @endif
+                    @endif
+                @endforeach
+
                 <tr>
                     <td>Geo Restriction</td>
+                    <td></td>
                     <td>
                         <button type="button" class="btn btn-outline-success" data-toggle="collapse"
                                 data-target="#country_code">
@@ -49,7 +44,8 @@
                                             @if(isset($item['status']))
                                                 @if($item['status'] == 'active')
                                                     @if( in_array($item['region'],['US', 'CA', 'GB']))
-                                                        <b style='color: red'>{{ $item['region'] }} [{{ $item['available_date'] }}]</b><br>
+                                                        <b style='color: red'>{{ $item['region'] }}
+                                                            [{{ $item['available_date'] }}]</b><br>
                                                     @else
                                                         {{ $item['region'] }} .  [{{ $item['available_date'] }}]<br>
                                                     @endif
@@ -59,6 +55,7 @@
                                             @endif
                                         @endforeach
                                     </td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -69,7 +66,8 @@
                                             @if(isset($item['status']))
                                                 @if($item['status'] == 'inactive')
                                                     @if( in_array($item['region'],['US', 'CA', 'GB']))
-                                                        <b style='color: red'>{{ $item['region'] }} [{{ $item['available_date'] }}]</b><br>
+                                                        <b style='color: red'>{{ $item['region'] }}
+                                                            [{{ $item['available_date'] }}]</b><br>
                                                     @else
                                                         {{ $item['region'] }} [{{ $item['available_date'] }}]<br>
                                                     @endif
