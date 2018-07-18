@@ -23,7 +23,6 @@ class Licensor extends Model
     {
         return $this->select('name')
             ->where('id', $id)
-            ->first()
-            ->toArray()['name'];
+            ->first();
     }
 }

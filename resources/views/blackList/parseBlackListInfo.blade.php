@@ -60,7 +60,10 @@
                     @elseif($attrName === 'data_source_provider_id')
                         <?php
                         $licensor = new \App\Models\Licensor();
-                        $attrValue = $licensor->getNameLicensorById($attrValue);
+
+                        if ($licensor->getNameLicensorById($attrValue)) {
+                            $attrValue = $licensor->getNameLicensorById($attrValue)->name;
+                        }
                         ?>
                     @endif
                     <td><span class="badge badge-pill badge-light">{{ $attrValue }}</span></td>
