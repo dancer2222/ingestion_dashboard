@@ -38,8 +38,11 @@ class Musics
                 array_unique(array_map("serialize", $geoRestrict->toArray())));
         }
 
-        $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
+        $dataSourceProvider = new DataSourceProvider();
+
+        if ($dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])) {
+            $providerName = $dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])->name;
+        }
 
         $result = [
             'providerName' => $providerName,
