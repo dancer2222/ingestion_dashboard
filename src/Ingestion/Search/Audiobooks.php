@@ -46,12 +46,19 @@ class Audiobooks extends MediaTypeAbstract
 
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
-        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+
+        if ($licensor->getNameLicensorById($info['licensor_id'])) {
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id'])->name;
+        }
+
         $idLink = substr($id, -6);
         $imageUrl = config('main.links.image') . 'audiobook/findaway/square/' . $idLink . '.jpg';
 
-        $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
+        $dataSourceProvider = new DataSourceProvider();
+
+        if ($dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])) {
+            $providerName = $dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])->name;
+        }
 
         if ($batchInfo != null) {
             $failedItems = new FailedItems();

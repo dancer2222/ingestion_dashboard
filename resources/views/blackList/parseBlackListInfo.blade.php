@@ -17,7 +17,7 @@
                     @break
 
                     @case('data_source_provider_id')
-                    <?php $product = 'Licensor'?>
+                    <?php $product = 'Data source provider'?>
                     @break
 
                     @case('title')
@@ -59,10 +59,10 @@
                         @continue
                     @elseif($attrName === 'data_source_provider_id')
                         <?php
-                        $licensor = new \App\Models\Licensor();
+                        $dataSourceProvider = new \App\Models\DataSourceProvider();
 
-                        if ($licensor->getNameLicensorById($attrValue)) {
-                            $attrValue = $licensor->getNameLicensorById($attrValue)->name;
+                        if ($dataSourceProvider->getDataSourceProviderName($attrValue)) {
+                            $attrValue = $dataSourceProvider->getDataSourceProviderName($attrValue)->name;
                         }
                         ?>
                     @endif
