@@ -15,19 +15,19 @@
                 </a>
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('sel', ['type' => 'movies']) }}">Movies</a>
+                        <a href="{{ route('search', ['contentType' => 'movies']) }}">Movies</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'audiobooks']) }}">Audiobooks</a>
+                        <a href="{{ route('search', ['contentType' => 'audiobooks']) }}">Audiobooks</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'books']) }}">Books</a>
+                        <a href="{{ route('search', ['contentType' => 'books']) }}">Books</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'albums']) }}">Albums</a>
+                        <a href="{{ route('search', ['contentType' => 'albums']) }}">Albums</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'games']) }}">Games</a>
+                        <a href="{{ route('search', ['contentType' => 'games']) }}">Games</a>
                     </li>
                 </ul>
             </li>

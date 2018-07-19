@@ -31,7 +31,7 @@
                                 <td><input type="hidden" name="media[{{ $item['id'] }}][id]"
                                            value="{{ $item['id'] }}"
                                            readonly><a
-                                        href="{{ route('search', ['id' => $item['id'], 'type' => str_replace('_', '', $mediaType)]) }}"
+                                        href="{{ route('search', [ 'type' => str_replace('_', '', $mediaType), 'valueType' => 'id', 'id' => $item['id']]) }}"
                                         class="badge badge-pill badge-secondary"
                                         title="Click to see more info about this Id"
                                         target="_blank">{{ $item['id'] }}</a></td>

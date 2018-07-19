@@ -17,12 +17,12 @@ class DataSourceProvider extends Model
 
     /**
      * @param $id
-     * @return null
+     * @return mixed
      */
     public function getDataSourceProviderName($id)
     {
         return  $this->select('name')
             ->where('id', $id)
-            ->first()['name'];
+            ->first();
     }
 }

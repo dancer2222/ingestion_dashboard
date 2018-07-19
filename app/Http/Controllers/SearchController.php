@@ -13,14 +13,46 @@ use Ingestion\Search\GeoRestrict;
 class SearchController extends Controller
 {
     /**
+     * Allowed content types
+     */
+    const CONTENT_TYPES = [
+        'movies',
+        'books',
+        'audiobooks',
+        'albums',
+        'games',
+    ];
+
+    /**
+     * We can search using only these types of values
+     */
+    const VALUE_TYPES = [
+        'movies' => ['id', 'title'],
+        'books' => ['id', 'title', 'isbn'],
+        'audiobooks' => ['id', 'title', 'dataOriginId', 'isbn'],
+        'albums' => ['id', 'title', 'upc'],
+        'games' => ['id'],
+    ];
+
+    /**
      * @param Request $request
      * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function index(Request $request)
     {
-        if (isset($request->id, $request->type)) {
+        $id = $request->value;
+        $contentType = $request->contentType;
+
+        // Declare the default values for view
+        $dataForView['contentTypes'] = self::CONTENT_TYPES;
+        $dataForView['contentType'] = $contentType ?? self::CONTENT_TYPES[0];
+        $dataForView['valueTypes'] = self::VALUE_TYPES[$dataForView['contentType']] ?? self::VALUE_TYPES[0];
+        $dataForView['valueTypesAll'] = self::VALUE_TYPES;
+        $dataForView['valueType'] = $request->valueType;
+
+        if (isset($id, $contentType)) {
             $changeStatus = new TrackingStatusChanges();
-            $statusInfo = $changeStatus->getInfoById($request->id);
+            $statusInfo = $changeStatus->getInfoById($id);
 
             if (!$statusInfo->isEmpty()) {
                 $statusInfo->toArray();
@@ -28,7 +60,7 @@ class SearchController extends Controller
                 $statusInfo = null;
             }
 
-            $className = "Ingestion\Search\\" . ucfirst($request->type);
+            $className = "Ingestion\Search\\" . ucfirst($contentType);
 
             try {
                 $reflectionMethod = new \ReflectionMethod($className, 'searchInfoById');
@@ -37,22 +69,24 @@ class SearchController extends Controller
             }
 
             try {
-                $dataForView = $reflectionMethod->invoke(
+                $data = $reflectionMethod->invoke(
                     new $className(),
-                    $request->id,
-                    $request->type,
-                    GeoRestrict::search($request->id, $request->type),
-                    $request->type
+                    $id,
+                    $contentType,
+                    GeoRestrict::search($id, $contentType),
+                    $contentType
                 );
+
+                if (\is_array($data)) {
+                    $dataForView = array_merge($dataForView, $data);
+                }
             } catch (\Exception $exception) {
                 return view('search.infoById')->withErrors($exception->getMessage());
             }
 
             $dataForView['statusInfo'] = $statusInfo;
-
-            return view('search.infoById', $dataForView);
         }
 
-        return view('search.infoById');
+        return view('search.infoById', $dataForView);
     }
 }
