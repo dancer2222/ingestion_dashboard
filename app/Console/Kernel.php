@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if (!app()->isLocal()) {
+        if ($this->app->environment('production')) {
             // Librarything Tags
             $schedule->command('librarything_data:download')->fridays();
 
