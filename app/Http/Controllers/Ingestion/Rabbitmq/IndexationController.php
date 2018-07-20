@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ingestion\Rabbitmq;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingestion\Rabbitmq\IndexationRequest;
+use App\Models\BookLibrarythingData;
 use Ingestion\Rabbitmq\Indexation;
 
 class IndexationController extends Controller
@@ -16,7 +17,7 @@ class IndexationController extends Controller
     /**
      * @var string|array
      */
-    private $errors;
+    private $errors = [];
 
     /**
      * Display a form to send messages to queue.

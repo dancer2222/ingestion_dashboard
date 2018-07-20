@@ -33,10 +33,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if ($this->app->environment('production')) {
+        if ($this->app->environment('production') || $this->app->environment('qa')) {
             // Librarything Tags
             $schedule->command('librarything_data:download')->fridays();
+            $schedule->command('audiobooks:bind-tags')->daily();
+        }
 
+        if ($this->app->environment('production')) {
             // Aws notifications
             $schedule->command('gmail:read:ingestion-tracking')->twiceDaily();
         }
