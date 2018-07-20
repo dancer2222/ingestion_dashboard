@@ -50,8 +50,8 @@ class Movies extends MediaTypeAbstract
         if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {
             $dataSourceProvider = new DataSourceProvider();
 
-            if ($dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])) {
-                $providerName = $dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])->name;
+            if ($dataSourceProvider->getDataSourceProviderName($batchInfo['data_source_provider_id'])) {
+                $providerName = $dataSourceProvider->getDataSourceProviderName($batchInfo['data_source_provider_id'])->name;
             }
 
             $batchInfo['title'] = explode($providerName . '_', $batchInfo['title'], 2)[1];
