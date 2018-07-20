@@ -64,11 +64,7 @@ class SearchController extends Controller
 
             try {
                 $reflectionMethod = new \ReflectionMethod($className, 'searchInfoById');
-            } catch (\ReflectionException $exception) {
-                return view('search.infoById')->withErrors($exception->getMessage());
-            }
 
-            try {
                 $data = $reflectionMethod->invoke(
                     new $className(),
                     $id,
@@ -81,7 +77,7 @@ class SearchController extends Controller
                     $dataForView = array_merge($dataForView, $data);
                 }
             } catch (\Exception $exception) {
-                return view('search.infoById')->withErrors($exception->getMessage());
+                return view('search.infoById', $dataForView)->withErrors($exception->getMessage());
             }
 
             $dataForView['statusInfo'] = $statusInfo;

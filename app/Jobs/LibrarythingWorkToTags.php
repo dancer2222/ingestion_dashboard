@@ -64,7 +64,6 @@ class LibrarythingWorkToTags implements ShouldQueue
                         LibrarythingTag::create($librarythingTagWhere);
                     }
                 } catch (\Exception $e) {
-                    $this->release(3600);
                     logger()->critical("LIBRARYTHING_DATA LISTENER TAGS {$e->getMessage()}");
                     continue;
                 }
