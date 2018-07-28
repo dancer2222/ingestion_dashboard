@@ -2,20 +2,24 @@
 
 namespace App\Console\Commands\Librarything;
 
+use Barryvdh\Debugbar\Twig\Extension\Stopwatch;
+use Ingestion\LibraryThing\Xml\ParserFactory;
 use App\Models\Tag;
 use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
-use App\Jobs\LibrarythingWorkToIsbn;
+use App\Jobs\WorkToIsbn;
 use App\Jobs\LibrarythingWorkToTags;
 
 class LibraryThingDataXmlParse extends Command
 {
+    const DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'librarything_data:xml:parse {--path=*} {--limit=1000}';
+    protected $signature = 'librarything_data:xml:parse {--path=*} {--limit=1000} {cleanup? : Delete the remaining files.}';
 
     /**
      * The console command description.
@@ -50,7 +54,7 @@ class LibraryThingDataXmlParse extends Command
      */
     public function handle()
     {
-        $this->info("$this->signature started at " . now()->format('Y-m-d H:i:s'));
+        $this->info("$this->signature started at " . now()->format(self::DATE_FORMAT));
 
         $this->limit = $this->option('limit');
         $paths = $this->option('path');
@@ -60,36 +64,32 @@ class LibraryThingDataXmlParse extends Command
         }
 
         foreach ($paths as $filepath) {
-            if (!file_exists($filepath)) {
-                $message = "File $filepath doesn't exist.";
-                $this->error($message);
-                logger($message);
-
-                continue;
-            }
-
-            if (str_contains($filepath, 'worktotags_current.xml')) {
-                $method = 'parseWorkToTagsXml';
-            } else if (str_contains($filepath, 'works_to_isbn_current.xml')) {
-                $method = 'parseWorkToIsbnXml';
-            } else {
-                continue;
-            }
-
             try {
-                $reader = new \XMLReader();
-                $reader->open($filepath, 'utf-8', LIBXML_BIGLINES | LIBXML_PARSEHUGE);
+                // Instantiate suitable class to parse file
+                $parser = ParserFactory::make($filepath, logger());
 
-                $this->info(Carbon::now() . " Start to parse $method");
+                $startParserTime = now()->format(self::DATE_FORMAT);
+                $this->info("$startParserTime - Started the parsing of the file $filepath");
 
-                $this->$method($reader);
+                // Parse file
+                $parser->parse();
 
-                unlink($filepath);
+                $endParserTime = now()->format(self::DATE_FORMAT);
+                $this->info("$endParserTime - Finished the parsing of the file $filepath");
 
-                $this->info(Carbon::now() . " Finished $method");
+                // Remove remaining files
+                if ($this->argument('cleanup') && unlink($filepath)) {
+                    $this->info("The file $filepath was deleted.");
+                }
+
+                // Display errors
+                foreach ($parser->getErrors() as $error) {
+                    $this->error($error);
+                    logger()->error($error);
+                }
             } catch (\Exception $e) {
                 $this->error($e->getMessage());
-                logger($e->getMessage());
+                logger()->critical($e->getMessage());
                 continue;
             }
         }
@@ -190,7 +190,7 @@ class LibraryThingDataXmlParse extends Command
                 $batchesCounter++;
 
                 if ($batchesCounter >= $this->limit) {
-                    LibrarythingWorkToIsbn::dispatch($batches)->onQueue('librarything-isbn');
+                    WorkToIsbn::dispatch($batches)->onQueue('librarything-isbn');
 
                     $batches = [];
                     $batchesCounter = 0;

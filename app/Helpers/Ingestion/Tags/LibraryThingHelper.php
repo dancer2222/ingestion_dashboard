@@ -37,6 +37,7 @@ class LibraryThingHelper
     private $feeds = [
         'works_to_isbn_current.xml.bz2',
         'worktotags_current.xml.bz2',
+        'worktoratings_current.xml.bz2',
     ];
 
     /**
