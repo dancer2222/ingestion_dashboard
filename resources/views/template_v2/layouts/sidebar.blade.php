@@ -118,6 +118,21 @@
             </li>
             @endrole
 
+            <li>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fas fa-book"></i>
+                    <span class="hide-menu">
+                        Librarything
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('librarything.ratings.index') }}">Ratings</a>
+                    </li>
+                </ul>
+            </li>
+
             {{--<li class="nav-label">Misc</li>--}}
 
             {{--<li>--}}

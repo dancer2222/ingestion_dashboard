@@ -19,4 +19,12 @@ class BookLibrarythingData extends Model
     {
         return $this->hasMany(LibrarythingTag::class, 'workcode', 'workcode');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ratings()
+    {
+        return $this->hasMany(LibrarythingRatings::class, 'workcode', 'workcode');
+    }
 }
