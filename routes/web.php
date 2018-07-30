@@ -138,7 +138,7 @@ Route::group(['middleware' => ['auth']], function() {
         // Ratings
         Route::name('ratings.')->prefix('ratings')->group(function () {
             Route::get('/', 'RatingsController@index')->name('index');
-            Route::get('/{isbn}', 'RatingsController@show')->name('show');
+            Route::get('/isbn/{isbn?}', 'RatingsController@show')->name('show');
 
         });
     });

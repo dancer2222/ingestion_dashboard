@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Librarything;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\BookLibrarythingData;
+use App\Models\ProductAudioBook;
 use Ingestion\LibraryThing\Ratings\Rating;
 use Isbn\Isbn;
 
@@ -47,47 +47,28 @@ class RatingsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  string  $isbn
      * @return \Illuminate\Http\Response
      */
-    public function show(string $isbn)
+    public function show($isbn = null)
     {
         try {
-            if ($isbn && $this->isbn->validation->isbn13($isbn)) {
-//                $audiobook = ProductAudioBook::where('isbn', $isbn)->audiobook();
-                $audiobook = 1;
-//9780329050436
+            if (!$isbn || $this->isbn->validation->isbn13($isbn)) {
+                $audiobook = ProductAudioBook::where('isbn', $isbn)->first()->audiobook()->first();
                 $isbn10 = $this->isbn->translate->to10($isbn);
                 $bookLibrarythingData = BookLibrarythingData::select('workcode')->whereIsbn_10($isbn10)->first();
 
-                if (!$audiobook || !$bookLibrarythingData) {
-                    throw new \Exception("Can't find audiobook with isbn: $isbn");
+                if (!$bookLibrarythingData) {
+                    throw new \Exception("We haven't yet received this isbn from Librarything - $isbn");
                 }
 
                 $ratings = $bookLibrarythingData->ratings()->select('rating', 'count')->get();
+
+                if (!$audiobook && $bookLibrarythingData) {
+                    $this->viewErrors[] = "We don't have product with this isbn: $isbn, but we found the requested isbn in book_librarything_datas.";
+                }
 
                 if (!$ratings) {
                     throw new \Exception("We don't have ratings for this isbn: $isbn");
@@ -95,45 +76,13 @@ class RatingsController extends Controller
 
                 $this->ratingsCalculator->setRatings($ratings->pluck('count', 'rating')->toArray());
                 $this->viewData['rating'] = $this->ratingsCalculator->calculate();
+            } else {
+                $this->viewErrors[] = "Invalid isbn: $isbn";
             }
         } catch (\Exception $e) {
             $this->viewErrors = $e->getMessage();
         }
 
         return view('template_v2.misc.library_thing.ratings', $this->viewData)->withErrors($this->viewErrors);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
