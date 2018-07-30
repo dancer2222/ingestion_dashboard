@@ -56,19 +56,18 @@ class RatingsController extends Controller
     {
         try {
             if (!$isbn || $this->isbn->validation->isbn13($isbn)) {
-                $audiobook = ProductAudioBook::where('isbn', $isbn)->first()->audiobook()->first();
                 $isbn10 = $this->isbn->translate->to10($isbn);
+                $productsAudiobooks = ProductAudioBook::where('isbn', $isbn)->with('audiobook')->get();
                 $bookLibrarythingData = BookLibrarythingData::select('workcode')->whereIsbn_10($isbn10)->first();
+
+                $this->viewData['products'] = $productsAudiobooks;
+                $this->viewData['bookLibrarything'] = $bookLibrarythingData;
 
                 if (!$bookLibrarythingData) {
                     throw new \Exception("We haven't yet received this isbn from Librarything - $isbn");
                 }
 
                 $ratings = $bookLibrarythingData->ratings()->select('rating', 'count')->get();
-
-                if (!$audiobook && $bookLibrarythingData) {
-                    $this->viewErrors[] = "We don't have product with this isbn: $isbn, but we found the requested isbn in book_librarything_datas.";
-                }
 
                 if (!$ratings) {
                     throw new \Exception("We don't have ratings for this isbn: $isbn");
