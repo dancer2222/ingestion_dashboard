@@ -121,6 +121,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/changeStatus', 'StatusController@changeStatus')->name('changeStatus');
     });
 
+    // Blacklist
     Route::group(['prefix' => 'blackList', 'namespace' => 'BlackList'], function() {
         Route::get('/', 'BlackListController@index')->name('blackList.index');
         Route::get('/search/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
@@ -129,6 +130,16 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/manage', 'BlackListController@indexManage')->name('blackList.manage');
             Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
             Route::post('/blackListSelect', 'BlackListController@blackListSelect')->name('blackList.blackListSelect');
+        });
+    });
+
+    // Librarything
+    Route::name('librarything.')->prefix('librarything')->namespace('Librarything')->group(function () {
+        // Ratings
+        Route::name('ratings.')->prefix('ratings')->group(function () {
+            Route::get('/', 'RatingsController@index')->name('index');
+            Route::get('/{isbn}', 'RatingsController@show')->name('show');
+
         });
     });
 });
