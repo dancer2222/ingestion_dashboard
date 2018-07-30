@@ -13,7 +13,7 @@ class LibraryThingData extends Command
      *
      * @var string
      */
-    protected $signature = 'librarything_data:download {force?}';
+    protected $signature = 'librarything_data:download {--choice} {force?}';
 
     /**
      * The console command description.
@@ -49,7 +49,12 @@ class LibraryThingData extends Command
     {
         $bar = $this->output->createProgressBar();
 
-        if ($this->argument('force')) {
+        $isChoice = $this->option('choice');
+
+        if ($isChoice) {
+            $userChoice = $this->choice('Select the file you want to download', $this->helper->getFeeds());
+            $feeds[] = $userChoice;
+        } elseif ($this->argument('force')) {
             $feeds = $this->helper->getFeeds();
         } else {
             $feeds = $this->helper->checkForUpdates();
@@ -63,7 +68,7 @@ class LibraryThingData extends Command
         $this->info('Downloading feeds...');
         $this->line(implode(' | ', $feeds));
 
-        $downloadedFiles = $this->helper->download($feeds, function ($dl_total_size, $dl_size_so_far, $ul_total_size, $ul_size_so_far) use ($bar) {
+        $downloadedFiles = $this->helper->download($feeds, function ($dl_total_size, $dl_size_so_far) use ($bar) {
             $bar->start($dl_total_size);
             $bar->advance($dl_size_so_far);
         });
@@ -74,8 +79,10 @@ class LibraryThingData extends Command
         $this->helper->saveLastModificationDate($downloadedFiles);
         $files = $this->helper->decompressBz2Files($downloadedFiles);
 
-        Artisan::call('librarything_data:xml:parse', [
-            '--path' => $files,
-        ]);
+        if (env('APP_ENV') !== 'local') {
+            Artisan::call('librarything_data:xml:parse', [
+                '--path' => $files,
+            ]);
+        }
     }
 }
