@@ -5,6 +5,10 @@ services:
   dweb:
     build: ./web
     container_name: dweb
+    environment:
+        ENABLE_XDEBUG: 1
+        XDEBUG_CONFIG: "remote_host=${YOUR_IP}"
+        PHP_IDE_CONFIG: "serverName=IDA:9000"
     volumes:
       - "./../:/var/www/html/dashboard"
     ports:
