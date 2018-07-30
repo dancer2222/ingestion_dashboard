@@ -8,7 +8,7 @@
 
             <div class="input-group-append">
                 <button type="submit" class="btn btn-primary pl-4 pr-4 mb-2" id="button-addon"
-                        data-action="{{ route('librarything.ratings.index') }}"
+                        data-action="{{ route('librarything.ratings.show') }}"
                         onclick="($('#isbn').val()) ? location.replace(this.dataset.action + '/' + $('#isbn').val()) : ''; return false">
                     Find
                 </button>

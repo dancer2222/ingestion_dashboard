@@ -22,6 +22,13 @@ RUN pecl install xdebug-2.6.0 memcached-3.0.4 \
     && docker-php-ext-install bcmath \
     && docker-php-source delete
 
+# Configure xdebug
+#ENV XDEBUGINI_PATH=/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN echo "xdebug.remote_connect_back=Off" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN echo "xdebug.remote_host=172.17.0.1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 RUN apk del --no-cache zlib-dev cyrus-sasl-dev \
     # Clear
     && rm -rf /tmp/* /var/cache/apk/*
