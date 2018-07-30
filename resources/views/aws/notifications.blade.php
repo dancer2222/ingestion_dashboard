@@ -75,8 +75,8 @@
                         @foreach($notifications as $notification)
                             <tr>
                                 <th scope="row">{{ $notification->id }}</th>
-                                <td class="color-primary">{{ $notification->eventTime }}</td>
-                                <td>{{ $notification->eventName }}</td>
+                                <td class="color-primary">{{ $notification->event_time }}</td>
+                                <td>{{ $notification->event_name }}</td>
                                 <td>{{ $notification->bucket }}</td>
                                 <td>{{ $notification->key }}</td>
                                 <td>{{ $notification->size }}</td>
