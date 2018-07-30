@@ -135,15 +135,15 @@ class IngestionTracking extends Command
                 }
 
                 foreach ($message->Records as $record) {
-                    $data['eventTime'] = $record->eventTime ?? null;
-                    $data['eventName'] = $record->eventName ?? null;
+                    $data['event_time'] = $record->eventTime ?? null;
+                    $data['event_name'] = $record->eventName ?? null;
                     $data['bucket'] = $record->s3->bucket->name ?? null;
                     $data['key'] = $record->s3->object->key ?? null;
                     $data['size'] = $record->s3->object->size ?? null;
 
                     $validator = Validator::make($data, [
-                        'eventTime' => 'present',
-                        'eventName' => 'present',
+                        'event_time' => 'present',
+                        'event_name' => 'present',
                         'bucket' => 'present|max:50',
                         'key' => 'present',
                         'size' => 'present|max:30',
@@ -154,7 +154,7 @@ class IngestionTracking extends Command
                     }
 
                     // Modify date after validation
-                    $data['eventTime'] = Carbon::parse($data['eventTime'])->format('Y-m-d');
+                    $data['event_time'] = Carbon::parse($data['event_time'])->format('Y-m-d');
 
                     AwsNotication::create($data);
                 }

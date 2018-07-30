@@ -22,8 +22,8 @@ class AwsNotication extends Model
     protected $fillable =
         [
             'date',
-            'eventTime',
-            'eventName',
+            'event_time',
+            'event_name',
             'bucket',
             'key',
             'size'

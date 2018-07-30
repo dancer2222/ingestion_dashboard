@@ -19,14 +19,14 @@ class AwsNotificationsController extends Controller
      */
     public function index()
     {
-        $builder = AwsNotication::orderBy('eventTime', 'desc');
+        $builder = AwsNotication::orderBy('event_time', 'desc');
 
         if ($fromDate = request('from_date')) {
-            $builder->where('eventTime', '>=', $fromDate);
+            $builder->where('event_time', '>=', $fromDate);
         }
 
         if ($toDate = request('to_date')) {
-            $builder->where('eventTime', '<=', $toDate);
+            $builder->where('event_time', '<=', $toDate);
         }
 
         if ($bucket = request('bucket')) {

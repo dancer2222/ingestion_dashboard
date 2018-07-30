@@ -16,8 +16,8 @@ class AwsNotificationsCreateTable extends Migration
         if (app()->environment('local')) {
             Schema::create('aws_notifications', function (Blueprint $table) {
                 $table->increments('id');
-                $table->date('eventTime');
-                $table->string('eventName', 30);
+                $table->date('event_time');
+                $table->string('event_name', 255);
                 $table->string('bucket', 50);
                 $table->text('key');
                 $table->string('size', 30);
