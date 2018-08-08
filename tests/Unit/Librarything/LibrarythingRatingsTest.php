@@ -58,6 +58,20 @@ class LibrarythingRatingsTest extends TestCase
                 ],
                 3.5
             ],
+            'Fourth' => [
+                [
+                    '3.0' => 0,
+                    '4.0' => 1,
+                ],
+                4.0
+            ],
+            'Fifth' => [
+                [
+                    '3.0' => 0,
+                    '4.0' => 0,
+                ],
+                0.0
+            ],
         ];
     }
 }
