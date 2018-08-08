@@ -87,7 +87,7 @@ class BindLibrarythingTags implements ShouldQueue
 
         $audiobook = $product->audiobook;
 
-        if (!$audiobook || $audiobook->count() > 1) {
+        if ($audiobook->count() !== 1) {
             return;
         }
 

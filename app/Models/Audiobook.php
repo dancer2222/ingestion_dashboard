@@ -120,4 +120,19 @@ class Audiobook extends Model
             'id'
         )->withPivot(['id']);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function products()
+    {
+        return $this->belongsToMany(
+            ProductAudioBook::class,
+            'audio_book_products',
+            'audio_book_id',
+            'product_id',
+            'id',
+            'id'
+        );
+    }
 }

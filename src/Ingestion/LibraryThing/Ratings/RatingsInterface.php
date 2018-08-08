@@ -21,4 +21,11 @@ interface RatingsInterface
      * @return array
      */
     public function getRatings(): array;
+
+    /**
+     * Returns total votes amount
+     *
+     * @return int
+     */
+    public function getTotalVotes(): int;
 }

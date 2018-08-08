@@ -24,7 +24,9 @@ class ProductAudioBook extends Model
             Audiobook::class,
             'audio_book_products',
             'product_id',
-            'audio_book_id'
+            'audio_book_id',
+            'id',
+            'id'
         );
 
         $this->primaryKey = 'seq_id';

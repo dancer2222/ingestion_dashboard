@@ -15,7 +15,11 @@ class Rating implements RatingsInterface
     public function calculate(): float
     {
         $countRatings = 0;
-        $countsSum = array_sum($this->getRatings());
+        $countsSum = $this->getTotalVotes();
+
+        if (!$countsSum) {
+            return 0.0;
+        }
 
         foreach ($this->getRatings() as $rating => $count) {
             $countRatings += $rating * $count;
@@ -38,5 +42,13 @@ class Rating implements RatingsInterface
     public function getRatings(): array
     {
         return $this->ratings;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTotalVotes(): int
+    {
+        return array_sum($this->getRatings());
     }
 }
