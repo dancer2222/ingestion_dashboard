@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AudiobookAverageRating extends Model
 {
     protected $connection = 'mysql_local_content';
-    protected $table = 'audio_book_average_ratings';
-    protected $fillable = ['audiobook_id', 'rating_lt', 'votes_total_lt'];
+    protected $table = 'audio_book_average_ratings_lt';
+    protected $fillable = ['audiobook_id', 'rating', 'votes_total'];
     public $timestamps = false;
 }

@@ -3,6 +3,7 @@
 namespace Ingestion\LibraryThing\Xml;
 
 use App\Jobs\Librarything\WorkToRatings;
+use App\Models\BookLibrarythingData;
 use Psr\Log\LoggerInterface;
 
 class ParseWorkToRatings extends ParserAbstract
@@ -74,5 +75,19 @@ class ParseWorkToRatings extends ParserAbstract
     protected function dispatch(): void
     {
         WorkToRatings::dispatch($this->batches)->onQueue($this->queue);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function sanitizeData(array $data): array
+    {
+        $bookDataLt = BookLibrarythingData::where('workcode', $data['workcode'])->count();
+
+        if (!$bookDataLt) {
+            return [];
+        }
+
+        return $data;
     }
 }
