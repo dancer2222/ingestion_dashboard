@@ -73,6 +73,14 @@ abstract class ParserAbstract implements ParserInterface
     abstract protected function dispatch(): void;
 
     /**
+     * Check the data before adding to batch
+     *
+     * @param array $data Data to validate
+     * @return array
+     */
+    abstract protected function sanitizeData(array $data): array;
+
+    /**
      * Parse xml file using 'handle' method.
      */
     public function parse(): void
@@ -111,6 +119,12 @@ abstract class ParserAbstract implements ParserInterface
      */
     protected function addToBatch(array $data): void
     {
+        $data = $this->sanitizeData($data);
+
+        if (!$data) {
+            return;
+        }
+
         $this->batchesCounter++;
         $this->batches[] = $data;
 
