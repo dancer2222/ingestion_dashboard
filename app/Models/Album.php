@@ -45,6 +45,15 @@ class Album extends Model
     }
 
     /**
+     * @param $dataOriginId
+     * @return mixed
+     */
+    public function getInfoByDataOriginId($dataOriginId)
+    {
+        return $this->where('data_origin_id', $dataOriginId)->get();
+    }
+
+    /**
      * @param $id
      * @return mixed
      */

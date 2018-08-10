@@ -28,9 +28,9 @@ class SearchController extends Controller
      */
     const VALUE_TYPES = [
         'movies' => ['id', 'title'],
-        'books' => ['id', 'title', 'isbn'],
+        'books' => ['id', 'title', 'isbn', 'dataOriginId'],
         'audiobooks' => ['id', 'title', 'dataOriginId', 'isbn'],
-        'albums' => ['id', 'title', 'upc'],
+        'albums' => ['id', 'title', 'upc', 'dataOriginId'],
         'games' => ['id'],
     ];
 
@@ -42,7 +42,6 @@ class SearchController extends Controller
     {
         $id = $request->value;
         $contentType = $request->contentType;
-
         // Declare the default values for view
         $dataForView['contentTypes'] = self::CONTENT_TYPES;
         $dataForView['contentType'] = $contentType ?? self::CONTENT_TYPES[0];

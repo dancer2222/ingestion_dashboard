@@ -72,8 +72,7 @@ class ParseController extends Controller
                 $this->filepath
             );
         } catch (\Exception $exception) {
-            return redirect(route('search', ['id' => $request->id, 'type' => '']))
-                ->with('message', $exception->getMessage());
+            return back()->with('message', $exception->getMessage());
         }
 
         if ($this->dataType == 'xml' || $this->dataType == 'COT') {
