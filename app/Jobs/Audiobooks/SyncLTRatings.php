@@ -116,14 +116,14 @@ class SyncLTRatings implements ShouldQueue
                 $averageRatingIsChanged = false;
 
                 // If rating was updated
-                if ($audiobookAverateRatingModel->rating_lt != $averageRating) {
-                    $audiobookAverateRatingModel->rating_lt = $averageRating;
+                if ($audiobookAverateRatingModel->rating != $averageRating) {
+                    $audiobookAverateRatingModel->rating = $averageRating;
                     $averageRatingIsChanged = true;
                 }
 
                 // If total votes were updated
-                if ($audiobookAverateRatingModel->votes_total_lt !== $totalVotes) {
-                    $audiobookAverateRatingModel->votes_total_lt = $totalVotes;
+                if ($audiobookAverateRatingModel->votes_total !== $totalVotes) {
+                    $audiobookAverateRatingModel->votes_total = $totalVotes;
                     $averageRatingIsChanged = true;
                 }
 
