@@ -31,15 +31,17 @@ class ParseController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->dataType = explode('.', $request->batchTitle, 2)[1];
-        $downloadPath = public_path("tmp/download");
+        if (isset($request->batchTitle)) {
+            $this->dataType = explode('.', $request->batchTitle, 2)[1];
+            $downloadPath = public_path("tmp/download");
 
-        if (!file_exists($downloadPath)) {
-            mkdir($downloadPath, 0777, true);
-            @chmod($downloadPath, 0777);
+            if (!file_exists($downloadPath)) {
+                mkdir($downloadPath, 0777, true);
+                @chmod($downloadPath, 0777);
+            }
+
+            $this->filepath = $downloadPath . '/' . $request->batchTitle;
         }
-
-        $this->filepath = $downloadPath . '/' . $request->batchTitle;
     }
 
     /**
@@ -70,8 +72,7 @@ class ParseController extends Controller
                 $this->filepath
             );
         } catch (\Exception $exception) {
-            return redirect(route('search', ['id' => $request->id, 'type' => '']))
-                ->with('message', $exception->getMessage());
+            return back()->with('message', $exception->getMessage());
         }
 
         if ($this->dataType == 'xml' || $this->dataType == 'COT') {

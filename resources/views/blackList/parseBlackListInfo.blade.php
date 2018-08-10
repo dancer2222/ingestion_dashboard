@@ -17,7 +17,7 @@
                     @break
 
                     @case('data_source_provider_id')
-                    <?php $product = 'Licensor'?>
+                    <?php $product = 'Data source provider'?>
                     @break
 
                     @case('title')
@@ -52,15 +52,18 @@
                 @foreach($product->attributesToArray() as $attrName => $attrValue)
                     @if($attrName === 'book_id' || $attrName === 'audio_book_id')
                         <td>
-                            <a href="{{ route('search', ['id' => $attrValue, 'type' => str_replace('_', '', $mediaType)]) }}"
+                            <a href="{{ route('search', ['type' => str_replace('_', '', $mediaType), 'valueType' => 'id','id' => $attrValue]) }}"
                                title="Click to see info about this Id"><span
                                         class="badge badge-pill badge-secondary">{{ $attrValue }}</span></a>
                         </td>
                         @continue
                     @elseif($attrName === 'data_source_provider_id')
                         <?php
-                        $licensor = new \App\Models\Licensor();
-                        $attrValue = $licensor->getNameLicensorById($attrValue);
+                        $dataSourceProvider = new \App\Models\DataSourceProvider();
+
+                        if ($dataSourceProvider->getDataSourceProviderName($attrValue)) {
+                            $attrValue = $dataSourceProvider->getDataSourceProviderName($attrValue)->name;
+                        }
                         ?>
                     @endif
                     <td><span class="badge badge-pill badge-light">{{ $attrValue }}</span></td>
@@ -70,11 +73,10 @@
     </table>
 </div>
 
+@if($info instanceof Illuminate\Pagination\LengthAwarePaginator)
 <div class="d-flex">
     <div class="mr-auto p-2">
-        @if($info instanceof Illuminate\Pagination\LengthAwarePaginator)
-            {{ $info->appends(['limit' => request('limit', 10)])->links() }}
-        @endif
+        {{ $info->appends(['limit' => request('limit', 10)])->links() }}
     </div>
     <div class="mr-auto p-2">
         <h3 style="font-weight: bold">Current page : {{ $info->currentPage() }}</h3>
@@ -95,7 +97,6 @@
         </form>
     </div>
 </div>
-
-
+@endif
 
 

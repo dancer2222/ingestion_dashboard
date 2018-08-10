@@ -82,9 +82,9 @@ class BlackListController extends Controller
             $handledIds);
 
         $msg = 'This id(s) - ' . $handledIds . ' updated in BlackList';
-        $unHandledIds = implode(', ', $blackListManager->unHandledIds);
 
         if (!empty($unHandledIds)) {
+            $unHandledIds = implode(', ', $blackListManager->unHandledIds);
             $msg = $msg . ', not found this id(s) - ' . $unHandledIds;
         }
 
@@ -128,7 +128,7 @@ class BlackListController extends Controller
                 $info = $blackListManager->getInfoById();
             }
         } catch (Exception $exception) {
-            $message = 'We have a problem with this id ' . $blackListManager->getId() . ' ' . $exception->getMessage();
+            $message = 'Not found this id ' . $blackListManager->getId() . ' ' . $exception->getMessage();
             logger()->critical($message);
 
             return back()->with('message', $message);
@@ -136,7 +136,7 @@ class BlackListController extends Controller
 
         return view('blackList.manageBlackListSelect', [
             'info' => $info,
-            'mediaType' => $blackListManager->getMediaType() . 's',
+            'mediaType' => $blackListManager->getMediaTypeFromRequest(),
             'authorName' => $authorName,
             'id' => $blackListManager->getId(),
             'command' => $blackListManager->getCommand(),
@@ -155,23 +155,21 @@ class BlackListController extends Controller
     /**
      * @param $mediaType
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @param BookBlackList $bookBlackList
+     * @param AudiobookBlackList $audiobookBlackList
+     * @return mixed
      */
-    public function getInfoFromBlackList($mediaType, Request $request)
+    public function getInfoFromBlackList($mediaType, Request $request, BookBlackList $bookBlackList, AudiobookBlackList $audiobookBlackList)
     {
-        $bookBlackList = new BookBlackList();
-        $audiobookBlackList = new AudiobookBlackList();
         $paginate = $request->get('limit', 10);
 
         if (!is_null($request->id)) {
-
             if ('books' === $mediaType) {
                 $info = $bookBlackList->getInfoById($request->id);
             } else {
                 $info = $audiobookBlackList->getInfoById($request->id);
             }
         } else {
-
             if ('books' === $mediaType) {
                 $info = $bookBlackList->getInfo($paginate);
             } else {

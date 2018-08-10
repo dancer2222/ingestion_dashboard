@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Brightcove
-    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|pm']], function() {
+    Route::group(['prefix' => 'brightcove', 'namespace' => 'Brightcove', 'middleware' => ['brightcove', 'role:admin|tester|pm|ingester']], function() {
         Route::get('/', 'ContentController@index')->name('brightcove.index');
         Route::get('/videos', 'ContentController@videos')->name('brightcove.videos');
         Route::get('/folders', 'ContentController@folders')->name('brightcove.folders');
@@ -81,20 +81,18 @@ Route::group(['middleware' => ['auth']], function() {
             return redirect(route('search'));
         });
         //Select search
-        Route::get('/sel', 'SelectController@index')->name('sel');
-        Route::get('/search/{id?}/{type?}', 'SearchController@index')->name('search');
+        Route::get('/search/{contentType?}/{valueType?}/{value?}', 'SearchController@index')->name('search');
 
         Route::post('/show', 'ParseController@index')->name('reports.parse.index');
         Route::post('/metadata', 'ParseController@getMetadataIntoDatabase')->name('reports.parse.getMetadataIntoDatabase');
-        Route::get('/track/{id?}/{option?}', 'TrackController@index')->name('reports.track.index');
+        Route::get('/track/{id?}', 'TrackController@index')->name('reports.track.index');
 
         Route::post('/searchBy/{title?}', 'SearchByController@index')->name('reports.search_by_title');
         Route::post('/report', 'BatchReportController@index')->name('reports.batch_report');
     });
 
-    Route::group(['prefix' => 'aws', 'middleware' => 'role:admin|ingester', 'namespace' => 'Aws'], function() {
-        Route::get('/show/', 'AwsNotificationsController@index')->name('aws.index');
-        Route::post('/showSelect/{date?}', 'AwsNotificationsController@getInfo')->name('aws.info');
+    Route::group(['prefix' => 'aws', 'middleware' => 'role:admin|ingester|pm', 'namespace' => 'Aws'], function() {
+        Route::get('/notifications', 'AwsNotificationsController@index')->name('aws.index');
     });
 
     //Tools route
@@ -118,23 +116,32 @@ Route::group(['middleware' => ['auth']], function() {
         });
     });
 
-
-
+    // TODO: rename status to something more suitable
     Route::group(['prefix' => 'status', 'middleware' => 'role:admin|ingester', 'namespace' => 'Status'], function() {
         Route::post('/changeStatus', 'StatusController@changeStatus')->name('changeStatus');
     });
 
+    // Blacklist
     Route::group(['prefix' => 'blackList', 'namespace' => 'BlackList'], function() {
-        Route::get('/showBlackList', 'BlackListController@index')->name('blackList.index');
-        Route::get('/infoFromBlackList/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
+        Route::get('/', 'BlackListController@index')->name('blackList.index');
+        Route::get('/search/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
 
         Route::group(['middleware' => 'role:admin|ingester'], function() {
-            Route::get('/manageBlackList', 'BlackListController@indexManage')->name('blackList.manage');
+            Route::get('/manage', 'BlackListController@indexManage')->name('blackList.manage');
             Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
             Route::post('/blackListSelect', 'BlackListController@blackListSelect')->name('blackList.blackListSelect');
         });
     });
 
+    // Librarything
+    Route::name('librarything.')->prefix('librarything')->namespace('Librarything')->group(function () {
+        // Ratings
+        Route::name('ratings.')->prefix('ratings')->group(function () {
+            Route::get('/', 'RatingsController@index')->name('index');
+            Route::get('/isbn/{isbn?}', 'RatingsController@show')->name('show');
+
+        });
+    });
 });
 
 Auth::routes();

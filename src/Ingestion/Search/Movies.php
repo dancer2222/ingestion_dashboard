@@ -35,7 +35,11 @@ class Movies extends MediaTypeAbstract
 
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
-        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+
+        if ($licensor->getNameLicensorById($info['licensor_id'])) {
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id'])->name;
+        }
+
         $imageUrl = config('main.links.image') . 'movie/' . $id . '.jpg';
         $brightcove_id = $brightcove->getBrightcoveId($id);
 
@@ -44,8 +48,12 @@ class Movies extends MediaTypeAbstract
         }
 
         if ($batchInfo != null && false != stristr($batchInfo['title'], '.')) {
-            $providerName = new DataSourceProvider();
-            $providerName = $providerName->getDataSourceProviderName($batchInfo['data_source_provider_id']);
+            $dataSourceProvider = new DataSourceProvider();
+
+            if ($dataSourceProvider->getDataSourceProviderName($batchInfo['data_source_provider_id'])) {
+                $providerName = $dataSourceProvider->getDataSourceProviderName($batchInfo['data_source_provider_id'])->name;
+            }
+
             $batchInfo['title'] = explode($providerName . '_', $batchInfo['title'], 2)[1];
 
             // Create links to aws bucket
@@ -81,7 +89,8 @@ class Movies extends MediaTypeAbstract
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems,
-            'brightcove_id'                => $brightcove_id
+            'brightcove_id'                => $brightcove_id,
+            'blackListStatus'              => ''
         ];
 
         return $result;

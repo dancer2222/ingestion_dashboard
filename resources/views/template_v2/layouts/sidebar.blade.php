@@ -15,19 +15,19 @@
                 </a>
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('sel', ['type' => 'movies']) }}">Movies</a>
+                        <a href="{{ route('search', ['contentType' => 'movies']) }}">Movies</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'audiobooks']) }}">Audiobooks</a>
+                        <a href="{{ route('search', ['contentType' => 'audiobooks']) }}">Audiobooks</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'books']) }}">Books</a>
+                        <a href="{{ route('search', ['contentType' => 'books']) }}">Books</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'albums']) }}">Albums</a>
+                        <a href="{{ route('search', ['contentType' => 'albums']) }}">Albums</a>
                     </li>
                     <li>
-                        <a href="{{ route('sel', ['type' => 'games']) }}">Games</a>
+                        <a href="{{ route('search', ['contentType' => 'games']) }}">Games</a>
                     </li>
                 </ul>
             </li>
@@ -48,7 +48,6 @@
             </li>
 
             {{-- Aws --}}
-            @permission('view-notifications')
             <li>
                 <a class="has-arrow " href="#" aria-expanded="false">
                     <i class="fab fa-aws"></i>
@@ -57,11 +56,9 @@
                     </span>
                 </a>
                 <ul aria-expanded="false" class="collapse">
-                    <li><a href="#">Coming soon</a></li>
-                    {{--<li><a href="{{ route('aws.index') }}">Notifications</a></li>--}}
+                    <li><a href="{{ route('aws.index') }}">Notifications</a></li>
                 </ul>
             </li>
-            @endpermission
 
             {{--Tools --}}
             @permission('view-tools')
@@ -82,13 +79,13 @@
                 <a class="has-arrow" href="#" aria-expanded="false">
                     <i class="fa fa-flag"></i>
                     <span class="hide-menu">
-                        Black list
+                        Content blacklist
                     </span>
                 </a>
 
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('blackList.index') }}">Show BlackList</a>
+                        <a href="{{ route('blackList.index') }}">Search</a>
                     </li>
                     @role(['admin', 'ingester'])
                     <li>
@@ -120,6 +117,45 @@
                 </ul>
             </li>
             @endrole
+
+            <li>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fas fa-book"></i>
+                    <span class="hide-menu">
+                        Librarything
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('librarything.ratings.index') }}">Ratings</a>
+                    </li>
+                </ul>
+            </li>
+
+            {{--<li class="nav-label">Misc</li>--}}
+
+            {{--<li>--}}
+
+                {{--<a class="has-arrow" href="#" aria-expanded="false">--}}
+                    {{--<i class="fas fa-tags"></i>--}}
+                    {{--<span class="hide-menu">--}}
+                        {{--Tags--}}
+                    {{--</span>--}}
+                {{--</a>--}}
+
+                {{--<ul aria-expanded="false" class="collapse">--}}
+                    {{--<li>--}}
+                        {{--<a class="has-arrow" href="#">Library Thing</a>--}}
+
+                        {{--<ul aria-expanded="false" class="collapse">--}}
+                            {{--<li>--}}
+                                {{--<a href="{{ route('librarything.index') }}">Xml feeds</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
+                {{--</ul>--}}
+            {{--</li>--}}
 
 
             {{--<li class="nav-label">Apps</li>--}}

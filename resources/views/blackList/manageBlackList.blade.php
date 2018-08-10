@@ -3,8 +3,6 @@
 @section('title', 'Black List')
 
 @section('content')
-
-    @include('search.sections.message.errorGreen')
     <div class="row">
         <div class="col-md-12">
             <h1 style="color: red">Manage BlackList</h1>

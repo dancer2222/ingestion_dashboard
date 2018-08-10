@@ -4,7 +4,6 @@
 
 @section('content')
 
-    @include('search.sections.message.errorGreen')
     <div class="row">
         <div class="col-md-12">
             <h2 style="color: red">Select {{ $mediaType }} : <i style="color: green">{{ $authorName }}</i></h2>
@@ -31,7 +30,11 @@
                             <tr>
                                 <td><input type="hidden" name="media[{{ $item['id'] }}][id]"
                                            value="{{ $item['id'] }}"
-                                           readonly>{{ $item['id'] }}</td>
+                                           readonly><a
+                                        href="{{ route('search', [ 'type' => str_replace('_', '', $mediaType), 'valueType' => 'id', 'id' => $item['id']]) }}"
+                                        class="badge badge-pill badge-secondary"
+                                        title="Click to see more info about this Id"
+                                        target="_blank">{{ $item['id'] }}</a></td>
                                 <td>{{ $item['title'] }}</td>
                                 <td>
                                     <div class="input-group-prepend">

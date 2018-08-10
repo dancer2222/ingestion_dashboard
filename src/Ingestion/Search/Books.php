@@ -48,7 +48,10 @@ class Books extends MediaTypeAbstract
 
         //all info by batch_id
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
-        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+
+        if ($licensor->getNameLicensorById($info['licensor_id'])) {
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id'])->name;
+        }
 
         if (isset($info['data_origin_id'])) {
             $imageUrl = config('main.links.image') . 'book/' . $info['data_origin_id'] . '.jpg';
@@ -84,7 +87,7 @@ class Books extends MediaTypeAbstract
             // Create object for aws bucket
             $object = $info['source'] . '/' . $batchInfo['title'];
             $failedItems = new FailedItems();
-            $failedItems = $failedItems->getFailedItems($info['isbn']);
+            $failedItems = $failedItems->getFailedItems($info['data_origin_id']);
         } else {
             $linkCopy = null;
             $linkShow = null;

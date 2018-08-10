@@ -22,48 +22,52 @@
     <td class="{{ $cssClass }}">{{ $item }}</td>
 
     <td>
-        @role(['admin', 'ingester'])
-        @if(isset($blackListStatus))
-            @if($blackListStatus !== 'active')
-                <form method="POST" class="form-inline"
-                      action="{{ route('changeStatus') }}" style="display: inline-block">
-                    <input type="hidden" name="id" value="{{ $info['id'] }}">
-                    <input type="hidden" name="command" value="{{ $command }}">
-                    <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
-                    <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <button type="submit" class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">
-                        Set {{ ucfirst($command) }}</button>
-                </form>
-            @else
-                <b>Unblacklist to activate</b> &nbsp;
+        <div class="btn-group">
+            @role(['admin', 'ingester'])
+            @if(isset($blackListStatus))
+                @if($blackListStatus !== 'active')
+                    <form method="POST" class="form-inline"
+                          action="{{ route('changeStatus') }}" style="display: inline-block">
+                        <input type="hidden" name="id" value="{{ $info['id'] }}">
+                        <input type="hidden" name="command" value="{{ $command }}">
+                        <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
+                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <button type="submit"
+                                class="btn btn-outline-{{ 'active' === $item ?  'danger' : 'success'}} }}">
+                            Set {{ ucfirst($command) }}</button>
+                    </form>
+                @else
+                    <b>Unblacklist to activate</b> &nbsp;
+                @endif
+                @if('audiobooks' === $mediaTypeTitle || 'books' === $mediaTypeTitle)
+                    @if('audiobooks' === $mediaTypeTitle)
+                        <?php $mediaTypeTitle = 'audio_books'?>
+                    @endif
+                    <form method="POST" class="form-inline"
+                          action="{{ route('blackList.blackList') }}" style="display: inline-block">
+                        <input type="hidden" name="id" value="{{ $info['id'] }}">
+                        <input type="hidden" name="command" value="{{ $commandBlackList }}">
+                        <input type="hidden" name="dataType" value="idType">
+                        <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
+                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <button type="submit"
+                                class="btn btn-outline-{{ 'inactive' === $blackListStatus ?  'danger' : 'success'}} }}">{{ ucfirst($blacklistButtonName) }}</button>
+                    </form>
+                @endif
             @endif
-            @if('audiobooks' === $mediaTypeTitle)
-                <?php $mediaTypeTitle = 'audio_books'?>
-            @endif
-            <form method="POST" class="form-inline"
-                  action="{{ route('blackList.blackList') }}" style="display: inline-block">
-                <input type="hidden" name="id" value="{{ $info['id'] }}">
-                <input type="hidden" name="command" value="{{ $commandBlackList }}">
-                <input type="hidden" name="dataType" value="idType">
-                <input type="hidden" name="mediaType" value="{{ $mediaTypeTitle }}">
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <button type="submit"
-                        class="btn btn-outline-{{ 'inactive' === $blackListStatus ?  'danger' : 'success'}} }}">{{ ucfirst($blacklistButtonName) }}</button>
-            </form>
-        @endif
-        @endrole
+            @endrole
 
-        <button type="button" class="btn btn-outline-success" data-toggle="collapse"
-                data-target="#statusInfo">Status info
-        </button>
-
+            <button type="button" class="btn btn-outline-success" data-toggle="collapse"
+                    data-target="#statusInfo">Status info
+            </button>
+        </div>
         <div id="statusInfo" class="collapse m-t-10">
             @if(!is_null($statusInfo))
-                <table class="table-responsive">
+                <table class="table table-hover text-dark">
                     <tr>
-                        <th style="background-color: #2ca02c">old_value</th>
-                        <th style="background-color: #2ca02c">new_value</th>
-                        <th style="background-color: #2ca02c">date_added</th>
+                        <th>old_value</th>
+                        <th>new_value</th>
+                        <th>date_added</th>
                     </tr>
                     @foreach($statusInfo as $changes)
                         <tr>
@@ -74,7 +78,7 @@
                     @endforeach
                 </table>
             @else
-                Not info
+                <h3>Not info about status</h3>
             @endif
         </div>
     </td>

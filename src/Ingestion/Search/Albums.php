@@ -44,6 +44,8 @@ class Albums extends MediaTypeAbstract
                     foreach ($nameMusicArtists as $name) {
                         $nameMusicArtist = '[ ' . $name['name'] . ' ]';
                     }
+                } else {
+                    $nameMusicArtist = 'Indefinitely';
                 }
             }
         }
@@ -52,7 +54,10 @@ class Albums extends MediaTypeAbstract
         $info = $info->getInfoById($id);
         $info = $this->toArray($info, $id, $mediaTypeTitle);
 
-        $licensorName = $licensor->getNameLicensorById($info['licensor_id']);
+        if ($licensor->getNameLicensorById($info['licensor_id'])) {
+            $licensorName = $licensor->getNameLicensorById($info['licensor_id'])->name;
+        }
+
         $idLink = substr($id, -7);
         $firstSymbol = substr($idLink, 0, 1);
 
@@ -63,8 +68,11 @@ class Albums extends MediaTypeAbstract
         $imageUrl = config('main.links.image') . 'album/7digital/' . $idLink . '.jpg';
         $batchInfo = $qaBatches->getAllByBatchId($info['batch_id']);
 
-        $providerName = new DataSourceProvider();
-        $providerName = $providerName->getDataSourceProviderName($info['data_source_provider_id']);
+        $dataSourceProvider = new DataSourceProvider();
+
+        if ($dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])) {
+            $providerName = $dataSourceProvider->getDataSourceProviderName($info['data_source_provider_id'])->name;
+        }
 
         if ($batchInfo != null) {
             $failedItems = new FailedItems();
@@ -84,7 +92,8 @@ class Albums extends MediaTypeAbstract
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems,
             'artistName'                   => $nameMusicArtist,
-            'tracks'                       => $tracks
+            'tracks'                       => $tracks,
+            'blackListStatus'              => ''
         ];
 
         return $result;
