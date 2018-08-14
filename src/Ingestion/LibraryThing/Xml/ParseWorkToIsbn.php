@@ -3,8 +3,6 @@
 namespace Ingestion\LibraryThing\Xml;
 
 use App\Jobs\Librarything\WorkToIsbn;
-use App\Models\ProductAudioBook;
-use Illuminate\Support\Collection;
 use Isbn\Isbn;
 use Psr\Log\LoggerInterface;
 
@@ -79,31 +77,10 @@ class ParseWorkToIsbn extends ParserAbstract
     {
         $isbnHelper = new Isbn();
 
-        // Validate all isbns at first
+        // Validate all isbns
         $data['isbns'] = array_filter($data['isbns'], function ($isbn) use ($isbnHelper) {
             return $isbnHelper->validation->isbn10($isbn);
         });
-
-        // Make a collection of isbn10 and related isbn13
-        $isbns13 = new Collection(array_map(function ($isbn) use ($isbnHelper) {
-            return [
-                'isbn10' => $isbn,
-                'isbn13' => $isbnHelper->translate->to13($isbn),
-            ];
-        }, $data['isbns']));
-
-        // Find all products with these isbns
-        $productsIsbns = ProductAudioBook::whereIn('isbn', $isbns13->pluck('isbn13'))->get()->pluck('isbn');
-
-        // Find matches
-        $matchedIsbns = $isbns13->whereIn('isbn13', $productsIsbns);
-
-        if (!$matchedIsbns->count()) {
-            return [];
-        }
-
-        // Attach only isbns which exist in our database
-        $data['isbns'] = $matchedIsbns->pluck('isbn10')->toArray();
 
         return $data;
     }
