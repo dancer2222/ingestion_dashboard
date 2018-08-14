@@ -46,7 +46,7 @@ class Normalize
             'IDW'                => 'idwpub',
             'IPG'                => 'IPG',
             'JoMedia'            => 'JoMedia',
-            'NationalGeographic' => 'natgo',
+            'NationalGeographic' => 'nationalgeographic',
             'Palatium'           => 'palatium',
             'Parkstone'          => 'parkstone',
             'pickatale'          => 'pickatale',

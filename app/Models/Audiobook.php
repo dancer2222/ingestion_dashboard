@@ -35,13 +35,12 @@ class Audiobook extends Model
     }
 
     /**
-     * @param $id
-     *
+     * @param $dataOriginId
      * @return mixed
      */
-    public function getInfoByDataOriginId($id)
+    public function getInfoByDataOriginId($dataOriginId)
     {
-        return $this->where('data_origin_id', $id)->get();
+        return $this->where('data_origin_id', $dataOriginId)->get();
     }
 
     /**
