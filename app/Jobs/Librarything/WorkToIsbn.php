@@ -30,6 +30,7 @@ class WorkToIsbn implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param array $data
      * @return void
      */
     public function __construct(array $data)
@@ -40,57 +41,67 @@ class WorkToIsbn implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param Isbn $isbnHelper
      * @return void
      */
     public function handle(Isbn $isbnHelper)
     {
         $this->isbnHelper = $isbnHelper;
+        $isbnWorkcode = (new Collection($this->data))->pluck('isbns', 'workcode');
+        $keyed = $isbnWorkcode->mapWithKeys(function ($isbns, $workcode) {
+            return array_fill_keys($isbns, $workcode);
+        });
 
-        foreach ($this->data as $datum) {
-            $workcode = $datum['workcode'] ?? '';
-            $isbns = $datum['isbns'] ?? [];
+        $existingIsbns = $this->checkIfExist($keyed);
 
-            if (!$workcode || !$isbns) {
-                logger()->error('LIBRARYTHING_DATA ISBN LISTENER: Missing workcode or isbns.');
+        foreach ($existingIsbns as $isbn) {
+            $workcode = $keyed->get($isbn);
+
+            if (!$workcode || !$isbn) {
+                logger()->error('LIBRARYTHING_DATA ISBN LISTENER: Missing workcode or isbn.');
                 $this->delete();
 
                 continue;
             }
 
-            $isbns = $this->validate($isbns);
+            try {
+                $data = BookLibrarythingData::firstOrCreate(
+                    ['isbn_10' => $isbn], ['workcode' => $workcode]
+                );
 
-            foreach ($isbns as $isbn) {
-                try {
-                    $data = BookLibrarythingData::firstOrCreate(
-                        ['isbn_10' => $isbn], ['workcode' => $workcode]
-                    );
-
-                    if (!$data) {
-                        continue;
-                    }
-
-                    if ($data->workcode != $workcode) {
-                        $data->workcode = $workcode;
-                        $data->saveOrFail();
-                    }
-                } catch (\Exception $e) {
-                    logger()->critical("LIBRARYTHING_DATA ISBN LISTENER: {$e->getMessage()}");
+                if (!$data) {
+                    continue;
                 }
+
+                if ($data->workcode != $workcode) {
+                    $data->workcode = $workcode;
+                    $data->saveOrFail();
+                }
+            } catch (\Exception $e) {
+                logger()->critical("LIBRARYTHING_DATA ISBN LISTENER: {$e->getMessage()}");
             }
         }
     }
 
-    public function validate(array $isbns)
+    /**
+     * Retrieve all isbns and check which from them are present in the database
+     *
+     * @param Collection $isbns
+     * @return array
+     */
+    public function checkIfExist(Collection $isbns)
     {
         $isbnHelper = $this->isbnHelper;
 
         // Make a collection of isbn10 and related isbn13
-        $isbns13 = new Collection(array_map(function ($isbn) use ($isbnHelper) {
+        $isbns13 = $isbns->map(function ($workcode, $isbn) use ($isbnHelper) {
+            $isbn = (string)$isbn;
+
             return [
                 'isbn10' => $isbn,
                 'isbn13' => $isbnHelper->translate->to13($isbn),
             ];
-        }, $isbns));
+        });
 
         $isbns13Raw = $isbns13->pluck('isbn13')->toArray();
 
