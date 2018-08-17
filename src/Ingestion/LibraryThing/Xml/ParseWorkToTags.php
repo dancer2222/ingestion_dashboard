@@ -4,7 +4,6 @@ namespace Ingestion\LibraryThing\Xml;
 
 use App\Jobs\Librarything\WorkToTags;
 use Psr\Log\LoggerInterface;
-use App\Models\BookLibrarythingData;
 
 class ParseWorkToTags extends ParserAbstract
 {
@@ -85,11 +84,11 @@ class ParseWorkToTags extends ParserAbstract
      */
     protected function sanitizeData(array $data): array
     {
-        $bookDataLt = BookLibrarythingData::where('workcode', $data['workcode'])->count();
-
-        if (!$bookDataLt) {
-            return [];
-        }
+//        $bookDataLt = BookLibrarythingData::where('workcode', $data['workcode'])->count();
+//
+//        if (!$bookDataLt) {
+//            return [];
+//        }
 
         return $data;
     }

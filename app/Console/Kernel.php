@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Books\SyncAverageRatingLT;
 use App\Console\Commands\Gmail\Reader\IngestionTracking;
 use App\Console\Commands\Librarything\LibraryThingData;
 use App\Console\Commands\Librarything\LibraryThingDataXmlParse;
@@ -32,6 +33,9 @@ class Kernel extends ConsoleKernel
         // Audiobooks
         BindTags::class,
         SyncAverageRating::class,
+
+        // Books
+        SyncAverageRatingLT::class,
     ];
 
     /**
