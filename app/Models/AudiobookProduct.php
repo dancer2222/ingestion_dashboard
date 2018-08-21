@@ -28,4 +28,13 @@ class AudiobookProduct extends Model
             ->where('pab.isbn', $isbn)
             ->first();
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getInfoById($id)
+    {
+        return $this->where('audio_book_id', $id)->get();
+    }
 }

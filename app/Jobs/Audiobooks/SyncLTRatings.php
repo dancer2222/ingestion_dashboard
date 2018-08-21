@@ -108,22 +108,22 @@ class SyncLTRatings implements ShouldQueue
                 $audiobookAverateRatingModel = AudiobookAverageRating::firstOrCreate(
                     ['audiobook_id' => $audiobookId],
                     [
-                        'rating_lt' => $averageRating,
-                        'votes_total_lt' => $totalVotes,
+                        'rating' => $averageRating,
+                        'votes_total' => $totalVotes,
                     ]
                 );
 
                 $averageRatingIsChanged = false;
 
                 // If rating was updated
-                if ($audiobookAverateRatingModel->rating_lt != $averageRating) {
-                    $audiobookAverateRatingModel->rating_lt = $averageRating;
+                if ($audiobookAverateRatingModel->rating != $averageRating) {
+                    $audiobookAverateRatingModel->rating = $averageRating;
                     $averageRatingIsChanged = true;
                 }
 
                 // If total votes were updated
-                if ($audiobookAverateRatingModel->votes_total_lt !== $totalVotes) {
-                    $audiobookAverateRatingModel->votes_total_lt = $totalVotes;
+                if ($audiobookAverateRatingModel->votes_total !== $totalVotes) {
+                    $audiobookAverateRatingModel->votes_total = $totalVotes;
                     $averageRatingIsChanged = true;
                 }
 

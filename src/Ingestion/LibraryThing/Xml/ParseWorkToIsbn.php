@@ -3,6 +3,7 @@
 namespace Ingestion\LibraryThing\Xml;
 
 use App\Jobs\Librarything\WorkToIsbn;
+use Isbn\Isbn;
 use Psr\Log\LoggerInterface;
 
 
@@ -61,8 +62,26 @@ class ParseWorkToIsbn extends ParserAbstract
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function dispatch(): void
     {
         WorkToIsbn::dispatch($this->batches)->onQueue($this->queue);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function sanitizeData(array $data): array
+    {
+        $isbnHelper = new Isbn();
+
+        // Validate all isbns
+        $data['isbns'] = array_filter($data['isbns'], function ($isbn) use ($isbnHelper) {
+            return $isbnHelper->validation->isbn10($isbn);
+        });
+
+        return $data;
     }
 }

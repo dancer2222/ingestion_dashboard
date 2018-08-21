@@ -78,4 +78,18 @@ class ParseWorkToTags extends ParserAbstract
     {
         WorkToTags::dispatch($this->batches)->onQueue($this->queue);
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function sanitizeData(array $data): array
+    {
+//        $bookDataLt = BookLibrarythingData::where('workcode', $data['workcode'])->count();
+//
+//        if (!$bookDataLt) {
+//            return [];
+//        }
+
+        return $data;
+    }
 }

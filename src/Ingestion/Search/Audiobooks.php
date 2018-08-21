@@ -4,10 +4,13 @@ namespace Ingestion\Search;
 
 use App\Models\Audiobook;
 use App\Models\AudiobookBlackList;
+use App\Models\AudiobookProduct;
 use App\Models\FailedItems;
 use App\Models\Licensor;
+use App\Models\ProductAudioBook;
 use App\Models\QaBatch;
 use App\Models\DataSourceProvider;
+use Exception;
 
 /**
  * Class Audiobooks
@@ -35,6 +38,20 @@ class Audiobooks extends MediaTypeAbstract
 
         $info = $info->getInfoById($id);
         $info = $this->toArray($info, $id, $mediaTypeTitle);
+
+        $productAudioBook = new AudiobookProduct();
+        $products = $productAudioBook->getInfoById($id)->toArray();
+
+        $productInfo = [];
+        $productAudiobook = new ProductAudioBook();
+
+        try {
+            foreach ($products as $product) {
+                $productInfo [$product['product_id']] = $productAudiobook->getInfoByProductId($product['product_id'])[0]->toArray();
+            }
+        } catch (Exception $exception) {
+            $productInfo = [];
+        }
 
         $blackList = AudiobookBlackList::find($id);
 
@@ -78,7 +95,9 @@ class Audiobooks extends MediaTypeAbstract
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems,
-            'blackListStatus'              => $blackListStatus
+            'blackListStatus'              => $blackListStatus,
+            'products'                     => $products,
+            'productInfo'                  => $productInfo
         ];
 
         return $result;

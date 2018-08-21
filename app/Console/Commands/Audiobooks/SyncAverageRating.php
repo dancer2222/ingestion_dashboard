@@ -15,7 +15,7 @@ class SyncAverageRating extends Command
      *
      * @var string
      */
-    protected $signature = 'audiobooks:rating-sync';
+    protected $signature = 'audiobooks:lt-rating-sync';
 
     /**
      * The console command description.
