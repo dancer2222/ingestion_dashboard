@@ -8,13 +8,15 @@
                 @foreach($products as $product)
                     <li class="list-group-item">
                         <button type="button" class="btn btn-info" data-parent="#aud" data-toggle="collapse"
-                                data-target="#{{ $product['product_id'] }}" aria-expanded="false" aria-controls="{{ $product['product_id'] }}">
-                            {{ $product['product_id'] }} | {{ $product['subscription_type'] }}
+                                data-target="#{{ $product['id'] }}" aria-expanded="false" aria-controls="{{ $product['id'] }}">
+                            {{ $product['id'] }} | {{ $product['pivot']['subscription_type'] }}
                         </button>
 
-                        <div id="{{ $product['product_id'] }}" class="collapse" aria-expanded="false" aria-labelledby="{{ $product['product_id'] }}" data-parent="#aud">
+                        <div id="{{ $product['id'] }}" class="collapse" aria-expanded="false" aria-labelledby="{{ $product['id'] }}" data-parent="#aud">
                             <ul class="list-group">
-                                @foreach($productInfo[$product['product_id']] as $value => $item)
+                                @foreach($product as $value => $item)
+                                    @if(is_array($item))
+                                    @else
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="col-md-2"><strong><span
@@ -35,6 +37,7 @@
                                             @endif
                                         </div>
                                     </li>
+                                    @endif
                                 @endforeach
                             </ul>
                         </div>
