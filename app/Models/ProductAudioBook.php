@@ -34,4 +34,13 @@ class ProductAudioBook extends Model
 
         return $relation;
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getInfoByProductId($id)
+    {
+        return $this->where('id', $id)->get();
+    }
 }

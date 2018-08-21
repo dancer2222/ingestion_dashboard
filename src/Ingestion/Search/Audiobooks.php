@@ -31,10 +31,8 @@ class Audiobooks extends MediaTypeAbstract
     ): array {
         $qaBatches = new QaBatch();
         $licensor = new Licensor();
-        $info = new Audiobook();
-
-        $info = $info->getInfoById($id);
-        $info = $this->toArray($info, $id, $mediaTypeTitle);
+        $audiobook = Audiobook::where('id', $id)->with('products')->first();
+        $info = $audiobook->toArray();
 
         $blackList = AudiobookBlackList::find($id);
 
@@ -78,7 +76,8 @@ class Audiobooks extends MediaTypeAbstract
             'imageUrl'                     => $imageUrl,
             'mediaGeoRestrictGetMediaType' => $mediaGeoRestrictGetMediaType,
             'messages'                     => $failedItems,
-            'blackListStatus'              => $blackListStatus
+            'blackListStatus'              => $blackListStatus,
+            'products'                     => $info['products'],
         ];
 
         return $result;
