@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 class PermissionSeeder extends Seeder
 {
     private $table = 'permissions';
+
     /**
      * Run the database seeds.
      *
@@ -19,58 +20,65 @@ class PermissionSeeder extends Seeder
 
             // Users
             [
-                'name' => 'create-users',
+                'name'         => 'create-users',
                 'display_name' => 'Create users',
-                'description' => 'Can create new users.',
+                'description'  => 'Can create new users.',
             ],
             [
-                'name' => 'edit-users',
+                'name'         => 'edit-users',
                 'display_name' => 'Edit users',
-                'description' => 'Can edit users.',
+                'description'  => 'Can edit users.',
             ],
             [
-                'name' => 'delete-users',
+                'name'         => 'delete-users',
                 'display_name' => 'Delete users',
-                'description' => 'Can delete users.',
+                'description'  => 'Can delete users.',
             ],
 
             // Tools
             [
-                'name' => 'run-tools',
+                'name'         => 'run-tools',
                 'display_name' => 'Run tools',
-                'description' => 'Can run tools of project_ingestion.',
+                'description'  => 'Can run tools of project_ingestion.',
             ],
             [
-                'name' => 'view-tools',
+                'name'         => 'view-tools',
                 'display_name' => 'View tools',
-                'description' => 'Can view tools of project_ingestion.',
+                'description'  => 'Can view tools of project_ingestion.',
             ],
 
             // Basic search
             [
-                'name' => 'basic-search',
+                'name'         => 'basic-search',
                 'display_name' => 'Search',
-                'description' => 'Can use the search.',
+                'description'  => 'Can use the search.',
             ],
 
             // Brightcove
             [
-                'name' => 'brightcove-search',
+                'name'         => 'brightcove-search',
                 'display_name' => 'Brightcove',
-                'description' => 'Can use brightcove menu.',
+                'description'  => 'Can use brightcove menu.',
             ],
 
             // Notifications
             [
-                'name' => 'view-notifications',
+                'name'         => 'view-notifications',
                 'display_name' => 'View notifications',
-                'description' => 'Can view notifications.',
+                'description'  => 'Can view notifications.',
             ],
             [
-                'name' => 'delete-notifications',
+                'name'         => 'delete-notifications',
                 'display_name' => 'Delete notifications',
-                'description' => 'Can delete notifications and mark as read.',
+                'description'  => 'Can delete notifications and mark as read.',
             ],
+
+            //BlackList
+            [
+                'name'         => 'manage-blackList',
+                'display_name' => 'Manage BlackList',
+                'description'  => 'Can add and remove item from BlackList',
+            ]
         ]);
     }
 }

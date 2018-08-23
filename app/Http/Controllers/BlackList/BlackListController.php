@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\BlackList;
 
+use App\Http\Requests\ManageBlackList;
 use App\Models\AudiobookBlackList;
 use App\Models\BookBlackList;
 use Exception;
@@ -97,15 +98,11 @@ class BlackListController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ManageBlackList $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function blackListSelect(Request $request)
+    public function blackListSelect(ManageBlackList $request)
     {
-        $request->validate([
-            'id' => 'required'
-        ]);
-
         try {
             $request->session()->put('command', $request->command);
             $request->session()->put('dataType', $request->dataType);

@@ -27,11 +27,11 @@ class SearchController extends Controller
      * We can search using only these types of values
      */
     const VALUE_TYPES = [
-        'movies' => ['id', 'title'],
-        'books' => ['id', 'title', 'isbn', 'dataOriginId'],
+        'movies'     => ['id', 'title'],
+        'books'      => ['id', 'title', 'isbn', 'dataOriginId'],
         'audiobooks' => ['id', 'title', 'dataOriginId', 'isbn'],
-        'albums' => ['id', 'title', 'upc', 'dataOriginId'],
-        'games' => ['id'],
+        'albums'     => ['id', 'title', 'upc', 'dataOriginId'],
+        'games'      => ['id'],
     ];
 
     /**
@@ -43,11 +43,11 @@ class SearchController extends Controller
         $id = $request->value;
         $contentType = $request->contentType;
         // Declare the default values for view
-        $dataForView['contentTypes'] = self::CONTENT_TYPES;
-        $dataForView['contentType'] = $contentType ?? self::CONTENT_TYPES[0];
-        $dataForView['valueTypes'] = self::VALUE_TYPES[$dataForView['contentType']] ?? self::VALUE_TYPES[0];
+        $dataForView['contentTypes']  = self::CONTENT_TYPES;
+        $dataForView['contentType']   = $contentType ?? self::CONTENT_TYPES[0];
+        $dataForView['valueTypes']    = self::VALUE_TYPES[$dataForView['contentType']] ?? self::VALUE_TYPES[0];
         $dataForView['valueTypesAll'] = self::VALUE_TYPES;
-        $dataForView['valueType'] = $request->valueType;
+        $dataForView['valueType']     = $request->valueType;
 
         if (isset($id, $contentType)) {
             $changeStatus = new TrackingStatusChanges();
