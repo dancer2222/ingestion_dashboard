@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Reports
-    Route::group(['middleware' => 'role:admin|tester', 'prefix' => 'reports'], function() {
+    Route::group(['prefix' => 'reports'], function() {
 
         Route::get('/', function() {
             return redirect(route('search'));
@@ -125,12 +125,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['prefix' => 'blackList', 'namespace' => 'BlackList'], function() {
         Route::get('/', 'BlackListController@index')->name('blackList.index');
         Route::get('/search/{mediaType}', 'BlackListController@getInfoFromBlackList')->name('blackList.getInfoFromBlackList');
-
-        Route::group(['middleware' => 'role:admin|ingester'], function() {
-            Route::get('/manage', 'BlackListController@indexManage')->name('blackList.manage');
-            Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
-            Route::post('/blackListSelect', 'BlackListController@blackListSelect')->name('blackList.blackListSelect');
-        });
+        Route::get('/manage', 'BlackListController@indexManage')->name('blackList.manage');
+        Route::post('/blackList', 'BlackListController@blackList')->name('blackList.blackList');
+        Route::post('/blackListSelect', 'BlackListController@blackListSelect')->name('blackList.blackListSelect');
     });
 
     // Librarything
