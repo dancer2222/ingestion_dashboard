@@ -87,11 +87,9 @@
                     <li>
                         <a href="{{ route('blackList.index') }}">Search</a>
                     </li>
-                    @role(['admin', 'ingester'])
                     <li>
                         <a href="{{ route('blackList.manage') }}">Manage</a>
                     </li>
-                    @endrole
                 </ul>
             </li>
 
