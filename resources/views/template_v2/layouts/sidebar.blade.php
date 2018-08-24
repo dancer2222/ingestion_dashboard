@@ -120,15 +120,19 @@
 
             <li>
                 <a class="has-arrow" href="#" aria-expanded="false">
-                    <i class="fas fa-book"></i>
+                    <i class="fas fa-star-half-alt"></i>
                     <span class="hide-menu">
-                        Librarything
+                        Ratings
                     </span>
                 </a>
 
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('librarything.ratings.index') }}">Ratings</a>
+                        <a href="{{ route('ratings.list', 'audiobooks') }}">Audiobooks</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('ratings.list', 'books') }}">Books</a>
                     </li>
                 </ul>
             </li>

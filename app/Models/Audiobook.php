@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -15,6 +17,7 @@ class Audiobook extends Model
      * @var string
      */
     protected $table = 'audio_book';
+    protected $connection = 'mysql_local_content';
 
     /**
      * @param $id
@@ -133,5 +136,13 @@ class Audiobook extends Model
             'id',
             'id'
         )->withPivot('subscription_type');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|mixed
+     */
+    public function rating(): HasOne
+    {
+        return $this->hasOne(AudiobookAverageRating::class, 'audiobook_id', 'id');
     }
 }

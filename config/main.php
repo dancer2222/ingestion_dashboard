@@ -4,7 +4,7 @@ return [
     'links'    => [
         'playster' => [
             'prod' => 'https://play.playster.com/',
-            'qa'   => 'https://qa-playster-v3-3rdparty.playster.com/'
+            'qa'   => 'https://qa-play.playster.com/'
         ],
         'aws'      => [
             'cp'     => 'aws s3 cp s3://',

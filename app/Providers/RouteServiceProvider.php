@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Audiobook;
+use App\Models\Book;
+use App\Models\Movie;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -26,6 +29,25 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot();
+
+        Route::bind('model', function ($name) {
+            $modelName = ucfirst(strtolower(str_singular(camel_case($name))));
+            $modelName = "\\App\\Models\\$modelName";
+
+            return new $modelName;
+        });
+
+        Route::bind('audiobookId', function ($id) {
+            return Audiobook::where('id', $id)->first() ?? new Audiobook;
+        });
+
+        Route::bind('bookId', function ($id) {
+            return Book::where('id', $id)->first() ?? new Book;
+        });
+
+        Route::bind('movieId', function ($id) {
+            return Movie::where('id', $id)->first() ?? new Movie;
+        });
     }
 
     /**
