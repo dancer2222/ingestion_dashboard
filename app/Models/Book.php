@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -109,5 +111,13 @@ class Book extends Model
         $this->timestamps = false;
 
         return $this->where('id', $id)->update(['status' => $status]);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|mixed
+     */
+    public function rating(): HasOne
+    {
+        return $this->hasOne(BookAverageRatingLT::class, 'book_id', 'seq_id');
     }
 }

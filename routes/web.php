@@ -133,14 +133,12 @@ Route::group(['middleware' => ['auth']], function() {
         });
     });
 
-    // Librarything
-    Route::name('librarything.')->prefix('librarything')->namespace('Librarything')->group(function () {
-        // Ratings
-        Route::name('ratings.')->prefix('ratings')->group(function () {
-            Route::get('/', 'RatingsController@index')->name('index');
-            Route::get('/isbn/{isbn?}', 'RatingsController@show')->name('show');
+    // Ratings
+    Route::name('ratings.')->prefix('ratings')->namespace('Ratings')->group(function () {
+        Route::get('/{model}', 'RatingsController@index')->name('list');
 
-        });
+        Route::get('/audiobooks/{audiobookId?}', 'RatingsController@show')->name('showAudiobook');
+        Route::get('/books/{bookId?}', 'RatingsController@show')->name('showBook');
     });
 });
 
