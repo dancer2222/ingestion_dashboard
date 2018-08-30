@@ -11,6 +11,7 @@ services:
         PHP_IDE_CONFIG: "serverName=IDA:9000"
     volumes:
       - "./../:/var/www/html/dashboard"
+      - "/logs:/logs"
     ports:
       - "8686:80"
     working_dir: /var/www/html/dashboard

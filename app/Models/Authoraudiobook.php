@@ -22,4 +22,19 @@ class Authoraudiobook extends Model
 
         return $this->where('id', $id)->update(['status' => $status]);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function books()
+    {
+        return $this->belongsToMany(
+            Audiobook::class,
+            'audio_book_authors',
+            'author_id',
+            'audio_book_id',
+            'id',
+            'id'
+        );
+    }
 }

@@ -29,6 +29,18 @@
                     <li>
                         <a href="{{ route('search', ['contentType' => 'games']) }}">Games</a>
                     </li>
+
+                    <li class="nav-devider"></li>
+
+                    <li>
+                        <a href="{{ route('authors.index') }}">Authors</a>
+
+                        {{--<ul aria-expanded="false" class="collapse">--}}
+                            {{--<li>--}}
+                                {{--<a href="author/books">Books</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    </li>
                 </ul>
             </li>
 

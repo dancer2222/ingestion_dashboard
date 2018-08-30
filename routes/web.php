@@ -137,6 +137,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/audiobooks/{audiobookId?}', 'RatingsController@show')->name('showAudiobook');
         Route::get('/books/{bookId?}', 'RatingsController@show')->name('showBook');
     });
+
+    // Authors Search
+    Route::name('authors.')->prefix('authors')->namespace('Authors')->group(function () {
+        Route::get('/', 'AuthorsController@index')->name('index');
+        Route::get('/{id}', 'AuthorsController@show')->name('show');
+    });
 });
 
 Auth::routes();
