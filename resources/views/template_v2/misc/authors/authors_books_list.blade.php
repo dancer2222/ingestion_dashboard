@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover table-bordered">
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
@@ -30,7 +30,7 @@
         <tbody>
             @foreach($books as $book)
             <tr>
-                <td>
+                <td scope="row">
                     {{ $book->id }}
                     <span class="font-weight-bold badge badge-{{ $book->status === 'active' ? 'success' : 'secondary' }}">
                         {{ $book->status }}

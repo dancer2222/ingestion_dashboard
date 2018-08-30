@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 class AuthorsController extends Controller
 {
-    const AUTHOR_MODEL_MAPPING = [
+    const AUTHOR_MODELS_MAPPING = [
         'audio_book' => Authoraudiobook::class,
         'book' => Author::class,
     ];
@@ -25,10 +25,10 @@ class AuthorsController extends Controller
      */
     public function __construct()
     {
-        $type = request()->get('author_type') ?? request('author_type');
+        $type = request()->get('author_type');
 
-        if (isset(self::AUTHOR_MODEL_MAPPING[$type])) {
-            $authorModelClass = self::AUTHOR_MODEL_MAPPING[$type];
+        if (isset(self::AUTHOR_MODELS_MAPPING[$type])) {
+            $authorModelClass = self::AUTHOR_MODELS_MAPPING[$type];
             $this->authorModel = new $authorModelClass;
         }
     }
@@ -44,12 +44,12 @@ class AuthorsController extends Controller
 
         if ($needle && $this->authorModel) {
             if (is_numeric($needle) && ctype_digit($needle)) {
-                $authors = $this->authorModel->where('id', $needle);
+                $authorsQuery = $this->authorModel->where('id', $needle);
             } else {
-                $authors = $this->authorModel->where('name', 'LIKE', "%$needle%");
+                $authorsQuery = $this->authorModel->where('name', 'LIKE', "%$needle%");
             }
 
-            $authors = $authors->has('books')->paginate(10);
+            $authors = $authorsQuery->with('books')->paginate(10);
 
             return view('template_v2.misc.authors.index', ['authors' => $authors]);
         }
@@ -58,77 +58,29 @@ class AuthorsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param string $id
      * @return \Illuminate\Http\Response
      */
-    public function show(string $id, string $authorType)
+    public function show(string $id)
     {
         if (!$this->authorModel) {
             return view('template_v2.misc.authors.index')->withErrors(["Can't determine the author type."]);
         }
 
-        $author = $this->authorModel->where('id', $id);
+        $author = $this->authorModel->where('id', $id)->first();
 
-        $author = $author->first();
-        $books = $author->books;
+        $booksQuery = $author->books();
+
+        $status = request()->get('status');
+
+        if ($status) {
+            $booksQuery = $booksQuery->where('status', $status);
+        }
+
+        $books = $booksQuery->get();
 
         return view('template_v2.misc.authors.index', ['author' => $author, 'books' => $books]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

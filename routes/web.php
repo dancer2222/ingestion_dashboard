@@ -141,7 +141,7 @@ Route::group(['middleware' => ['auth']], function() {
     // Authors Search
     Route::name('authors.')->prefix('authors')->namespace('Authors')->group(function () {
         Route::get('/', 'AuthorsController@index')->name('index');
-        Route::get('/{id}/{author_type}', 'AuthorsController@show')->name('show');
+        Route::get('/{id}', 'AuthorsController@show')->name('show');
     });
 });
 

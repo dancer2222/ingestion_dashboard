@@ -11,6 +11,9 @@
 
     <tbody>
     @foreach($authors as $author)
+        @php
+            $books = $author->books;
+        @endphp
         <tr>
             <td>
                 {{ $author->id }}
@@ -20,20 +23,20 @@
             </td>
 
             <td>
-                <a href="{{ route('authors.show', ['id' => $author->id, 'type' => request()->author_type]) }}">
+                <a href="{{ route('authors.show', ['id' => $author->id, 'author_type' => request()->author_type]) }}" class="font-weight-bold text-dark">
                     {{ $author->name }}
                 </a>
             </td>
 
             <td>
-                <a href="{{ route('authors.show', ['id' => $author->id, 'type' => request()->author_type, 'status' => 'active']) }}" class="badge badge-success font-weight-bold">
+                <a href="{{ route('authors.show', ['id' => $author->id, 'author_type' => request()->author_type, 'status' => 'active']) }}" class="badge badge-success font-weight-bold">
                     active books
-                    {{ $author->books()->where('status', 'active')->count() }}
+                    {{ $author->books->where('status', 'active')->count() }}
                 </a>
 
-                <a href="{{ route('authors.show', ['id' => $author->id, 'type' => request()->author_type, 'status' => 'inactive']) }}" class="badge badge-secondary font-weight-bold">
+                <a href="{{ route('authors.show', ['id' => $author->id, 'author_type' => request()->author_type, 'status' => 'inactive']) }}" class="badge badge-secondary font-weight-bold">
                     inactive books
-                    {{ $author->books()->where('status', 'inactive')->count() }}
+                    {{ $author->books->where('status', 'inactive')->count() }}
                 </a>
             </td>
         </tr>
