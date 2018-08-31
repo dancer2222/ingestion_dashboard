@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Http\Controllers\Licensors;
+
+use App\Models\Licensor;
+use App\Models\Audiobook;
+use App\Models\Book;
+use App\Models\Movie;
+use App\Models\Music;
+use App\Models\Game;
+use App\Models\Software;
+use App\Http\Controllers\Controller;
+
+class LicensorsController extends Controller
+{
+    const CONTENT_MODELS_MAPPING = [
+        'audiobooks' => Audiobook::class,
+        'books' => Book::class,
+        'movies' => Movie::class,
+        'music' => Music::class,
+        'games' => Game::class,
+        'software' => Software::class,
+    ];
+
+    /**
+     * Display blank form.
+     *
+     * @param Licensor $licensor
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Licensor $licensor)
+    {
+        $data = [];
+        $isList = request()->has('list');
+        $name = request()->get('name');
+        $media_types = request()->input('media_type');
+
+        if ($media_types) {
+            $licensor = $licensor->whereIn('media_type', $media_types);
+        }
+
+        if ($name) {
+            $licensor = $licensor->where('name', 'like', "%$name%");
+        }
+
+        if ($isList || $name || $media_types) {
+            $data['licensors'] = $licensor->get();
+        }
+
+        return view('template_v2.misc.licensors.index', $data);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @param Licensor $licensor
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id, Licensor $licensor)
+    {
+        $errors = [];
+        $licensor = $licensor->find($id);
+
+        if (!$licensor) {
+            $errors[] = "Didn't find licensor with ID: $id";
+        }
+
+        if (!isset(self::CONTENT_MODELS_MAPPING[$licensor->media_type])) {
+            $errors[] = 'No contents found.';
+        }
+
+        if ($errors) {
+            return view('template_v2.misc.licensors.index')->withErrors($errors);
+        }
+
+        $contentModel = self::CONTENT_MODELS_MAPPING[$licensor->media_type];
+        $licensorContentItems = $contentModel::where('licensor_id', $licensor->id)->paginate(15);
+
+        return view('template_v2.misc.licensors.index', [
+            'licensor' => $licensor,
+            'licensorContentItems' => $licensorContentItems,
+        ]);
+    }
+}

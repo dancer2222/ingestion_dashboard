@@ -34,6 +34,7 @@
 
                     <li>
                         <a href="{{ route('authors.index') }}">Authors</a>
+                        <a href="{{ route('licensors.index') }}">Licensors</a>
 
                         {{--<ul aria-expanded="false" class="collapse">--}}
                             {{--<li>--}}
