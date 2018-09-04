@@ -143,6 +143,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/', 'AuthorsController@index')->name('index');
         Route::get('/{id}', 'AuthorsController@show')->name('show');
     });
+
+    // Licensors Search
+    Route::name('licensors.')->prefix('licensors')->namespace('Licensors')->group(function () {
+        Route::get('/', 'LicensorsController@index')->name('index');
+        Route::get('/{id}', 'LicensorsController@show')->name('show');
+    });
 });
 
 Auth::routes();
