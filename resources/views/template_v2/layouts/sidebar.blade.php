@@ -139,11 +139,11 @@
 
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('ratings.list', 'audiobooks') }}">Audiobooks</a>
+                        <a href="{{ route('ratings.index', 'audiobooks') }}">Audiobooks</a>
                     </li>
 
                     <li>
-                        <a href="{{ route('ratings.list', 'books') }}">Books</a>
+                        <a href="{{ route('ratings.index', 'books') }}">Books</a>
                     </li>
                 </ul>
             </li>

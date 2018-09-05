@@ -16,39 +16,34 @@ $contentTypeSingular = str_singular($contentType);
             <div class="card">
 
                 <div class="card-title">
-                    @include('template_v2.misc.ratings.search-form')
+                    @include('template_v2.misc.ratings.search_form')
                 </div>
 
                 <div class="card-body">
                     <div class="row">
 
-                        @if(isset($list) || isset($entity))
+                        @if(isset($list) && $list)
+                        <hr>
+
                         <div class="col-12 mb-5">
                             <table class="table table-hover table-bordered">
                                 <thead class="thead-dark text-center">
                                 <tr>
                                     <th scope="col">{{ $contentTypeSingular }} ID</th>
                                     <th scope="col">Title</th>
-                                    <th scope="col">Average Rating</th>
-                                    <th scope="col">Total Votes</th>
+                                    <th scope="col">Average Rating - LT</th>
                                     <th scope="col"><i class="fas fa-sliders-h"></i></th>
                                 </tr>
                                 </thead>
 
-                                @isset($list)
-                                    @foreach($list as $item)
-                                        @include('template_v2.misc.ratings.entity', ['item' => $item])
-                                    @endforeach
-                                @endisset
-
-                                @isset($entity)
-                                    @include('template_v2.misc.ratings.entity', ['item' => $entity])
-                                @endisset
+                                @foreach($list as $item)
+                                    @include('template_v2.misc.ratings.entity', ['item' => $item])
+                                @endforeach
                             </table>
                         </div>
 
 
-                        @isset($list)
+                        @if(isset($list) && $list instanceof \Illuminate\Pagination\LengthAwarePaginator)
                         <div class="col-12">
                             {{ $list->links() }}
                         </div>

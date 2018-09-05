@@ -26,9 +26,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/', function() {
         return view('template_v2.welcome');
     });
-    Route::get('/home', function() {
-        return redirect(route('brightcove.index'));
-    })->name('home');
 
     // Admin area
     Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => []], function () {
@@ -132,10 +129,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Ratings
     Route::name('ratings.')->prefix('ratings')->namespace('Ratings')->group(function () {
-        Route::get('/{model}', 'RatingsController@index')->name('list');
-
-        Route::get('/audiobooks/{audiobookId?}', 'RatingsController@show')->name('showAudiobook');
-        Route::get('/books/{bookId?}', 'RatingsController@show')->name('showBook');
+        Route::get('/{content_type}', 'RatingsController@index')->name('index');
     });
 
     // Authors Search

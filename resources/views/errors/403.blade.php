@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('errors.layout')
 
 @section('title', '403 Unauthorized action')
 

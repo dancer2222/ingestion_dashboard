@@ -1,5 +1,14 @@
 <hr>
 
+<h3>Licensor</h3>
+
+<ul>
+    <li>ID: <b>{{ $licensor->id }}</b></li>
+    <li>Name: <b>{{ $licensor->name }}</b></li>
+    <li>Status: <b>{{ $licensor->status }}</b></li>
+    <li>Media Type: <b>{{ $licensor->media_type }}</b></li>
+</ul>
+
 <table class="table mt-3">
     <thead class="thead-dark">
     <tr>

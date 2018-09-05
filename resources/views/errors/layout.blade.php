@@ -31,7 +31,6 @@
 
     {{-- Theme CSS --}}
     <link href="{{ asset("$templatePrefix/css/theme.min.css") }}" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     {{-- Custom CSS --}}
 
@@ -63,30 +62,8 @@
 {{-- Main wrapper  --}}
 <div id="main-wrapper">
 
-    {{-- Header --}}
-    <div class="header">
-
-        @include('template_v2.layouts.header')
-
-    </div>
-
-    {{-- Sidebar --}}
-    <div class="left-sidebar">
-
-        @include('template_v2.layouts.sidebar')
-
-    </div>
-
-
     {{-- Content --}}
-    <div class="page-wrapper">
-
-        {{-- Breadcrumbs --}}
-        <div class="row page-titles">
-
-            @include('template_v2.layouts.breadcrumbs')
-
-        </div>
+    <div class="page-wrapper" style="margin-left: 0">
 
         {{-- Content container --}}
         <div class="container-fluid">
@@ -97,14 +74,6 @@
             @yield('content')
 
         </div>
-
-        {{-- Footer --}}
-        <footer class="footer">
-
-            @include('template_v2.layouts.footer')
-
-        </footer>
-
     </div>
 
 </div>

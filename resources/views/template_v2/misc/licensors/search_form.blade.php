@@ -1,9 +1,9 @@
 <form action="{{ route('licensors.index') }}" method="get">
 
-    <div class="input-group mb-3">
+    <div class="input-group mb-1">
         <input type="text" class="form-control rounded-left mb-2"
                id="name" name="name"
-               placeholder="Licensor name" aria-label="needle" aria-describedby="button-addon"
+               placeholder="Licensor name or ID" aria-label="needle" aria-describedby="button-addon"
                value="{{ request()->get('name') }}">
 
         <div class="input-group-append">
@@ -13,53 +13,75 @@
         </div>
     </div>
 
-    <div class="pull-left">
-        <a href="{{ route('licensors.index', ['list' => true]) }}" class="btn btn-outline-dark">View full list</a>
-
-        {{-- Statuses --}}
-        <div class="custom-control custom-checkbox custom-control-inline ml-2">
-            <input type="checkbox" id="active" name="status[]" class="custom-control-input" value="active"
-                    {{ in_array('active', request()->input('status') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="active">active</label>
-        </div>
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" id="inactive" name="status[]" class="custom-control-input" value="inactive"
-                    {{ in_array('inactive', request()->input('status') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="inactive">inactive</label>
-        </div>
+    <div class="float-left">
+        <a href="{{ route('licensors.index', ['list' => true]) }}" class="btn btn-sm btn-outline-dark">View full list</a>
     </div>
 
-    <div class="pull-right">
+    <div class="float-right">
+        {{-- Statuses --}}
+        <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+            @php
+                $isActiveChecked = in_array('active', request()->input('status') ?? []) ? 'checked' : '';
+                $isInactiveChecked = in_array('inactive', request()->input('status') ?? []) ? 'checked' : '';
+            @endphp
+            <label class="btn btn-outline-secondary {{ $isActiveChecked ? 'active' : '' }}">
+                <input type="checkbox" id="active" name="status[]" class="custom-control-input" value="active"
+                        {{ $isActiveChecked }}>
+                active
+            </label>
+
+            <label class="btn btn-outline-secondary {{ $isInactiveChecked ? 'active' : '' }}">
+                <input type="checkbox" id="inactive" name="status[]" class="custom-control-input" value="inactive"
+                        {{ $isInactiveChecked }}>
+                inactive
+            </label>
+        </div>
+
         {{-- Media Types --}}
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" id="audiobooks" name="media_type[]" class="custom-control-input" value="audiobooks"
-                {{ in_array('audiobooks', request()->input('media_type') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="audiobooks">audiobooks</label>
-        </div>
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" id="books" name="media_type[]" class="custom-control-input" value="books"
-                {{ in_array('books', request()->input('media_type') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="books">books</label>
-        </div>
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" id="movies" name="media_type[]" class="custom-control-input" value="movies"
-                {{ in_array('movies', request()->input('media_type') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="movies">movies</label>
-        </div>
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" id="music" name="media_type[]" class="custom-control-input" value="music"
-                {{ in_array('music', request()->input('media_type') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="music">music</label>
-        </div>
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" id="games" name="media_type[]" class="custom-control-input" value="games"
-                {{ in_array('games', request()->input('media_type') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="games">games</label>
-        </div>
-        <div class="custom-control custom-checkbox custom-control-inline">
-            <input type="checkbox" id="software" name="media_type[]" class="custom-control-input" value="software"
-                {{ in_array('software', request()->input('media_type') ?? []) ? 'checked' : '' }}>
-            <label class="custom-control-label" for="software">software</label>
+        @php
+            $isAudiobooks = in_array('audiobooks', request()->input('media_type') ?? []);
+            $isBooks = in_array('books', request()->input('media_type') ?? []);
+            $isMovies = in_array('movies', request()->input('media_type') ?? []);
+            $isMusic = in_array('music', request()->input('media_type') ?? []);
+            $isGames = in_array('games', request()->input('media_type') ?? []);
+            $isSoftware = in_array('software', request()->input('media_type') ?? []);
+        @endphp
+        <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+            <label class="btn btn-outline-secondary {{ $isAudiobooks ? 'active' : '' }}" for="audiobooks">
+                <input type="checkbox" id="audiobooks" name="media_type[]" class="custom-control-input" value="audiobooks"
+                        {{ $isAudiobooks ? 'checked' : '' }}>
+                audiobooks
+            </label>
+
+            <label class="btn btn-outline-secondary {{ $isBooks ? 'active' : '' }}" for="books">
+                <input type="checkbox" id="books" name="media_type[]" class="custom-control-input" value="books"
+                        {{ $isBooks ? 'checked' : '' }}>
+                books
+            </label>
+
+            <label class="btn btn-outline-secondary {{ $isMovies ? 'active' : '' }}" for="movies">
+                <input type="checkbox" id="movies" name="media_type[]" class="custom-control-input" value="movies"
+                        {{ $isMovies ? 'checked' : '' }}>
+                movies
+            </label>
+
+            <label class="btn btn-outline-secondary {{ $isMusic ? 'active' : '' }}" for="music">
+                <input type="checkbox" id="music" name="media_type[]" class="custom-control-input" value="music"
+                        {{ $isMusic ? 'checked' : '' }}>
+                music
+            </label>
+
+            <label class="btn btn-outline-secondary {{ $isGames ? 'active' : '' }}" for="games">
+                <input type="checkbox" id="games" name="media_type[]" class="custom-control-input" value="games"
+                        {{ $isGames ? 'checked' : '' }}>
+                games
+            </label>
+
+            <label class="btn btn-outline-secondary {{ $isSoftware ? 'active' : '' }}" for="software">
+                <input type="checkbox" id="software" name="media_type[]" class="custom-control-input" value="software"
+                        {{ $isSoftware ? 'checked' : '' }}>
+                software
+            </label>
         </div>
     </div>
 
