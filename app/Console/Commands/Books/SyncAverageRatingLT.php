@@ -36,7 +36,7 @@ class SyncAverageRatingLT extends Command
         $dateStart = new \DateTime();
         $this->output->writeln('Started at: ' . $dateStart->format('H:i:s'));
 
-        Book::select('seq_id', 'data_origin_id')
+        Book::select('id', 'data_origin_id')
             ->whereNotNull('data_origin_id')
             ->chunk(5000, function ($books) use (&$booksCounter, $self) {
                 $booksCounter += $books->count();

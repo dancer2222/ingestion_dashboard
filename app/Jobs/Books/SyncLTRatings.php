@@ -86,7 +86,7 @@ class SyncLTRatings implements ShouldQueue
                 $totalVotes = $ratingHelper->getTotalVotes();
 
                 $bookAverageRatingModel = BookAverageRatingLT::firstOrCreate(
-                    ['book_id' => $booksWithValidIsbn->where('isbn10', $bookLt->isbn_10)->pluck('seq_id')->first()],
+                    ['book_id' => $booksWithValidIsbn->where('isbn10', $bookLt->isbn_10)->pluck('id')->first()],
                     [
                         'rating' => $averageRating,
                         'votes_total' => $totalVotes,
