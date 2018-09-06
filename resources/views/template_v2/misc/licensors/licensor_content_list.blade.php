@@ -40,3 +40,7 @@
     @endforeach
     </tbody>
 </table>
+
+@if($licensorContentItems && $licensorContentItems instanceof \Illuminate\Pagination\LengthAwarePaginator)
+    {{ $licensorContentItems->links() }}
+@endif

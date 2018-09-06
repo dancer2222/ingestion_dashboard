@@ -44,6 +44,19 @@
     </tbody>
 </table>
 
-<div class="mt-4">
-{{ $authors->links() }}
-</div>
+@if($authors && $authors instanceof \Illuminate\Pagination\LengthAwarePaginator)
+    @php
+        $appends = [];
+
+        if (request()->needle) {
+            $appends['needle'] = request()->needle;
+        }
+
+        if (request()->author_type) {
+            $appends['author_type'] = request()->author_type;
+        }
+    @endphp
+    <div class="mt-4">
+    {{ $authors->appends($appends)->links() }}
+    </div>
+@endif

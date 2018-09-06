@@ -45,7 +45,13 @@ $contentTypeSingular = str_singular($contentType);
 
                         @if(isset($list) && $list instanceof \Illuminate\Pagination\LengthAwarePaginator)
                         <div class="col-12">
-                            {{ $list->links() }}
+                            @php
+                                $appends = [];
+                                if (request()->needle) {
+                                    $appends['needle'] = request()->needle;
+                                }
+                            @endphp
+                            {{ $list->appends($appends)->links() }}
                         </div>
                         @endisset
 
