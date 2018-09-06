@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Authors;
 use App\Models\Author;
 use App\Models\Authoraudiobook;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AuthorsController extends Controller
@@ -65,22 +64,30 @@ class AuthorsController extends Controller
      */
     public function show(string $id)
     {
-        if (!$this->authorModel) {
-            return view('template_v2.misc.authors.index')->withErrors(["Can't determine the author type."]);
+        try {
+            if (!$this->authorModel) {
+                throw new \Exception("Can't determine the author type.");
+            }
+
+            $author = $this->authorModel->where('id', $id)->first();
+
+            if (!$author) {
+                throw new \Exception("Can't find the author");
+            }
+
+            $booksQuery = $author->books();
+
+            $status = request()->get('status');
+
+            if ($status) {
+                $booksQuery = $booksQuery->where('status', $status);
+            }
+
+            $books = $booksQuery->get();
+
+            return view('template_v2.misc.authors.index', ['author' => $author, 'books' => $books]);
+        } catch (\Exception $e) {
+            return view('template_v2.misc.authors.index')->withErrors($e->getMessage());
         }
-
-        $author = $this->authorModel->where('id', $id)->first();
-
-        $booksQuery = $author->books();
-
-        $status = request()->get('status');
-
-        if ($status) {
-            $booksQuery = $booksQuery->where('status', $status);
-        }
-
-        $books = $booksQuery->get();
-
-        return view('template_v2.misc.authors.index', ['author' => $author, 'books' => $books]);
     }
 }

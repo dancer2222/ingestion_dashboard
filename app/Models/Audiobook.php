@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\ContentSmartSearchContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Isbn\Isbn;
 
 /**
  * Class Audiobook
  * @package App\Models
  */
-class Audiobook extends Model
+class Audiobook extends Model implements ContentSmartSearchContract
 {
     /**
      * @var string
@@ -144,5 +146,40 @@ class Audiobook extends Model
     public function rating(): HasOne
     {
         return $this->hasOne(AudiobookAverageRating::class, 'audiobook_id', 'id');
+    }
+
+    /**
+     * @param string $needle
+     * @param null $query
+     * @return Builder
+     * @throws \Isbn\Exception
+     */
+    public function smartSearch(string $needle, $query = null): Builder
+    {
+        $isFound = false;
+        $isbnHandler = new Isbn();
+        $query = $query ?? $this->newQuery();
+
+        if ($isbnHandler->validation->isbn($needle)) {
+            $isbn = $isbnHandler->hyphens->removeHyphens($needle);
+            $query->whereHas('products', function ($query) use ($isbn) {
+                $query->where('isbn', $isbn);
+            });
+
+            $isFound = true;
+        }
+
+        if (!$isFound && is_numeric($needle) && ctype_digit($needle)) {
+            $query = $query->where('id', $needle)
+                ->orWhere('data_origin_id', $needle);
+
+            $isFound = true;
+        }
+
+        if (!$isFound) {
+            $query->where('title', 'like', "%$needle%");
+        }
+
+        return $query;
     }
 }

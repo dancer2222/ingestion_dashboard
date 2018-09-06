@@ -2,43 +2,63 @@
 
 namespace App\Http\Controllers\Ratings;
 
+use App\Models\Audiobook;
+use App\Models\Book;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\Controller;
 
 class RatingsController extends Controller
 {
+    const MODELS_MAPPING = [
+        'audiobooks' => Audiobook::class,
+        'books' => Book::class,
+    ];
+
+    /**
+     * @var Model
+     */
+    private $model;
+    private $contenType;
+
+    /**
+     * RatingsController constructor.
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        $contentType = $this->contenType = request()->content_type;
+
+        if (isset(self::MODELS_MAPPING[$contentType])) {
+            $modelName = self::MODELS_MAPPING[$contentType];
+            $this->model = new $modelName;
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @param Model $model
      * @return \Illuminate\Http\Response
      */
-    public function index(Model $model)
+    public function index()
     {
-        $list = $model->has('rating')->with('rating')->paginate(10);
+        $data = [];
+        $needle = request()->input('needle');
 
-        return view('template_v2.misc.ratings.ratings', ['list' => $list]);
-    }
+        try {
+            if (!$this->model) {
+                throw new \Exception("Can't determine the media type.");
+            }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Model $model
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Model $model)
-    {
-        return view('template_v2.misc.ratings.ratings', ['entity' => $model]);
-    }
+            if ($needle) {
+                $this->model = $this->model->smartSearch($needle, $this->model->has('rating')->with('rating'));
+                $data['list'] = $this->model->paginate(10);
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            return view('template_v2.misc.ratings.ratings', $data);
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+
+            return view('template_v2.misc.ratings.ratings')->withErrors('An error happened. See logs for more info.');
+        }
     }
 }

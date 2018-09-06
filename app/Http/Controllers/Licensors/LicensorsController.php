@@ -34,16 +34,25 @@ class LicensorsController extends Controller
         $isList = request()->has('list');
         $name = request()->get('name');
         $media_types = request()->input('media_type');
+        $status = request()->input('status');
 
         if ($media_types) {
             $licensor = $licensor->whereIn('media_type', $media_types);
         }
 
-        if ($name) {
-            $licensor = $licensor->where('name', 'like', "%$name%");
+        if ($status) {
+            $licensor = $licensor->whereIn('status', $status);
         }
 
-        if ($isList || $name || $media_types) {
+        if ($name) {
+            if (is_numeric($name) && ctype_digit($name)) {
+                $licensor = $licensor->where('id', $name);
+            } else {
+                $licensor = $licensor->where('name', 'like', "%$name%");
+            }
+        }
+
+        if ($isList || $name || $media_types || $status) {
             $data['licensors'] = $licensor->get();
         }
 

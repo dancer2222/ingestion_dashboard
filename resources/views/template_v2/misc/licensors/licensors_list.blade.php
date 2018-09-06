@@ -1,6 +1,6 @@
 <hr>
-
-<table class="table mt-3">
+@if($licensors->count())
+<table class="table table-hover mt-3">
     <thead class="thead-dark">
         <tr>
             <th scope="col">ID</th>
@@ -28,3 +28,8 @@
     @endforeach
     </tbody>
 </table>
+@else
+<div class="alert alert-danger" role="alert">
+    No licensors found
+</div>
+@endif
