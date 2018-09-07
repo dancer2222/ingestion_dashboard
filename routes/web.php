@@ -35,6 +35,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/folders/{folder}', 'ContentController@folder')->name('brightcove.folder');
     });
 
+    // Search v2
+    Route::name('reports.')->prefix('search/v2')->namespace('Search')->group(function () {
+        Route::get('/{mediaType}', 'SearchController@index')->name('index')->where(['mediaType' => '(movies|audiobooks|books|albums|games)']);
+        Route::get('/{mediaType}/{needle}', 'SearchController@show')->name('show')->where(['mediaType' => '(movies|audiobooks|books|albums|games)']);
+    });
+
     // Reports
     Route::group(['prefix' => 'reports'], function() {
 
