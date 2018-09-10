@@ -25,6 +25,7 @@
 
     {{-- Bootstrap Core CSS --}}
     <link href="{{ asset("$templatePrefix/css/lib/bootstrap/bootstrap.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("$templatePrefix/css/lib/checkbox/checkbox.css") }}" rel="stylesheet">
 
     {{-- Additional styles --}}
     @stack('styles')

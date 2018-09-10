@@ -5,6 +5,28 @@
             <li class="nav-devider"></li>
             <li class="nav-label">Menu</li>
 
+            {{-- Search New --}}
+            @role(['tester', 'admin'])
+            <li>
+                <a class="has-arrow " href="#" aria-expanded="false">
+                    <i class="fa fa-search"></i>
+                    <span class="hide-menu">
+                        Search v2
+                        <span class="badge badge-danger">alpha</span>
+                    </span>
+                </a>
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('reports.index', 'audiobooks') }}">Audiobooks</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('reports.index', 'books') }}">Books</a>
+                    </li>
+                </ul>
+            </li>
+            @endrole
+
+
             {{-- Search --}}
             <li>
                 <a class="has-arrow " href="#" aria-expanded="false">
