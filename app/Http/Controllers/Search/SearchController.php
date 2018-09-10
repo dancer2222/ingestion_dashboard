@@ -68,6 +68,12 @@ class SearchController extends Controller
         return view('template_v2.search.index', $this->viewData);
     }
 
+    /**
+     * @param string $mediaType
+     * @param string $id
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show(string $mediaType, string $id, Request $request)
     {
         $viewName = "template_v2.search.{$mediaType}_item";

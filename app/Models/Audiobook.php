@@ -20,6 +20,7 @@ class Audiobook extends Model implements ContentSmartSearchContract
      */
     protected $table = 'audio_book';
     protected $connection = 'mysql_local_content';
+    public $timestamps = false;
 
     /**
      * @param $id

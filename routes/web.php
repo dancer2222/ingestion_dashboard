@@ -37,8 +37,15 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Search v2
     Route::name('reports.')->prefix('search/v2')->namespace('Search')->group(function () {
-        Route::get('/{mediaType}', 'SearchController@index')->name('index')->where(['mediaType' => '(movies|audiobooks|books|albums|games)']);
-        Route::get('/{mediaType}/{needle}', 'SearchController@show')->name('show')->where(['mediaType' => '(movies|audiobooks|books|albums|games)']);
+        Route::get('/{mediaType}', 'SearchController@index')->name('index')->where(['mediaType' => '(audiobooks|books)']);
+        Route::get('/{mediaType}/{needle}', 'SearchController@show')->name('show')->where(['mediaType' => '(audiobooks|books)']);
+    });
+
+    Route::name('webApi.')->prefix('web/content')->namespace('API\V1\Content')->group(function () {
+        // Audiobooks
+        Route::name('audiobooks.')->prefix('audiobooks')->group(function () {
+            Route::post('status', 'AudiobooksController@setStatus')->name('setStatus');
+        });
     });
 
     // Reports

@@ -17,13 +17,10 @@
                 </a>
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('reports.index', 'movies') }}">Movies</a>
-                    </li>
-                    <li>
                         <a href="{{ route('reports.index', 'audiobooks') }}">Audiobooks</a>
                     </li>
                     <li>
-                        <a href="{{ route('reports.index', 'audiobooks') }}">Books</a>
+                        <a href="{{ route('reports.index', 'books') }}">Books</a>
                     </li>
                 </ul>
             </li>

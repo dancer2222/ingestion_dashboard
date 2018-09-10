@@ -6,6 +6,52 @@ $.ajaxSetup({
     url: location.origin
 });
 
+// Audiobook Class
+var Audiobook = {
+    setStatus: function (radioBtn) {
+        var self = this;
+
+        var status = radioBtn.value;
+        var id = radioBtn.dataset.audiobookId;
+
+        self.statusPanelToggle();
+
+        $.ajax({
+            url: $.ajaxSettings.url + '/web/content/audiobooks/status',
+            method: 'post',
+            data: {
+                id: id,
+                status: status
+            },
+            success: function (response) {
+                self.statusPanelToggle(!response.result);
+            },
+            error: function (error) {
+                console.log(error);
+
+                self.statusPanelToggle(true);
+            }
+        });
+    },
+    statusPanelToggle: function (rollback) {
+        var statusPanel = $('#status_panel');
+        var radioActive = statusPanel.find('#status_active');
+        var radioInactive = statusPanel.find('#status_inactive');
+
+        if (rollback) {
+            if (radioActive.prop('checked')) {
+                radioInactive.prop('checked', true);
+            } else {
+                radioActive.prop('checked', true);
+            }
+        }
+
+        var statusPanelInputs = statusPanel.find('input');
+
+        statusPanelInputs.prop('disabled', !statusPanelInputs.prop('disabled'));
+    }
+};
+
 /**
  * Redirect using current pathname
  *
@@ -162,6 +208,10 @@ $(document).ready(function () {
 
         return false;
     });
+
+    // Audiobooks
+    // Change status
+    $('.audiobook_status_change').on('change', Audiobook.setStatus);
 });
 
 
