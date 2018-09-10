@@ -77,12 +77,13 @@ class SearchController extends Controller
     public function show(string $mediaType, string $id, Request $request)
     {
         $viewName = "template_v2.search.{$mediaType}_item";
-        $this->viewData['item'] = $this->mediaModel->find($id);
 
         if (!view()->exists($viewName)) {
             return view('template_v2.search.index', $this->viewData);
         }
-//        dd($this->viewData);
+
+        $this->viewData['item'] = $this->mediaModel->find($id);
+
         return view($viewName, $this->viewData);
     }
 }

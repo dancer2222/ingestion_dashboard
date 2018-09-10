@@ -211,7 +211,9 @@ $(document).ready(function () {
 
     // Audiobooks
     // Change status
-    $('.audiobook_status_change').on('change', Audiobook.setStatus);
+    $('.audiobook_status_change').on('change', function (e) {
+        Audiobook.setStatus(this);
+    });
 });
 
 
