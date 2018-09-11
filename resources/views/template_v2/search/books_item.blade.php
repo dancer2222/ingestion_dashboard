@@ -23,14 +23,7 @@
                     </div>
                     <div class="col-6 text-right" id="status_panel">
                         {{-- Status switcher --}}
-                        <div class="form-check abc-radio abc-radio-success form-check-inline">
-                            <input class="form-check-input audiobook_status_change" data-audiobook-id="{{ $item->id }}" type="radio" id="status_active" value="active" name="status" {{ $isActive ? 'checked=""' : '' }}>
-                            <label class="form-check-label" for="status_active">Active</label>
-                        </div>
-                        <div class="form-check abc-radio abc-radio-danger form-check-inline">
-                            <input class="form-check-input audiobook_status_change" data-audiobook-id="{{ $item->id }}" type="radio" id="status_inactive" value="inactive" name="status" {{ !$isActive ? 'checked=""' : '' }}>
-                            <label class="form-check-label" for="status_inactive">Inactive</label>
-                        </div>
+                        @include('template_v2.search._options', ['id' => $item->id, 'mediaType' => $mediaType, 'isMediaActive' => $isActive])
                     </div>
                 </div>
 
