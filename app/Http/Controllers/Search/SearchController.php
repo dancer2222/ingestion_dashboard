@@ -40,7 +40,7 @@ class SearchController extends Controller
             return view('template_v2.search.index', $viewData);
         }
 
-        $viewData['item'] = $entity->getModel()->find($id);
+        $viewData['item'] = $entity->findById($id);
 
         return view($viewName, $viewData);
     }

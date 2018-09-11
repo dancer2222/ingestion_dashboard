@@ -3,10 +3,18 @@
 namespace Ingestion\Search\Entity;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Isbn\Isbn;
 
 class AudiobookEntity extends Entity
 {
+    public function __construct(Model $model)
+    {
+        parent::__construct($model);
+
+        $this->setScopes(['products']);
+    }
+
     /**
      * @param string $needle
      * @param array $scopes
@@ -42,6 +50,8 @@ class AudiobookEntity extends Entity
         if (!$isFound) {
             $query->where('title', 'like', "%$needle%");
         }
+
+        $query->select('id', 'title');
 
         return $query;
     }
