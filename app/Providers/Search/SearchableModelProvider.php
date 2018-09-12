@@ -19,6 +19,7 @@ class SearchableModelProvider extends ServiceProvider
      */
     private $modelsMapping = [
         'audiobooks' => Audiobook::class,
+        'books'      => Book::class,
     ];
 
     /**

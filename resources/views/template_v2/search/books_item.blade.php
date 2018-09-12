@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @include('template_v2.search.search_form')
+    @include('template_v2.search._search_form')
 
     @php
         $isActive = $item->status === 'active';
