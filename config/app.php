@@ -188,7 +188,7 @@ return [
         \VladimirYuldashev\LaravelQueueRabbitMQ\LaravelQueueRabbitMQServiceProvider::class,
         \App\Providers\LibraryThingHelperProvider::class,
         \App\Providers\Apis\GoogleClientServiceProvider::class,
-        \App\Providers\Search\SearchEntityProvider::class,
+        \App\Providers\Search\SearchableModelProvider::class,
     ],
 
     /*

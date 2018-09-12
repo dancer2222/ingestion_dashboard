@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Contracts\ContentSmartSearchContract;
+use App\Models\Contracts\SearchableModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +13,7 @@ use Isbn\Isbn;
  * Class Book
  * @package App\Models
  */
-class Book extends Model implements ContentSmartSearchContract
+class Book extends Model implements SearchableModel
 {
     /**
      * @var string

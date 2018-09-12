@@ -2,24 +2,31 @@
 
 namespace App\Http\Controllers\Search;
 
+use App\Models\Contracts\SearchableModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Ingestion\Search\Contracts\SearchableEntity;
 
 class SearchController extends Controller
 {
     /**
+     * @var array
+     */
+    private $scopesMapping = [
+        'audiobooks' => ['products', 'licensor', 'provider'],
+    ];
+
+    /**
      * @param string $mediaType
      * @param Request $request
-     * @param SearchableEntity $entity
+     * @param SearchableModel $model
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(string $mediaType, Request $request, SearchableEntity $entity)
+    public function index(string $mediaType, Request $request, SearchableModel $model)
     {
         $viewData['mediaType'] = $mediaType;
         
         if ($request->get('needle')) {
-            $viewData['list'] = $entity->search($request->get('needle'))->paginate(15);
+            $viewData['list'] = $model->seek($request->get('needle'))->paginate(15);
         }
 
         return view('template_v2.search.index', $viewData);
@@ -28,10 +35,10 @@ class SearchController extends Controller
     /**
      * @param string $mediaType
      * @param string $id
-     * @param SearchableEntity $entity
+     * @param SearchableModel $model
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(string $mediaType, string $id, SearchableEntity $entity)
+    public function show(string $mediaType, string $id, SearchableModel $model)
     {
         $viewData['mediaType'] = $mediaType;
         $viewName = "template_v2.search.{$mediaType}_item";
@@ -40,7 +47,7 @@ class SearchController extends Controller
             return view('template_v2.search.index', $viewData);
         }
 
-        $viewData['item'] = $entity->findById($id);
+        $viewData['item'] = $model->seekById($id, $this->scopesMapping[$mediaType]);
 
         return view($viewName, $viewData);
     }
