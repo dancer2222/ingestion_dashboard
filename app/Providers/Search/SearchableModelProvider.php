@@ -4,11 +4,10 @@ namespace App\Providers\Search;
 
 use App\Models\Audiobook;
 use App\Models\Book;
+use App\Models\Contracts\SearchableModel;
 use Illuminate\Support\ServiceProvider;
-use Ingestion\Search\Contracts\SearchableEntity;
-use Ingestion\Search\Entity\EntityFactory;
 
-class SearchEntityProvider extends ServiceProvider
+class SearchableModelProvider extends ServiceProvider
 {
     /**
      * @var bool
@@ -31,16 +30,14 @@ class SearchEntityProvider extends ServiceProvider
     {
         $self = $this;
 
-        $this->app->singleton(SearchableEntity::class, function ($app) use ($self) {
+        $this->app->singleton(SearchableModel::class, function ($app) use ($self) {
             $mediaType = $app->request->mediaType;
 
             if (!isset($self->modelsMapping[$mediaType])) {
                 throw new \Exception("Can't determine media type.");
             }
 
-            $model = new $self->modelsMapping[$mediaType];
-
-            return EntityFactory::make($mediaType, $model);
+            return new $self->modelsMapping[$mediaType];
         });
     }
 
@@ -49,6 +46,6 @@ class SearchEntityProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [SearchableEntity::class];
+        return [SearchableModel::class];
     }
 }

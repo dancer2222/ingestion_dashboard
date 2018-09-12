@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Contracts\ContentSmartSearchContract;
+use App\Models\Contracts\SearchableModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +13,7 @@ use Isbn\Isbn;
  * Class Audiobook
  * @package App\Models
  */
-class Audiobook extends Model implements ContentSmartSearchContract
+class Audiobook extends Model implements SearchableModel
 {
     /**
      * @var string
@@ -142,6 +142,30 @@ class Audiobook extends Model implements ContentSmartSearchContract
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function licensor()
+    {
+        return $this->belongsTo(Licensor::class, 'licensor_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function provider()
+    {
+        return $this->belongsTo(DataSourceProvider::class, 'data_source_provider_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function georestricts()
+    {
+        return $this->hasMany(MediaGeoRestrict::class, 'media_id', 'id');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne|mixed
      */
     public function rating(): HasOne
@@ -151,15 +175,19 @@ class Audiobook extends Model implements ContentSmartSearchContract
 
     /**
      * @param string $needle
-     * @param null $query
+     * @param array $scopes
      * @return Builder
      * @throws \Isbn\Exception
      */
-    public function smartSearch(string $needle, $query = null): Builder
+    public function seek(string $needle, array $scopes = []): Builder
     {
         $isFound = false;
         $isbnHandler = new Isbn();
-        $query = $query ?? $this->newQuery();
+        $query = $this->newQuery();
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
 
         if ($isbnHandler->validation->isbn($needle)) {
             $isbn = $isbnHandler->hyphens->removeHyphens($needle);
@@ -182,5 +210,21 @@ class Audiobook extends Model implements ContentSmartSearchContract
         }
 
         return $query;
+    }
+
+    /**
+     * @param string $id
+     * @param array $scopes
+     * @return Builder|Model|null|object
+     */
+    public function seekById(string $id, array $scopes = [])
+    {
+        $query = $this->newQuery();
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        return $query->where('id', $id)->first();
     }
 }
