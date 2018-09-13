@@ -54,15 +54,11 @@
                 </div>
 
                 <div class="mb-3 border-bottom">
-                    <b>Isbn:</b> <span class="float-right">{{ $item->isbn }}</span>
+                    <b>Brightcove id:</b> <span class="float-right">{{ $item->brightcove->brightcove_id }}</span>
                 </div>
 
                 <div class="mb-3 border-bottom">
-                    <b>Data origin id:</b> <span class="float-right">{{ $item->data_origin_id }}</span>
-                </div>
-
-                <div class="mb-3 border-bottom">
-                    <b>Batch id:</b> <span class="float-right">{{ $item->batch_id }}</span>
+                    <b>Batch id:</b> <span class="float-right">{{ $item->batch_id }} [{{ $item->qaBatch->import_date }}]</span>
                 </div>
 
                 <div class="mb-3 border-bottom">
@@ -78,19 +74,11 @@
                 </div>
 
                 <div class="mb-3 border-bottom">
-                    <b>Download_url:</b> <span class="float-right">{{ $item->download_url }}</span>
+                    <b>Licensor id:</b> <span class="float-right">{{ $item->licensor_id }} [{{ $item->licensor->name }}]</span>
                 </div>
 
                 <div class="mb-3 border-bottom">
-                    <b>Licensor id:</b> <span class="float-right">{{ $item->licensor_id }} [{{ $item->source }}]</span>
-                </div>
-
-                <div class="mb-3 border-bottom">
-                    <b>Author_id</b> <span class="float-right">{{ $item->author_id }}</span>
-                </div>
-
-                <div class="mb-3 border-bottom">
-                    <b>Language</b> <span class="float-right">{{ $item->language }}</span>
+                    <b>Data source provider id:</b> <span class="float-right">{{ $item->qaBatch->data_source_provider_id }} [{{ $item->provider->get(0)->name }}]</span>
                 </div>
 
                 <div class="mb-3 border-bottom">

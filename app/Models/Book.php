@@ -124,23 +124,66 @@ class Book extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function licensor()
+    {
+        return $this->belongsTo(Licensor::class, 'licensor_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function provider()
+    {
+        return $this->belongsTo(DataSourceProvider::class, 'data_source_provider_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function georestricts()
+    {
+        return $this->hasMany(MediaGeoRestrict::class, 'media_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function language()
+    {
+        return $this->belongsToMany(
+            MaLanguage::class,
+            'media_language',
+            'media_id',
+            'language_id',
+            'id',
+            'id'
+            );
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function qaBatch()
+    {
+        return $this->belongsTo(QaBatch::class, 'batch_id');
+    }
+
+    /**
      * @param string $needle
-     * @param null $query
+     * @param array $scopes
      * @return Builder
      * @throws \Isbn\Exception
      */
-    public function smartSearch(string $needle, $query = null): Builder
+    public function seek(string $needle, array $scopes = []): Builder
     {
         $isFound = false;
         $isbnHandler = new Isbn();
-        $query = $query ?? $this->newQuery();
+        $query = $this->newQuery();
 
-        if ($isbnHandler->validation->isbn($needle)) {
-            $isbn = $isbnHandler->hyphens->removeHyphens($needle);
-            $query = $query->where('data_origin_id', $isbn)
-                ->orWhere('isbn', $isbn);
-
-            $isFound = true;
+        if ($scopes) {
+            $query->with($scopes);
         }
 
         if (!$isFound && is_numeric($needle) && ctype_digit($needle)) {
@@ -152,8 +195,31 @@ class Book extends Model implements SearchableModel
 
         if (!$isFound) {
             $query->where('title', 'like', "%$needle%");
+
+            $isFound = true;
+        }
+
+        if (!$isFound && $isbnHandler->validation->isbn($needle)) {
+            $isbn = $isbnHandler->hyphens->removeHyphens($needle);
+            $query->where('isbn', $isbn);
         }
 
         return $query;
+    }
+
+    /**
+     * @param string $id
+     * @param array $scopes
+     * @return Builder|Model|null|object
+     */
+    public function seekById(string $id, array $scopes = [])
+    {
+        $query = $this->newQuery();
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        return $query->where('id', $id)->first();
     }
 }
