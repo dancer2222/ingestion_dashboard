@@ -50,7 +50,7 @@ class RatingsController extends Controller
             }
 
             if ($needle) {
-                $this->model = $this->model->smartSearch($needle, $this->model->has('rating')->with('rating'));
+                $this->model = $this->model->seek($needle, ['rating'], ['rating']);
                 $data['list'] = $this->model->paginate(10);
             }
 

@@ -12,7 +12,7 @@ class SearchController extends Controller
      * @var array
      */
     private $scopesMapping = [
-        'audiobooks' => ['products', 'licensor', 'provider'],
+        'audiobooks' => ['products', 'licensor', 'provider', 'statusChanges', 'blacklist', 'georestricts'],
     ];
 
     /**

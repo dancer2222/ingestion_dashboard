@@ -41,10 +41,27 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{mediaType}/{needle}', 'SearchController@show')->name('show')->where(['mediaType' => '(audiobooks|books)']);
     });
 
-    Route::name('webApi.')->prefix('web/content')->namespace('API\V1\Content')->group(function () {
+    Route::name('content.')->prefix('content')->namespace('API\V1\Content')->group(function () {
         // Audiobooks
         Route::name('audiobooks.')->prefix('audiobooks')->group(function () {
             Route::post('status', 'AudiobooksController@setStatus')->name('setStatus');
+            Route::post('blacklist', 'AudiobooksController@blacklist')->name('blacklist');
+        });
+
+        // Books
+        Route::name('books.')->prefix('audiobooks')->group(function () {
+            Route::post('status', 'BooksController@setStatus')->name('setStatus');
+            Route::post('blacklist', 'BooksController@blacklist')->name('blacklist');
+        });
+
+        // Movies
+        Route::name('movies.')->prefix('audiobooks')->group(function () {
+            Route::post('status', 'BooksController@setStatus')->name('setStatus');
+        });
+
+        // Albums
+        Route::name('albums.')->prefix('audiobooks')->group(function () {
+            Route::post('status', 'BooksController@setStatus')->name('setStatus');
         });
     });
 

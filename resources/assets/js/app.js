@@ -6,18 +6,84 @@ $.ajaxSetup({
     url: location.origin
 });
 
-// Audiobook Class
-var Audiobook = {
-    setStatus: function (radioBtn) {
+var CommonHelper = {
+    mediaTypes: [
+        'books', 'audiobooks', 'albums', 'games', 'movies',
+    ],
+    toastr: function (message, status) {
+        if (window.toastr) {
+
+        } else {
+            alert(status + '! ' + message);
+        }
+    },
+    btnAjax: function (btn) {
+        if (btn.classList.contains('running')) {
+            btn.classList.remove('running', 'hovering', 'disabled');
+        } else {
+            btn.classList.add('running', 'hovering', 'disabled');
+        }
+    },
+    blacklistStatus: function (btn) {
+        this.btnAjax(btn);
+
         var self = this;
-
-        var status = radioBtn.value;
-        var id = radioBtn.dataset.audiobookId;
-
-        self.statusPanelToggle();
+        var url = btn.getAttribute('data-url');
+        var id = btn.getAttribute('data-id');
+        var status = btn.getAttribute('data-status');
+        var responseMessage = "By some reason it wasn't added to blacklist";
+        var responseStatus = 'error';
 
         $.ajax({
-            url: $.ajaxSettings.url + '/web/content/audiobooks/status',
+            url: url,
+            method: 'post',
+            data: {
+                id: id,
+                status: status
+            },
+            success: function (r) {
+                self.btnAjax(btn);
+
+                if (r) {
+                    responseMessage = 'Successfully completed.';
+                    responseStatus = 'success';
+
+                    $('#status_panel .form-check-inline').toggleClass('hidden');
+                    $('#blacklist_add').toggleClass('hidden');
+                    $('#blacklist_remove').toggleClass('hidden');
+
+                    if (status === 'active') {
+                        $('.status_border_card').toggleClass('border-danger').toggleClass('border-success');
+                    }
+                }
+
+                self.toastr(responseMessage, responseStatus);
+            },
+            error: function (e) {
+                console.error(e);
+
+                self.toastr(responseMessage, responseStatus);
+                self.btnAjax(btn);
+            }
+        });
+    },
+    setStatus: function (radioBtn) {
+        this.statusPanelFadeToggle();
+
+        var self = this;
+        var status = radioBtn.value;
+        var id = radioBtn.dataset.id;
+        var mediaType = radioBtn.dataset.mediaType;
+
+        if (self.mediaTypes.indexOf(mediaType) < 0) {
+            console.error('Wrong media type is passed.');
+            self.statusPanelToggle(true);
+
+            return false;
+        }
+
+        $.ajax({
+            url: $.ajaxSettings.url + '/content/' + mediaType + '/status',
             method: 'post',
             data: {
                 id: id,
@@ -25,18 +91,28 @@ var Audiobook = {
             },
             success: function (response) {
                 self.statusPanelToggle(!response.result);
+                self.statusPanelFadeToggle();
             },
             error: function (error) {
                 console.log(error);
 
                 self.statusPanelToggle(true);
+                self.statusPanelFadeToggle();
             }
         });
+    },
+    statusPanelFadeToggle: function () {
+        var statusPanel = $('#status_panel');
+        var statusPanelInputs = statusPanel.find('input');
+
+        statusPanelInputs.prop('disabled', !statusPanelInputs.prop('disabled'));
+
     },
     statusPanelToggle: function (rollback) {
         var statusPanel = $('#status_panel');
         var radioActive = statusPanel.find('#status_active');
         var radioInactive = statusPanel.find('#status_inactive');
+        var statusBorderCard = $('.status_border_card');
 
         if (rollback) {
             if (radioActive.prop('checked')) {
@@ -44,13 +120,44 @@ var Audiobook = {
             } else {
                 radioActive.prop('checked', true);
             }
+
+            return false;
         }
 
-        var statusPanelInputs = statusPanel.find('input');
+        statusBorderCard.toggleClass('border-danger');
+        statusBorderCard.toggleClass('border-success');
+    },
+    copyToClipboard: function (value) {
+        var el = document.createElement('input');
+        el.value = value;
 
-        statusPanelInputs.prop('disabled', !statusPanelInputs.prop('disabled'));
+        document.body.appendChild(el);
+
+        el.select();
+
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    },
+    initClipboardBtns: function () {
+        var el = document.createElement('i');
+        el.classList.add('fas', 'fa-copy');
+
+        var elementsRequested = document.querySelectorAll('[data-clipboard]');
+
+        // if (elementsRequested.length > 0) {
+        //     for (let element in elementsRequested) {
+        //         console.log(element);
+        //     }
+        // }
     }
 };
+
+// Media Classes
+var Audiobook = {};
+var Book = {};
+var Movie = {};
+var Game = {};
+var Album = {};
 
 /**
  * Redirect using current pathname
@@ -209,10 +316,19 @@ $(document).ready(function () {
         return false;
     });
 
+    /**
+     * Clipboards
+     */
+    CommonHelper.initClipboardBtns();
+
     // Audiobooks
     // Change status
     $('.audiobook_status_change').on('change', function (e) {
-        Audiobook.setStatus(this);
+        CommonHelper.setStatus(this);
+    });
+
+    $('.blacklist-btn').on('click', function () {
+        CommonHelper.blacklistStatus(this);
     });
 });
 
