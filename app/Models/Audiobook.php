@@ -190,6 +190,14 @@ class Audiobook extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function qaBatch()
+    {
+        return $this->belongsTo(QaBatch::class, 'batch_id');
+    }
+
+    /**
      * @param string $needle
      * @param array $scopes
      * @param array $has

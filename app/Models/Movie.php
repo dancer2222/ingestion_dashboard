@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\SearchableModel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -9,7 +11,7 @@ use Illuminate\Support\Facades\DB;
  * Class Movie
  * @package App\Models
  */
-class Movie extends Model
+class Movie extends Model implements SearchableModel
 {
     /**
      * @var string
@@ -77,5 +79,96 @@ class Movie extends Model
         $this->timestamps = false;
 
         return $this->where('id', $id)->update(['status' => $status]);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function licensor()
+    {
+        return $this->belongsTo(Licensor::class, 'licensor_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function provider()
+    {
+        return $this->belongsToMany(
+            DataSourceProvider::class,
+            'qa_batches',
+            'id',
+            'data_source_provider_id',
+            'batch_id',
+            'id'
+        );
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function georestricts()
+    {
+        return $this->hasMany(MediaGeoRestrict::class, 'media_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function qaBatch()
+    {
+        return $this->belongsTo(QaBatch::class, 'batch_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function brightcove()
+    {
+        return $this->belongsTo(Brightcove::class, 'id', 'id');
+    }
+
+    /**
+     * @param string $needle
+     * @param array $scopes
+     * @return Builder
+     */
+    public function seek(string $needle, array $scopes = []): Builder
+    {
+        $isFound = false;
+        $query = $this->newQuery();
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        if (!$isFound && is_numeric($needle) && ctype_digit($needle)) {
+            $query = $query->where('id', $needle)
+                ->orWhere('data_origin_id', $needle);
+
+            $isFound = true;
+        }
+
+        if (!$isFound) {
+            $query->where('title', 'like', "%$needle%");
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param string $id
+     * @param array $scopes
+     * @return Builder|Model|null|object
+     */
+    public function seekById(string $id, array $scopes = [])
+    {
+        $query = $this->newQuery();
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        return $query->where('id', $id)->first();
     }
 }

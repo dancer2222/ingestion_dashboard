@@ -37,8 +37,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Search v2
     Route::name('reports.')->prefix('search/v2')->namespace('Search')->group(function () {
-        Route::get('/{mediaType}', 'SearchController@index')->name('index')->where(['mediaType' => '(audiobooks|books)']);
-        Route::get('/{mediaType}/{needle}', 'SearchController@show')->name('show')->where(['mediaType' => '(audiobooks|books)']);
+        Route::get('/{mediaType}', 'SearchController@index')->name('index')->where(['mediaType' => '(audiobooks|books|movies)']);
+        Route::get('/{mediaType}/{needle}', 'SearchController@show')->name('show')->where(['mediaType' => '(audiobooks|books|movies)']);
     });
 
     Route::name('content.')->prefix('content')->namespace('API\V1\Content')->group(function () {

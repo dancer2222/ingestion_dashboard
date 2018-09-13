@@ -5,6 +5,7 @@ namespace App\Providers\Search;
 use App\Models\Audiobook;
 use App\Models\Book;
 use App\Models\Contracts\SearchableModel;
+use App\Models\Movie;
 use Illuminate\Support\ServiceProvider;
 
 class SearchableModelProvider extends ServiceProvider
@@ -19,6 +20,8 @@ class SearchableModelProvider extends ServiceProvider
      */
     private $modelsMapping = [
         'audiobooks' => Audiobook::class,
+        'books'      => Book::class,
+        'movies'     => Movie::class,
     ];
 
     /**
