@@ -22,6 +22,9 @@
                     <li>
                         <a href="{{ route('reports.index', 'books') }}">Books</a>
                     </li>
+                    <li>
+                        <a href="{{ route('reports.index', 'movies') }}">Movies</a>
+                    </li>
                 </ul>
             </li>
             @endrole
