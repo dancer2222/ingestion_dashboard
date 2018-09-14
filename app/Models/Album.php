@@ -163,11 +163,13 @@ class Album extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        if (!$isFound && is_numeric($needle) && ctype_digit($needle)) {
-            $query = $query->where('id', 'like', "%$needle%")
-                ->orWhere('data_origin_id', 'like', "%$needle%")
-                ->orWhere('upc', 'like', "%$needle%")
-                ->orWhere('batch_id', 'like', "%$needle%");
+        $trimmed = str_replace(["-", " "], "", $needle);
+
+        if (is_numeric($trimmed) && ctype_digit($trimmed)) {
+            $query = $query->where('id', 'like', "%$trimmed%")
+                ->orWhere('data_origin_id', 'like', "%$trimmed%")
+                ->orWhere('upc', 'like', "%$trimmed%")
+                ->orWhere('batch_id', 'like', "%$trimmed%");
 
             $isFound = true;
         }

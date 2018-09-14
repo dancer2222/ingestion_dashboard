@@ -159,9 +159,10 @@ class Movie extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        if (!$isFound && is_numeric($needle) && ctype_digit($needle)) {
-            $query = $query->where('id', $needle)
-                ->orWhere('data_origin_id', $needle);
+        $trimmed = str_replace(["-", " "], "", $needle);
+
+        if (is_numeric($trimmed) && ctype_digit($trimmed)) {
+            $query = $query->where('id', $trimmed);
 
             $isFound = true;
         }

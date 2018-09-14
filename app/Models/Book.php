@@ -212,15 +212,11 @@ class Book extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        if (!$isFound && is_numeric($needle) && ctype_digit($needle)) {
-            $query = $query->where('id', $needle)
-                ->orWhere('data_origin_id', $needle);
+        $trimmed = str_replace(["-", " "], "", $needle);
 
-            $isFound = true;
-        }
-
-        if (!$isFound) {
-            $query->where('title', 'like', "%$needle%");
+        if (is_numeric($trimmed) && ctype_digit($trimmed)) {
+            $query = $query->where('id', $trimmed)
+                ->orWhere('data_origin_id', $trimmed);
 
             $isFound = true;
         }
@@ -228,6 +224,12 @@ class Book extends Model implements SearchableModel
         if (!$isFound && $isbnHandler->validation->isbn($needle)) {
             $isbn = $isbnHandler->hyphens->removeHyphens($needle);
             $query->where('isbn', $isbn);
+
+            $isFound = true;
+        }
+
+        if (!$isFound) {
+            $query->where('title', 'like', "%$needle%");
         }
 
         return $query;
