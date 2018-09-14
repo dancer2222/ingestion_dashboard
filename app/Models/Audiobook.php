@@ -2,19 +2,25 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\SearchableModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Isbn\Isbn;
 
 /**
  * Class Audiobook
  * @package App\Models
  */
-class Audiobook extends Model
+class Audiobook extends Model implements SearchableModel
 {
     /**
      * @var string
      */
     protected $table = 'audio_book';
+    protected $connection = 'mysql_local_content';
+    public $timestamps = false;
 
     /**
      * @param $id
@@ -133,5 +139,136 @@ class Audiobook extends Model
             'id',
             'id'
         )->withPivot('subscription_type');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function licensor()
+    {
+        return $this->belongsTo(Licensor::class, 'licensor_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function provider()
+    {
+        return $this->belongsTo(DataSourceProvider::class, 'data_source_provider_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function georestricts()
+    {
+        return $this->hasMany(MediaGeoRestrict::class, 'media_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function statusChanges()
+    {
+        return $this->hasMany(TrackingStatusChanges::class, 'media_id', 'id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function blacklist()
+    {
+        return $this->hasOne(AudiobookBlackList::class, 'audio_book_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|mixed
+     */
+    public function rating(): HasOne
+    {
+        return $this->hasOne(AudiobookAverageRating::class, 'audiobook_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function qaBatch()
+    {
+        return $this->belongsTo(QaBatch::class, 'batch_id');
+    }
+
+    /**
+     * @param string $needle
+     * @param array $scopes
+     * @param array $has
+     * @return Builder
+     * @throws \Isbn\Exception
+     */
+    public function seek(string $needle, array $scopes = [], array $has = []): Builder
+    {
+        $isFound = false;
+        $isbnHandler = new Isbn();
+        $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        $trimmed = str_replace(["-", " "], "", $needle);
+
+        if ($isbnHandler->validation->isbn($needle)) {
+            $isbn = $isbnHandler->hyphens->removeHyphens($needle);
+            $query->whereHas('products', function ($query) use ($isbn) {
+                $query->where('isbn', $isbn);
+            });
+
+            $isFound = true;
+        }
+
+        if (!$isFound && is_numeric($trimmed) && ctype_digit($trimmed)) {
+            $query = $query->where('id', $trimmed)
+                ->orWhere('data_origin_id', $trimmed);
+
+            $isFound = true;
+        }
+
+        if (!$isFound) {
+            $query->where('title', 'like', "%$needle%");
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param string $id
+     * @param array $scopes
+     * @param array $has
+     * @return Builder|Model|null|object
+     */
+    public function seekById(string $id, array $scopes = [], array $has = [])
+    {
+        $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        return $query->where('id', $id)->first();
     }
 }

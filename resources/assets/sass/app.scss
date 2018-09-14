@@ -1,0 +1,8 @@
+.btn-group-toggle .btn {
+  color: #67757c !important;
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled).active,
+.btn-group-toggle .btn:hover {
+  color: #fff !important;
+}

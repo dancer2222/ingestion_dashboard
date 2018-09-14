@@ -25,12 +25,17 @@
 
     {{-- Bootstrap Core CSS --}}
     <link href="{{ asset("$templatePrefix/css/lib/bootstrap/bootstrap.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("$templatePrefix/css/lib/checkbox/checkbox.css") }}" rel="stylesheet">
+    <link href="{{ asset("$templatePrefix/css/lib/toastr/toastr.min.css") }}" rel="stylesheet">
+    <link href="{{ asset('lib/loading-btn/loading.css') }}" rel="stylesheet">
+    <link href="{{ asset('lib/loading-btn/loading-btn.css') }}" rel="stylesheet">
 
     {{-- Additional styles --}}
     @stack('styles')
 
     {{-- Theme CSS --}}
     <link href="{{ asset("$templatePrefix/css/theme.min.css") }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     {{-- Custom CSS --}}
 
@@ -114,6 +119,9 @@
 {{-- Bootstrap --}}
 <script src="{{ asset("$templatePrefix/js/lib/bootstrap/js/popper.min.js") }}"></script>
 <script src="{{ asset("$templatePrefix/js/lib/bootstrap/js/bootstrap.min.js") }}"></script>
+
+{{-- Toastr --}}
+<script src="{{ asset("$templatePrefix/js/lib/toastr/toastr.min.js") }}"></script>
 
 {{-- Slimscroll --}}
 <script src="{{ asset("$templatePrefix/js/jquery.slimscroll.js") }}"></script>

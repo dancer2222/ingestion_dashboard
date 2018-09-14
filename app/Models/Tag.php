@@ -8,7 +8,7 @@ class Tag extends Model
 {
     protected $connection = 'mysql_local_content';
     protected $table = 'tag';
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name'];
     public $timestamps = false;
 
     /**

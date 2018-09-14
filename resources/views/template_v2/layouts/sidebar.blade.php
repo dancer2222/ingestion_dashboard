@@ -5,6 +5,34 @@
             <li class="nav-devider"></li>
             <li class="nav-label">Menu</li>
 
+            {{-- Search New --}}
+            @role(['tester', 'admin'])
+            <li>
+                <a class="has-arrow " href="#" aria-expanded="false">
+                    <i class="fa fa-search"></i>
+                    <span class="hide-menu">
+                        Search v2
+                        <span class="badge badge-danger">alpha</span>
+                    </span>
+                </a>
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('reports.index', 'audiobooks') }}">Audiobooks</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('reports.index', 'books') }}">Books</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('reports.index', 'movies') }}">Movies</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('reports.index', 'albums') }}">Albums</a>
+                    </li>
+                </ul>
+            </li>
+            @endrole
+
+
             {{-- Search --}}
             <li>
                 <a class="has-arrow " href="#" aria-expanded="false">
@@ -28,6 +56,19 @@
                     </li>
                     <li>
                         <a href="{{ route('search', ['contentType' => 'games']) }}">Games</a>
+                    </li>
+
+                    <li class="nav-devider"></li>
+
+                    <li>
+                        <a href="{{ route('authors.index') }}">Authors</a>
+                        <a href="{{ route('licensors.index') }}">Licensors</a>
+
+                        {{--<ul aria-expanded="false" class="collapse">--}}
+                            {{--<li>--}}
+                                {{--<a href="author/books">Books</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
                     </li>
                 </ul>
             </li>
@@ -118,15 +159,19 @@
 
             <li>
                 <a class="has-arrow" href="#" aria-expanded="false">
-                    <i class="fas fa-book"></i>
+                    <i class="fas fa-star-half-alt"></i>
                     <span class="hide-menu">
-                        Librarything
+                        Ratings
                     </span>
                 </a>
 
                 <ul aria-expanded="false" class="collapse">
                     <li>
-                        <a href="{{ route('librarything.ratings.index') }}">Ratings</a>
+                        <a href="{{ route('ratings.index', 'audiobooks') }}">Audiobooks</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('ratings.index', 'books') }}">Books</a>
                     </li>
                 </ul>
             </li>

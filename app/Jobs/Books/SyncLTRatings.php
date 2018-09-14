@@ -12,7 +12,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Mockery\Exception;
 
 class SyncLTRatings implements ShouldQueue
 {
@@ -31,6 +30,7 @@ class SyncLTRatings implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param array $books
      * @return void
      */
     public function __construct(array $books)
@@ -41,7 +41,7 @@ class SyncLTRatings implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param Isbn $isbn
+     * @param Isbn $isbnHandler
      * @param Rating $ratingHelper
      * @return void
      */
@@ -86,7 +86,7 @@ class SyncLTRatings implements ShouldQueue
                 $totalVotes = $ratingHelper->getTotalVotes();
 
                 $bookAverageRatingModel = BookAverageRatingLT::firstOrCreate(
-                    ['book_id' => $booksWithValidIsbn->where('isbn10', $bookLt->isbn_10)->pluck('seq_id')->first()],
+                    ['book_id' => $booksWithValidIsbn->where('isbn10', $bookLt->isbn_10)->pluck('id')->first()],
                     [
                         'rating' => $averageRating,
                         'votes_total' => $totalVotes,

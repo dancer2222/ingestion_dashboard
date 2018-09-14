@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\SearchableModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Class Album
  * @package App\Models
  */
-class Album extends Model
+class Album extends Model implements SearchableModel
 {
     /**
      * @var string
      */
     protected $table = 'music_album';
+    public $timestamps = false;
 
     /**
      * @param $id
@@ -87,6 +90,46 @@ class Album extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function statusChanges()
+    {
+        return $this->hasMany(TrackingStatusChanges::class, 'media_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function qaBatch()
+    {
+        return $this->belongsTo(QaBatch::class, 'batch_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function licensor()
+    {
+        return $this->belongsTo(Licensor::class, 'licensor_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function provider()
+    {
+        return $this->belongsTo(DataSourceProvider::class, 'data_source_provider_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function georestricts()
+    {
+        return $this->hasMany(MediaGeoRestrict::class, 'media_id', 'id');
+    }
+
+    /**
      * @param $id
      * @return mixed
      */
@@ -95,5 +138,71 @@ class Album extends Model
         $this->timestamps = false;
 
         return $this->where('id', $id)->update(['status' => $status]);
+    }
+
+    /**
+     * @param string $needle
+     * @param array $scopes
+     * @param array $has
+     * @return Builder
+     */
+    public function seek(string $needle, array $scopes = [], array $has = []): Builder
+    {
+        $isFound = false;
+        $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        $trimmed = str_replace(["-", " "], "", $needle);
+
+        if (is_numeric($trimmed) && ctype_digit($trimmed)) {
+            $query = $query->where('id', 'like', "%$trimmed%")
+                ->orWhere('data_origin_id', 'like', "%$trimmed%")
+                ->orWhere('upc', 'like', "%$trimmed%")
+                ->orWhere('batch_id', 'like', "%$trimmed%");
+
+            $isFound = true;
+        }
+
+        if (!$isFound) {
+            $query->where('title', 'like', "%$needle%");
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param string $id
+     * @param array $scopes
+     * @param array $has
+     * @return Builder|Model|null|object
+     */
+    public function seekById(string $id, array $scopes = [], array $has = [])
+    {
+        $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
+
+        if ($scopes) {
+            $query->with($scopes);
+        }
+
+        return $query->where('id', $id)->first();
     }
 }

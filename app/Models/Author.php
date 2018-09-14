@@ -22,4 +22,19 @@ class Author extends Model
 
         return $this->where('id', $id)->update(['status' => $status]);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function books()
+    {
+        return $this->belongsToMany(
+            Book::class,
+            'book_authors',
+            'author_id',
+            'book_id',
+            'id',
+            'id'
+        );
+    }
 }
