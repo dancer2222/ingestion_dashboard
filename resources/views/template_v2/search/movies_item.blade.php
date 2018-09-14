@@ -53,7 +53,7 @@
 </div>
 
 <div class="mb-3 border-bottom">
-    <b>Data source provider id:</b> <span class="float-right">{{ $item->qaBatch->data_source_provider_id }} [{{ $item->provider->name }}]</span>
+    <b>Data source provider id:</b> <span class="float-right">{{ $item->qaBatch->data_source_provider_id }} [{{ $item->provider->get(0)->name }}]</span>
 </div>
 
 <div class="mb-3 border-bottom">

@@ -222,6 +222,8 @@ class Audiobook extends Model implements SearchableModel
             $query->with($scopes);
         }
 
+        $trimmed = str_replace(["-", " "], "", $needle);
+
         if ($isbnHandler->validation->isbn($needle)) {
             $isbn = $isbnHandler->hyphens->removeHyphens($needle);
             $query->whereHas('products', function ($query) use ($isbn) {
@@ -231,9 +233,9 @@ class Audiobook extends Model implements SearchableModel
             $isFound = true;
         }
 
-        if (!$isFound && is_numeric($needle) && ctype_digit($needle)) {
-            $query = $query->where('id', $needle)
-                ->orWhere('data_origin_id', $needle);
+        if (!$isFound && is_numeric($trimmed) && ctype_digit($trimmed)) {
+            $query = $query->where('id', $trimmed)
+                ->orWhere('data_origin_id', $trimmed);
 
             $isFound = true;
         }
