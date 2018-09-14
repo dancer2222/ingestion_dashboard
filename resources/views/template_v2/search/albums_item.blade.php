@@ -29,7 +29,11 @@
 </div>
 
 <div class="mb-3 border-bottom">
-    <b>Brightcove id:</b> <span class="float-right">{{ $item->brightcove->brightcove_id }}</span>
+    <b>UPC:</b> <span class="float-right">{{ $item->upc }}</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Duration:</b> <span class="float-right">{{ $item->duration }}</span>
 </div>
 
 <div class="mb-3 border-bottom">
@@ -42,6 +46,10 @@
 
 <div class="mb-3 border-bottom">
     <b>Date published:</b> <span class="float-right">{{ $item->date_published }}</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Release date:</b> <span class="float-right">{{ $item->release_date }}</span>
 </div>
 
 <div class="mb-3 border-bottom">

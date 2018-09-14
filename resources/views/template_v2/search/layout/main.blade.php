@@ -8,7 +8,7 @@
 
 @php
     $isActive = $item->status === 'active';
-    $isInBlacklist = (isset($item->blacklist) && $item->blacklist->status == 'active') || !isset($item->blacklist);
+    $isInBlacklist = isset($item->blacklist) && $item->blacklist->status == 'active';
 @endphp
 
 <div class="row">
@@ -23,12 +23,18 @@
                         <h5 class="card-title" data-clipboard="{float: 'right', value: {{ $item->title }}">
                             <b>{{ $item->title }}</b>
                         </h5>
+
+                        <span class="badge badge-{{ $isActive && !$isInBlacklist ? 'success' : 'danger' }}">{{ $item->status }}</span>
+
                     </div>
+
+                    @role(['admin', 'ingester'])
                     <div class="col-6 text-right" id="status_panel">
                         {{-- Status switcher --}}
 
                         @include('template_v2.search._options', ['id' => $item->id, 'mediaType' => $mediaType, 'isMediaActive' => $isActive, 'isDisplay' => !$isInBlacklist])
 
+                        @if(in_array($mediaType, ['audiobooks', 'books']))
                         <button class="btn btn-sm btn-outline-dark ld-over-inverse blacklist-btn {{ !$isInBlacklist ? 'hidden' : '' }}" id="blacklist_remove"
                                 data-status="inactive" data-id="{{ $item->id }}" data-url="{{ route("content.$mediaType.blacklist") }}">
                             Remove from blacklist
@@ -39,7 +45,9 @@
                             Add to blacklist
                             <div class="ld ld-ball ld-flip"></div>
                         </button>
+                        @endif
                     </div>
+                    @endrole
                 </div>
 
                 {{-- Primary info --}}

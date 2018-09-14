@@ -15,7 +15,7 @@
                 <th scope="row">{{ $statusInfo->id }}</th>
                 <td>{{ $statusInfo->old_value }}</td>
                 <td>{{ $statusInfo->new_value }}</td>
-                <td>{{ $statusInfo->date_added }}</td>
+                <td>{{ now()->timestamp($statusInfo->date_added)->format('Y-m-d H:i:s') }}</td>
             </tr>
         @endforeach
         </tbody>

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Search;
 
+use App\Models\Album;
 use App\Models\Audiobook;
 use App\Models\Book;
 use App\Models\Contracts\SearchableModel;
@@ -22,6 +23,7 @@ class SearchableModelProvider extends ServiceProvider
         'audiobooks' => Audiobook::class,
         'books'      => Book::class,
         'movies'     => Movie::class,
+        'albums'     => Album::class,
     ];
 
     /**
