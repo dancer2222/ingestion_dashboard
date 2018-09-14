@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\API\V1\Content;
 
-use App\Models\Audiobook;
-use App\Models\AudiobookBlackList;
+use App\Models\Book;
+use App\Models\BookBlackList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 /**
- * Class AudiobooksController
+ * Class BooksController
  * @package App\Http\Controllers\API\V1\Content
  */
-class AudiobooksController extends Controller
+class BooksController extends Controller
 {
     /**
      * @param Request $request
@@ -19,7 +19,7 @@ class AudiobooksController extends Controller
      */
     public function setStatus(Request $request)
     {
-        $result = Audiobook::where('id', $request->id)->update(['status' => $request->status]);
+        $result = Book::where('id', $request->id)->update(['status' => $request->status]);
 
         return response()->json(['result' => $result], 200);
     }
@@ -35,9 +35,9 @@ class AudiobooksController extends Controller
         $status = $request->get('status');
 
         if ($id && $status) {
-            $result = AudiobookBlackList::updateOrCreate(
+            $result = BookBlackList::updateOrCreate(
                 [
-                    'audio_book_id' => $id,
+                    'book_id' => $id,
                 ],
                 [
                     'status' => $status,
@@ -45,7 +45,7 @@ class AudiobooksController extends Controller
             );
 
             if ($status === 'active' && $result) {
-                Audiobook::where('id', $id)->update(['status' => 'inactive']);
+                Book::where('id', $id)->update(['status' => 'inactive']);
             }
 
         }

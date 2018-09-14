@@ -107,6 +107,14 @@ class Movie extends Model implements SearchableModel
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function statusChanges()
+    {
+        return $this->hasMany(TrackingStatusChanges::class, 'media_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function georestricts()
     {
         return $this->hasMany(MediaGeoRestrict::class, 'media_id', 'id');
@@ -131,12 +139,21 @@ class Movie extends Model implements SearchableModel
     /**
      * @param string $needle
      * @param array $scopes
+     * @param array $has
      * @return Builder
      */
-    public function seek(string $needle, array $scopes = []): Builder
+    public function seek(string $needle, array $scopes = [], array $has = []): Builder
     {
         $isFound = false;
         $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
 
         if ($scopes) {
             $query->with($scopes);
@@ -159,11 +176,20 @@ class Movie extends Model implements SearchableModel
     /**
      * @param string $id
      * @param array $scopes
+     * @param array $has
      * @return Builder|Model|null|object
      */
-    public function seekById(string $id, array $scopes = [])
+    public function seekById(string $id, array $scopes = [], array $has = [])
     {
         $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
 
         if ($scopes) {
             $query->with($scopes);

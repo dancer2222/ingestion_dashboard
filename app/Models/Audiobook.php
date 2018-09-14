@@ -166,6 +166,22 @@ class Audiobook extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function statusChanges()
+    {
+        return $this->hasMany(TrackingStatusChanges::class, 'media_id', 'id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function blacklist()
+    {
+        return $this->hasOne(AudiobookBlackList::class, 'audio_book_id', 'id');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne|mixed
      */
     public function rating(): HasOne
@@ -184,14 +200,23 @@ class Audiobook extends Model implements SearchableModel
     /**
      * @param string $needle
      * @param array $scopes
+     * @param array $has
      * @return Builder
      * @throws \Isbn\Exception
      */
-    public function seek(string $needle, array $scopes = []): Builder
+    public function seek(string $needle, array $scopes = [], array $has = []): Builder
     {
         $isFound = false;
         $isbnHandler = new Isbn();
         $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
 
         if ($scopes) {
             $query->with($scopes);
@@ -223,11 +248,20 @@ class Audiobook extends Model implements SearchableModel
     /**
      * @param string $id
      * @param array $scopes
+     * @param array $has
      * @return Builder|Model|null|object
      */
-    public function seekById(string $id, array $scopes = [])
+    public function seekById(string $id, array $scopes = [], array $has = [])
     {
         $query = $this->newQuery();
+
+        if ($has) {
+            foreach ($has as $hasItem) {
+                if ($hasItem) {
+                    $query->has($hasItem);
+                }
+            }
+        }
 
         if ($scopes) {
             $query->with($scopes);
