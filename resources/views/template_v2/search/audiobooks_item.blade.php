@@ -70,7 +70,7 @@
 
 <div class="mb-3 border-bottom">
     <b>Data source provider id:</b>
-    <span class="float-right">{{ $item->data_source_provider_id }} - {{ $item->provider->name }}</span>
+    <span class="float-right">{{ $item->data_source_provider_id }} - {{ $item->provider->name ?? '' }}</span>
 </div>
 
 <div class="mb-3 border-bottom">
