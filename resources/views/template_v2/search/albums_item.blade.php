@@ -57,7 +57,12 @@
 </div>
 
 <div class="mb-3 border-bottom">
-    <b>Licensor id:</b> <span class="float-right">{{ $item->licensor_id }} [{{ $item->licensor->name }}]</span>
+    <b>Licensor id:</b>
+    <span class="float-right">
+        <a title="show info about this licensor" href="{{ route('licensors.show', ['id' => $item->licensor_id]) }}" target="_blank">
+            {{ $item->licensor_id }} [{{ $item->licensor->name ?? '' }}]
+        </a>
+    </span>
 </div>
 
 <div class="mb-3 border-bottom">
