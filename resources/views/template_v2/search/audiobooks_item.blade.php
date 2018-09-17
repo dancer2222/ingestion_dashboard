@@ -61,12 +61,14 @@
 
 <div class="mb-3 border-bottom">
     <b>Licensor:</b>
-    <span class="float-right">{{ $item->licensor_id }} - {{ $item->licensor->name }}</span>
+    <a href="{{ route('licensors.show', ['id' => $item->licensor_id]) }}">
+        <span class="float-right">{{ $item->licensor_id }} - {{ $item->licensor->name ?? '' }}</span>
+    </a>
 </div>
 
 <div class="mb-3 border-bottom">
     <b>Data source provider id:</b>
-    <span class="float-right">{{ $item->data_source_provider_id }} - {{ $item->provider->name }}</span>
+    <span class="float-right">{{ $item->data_source_provider_id }} - {{ $item->provider->name ?? '' }}</span>
 </div>
 
 <div class="mb-3 border-bottom">
