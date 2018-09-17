@@ -24,14 +24,16 @@
     @foreach($licensorContentItems as $item)
         <tr>
             <th scope="row">
-                {{ $item->id }}
+                <a title="Click to see more info about this Id" href="{{ route('reports.show', ['mediaType' => $licensor->media_type, 'id' => $item->id]) }}">
+                    {{ $item->id }}
+                </a>
 
                 <span class="pull-right badge badge-{{ $item->status === 'active' ? 'success' : 'secondary' }}">
                     {{ $item->status }}
                 </span>
             </th>
             <td>
-                <a href="" class="font-weight-bold text-dark">
+                <a title="Click to see more info about this Title" href="{{ route('reports.show', ['mediaType' => $licensor->media_type, 'id' => $item->id]) }}" class="font-weight-bold text-dark">
                     {{ $item->title }}
                 </a>
             </td>

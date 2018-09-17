@@ -29,7 +29,7 @@ class SearchController extends Controller
         $viewData['mediaType'] = $mediaType;
         
         if ($request->get('needle')) {
-            $viewData['list'] = $model->seek($request->get('needle'))->paginate(15);
+            $viewData['list'] = $model->seek($request->get('needle'), ['licensor'])->paginate(15);
         }
 
         return view('template_v2.search.index', $viewData);
