@@ -104,24 +104,32 @@ if (! function_exists('ida_asset')) {
 if (! function_exists('resizer')) {
 
     /**
-     * @param string $mediaType
-     * @param string $id
+     * @param array $parts
      * @param string $width
      * @param string $height
-     * @return string
+     * @return bool|string
      */
-    function resizer(string $mediaType, string $id, string $width = '200', string $height = '300')
+    function resizer(array $parts = [], string $width = '200', string $height = '300')
     {
         $env = env('APP_ENV') === 'local' ? 'qa' : env('APP_ENV');
+        $urlBase = config("main.links.resizer.$env");
 
-        $url = sprintf('%s/%s/%s?m=w%s-h%s-cscale',
-            config("main.links.resizer.$env"),
-            $mediaType,
-            $id,
+        foreach ($parts as $part) {
+            $urlBase .= '/' . strtolower($part);
+        }
+
+        $url = sprintf('%s.jpg?m=w%s-h%s-cscale',
+            $urlBase,
             $width,
             $height
         );
 
-        return $url;
+        $headers = get_headers($url);
+
+        if (isset($headers[0]) && $headers[0] === 'HTTP/1.1 200 OK') {
+            return $url;
+        }
+
+        return false;
     }
 }
