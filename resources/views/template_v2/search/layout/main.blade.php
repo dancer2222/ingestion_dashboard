@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('template_v2.search._search_form')
+@include('template_v2.search.including_stack._search_form')
 
 @php
     $isActive = $item->status === 'active';
@@ -32,7 +32,7 @@
                     <div class="col-6 text-right" id="status_panel">
                         {{-- Status switcher --}}
 
-                        @include('template_v2.search._options', ['id' => $item->id, 'mediaType' => $mediaType, 'isMediaActive' => $isActive, 'isDisplay' => !$isInBlacklist])
+                        @include('template_v2.search.including_stack._options', ['id' => $item->id, 'mediaType' => $mediaType, 'isMediaActive' => $isActive, 'isDisplay' => !$isInBlacklist])
 
                         @if(in_array($mediaType, ['audiobooks', 'books']))
                         <button class="btn btn-sm btn-outline-dark ld-over-inverse blacklist-btn {{ !$isInBlacklist ? 'hidden' : '' }}" id="blacklist_remove"

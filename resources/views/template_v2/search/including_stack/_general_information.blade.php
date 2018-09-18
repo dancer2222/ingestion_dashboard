@@ -1,0 +1,33 @@
+<div class="mb-3 border-bottom">
+    <b>Batch id:</b> <span class="float-right">{{ $item->batch_id }} [{{ $item->qaBatch->import_date ?? '' }}]</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Date added:</b> <span class="float-right">{{ now()->timestamp($item->date_added)->format('Y-m-d H:i:s') }}</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Date published:</b> <span class="float-right">{{ $item->date_published }}</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>MA release date:</b> <span class="float-right">{{ $item->ma_release_date }}</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Licensor:</b>
+    <span class="float-right">
+       <a title="show info about this licensor" href="{{ route('licensors.show', ['id' => $item->licensor_id]) }}" target="_blank">
+           {{ $item->licensor_id }} [{{ $item->licensor->name ?? '' }}]
+       </a>
+    </span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Data source provider id:</b>
+    <span class="float-right">{{ $item->qaBatch->data_source_provider_id ?? '' }} [{{ $item->provider->name ?? '' }}]</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Premium:</b> <span class="float-right">{{ $item->premium }}</span>
+</div>

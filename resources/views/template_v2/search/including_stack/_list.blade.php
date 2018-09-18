@@ -15,9 +15,24 @@
                 <tbody>
                 @foreach($list as $item)
                     <tr>
-                        <td><a title="Click to see more info about this Id" href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}">{{ $item->id }}</a></td>
-                        <td><a title="Click to see more info about this Title" href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}">{{ $item->title }}</a></td>
-                        <td class="text-left"><a title="Click to see more info about this Licensor" href="{{ route('licensors.show', ['id' => $item->licensor_id]) }}">{{ $item->licensor->name ?? ''}}</a></td>
+                        <td>
+                            <a title="Click to see more info about this Id"
+                               href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}">
+                                {{ $item->id }}
+                            </a>
+                        </td>
+                        <td>
+                            <a title="Click to see more info about this Title"
+                               href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}">
+                                {{ $item->title }}
+                            </a>
+                        </td>
+                        <td class="text-left">
+                            <a title="Click to see more info about this Licensor"
+                               href="{{ route('licensors.show', ['id' => $item->licensor_id]) }}">
+                                {{ $item->licensor->name ?? ''}}
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

@@ -4,10 +4,10 @@
 
 @section('content')
 
-    @include('template_v2.search._search_form')
+    @include('template_v2.search.including_stack._search_form')
 
     @if(isset($list) && $list)
-        @include('template_v2.search._list')
+        @include('template_v2.search.including_stack._list')
     @endif
 
 @endsection
