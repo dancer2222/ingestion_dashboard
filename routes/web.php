@@ -136,6 +136,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::name('licensors.')->prefix('licensors')->namespace('Licensors')->group(function () {
         Route::get('/', 'LicensorsController@index')->name('index');
         Route::get('/{id}', 'LicensorsController@show')->name('show');
+        Route::get('/{id}/export/content', 'LicensorsController@exportContent')->name('export.content');
     });
 });
 

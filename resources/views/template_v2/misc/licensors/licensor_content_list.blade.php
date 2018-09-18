@@ -1,13 +1,21 @@
 <hr>
 
-<h3>Licensor</h3>
+<h3>
+    Licensor
 
-<ul>
-    <li>ID: <b>{{ $licensor->id }}</b></li>
-    <li>Name: <b>{{ $licensor->name }}</b></li>
-    <li>Status: <b>{{ $licensor->status }}</b></li>
-    <li>Media Type: <b>{{ $licensor->media_type }}</b></li>
-</ul>
+    <a href="{{ route('licensors.export.content', ['id' => $licensor->id]) }}" class="btn btn-outline-info btn-sm float-right" target="_blank">
+        Export CSV
+    </a>
+</h3>
+
+<div class="row">
+    <ul class="col-sm-12 col-md-6">
+        <li>ID: <b>{{ $licensor->id }}</b></li>
+        <li>Name: <b>{{ $licensor->name }}</b></li>
+        <li>Status: <b>{{ $licensor->status }}</b></li>
+        <li>Media Type: <b>{{ $licensor->media_type }}</b></li>
+    </ul>
+</div>
 
 <table class="table mt-3">
     <thead class="thead-dark">
