@@ -100,3 +100,28 @@ if (! function_exists('ida_asset')) {
         return asset($path, !app()->isLocal());
     }
 }
+
+if (! function_exists('resizer')) {
+
+    /**
+     * @param string $mediaType
+     * @param string $id
+     * @param string $width
+     * @param string $height
+     * @return string
+     */
+    function resizer(string $mediaType, string $id, string $width = '200', string $height = '300')
+    {
+        $env = env('APP_ENV') === 'local' ? 'qa' : env('APP_ENV');
+
+        $url = sprintf('%s/%s/%s?m=w%s-h%s-cscale',
+            config("main.links.resizer.$env"),
+            $mediaType,
+            $id,
+            $width,
+            $height
+        );
+
+        return $url;
+    }
+}
