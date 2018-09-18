@@ -94,6 +94,10 @@ class ParseController extends Controller
         if (!is_null($metadata)) {
             $arrayMetadata = json_decode($metadata->metadata, true);
 
+            if ($request->type === 'movies') {
+                dd($arrayMetadata);
+            }
+
             return response(ArrayToXml::convert($arrayMetadata, 'product'))
                 ->header('Content-Type', 'text/xml');
         }

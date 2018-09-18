@@ -137,6 +137,14 @@ class Movie extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function failedItems()
+    {
+        return $this->hasMany(FailedItems::class, 'item_id', 'id');
+    }
+
+    /**
      * @param string $needle
      * @param array $scopes
      * @param array $has
