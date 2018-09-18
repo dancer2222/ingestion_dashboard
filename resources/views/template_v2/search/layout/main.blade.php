@@ -20,7 +20,7 @@
                 {{-- Title & Status switcher--}}
                 <div class="row">
                     <div class="col-6">
-                        <h5 class="card-title" data-clipboard="{float: 'right', value: {{ $item->title }}">
+                        <h5 class="card-title" data-clipboard='{"float": "right", "value": "{{ $item->title }}"}'>
                             <b>{{ $item->title }}</b>
                         </h5>
 
