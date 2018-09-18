@@ -12,10 +12,10 @@ class SearchController extends Controller
      * @var array
      */
     private $scopesMapping = [
-        'audiobooks' => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'blacklist', 'products'],
-        'books'      => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'blacklist', 'languages'],
-        'movies'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'brightcove'],
-        'albums'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges'],
+        'audiobooks' => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems', 'blacklist', 'products'],
+        'books'      => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems', 'blacklist', 'languages'],
+        'movies'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems', 'brightcove'],
+        'albums'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems'],
     ];
 
     /**

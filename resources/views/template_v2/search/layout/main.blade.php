@@ -78,6 +78,13 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#failed_items" role="tab" aria-selected="false">
+                            <span class="hidden-sm-up"><i class="ti-email"></i></span>
+                            <span class="hidden-xs-down">Failed items</span>
+                        </a>
+                    </li>
+
                     {{-- Optional items --}}
                     @stack('search_nav_items')
                 </ul>
@@ -87,7 +94,7 @@
                     {{-- Common item contents --}}
                     @include('template_v2.search.nav_items._georestricts', ['restricts' => $item->georestricts])
                     @include('template_v2.search.nav_items._status_changes_tracking', ['statusChangesTracking' => $item->statusChanges])
-
+                    @include('template_v2.search.nav_items._failed_items', ['failedItems' => $item->failedItems])
                     @stack('search_nav_items_content')
                 </div>
             </div>

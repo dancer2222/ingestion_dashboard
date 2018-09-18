@@ -2,7 +2,6 @@
 
 @section('search_primary_info')
 
-{{-- Subtitle --}}
 <h4 class="card-title">{{ $item->subtitle }}</h4>
 
 {{-- Cover --}}
@@ -16,6 +15,11 @@
 
 <div class="mb-3 border-bottom">
     <b>Brightcove id:</b> <span class="float-right">{{ $item->brightcove->brightcove_id }}</span>
+</div>
+
+<div class="mb-3 border-bottom">
+    <b>Data source provider id:</b>
+    <span class="float-right">{{ $item->qaBatch->data_source_provider_id ?? '' }} [{{ $item->provider->get(0)->name ?? '' }}]</span>
 </div>
 
 {{--General info--}}

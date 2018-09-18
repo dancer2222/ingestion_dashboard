@@ -24,11 +24,6 @@
 </div>
 
 <div class="mb-3 border-bottom">
-    <b>Data source provider id:</b>
-    <span class="float-right">{{ $item->qaBatch->data_source_provider_id ?? '' }} [{{ $item->provider->name ?? '' }}]</span>
-</div>
-
-<div class="mb-3 border-bottom">
     <b>Premium:</b> <span class="float-right">{{ $item->premium }}</span>
 </div>
 

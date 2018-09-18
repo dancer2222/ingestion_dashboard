@@ -44,6 +44,11 @@
     <span class="float-right">{{ $item->grade_level }}</span>
 </div>
 
+<div class="mb-3 border-bottom">
+    <b>Data source provider id:</b>
+    <span class="float-right">{{ $item->qaBatch->data_source_provider_id ?? '' }} [{{ $item->provider->name ?? '' }}]</span>
+</div>
+
 {{--General info--}}
 @include('template_v2.search.including_stack._general_information')
 

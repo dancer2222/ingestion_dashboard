@@ -188,6 +188,14 @@ class Book extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function failedItems()
+    {
+        return $this->hasMany(FailedItems::class, 'item_id', 'data_origin_id');
+    }
+
+    /**
      * @param string $needle
      * @param array $scopes
      * @param array $has
