@@ -10,9 +10,9 @@ var CommonHelper = {
     mediaTypes: [
         'books', 'audiobooks', 'albums', 'games', 'movies',
     ],
-    toastr: function (message, status) {
+    toastr: function (title, message, status) {
         if (window.toastr) {
-
+            toastr[status](message, title);
         } else {
             alert(status + '! ' + message);
         }
@@ -139,16 +139,57 @@ var CommonHelper = {
         document.body.removeChild(el);
     },
     initClipboardBtns: function () {
-        var el = document.createElement('i');
-        el.classList.add('fas', 'fa-copy');
+        if (!navigator.clipboard) {
+            return false;
+        }
 
-        var elementsRequested = document.querySelectorAll('[data-clipboard]');
+        let elementsRequested = document.querySelectorAll('[data-clipboard]');
 
-        // if (elementsRequested.length > 0) {
-        //     for (let element in elementsRequested) {
-        //         console.log(element);
-        //     }
-        // }
+        if (elementsRequested.length > 0) {
+            for (let element of elementsRequested) {
+                let icon = document.createElement('i');
+                icon.classList.add('fas', 'fa-copy', 'ml-1', 'mr-1');
+                icon.style.cursor = 'pointer';
+
+                let data = JSON.parse(element.getAttribute('data-clipboard'));
+
+                if (!data.hasOwnProperty('float') || !data.float) {
+                    data.float = 'left';
+                }
+
+                $(icon).hover(function () {
+                    $(icon).attr('data-original-title', 'Copy to clipboard');
+                    $(icon).tooltip('show');
+                });
+
+                $(icon).on('click', function () {
+                    navigator.clipboard.writeText(data.value)
+                        .then(() => {
+                            icon.setAttribute('data-original-title', 'Copied');
+                            $(icon).tooltip('show');
+                        })
+                        .catch(err => {
+                            icon.setAttribute('data-original-title', 'Something went wrong.');
+                            $(icon).tooltip('show');
+                        });
+                });
+
+                $(icon).hide();
+
+                $(element).hover(function () {
+                    $(icon).show(300);
+                }, function () {
+                    $(icon).hide(300);
+                });
+
+
+                if (data.float === 'right' || data.float === 'right' && !element.childNodes.length) {
+                    element.appendChild(icon);
+                } else {
+                    element.insertBefore(icon, element.childNodes[0]);
+                }
+            }
+        }
     }
 };
 
