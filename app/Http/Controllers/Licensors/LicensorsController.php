@@ -6,10 +6,11 @@ use App\Models\Licensor;
 use App\Models\Audiobook;
 use App\Models\Book;
 use App\Models\Movie;
-use App\Models\Music;
+use App\Models\Album;
 use App\Models\Game;
 use App\Models\Software;
 use App\Http\Controllers\Controller;
+use Ingestion\Exports\Csv\LicensorsContent;
 
 class LicensorsController extends Controller
 {
@@ -17,7 +18,7 @@ class LicensorsController extends Controller
         'audiobooks' => Audiobook::class,
         'books' => Book::class,
         'movies' => Movie::class,
-        'music' => Music::class,
+        'music' => Album::class,
         'games' => Game::class,
         'software' => Software::class,
     ];
@@ -90,5 +91,31 @@ class LicensorsController extends Controller
             'licensor' => $licensor,
             'licensorContentItems' => $licensorContentItems,
         ]);
+    }
+
+    /**
+     * @param $id
+     * @param Licensor $licensor
+     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function exportContent($id, Licensor $licensor)
+    {
+        try {
+            $licensor = $licensor->find($id);
+
+            $licensorContentModel = self::CONTENT_MODELS_MAPPING[$licensor->media_type];
+            $licensorContentModel = new $licensorContentModel;
+
+            $nowDate = now()->format('Y_m_d');
+            $licensorName = str_replace(' ', '_', $licensor->name);
+            $filename = "{$licensorName}_{$licensor->media_type}_{$nowDate}.csv";
+
+            return (new LicensorsContent($licensor, $licensorContentModel, ['id', 'title']))
+                ->download($filename, \Maatwebsite\Excel\Excel::CSV);
+        } catch (\Exception $e) {
+            logger()->error($e->getMessage());
+
+            return back()->withErrors('Something went wrong. The error message was written to the log.');
+        }
     }
 }
