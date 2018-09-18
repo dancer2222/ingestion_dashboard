@@ -31,3 +31,10 @@
 <div class="mb-3 border-bottom">
     <b>Premium:</b> <span class="float-right">{{ $item->premium }}</span>
 </div>
+
+<form method="POST" class="form-group" action="{{ ida_route('reports.parse.getMetadataIntoDatabase') }}" target="_blank">
+    <input type="hidden" id="type" name="type" value="{{ $mediaType }}">
+    <input type="hidden" id="id" name="id" value="{{ $item->id }}">
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+    <button type="submit" class="btn btn-info">Info by metadata file</button>
+</form>
