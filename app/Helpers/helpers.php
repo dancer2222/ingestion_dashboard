@@ -124,7 +124,7 @@ if (! function_exists('resizer')) {
             $height
         );
 
-        $headers = get_headers($url);
+        $headers = @get_headers($url);
 
         if (isset($headers[0]) && $headers[0] === 'HTTP/1.1 200 OK') {
             return $url;
