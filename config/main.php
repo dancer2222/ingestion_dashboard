@@ -14,6 +14,10 @@ return [
                 'movies' => 'playster-content-ingestion'
             ]
         ],
-        'image'    => 'https://prod-image-resizer-v1-cdn1.playster.com/'
+        'image'    => 'https://prod-image-resizer-v1-cdn1.playster.com/',
+        'resizer' => [
+            'prod' => 'https://prod-image-resizer-v1-cdn1.playster.com',
+            'qa' => 'https://qa-web-imageresizer-v1-cdn3.playster.systems'
+        ],
     ]
 ];

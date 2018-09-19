@@ -8,10 +8,9 @@
 <h4 class="card-title">{{ $item->subtitle }}</h4>
 
 {{-- Cover --}}
-<img src="{{ $item->img_url ?? asset('theme_v2/images/background/user-info.jpg') }}"
+<img src="{{ resizer([str_singular($mediaType), $item->data_origin_id]) ?? asset('theme_v2/images/background/user-info.jpg') }}"
      class="rounded float-right ml-3 d-block"
-     alt="{{ $item->title }}"
-     style="max-width: 200px;">
+     alt="{{ $item->title }}">
 
 {{-- Description --}}
 @include('template_v2.search.including_stack._description_and_Id')

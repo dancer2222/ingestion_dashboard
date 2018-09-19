@@ -100,3 +100,36 @@ if (! function_exists('ida_asset')) {
         return asset($path, !app()->isLocal());
     }
 }
+
+if (! function_exists('resizer')) {
+
+    /**
+     * @param array $parts
+     * @param string $width
+     * @param string $height
+     * @return bool|string
+     */
+    function resizer(array $parts = [], string $width = '200', string $height = '300')
+    {
+        $env = env('APP_ENV') === 'local' ? 'qa' : env('APP_ENV');
+        $urlBase = config("main.links.resizer.$env");
+
+        foreach ($parts as $part) {
+            $urlBase .= '/' . strtolower($part);
+        }
+
+        $url = sprintf('%s.jpg?m=w%s-h%s-cscale',
+            $urlBase,
+            $width,
+            $height
+        );
+
+        $headers = get_headers($url);
+
+        if (isset($headers[0]) && $headers[0] === 'HTTP/1.1 200 OK') {
+            return $url;
+        }
+
+        return false;
+    }
+}

@@ -78,7 +78,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item {{ !$item->failedItems->count() ? 'hidden' : '' }}">
                         <a class="nav-link" data-toggle="tab" href="#failed_items" role="tab" aria-selected="false">
                             <span class="hidden-sm-up"><i class="ti-email"></i></span>
                             <span class="hidden-xs-down">Failed items</span>

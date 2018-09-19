@@ -1,4 +1,4 @@
-@if(!is_null($failedItems))
+@if($failedItems->count())
 <div class="tab-pane p-20" id="failed_items" role="tabpanel">
     <table class="table table-hover">
         <thead class="thead-dark">
