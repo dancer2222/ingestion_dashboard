@@ -71,7 +71,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item {{ !$item->statusChanges->count() ? 'hidden' : '' }}">
                         <a class="nav-link" data-toggle="tab" href="#status_info" role="tab" aria-selected="false">
                             <span class="hidden-sm-up"><i class="ti-email"></i></span>
                             <span class="hidden-xs-down">Status info</span>
