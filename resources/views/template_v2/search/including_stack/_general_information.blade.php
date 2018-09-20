@@ -27,6 +27,16 @@
     <b>Premium:</b> <span class="float-right">{{ $item->premium }}</span>
 </div>
 
+{{--Metadata file name--}}
+<div class="mb-3 border-bottom">
+    <b>Feed:</b>
+    <span class="float-right">
+        <small>
+            {{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name ?? '') }}/{{ $item->qaBatch->title ?? '' }}
+        </small>
+    </span>
+</div>
+
 <form method="POST" class="form-group" action="{{ ida_route('reports.parse.getMetadataIntoDatabase') }}" target="_blank">
     <input type="hidden" id="type" name="type" value="{{ $mediaType }}">
     <input type="hidden" id="id" name="id" value="{{ $item->id }}">
