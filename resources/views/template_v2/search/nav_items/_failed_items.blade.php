@@ -23,7 +23,7 @@
 
                         <div class="col-6">
                             <span class="float-left text-left font-weight-bold">Status:</span>
-                            <span class="float-right text-right text-{{ $message->status === 'active' ? 'success' : 'danger' }}">{{ $message->status }}</span>
+                            <span class="float-right text-right text-{{ $message->status === 'active' ? 'danger' : 'success' }}">{{ $message->status }}</span>
                         </div>
 
                         <div class="col-6">
