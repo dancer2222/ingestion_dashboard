@@ -13,7 +13,7 @@
 @include('template_v2.search.including_stack._description_and_Id')
 
 <div class="mb-3 border-bottom">
-    <b>Brightcove id:</b> <span class="float-right">{{ $item->brightcove->brightcove_id }}</span>
+    <b>Brightcove id:</b> <span class="float-right">{{ $item->brightcove->brightcove_id ?? '-' }}</span>
 </div>
 
 <div class="mb-3 border-bottom">

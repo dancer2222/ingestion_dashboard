@@ -1,5 +1,5 @@
 <div class="mb-3 border-bottom">
-    <b>Batch id:</b> <span class="float-right">{{ $item->batch_id }} [{{ $item->qaBatch->import_date ?? '' }}]</span>
+    <b>Batch id:</b> <span class="float-right">{{ $item->batch_id ?? '-' }} [{{ $item->qaBatch->import_date ?? '' }}]</span>
 </div>
 
 <div class="mb-3 border-bottom">
@@ -32,7 +32,7 @@
     <b>Feed:</b>
     <span class="float-right">
         <small>
-            {{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name) }}/{{ explode($item->licensor->name. '_', $item->qaBatch->title, 2)[1] }}
+            {{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name ?? '') }}/{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}
         </small>
     </span>
 </div>

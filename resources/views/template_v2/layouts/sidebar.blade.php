@@ -9,10 +9,10 @@
             @role(['tester', 'admin'])
             <li>
                 <a class="has-arrow " href="#" aria-expanded="false">
-                    <i class="fa fa-search"></i>
+                    <i class="fa fa-search text-danger"></i>
                     <span class="hide-menu">
                         Search v2
-                        <span class="badge badge-danger">alpha</span>
+                        <span class="badge badge-danger">beta</span>
                     </span>
                 </a>
                 <ul aria-expanded="false" class="collapse">
