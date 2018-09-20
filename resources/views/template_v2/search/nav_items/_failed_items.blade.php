@@ -1,27 +1,39 @@
 <div class="tab-pane p-20" id="failed_items" role="tabpanel">
     <table class="table table-hover">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">id</th>
-            <th scope="col">batch_id</th>
-            <th scope="col">reason</th>
-            <th scope="col">time</th>
-            <th scope="col">level</th>
-            <th scope="col">error_code</th>
-            <th scope="col">status</th>
-        </tr>
-        </thead>
-
         <tbody>
         @foreach($failedItems as $message)
             <tr>
-                <th>{{ $message->id }}</th>
-                <th>{{ $message->batch_id }}</th>
-                <th>{{ $message->reason }}</th>
-                <th>{{ $message->time }}</th>
-                <th>{{ $message->level }}</th>
-                <th>{{ $message->error_code }}</th>
-                <th>{{ $message->status }}</th>
+                <th>
+                    <div class="row">
+                        <div class="col-6">
+                            <span class="float-left text-left font-weight-bold">ID:</span>
+                            <span class="float-right text-right">{{ $message->id }}</span>
+                        </div>
+
+                        <div class="col-6">
+                            <span class="float-left text-left font-weight-bold">Date:</span>
+                            <span class="float-right text-right">{{ $message->time }}</span>
+                        </div>
+
+                        <div class="col-6">
+                            <span class="float-left text-left font-weight-bold">Level:</span>
+                            <span class="float-right text-right">{{ $message->level }}</span>
+                        </div>
+
+                        <div class="col-6">
+                            <span class="float-left text-left font-weight-bold">Status:</span>
+                            <span class="float-right text-right text-{{ $message->status === 'active' ? 'danger' : 'success' }}">{{ $message->status }}</span>
+                        </div>
+
+                        <div class="col-6">
+                            <span class="font-weight-bold">Error code:</span> {{ $message->error_code }}
+                        </div>
+
+                        <div class="col-6">
+                            <span class="font-weight-bold">Reason:</span> {{ $message->reason }}
+                        </div>
+                    </div>
+                </th>
             </tr>
         @endforeach
         </tbody>
