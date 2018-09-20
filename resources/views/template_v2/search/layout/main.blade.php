@@ -93,8 +93,8 @@
                 <div class="tab-content">
                     {{-- Common item contents --}}
                     @include('template_v2.search.nav_items._georestricts', ['restricts' => $item->georestricts])
-                    @include('template_v2.search.nav_items._status_changes_tracking', ['statusChangesTracking' => $item->statusChanges])
-                    @include('template_v2.search.nav_items._failed_items', ['failedItems' => $item->failedItems])
+                    @include('template_v2.search.nav_items._status_changes_tracking', ['statusChangesTracking' => $item->statusChanges->reverse()])
+                    @include('template_v2.search.nav_items._failed_items', ['failedItems' => $item->failedItems->reverse()])
                     @stack('search_nav_items_content')
                 </div>
             </div>
