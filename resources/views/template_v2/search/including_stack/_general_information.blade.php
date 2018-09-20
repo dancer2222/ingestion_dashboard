@@ -32,7 +32,7 @@
     <b>Feed:</b>
     <span class="float-right">
         <small>
-            {{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name ?? '') }}/{{ $item->qaBatch->title ?? '' }}
+            {{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name) }}/{{ explode($item->licensor->name. '_', $item->qaBatch->title, 2)[1] }}
         </small>
     </span>
 </div>
