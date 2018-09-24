@@ -82,8 +82,9 @@ class WorkToTags implements ShouldQueue
                        $weight = collect($tags->where('name', $tagName)->first())->get('weight');
 
                        if ($weight !== null && $ltTag->weight != $weight) {
-                           $ltTag->weight = $weight;
-                           $ltTag->save();
+                           LibrarythingTag::where('tag_id', $ltTag->tag_id)
+                               ->where('workcode', $workcode)
+                               ->update(['weight' => $weight]);
                        }
                    } catch (\Exception $e) {
                        logger()->critical("LIBRARYTHING_DATA LISTENER TAGS {$e->getMessage()}");
