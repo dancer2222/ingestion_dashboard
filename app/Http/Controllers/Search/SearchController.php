@@ -12,11 +12,34 @@ class SearchController extends Controller
      * @var array
      */
     private $scopesMapping = [
-        'audiobooks' => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems', 'blacklist', 'products'],
-        'books'      => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems', 'blacklist', 'languages'],
-        'movies'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems', 'brightcove'],
-        'albums'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'failedItems'],
+        'audiobooks' => [
+            'blacklist',
+            'products:id,data_source_provider_id,title,isbn,modified_date,price,sale_start_date,sale_end_date,active_date,inactive_date,currency,status',
+        ],
+        'books'      => ['blacklist', 'languages'],
+        'movies'     => ['brightcove'],
+        'albums'     => [],
     ];
+
+    /**
+     * @var array
+     */
+    private $generalScopesMapping = [];
+
+    /**
+     * SearchController constructor.
+     */
+    public function __construct()
+    {
+        $this->generalScopesMapping = [
+            'provider',
+            'licensor:id,name',
+            'georestricts:media_id,country_code,status',
+            'qaBatch:id,data_source_provider_id,import_date,title',
+            'statusChanges:id,old_value,new_value,date_added',
+            'failedItems:id,reason,time,level,error_code,status',
+        ];
+    }
 
     /**
      * @param string $mediaType
@@ -29,7 +52,7 @@ class SearchController extends Controller
         $viewData['mediaType'] = $mediaType;
         
         if ($request->get('needle')) {
-            $viewData['list'] = $model->seek($request->get('needle'), ['licensor'])->paginate(15);
+            $viewData['list'] = $model->seek($request->get('needle'), ['licensor:id,name'])->paginate(15);
         }
 
         return view('template_v2.search.index', $viewData);
@@ -50,7 +73,9 @@ class SearchController extends Controller
             return view('template_v2.search.index', $viewData);
         }
 
-        $viewData['item'] = $model->seekById($id, $this->scopesMapping[$mediaType]);
+        $scopes = array_merge($this->scopesMapping[$mediaType], $this->generalScopesMapping);
+
+        $viewData['item'] = $model->seekById($id, $scopes);
 
         return view($viewName, $viewData);
     }

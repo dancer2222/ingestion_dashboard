@@ -167,7 +167,7 @@ class Movie extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        $trimmed = str_replace(["-", " "], "", $needle);
+        $trimmed = str_replace(['-', ' '], '', $needle);
 
         if (is_numeric($trimmed) && ctype_digit($trimmed)) {
             $query = $query->where('id', $trimmed);
@@ -203,6 +203,11 @@ class Movie extends Model implements SearchableModel
         if ($scopes) {
             $query->with($scopes);
         }
+
+        $query->select([
+            'id', 'title', 'description', 'duration', 'ma_release_date', 'date_added', 'premium',
+            'licensor_id', 'status', 'batch_id', 'date_published',
+        ]);
 
         return $query->where('id', $id)->first();
     }
