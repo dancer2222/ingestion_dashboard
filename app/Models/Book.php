@@ -195,6 +195,18 @@ class Book extends Model implements SearchableModel
         return $this->hasMany(FailedItems::class, 'item_id', 'data_origin_id');
     }
 
+    public function authors()
+    {
+        return $this->belongsToMany(
+            Author::class,
+            'book_authors',
+            'book_id',
+            'author_id',
+            'id',
+            'id'
+        );
+    }
+
     /**
      * @param string $needle
      * @param array $scopes
@@ -240,6 +252,8 @@ class Book extends Model implements SearchableModel
             $query->where('title', 'like', "%$needle%");
         }
 
+        $query->select('id', 'title', 'licensor_id');
+
         return $query;
     }
 
@@ -264,6 +278,11 @@ class Book extends Model implements SearchableModel
         if ($scopes) {
             $query->with($scopes);
         }
+
+        $query->select([
+            'id', 'title', 'description', 'ma_release_date', 'premium', 'licensor_id', 'author_id', 'status', 'isbn',
+            'source', 'batch_id', 'date_published', 'data_origin_id', 'download_url',
+        ]);
 
         return $query->where('id', $id)->first();
     }

@@ -76,14 +76,96 @@
 
         <div class="collapse {{ $loop->index === 0 ? 'show' : '' }}" id="collapse_{{ $product->id }}"
              data-parent="#products_accordion" aria-labelledby="product_heading_{{ $product->id }}">
-            @foreach($product->getAttributes() as $attributeName => $attributeValue)
             <div class="border-bottom">
-                <b>{{ $attributeName }}:</b>
+                <b>id:</b>
                 <span class="float-right">
-                {{ $attributeValue }}
+                {{ $product->id }}
                 </span>
             </div>
-            @endforeach
+
+            <div class="border-bottom">
+                <b>data_source_provider_id:</b>
+                <span class="float-right">
+                {{ $product->data_source_provider_id }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>title:</b>
+                <span class="float-right">
+                {{ $product->title }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>isbn:</b>
+                <span class="float-right">
+                {{ $product->isbn }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>modified_date:</b>
+                <span class="float-right">
+                {{ $product->modified_date }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>price:</b>
+                <span class="float-right">
+                {{ $product->price }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>sale_start_date:</b>
+                <span class="float-right">
+                {{ $product->sale_start_date }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>sale_end_date:</b>
+                <span class="float-right">
+                {{ $product->sale_end_date }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>modified_date:</b>
+                <span class="float-right">
+                {{ $product->modified_date }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>active_date:</b>
+                <span class="float-right">
+                {{ $product->active_date }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>inactive_date:</b>
+                <span class="float-right">
+                {{ $product->inactive_date }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>currency:</b>
+                <span class="float-right">
+                {{ $product->currency }}
+                </span>
+            </div>
+
+            <div class="border-bottom">
+                <b>status:</b>
+                <span class="float-right">
+                {{ $product->status }}
+                </span>
+            </div>
         </div>
         @endforeach
     </div>
