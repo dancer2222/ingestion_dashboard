@@ -230,7 +230,7 @@ class Audiobook extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        $trimmed = str_replace(['-', ' '], '', $needle);
+        $trimmed = str_replace(['-', ' ', '`', '\''], '', $needle);
 
         if ($isbnHandler->validation->isbn($needle)) {
             $isbn = $isbnHandler->hyphens->removeHyphens($needle);
