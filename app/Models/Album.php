@@ -171,7 +171,7 @@ class Album extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        $trimmed = str_replace(["-", " "], "", $needle);
+        $trimmed = str_replace(['-', ' ', '`', '\''], '', $needle);
 
         if (is_numeric($trimmed) && ctype_digit($trimmed)) {
             $query = $query->where('id', 'like', "%$trimmed%")
