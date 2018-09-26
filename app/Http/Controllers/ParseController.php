@@ -53,7 +53,7 @@ class ParseController extends Controller
     public function index(Request $request, S3Client $awsS3, ParseMetadata $parse)
     {
         if ($this->dataType == 'zip') {
-            $message = 'This file has an extension `zip` you can look it up in: [public/' . $this->filepath . ']';
+            $message = 'This file has an extension `zip` you can look it up in: [' . $this->filepath . ']';
 
             return back()->with('message', $message);
         }

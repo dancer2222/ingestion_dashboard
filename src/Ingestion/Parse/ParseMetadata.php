@@ -91,18 +91,7 @@ class ParseMetadata
      */
     public function getFile(string $filepath, string $title)
     {
-
-        $results = Excel::load($filepath, function($reader) {
-            $reader->all();
-        })->get();
-
-        $resultExcel = [];
-
-        foreach ($results as $result => $value) {
-            $resultExcel []= $value;
-        }
-
-        return array_unique($resultExcel);
+        return excelToArray($filepath);
     }
 
     /**
