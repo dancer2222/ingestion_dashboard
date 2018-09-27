@@ -1,24 +1,28 @@
+@php
+$headers = $messages->get('headers');
+$items = $messages->get('items');
+@endphp
+
 <table class="table table-hover" border="2px">
+    @if($headers)
     <tr>
-        @if(isset($messages[0]))
-            @foreach($messages[0] as $item => $a)
-                @if($item !== 'description')
-                <th style="background-color: #2ca02c">
-                    {{ $item }}
-                </th>
-                @endif
-            @endforeach
-        @endif
+        @foreach($headers as $header)
+            @if($header !== 'description')
+            <th style="background-color: green">{{ $header }}</th>
+            @endif
+        @endforeach
     </tr>
-    @foreach($messages as $message)
-        <tr>
-            @foreach($message as $name => $value)
-                @if($name !== 'description')
-                <td>
-                    <p style="font-size: 13px">{{ $value }}</p>
-                </td>
+    @endif
+
+    @if($items)
+        @foreach($items as $item)
+            <tr>
+            @foreach($item as $headerName => $itemValue)
+                @if($headerName !== 'description' && \in_array($headerName, $headers, true))
+                <td>{{ $itemValue }}</td>
                 @endif
             @endforeach
-        </tr>
-    @endforeach
+            </tr>
+        @endforeach
+    @endif
 </table>
