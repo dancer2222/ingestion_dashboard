@@ -34,4 +34,7 @@ Route::group(['namespace' => 'Admin'], function () {
         Route::get('/permissions/create', 'PermissionsController@showCreate')->name('admin.permissions.showCreate');
         Route::post('/permissions/create', 'PermissionsController@create')->name('admin.permissions.create');
     });
+
+    // Logs viewer
+    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware(['role:admin,ingester'])->name('admin.logs');
 });
