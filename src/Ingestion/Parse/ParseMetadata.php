@@ -84,10 +84,11 @@ class ParseMetadata
     }
 
     /**
-     * @param $filepath
-     * @param $title
-     *
+     * @param string $filepath
+     * @param string $title
      * @return array
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
     public function getFile(string $filepath, string $title)
     {

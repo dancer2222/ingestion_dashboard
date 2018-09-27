@@ -135,41 +135,66 @@ if (! function_exists('resizer')) {
 }
 
 if (! function_exists('excelToArray')) {
-    function excelToArray($filePath, $header=true){
-        //Create excel reader after determining the file type
-        $inputFileName = $filePath;
-        /**  Identify the type of $inputFileName  **/
-        $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-        /**  Create a new Reader of the type that has been identified  **/
-        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-        /** Set read type to read cell data onl **/
-        $objReader->setReadDataOnly(true);
-        /**  Load $inputFileName to a PHPExcel Object  **/
-        $objPHPExcel = $objReader->load($inputFileName);
-        //Get worksheet and built array with first row as header
-        $objWorksheet = $objPHPExcel->getActiveSheet();
-        //excel with first row header, use header as key
-        if($header){
-            $highestRow = $objWorksheet->getHighestRow();
-            $highestColumn = $objWorksheet->getHighestColumn();
-            $headingsArray = $objWorksheet->rangeToArray('A1:'.$highestColumn.'1',null, true, true, true);
-            $headingsArray = $headingsArray[1];
-            $r = -1;
-            $namedDataArray = array();
-            for ($row = 2; $row <= $highestRow; ++$row) {
-                $dataRow = $objWorksheet->rangeToArray('A'.$row.':'.$highestColumn.$row,null, true, true, true);
-                if ((isset($dataRow[$row]['A'])) && ($dataRow[$row]['A'] > '')) {
-                    ++$r;
-                    foreach($headingsArray as $columnKey => $columnHeading) {
-                        $namedDataArray[$r][$columnHeading] = $dataRow[$row][$columnKey];
-                    }
+    /**
+     * @param string $filePath
+     * @param bool $header
+     * @return \Illuminate\Support\Collection
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+    function excelToArray(string $filePath, bool $header = true) {
+        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rowIterator = $worksheet->getRowIterator();
+
+        $formattedData = [];
+        $headers = [];
+        $headersCounter = 0;
+
+        if ($header && $rowIterator->seek(1)) {
+            $headersIterator = $rowIterator->seek(1)->current()->getCellIterator();
+
+            foreach ($headersIterator as $headerIndex => $headerItem) {
+                $headerItemValue = $headerItem->getFormattedValue();
+
+                if ($headerItemValue) {
+                    $headers[$headerIndex] = $headerItemValue;
                 }
             }
+
+            if ($headers) {
+                $formattedData['headers'] = $headers;
+                $headersCounter = \count($headers);
+                $worksheet->removeRow(1);
+            }
         }
-        else{
-            //excel sheet with no header
-            $namedDataArray = $objWorksheet->toArray(null,true,true,true);
+
+        foreach ($rowIterator as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $tempData = [];
+            $cellCounter = 0;
+
+            foreach ($cellIterator as $index => $cell) {
+                $cellValue = $cell->getFormattedValue();
+
+                if (!$header || !$headers) {
+                    $tempData[$cell->getColumn()] = $cellValue;
+                    continue;
+                }
+
+                if ($header && $headers && $cellCounter++ <= $headersCounter && isset($headers[$index])) {
+                    $tempData[$headers[$index]] = $cellValue;
+                    continue;
+                }
+            }
+
+            $formattedData['items'][] = $tempData;
         }
-        return $namedDataArray;
+
+        return collect($formattedData);
     }
 }
