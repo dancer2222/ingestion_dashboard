@@ -189,6 +189,7 @@ return [
         \App\Providers\LibraryThingHelperProvider::class,
         \App\Providers\Apis\GoogleClientServiceProvider::class,
         \App\Providers\Search\SearchableModelProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
     ],
 
     /*

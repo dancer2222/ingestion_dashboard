@@ -205,6 +205,12 @@
                                 Settings
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.logs') }}">
+                                <i class="far fa-file-alt"></i>
+                                Logs
+                            </a>
+                        </li>
                         <li class="dropdown-divider"></li>
                         @endrole
 

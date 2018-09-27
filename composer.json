@@ -23,6 +23,7 @@
         "maatwebsite/excel": "^3.0",
         "php-amqplib/php-amqplib": ">=2.6.1",
         "phpoffice/phpspreadsheet": "^1.4",
+        "rap2hpoutre/laravel-log-viewer": "^0.22.0",
         "socialiteproviders/google": "~3.0",
         "spatie/array-to-xml": "^2.7",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^7.0",
