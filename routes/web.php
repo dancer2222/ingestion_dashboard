@@ -138,6 +138,13 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}', 'LicensorsController@show')->name('show');
         Route::get('/{id}/export/content', 'LicensorsController@exportContent')->name('export.content');
     });
+
+    // Providers Search
+    Route::name('providers.')->prefix('providers')->namespace('Providers')->group(function () {
+        Route::get('/', 'ProvidersController@index')->name('index');
+        Route::get('/search', 'ProvidersController@search')->name('search');
+        Route::get('/search/{id?}', 'ProvidersController@searchOne')->name('searchOne');
+    });
 });
 
 Auth::routes();

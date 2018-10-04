@@ -21,6 +21,15 @@ class Album extends Model implements SearchableModel
 
     /**
      * @param $id
+     * @return string
+     */
+    public function getIdAttribute($id)
+    {
+        return (string)$id;
+    }
+
+    /**
+     * @param $id
      * @return mixed
      */
     public function getInfoById($id)
