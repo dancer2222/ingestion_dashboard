@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\User;
+use App\Models\Role;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
@@ -57,11 +58,22 @@ class MakeAdmin extends Command
         $password = Hash::make($this->secret('Password'));
 
         try {
-            $result = $this->user->fill([
+            $adminRole = Role::whereName('admin')->first();
+
+            if (!$adminRole) {
+                $this->error('Can\'t create admin. Admin role does not exist.');
+                return;
+            }
+
+            $this->user->fill([
                 'name' => 'Admin',
                 'password' => $password,
                 'email' => $email
-            ])->save();
+            ]);
+
+            $result = $this->user->save();
+
+            $this->user->attachRole($adminRole);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
 
@@ -73,14 +85,10 @@ class MakeAdmin extends Command
         }
 
         $this->info('User has been successfully created!');
-
-        return;
     }
 
     private function checkIfAdminAlreadyExist()
     {
-        $admin = User::whereName('Admin')->first();
-
-        return $admin;
+        return User::whereName('Admin')->count();
     }
 }

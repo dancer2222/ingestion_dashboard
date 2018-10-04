@@ -28,6 +28,14 @@
                     <li>
                         <a href="{{ route('reports.index', 'albums') }}">Albums</a>
                     </li>
+
+                    <li class="nav-devider"></li>
+
+                    <li>
+                        <a href="{{ route('authors.index') }}">Authors</a>
+                        <a href="{{ route('licensors.index') }}">Licensors</a>
+                        <a href="{{ route('providers.index') }}">Providers</a>
+                    </li>
                 </ul>
             </li>
             @endrole
@@ -63,12 +71,7 @@
                     <li>
                         <a href="{{ route('authors.index') }}">Authors</a>
                         <a href="{{ route('licensors.index') }}">Licensors</a>
-
-                        {{--<ul aria-expanded="false" class="collapse">--}}
-                            {{--<li>--}}
-                                {{--<a href="author/books">Books</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
+                        <a href="{{ route('providers.index') }}">Providers</a>
                     </li>
                 </ul>
             </li>
