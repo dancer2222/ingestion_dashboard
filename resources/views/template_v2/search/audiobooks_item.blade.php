@@ -70,7 +70,7 @@
             <a class="btn btn-primary {{ $loop->index > 1 ? 'collapsed' : '' }}"
                 data-toggle="collapse" href="#collapse_{{ $product->id }}" role="button"
                 aria-expanded="true" aria-controls="collapse_{{ $product->id }}">
-            {{ $product->title ? 'title - ' . $product->title : 'isbn - ' . $product->isbn }}
+                {{ $product->title ? 'title - ' . $product->title : 'isbn - ' . $product->isbn .'|'. $product->pivot->subscription_type}}
             </a>
         </div>
 
