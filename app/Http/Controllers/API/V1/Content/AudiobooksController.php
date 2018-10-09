@@ -6,6 +6,7 @@ use App\Models\Audiobook;
 use App\Models\AudiobookBlackList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\Rabbitmq\Indexation;
 
 /**
  * Class AudiobooksController
@@ -15,11 +16,14 @@ class AudiobooksController extends Controller
 {
     /**
      * @param Request $request
+     * @param Indexation $indexation
      * @return \Illuminate\Http\JsonResponse
      */
-    public function setStatus(Request $request)
+    public function setStatus(Request $request, Indexation $indexation)
     {
-        $result = Audiobook::where('id', $request->id)->update(['status' => $request->status]);
+        $id = $request->id;
+        $result = Audiobook::where('id', $id)->update(['status' => $request->status]);
+        $indexation->push('updateSingle', 'audiobooks', $id);
 
         return response()->json(['result' => $result], 200);
     }

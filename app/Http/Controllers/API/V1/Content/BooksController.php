@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\BookBlackList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\Rabbitmq\Indexation;
 
 /**
  * Class BooksController
@@ -15,11 +16,14 @@ class BooksController extends Controller
 {
     /**
      * @param Request $request
+     * @param Indexation $indexation
      * @return \Illuminate\Http\JsonResponse
      */
-    public function setStatus(Request $request)
+    public function setStatus(Request $request, Indexation $indexation)
     {
-        $result = Book::where('id', $request->id)->update(['status' => $request->status]);
+        $id = $request->id;
+        $result = Book::where('id', $id)->update(['status' => $request->status]);
+        $indexation->push('updateSingle', 'books', $id);
 
         return response()->json(['result' => $result], 200);
     }
