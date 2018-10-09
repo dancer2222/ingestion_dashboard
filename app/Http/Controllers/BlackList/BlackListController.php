@@ -8,8 +8,8 @@ use App\Models\BookBlackList;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Ingestion\BlackList\BlackListManager;
+use Ingestion\Logs\UserActivityLogs;
 use Ingestion\Rabbitmq\Indexation;
 
 /**
@@ -29,9 +29,10 @@ class BlackListController extends Controller
     /**
      * @param Request $request
      * @param Indexation $indexation
+     * @param UserActivityLogs $userActivityLogs
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function blackList(Request $request, Indexation $indexation)
+    public function blackList(Request $request, Indexation $indexation, UserActivityLogs $userActivityLogs)
     {
         $request->validate([
             'id' => 'required'
@@ -73,13 +74,7 @@ class BlackListController extends Controller
         }
 
         $handledIds = implode(', ', $blackListManager->handledIds);
-
-        logger()->info('User - ' .
-            Auth::user()->name .
-            ' ' .
-            Auth::user()->email .
-            ' Blacklist updated id(s): ' .
-            $handledIds);
+        $userActivityLogs->updateBlacklistStatus($handledIds, $request->mediaType);
 
         $msg = 'This id(s) - ' . $handledIds . ' updated in BlackList';
 

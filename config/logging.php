@@ -35,6 +35,11 @@ return [
             'path' => sys_get_temp_dir() . '/ida.log',
             'level' => 'debug',
         ],
+        'userActivity' => [
+            'driver' => 'single',
+            'path' => sys_get_temp_dir() . '/userActivity.log',
+            'level' => 'debug',
+        ],
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),

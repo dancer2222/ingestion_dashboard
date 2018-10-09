@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\BookBlackList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\Logs\UserActivityLogs;
 use Ingestion\Rabbitmq\Indexation;
 
 /**
@@ -15,24 +16,34 @@ use Ingestion\Rabbitmq\Indexation;
 class BooksController extends Controller
 {
     /**
+     * @var string
+     */
+    private $mediaType = 'books';
+
+    /**
      * @param Request $request
      * @param Indexation $indexation
+     * @param UserActivityLogs $userActivityLogs
      * @return \Illuminate\Http\JsonResponse
      */
-    public function setStatus(Request $request, Indexation $indexation)
+    public function setStatus(Request $request, Indexation $indexation, UserActivityLogs $userActivityLogs)
     {
         $id = $request->id;
+
         $result = Book::where('id', $id)->update(['status' => $request->status]);
-        $indexation->push('updateSingle', 'books', $id);
+
+        $indexation->push('updateSingle', $this->mediaType, $id);
+        $userActivityLogs->updateMediaStatus($id, $this->mediaType);
 
         return response()->json(['result' => $result], 200);
     }
 
     /**
      * @param Request $request
+     * @param UserActivityLogs $userActivityLogs
      * @return \Illuminate\Http\JsonResponse
      */
-    public function blacklist(Request $request)
+    public function blacklist(Request $request, UserActivityLogs $userActivityLogs)
     {
         $result = false;
         $id = $request->get('id');
@@ -53,6 +64,8 @@ class BooksController extends Controller
             }
 
         }
+
+        $userActivityLogs->updateBlacklistStatus($id, $this->mediaType);
 
         return response()->json(['result' => $result], 200);
     }
