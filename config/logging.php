@@ -37,7 +37,7 @@ return [
         ],
         'userActivity' => [
             'driver' => 'single',
-            'path' => sys_get_temp_dir() . '/userActivity.log',
+            'path' => sys_get_temp_dir() . '/ida_userActivity.log',
             'level' => 'debug',
         ],
         'daily' => [
