@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dancer
- * Date: 09.10.18
- * Time: 15:03
- */
 
 namespace Ingestion\Logs;
 
