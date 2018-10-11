@@ -6,6 +6,8 @@ use App\Models\Audiobook;
 use App\Models\AudiobookBlackList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\Logs\UserActivityLogs;
+use Ingestion\Rabbitmq\Indexation;
 
 /**
  * Class AudiobooksController
@@ -14,21 +16,34 @@ use App\Http\Controllers\Controller;
 class AudiobooksController extends Controller
 {
     /**
+     * @var string
+     */
+    private $mediaType = 'audiobooks';
+
+    /**
      * @param Request $request
+     * @param Indexation $indexation
+     * @param UserActivityLogs $userActivityLogs
      * @return \Illuminate\Http\JsonResponse
      */
-    public function setStatus(Request $request)
+    public function setStatus(Request $request, Indexation $indexation, UserActivityLogs $userActivityLogs)
     {
-        $result = Audiobook::where('id', $request->id)->update(['status' => $request->status]);
+        $id = $request->id;
+
+        $result = Audiobook::where('id', $id)->update(['status' => $request->status]);
+
+        $indexation->push('updateSingle', $this->mediaType, $id);
+        $userActivityLogs->updateMediaStatus($id, $this->mediaType);
 
         return response()->json(['result' => $result], 200);
     }
 
     /**
      * @param Request $request
+     * @param UserActivityLogs $userActivityLogs
      * @return \Illuminate\Http\JsonResponse
      */
-    public function blacklist(Request $request)
+    public function blacklist(Request $request, UserActivityLogs $userActivityLogs)
     {
         $result = false;
         $id = $request->get('id');
@@ -49,6 +64,8 @@ class AudiobooksController extends Controller
             }
 
         }
+
+        $userActivityLogs->updateBlacklistStatus($id, $this->mediaType);
 
         return response()->json(['result' => $result], 200);
     }

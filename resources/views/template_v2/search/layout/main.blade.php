@@ -5,7 +5,20 @@
 @section('content')
 
 @include('template_v2.search.including_stack._search_form')
+<div class="row m-t-15">
+    <div class="col-6">
 
+        <b>Show on playster this {{ $mediaType }} - <a
+                href="{{ config('main.links.playster.prod') }}{{ $mediaType }}/{{ $item->id}}/{{ $item->title }}"
+                target="_blank"> {{ $item->title}}</a></b>
+    </div>
+
+    <div class="col-6">
+        <b>Show on QA playster this {{ $mediaType }} - <a
+                href="{{ config('main.links.playster.qa') }}{{ $mediaType }}/{{ $item->id }}/{{ $item->title }}"
+                target="_blank">{{ $item->title }}</a></b>
+    </div>
+</div>
 @php
     $isActive = $item->status === 'active';
     $isInBlacklist = isset($item->blacklist) && $item->blacklist->status == 'active';
