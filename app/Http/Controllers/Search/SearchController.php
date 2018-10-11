@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Search;
 use App\Models\Contracts\SearchableModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller
 {
@@ -24,21 +25,27 @@ class SearchController extends Controller
     /**
      * @var array
      */
-    private $generalScopesMapping = [];
+    private $generalScopesMapping = [
+        'provider',
+        'licensor:id,name',
+        'georestricts:media_id,country_code,status',
+        'qaBatch:id,data_source_provider_id,import_date,title',
+        'statusChanges:id,media_id,old_value,new_value,date_added',
+        'failedItems',
+    ];
+
+    /**
+     * @var string
+     */
+    private $cacheKeyPrefix;
 
     /**
      * SearchController constructor.
+     * @param Request $request
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->generalScopesMapping = [
-            'provider',
-            'licensor:id,name',
-            'georestricts:media_id,country_code,status',
-            'qaBatch:id,data_source_provider_id,import_date,title',
-            'statusChanges:id,old_value,new_value,date_added',
-            'failedItems:id,reason,time,level,error_code,status',
-        ];
+        $this->cacheKeyPrefix = $request->route()->getName();
     }
 
     /**
@@ -49,10 +56,19 @@ class SearchController extends Controller
      */
     public function index(string $mediaType, Request $request, SearchableModel $model)
     {
+        $page = $request->get('page', 1);
+        $needle = $request->get('needle');
+        $cacheKey = "{$this->cacheKeyPrefix}.$mediaType.$needle.page_$page";
         $viewData['mediaType'] = $mediaType;
-        
-        if ($request->get('needle')) {
-            $viewData['list'] = $model->seek($request->get('needle'), ['licensor:id,name'])->paginate(15);
+
+        if ($needle) {
+            if (!($data = Cache::get($cacheKey))) {
+                $data = $model->seek($needle, ['licensor:id,name'])->paginate(15);
+
+                Cache::put($cacheKey, $data, 1000);
+            }
+
+            $viewData['list'] = $data;
         }
 
         return view('template_v2.search.index', $viewData);
@@ -74,8 +90,15 @@ class SearchController extends Controller
         }
 
         $scopes = array_merge($this->scopesMapping[$mediaType], $this->generalScopesMapping);
+        $cacheKey = "{$this->cacheKeyPrefix}.$mediaType.$id";
 
-        $viewData['item'] = $model->seekById($id, $scopes);
+        if (!($data = Cache::get($cacheKey))) {
+            $data = $model->seekById($id, $scopes);
+
+            Cache::put($cacheKey, $data, 1000);
+        }
+
+        $viewData['item'] = $data;
 
         return view($viewName, $viewData);
     }
