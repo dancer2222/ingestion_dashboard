@@ -2,6 +2,10 @@
 
 @section('title', ucfirst($mediaType) . " - $item->title")
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('theme_v2/css/lib/sweetalert/sweetalert.css') }}">
+@endpush
+
 @section('content')
 
 @include('template_v2.search.including_stack._search_form')
@@ -117,3 +121,7 @@
 </div>
 
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('theme_v2/js/lib/sweetalert/sweetalert.min.js') }}"></script>
+@endpush

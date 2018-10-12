@@ -365,11 +365,57 @@ $(document).ready(function () {
     // Audiobooks
     // Change status
     $('.audiobook_status_change').on('change', function (e) {
-        CommonHelper.setStatus(this);
+        if (window.swal) {
+            const radioBtn = this;
+
+            const swalWithBootstrapButtons = swal.mixin({
+                confirmButtonClass: 'btn btn-success mr-3',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                focusConfirm: false,
+            });
+
+            swalWithBootstrapButtons({
+                type: 'warning',
+                title: "Are you sure?",
+                text: "You're going to change status.",
+                showConfirmButton: true,
+                confirmButtonText: 'Yes',
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    return CommonHelper.setStatus(radioBtn)
+                }
+            })
+        }
     });
 
     $('.blacklist-btn').on('click', function () {
-        CommonHelper.blacklistStatus(this);
+        if (window.swal) {
+            const blackstatusBtn = this;
+            const swalWithBootstrapButtons = swal.mixin({
+                confirmButtonClass: 'btn btn-success mr-3',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                focusConfirm: false,
+            });
+
+            swalWithBootstrapButtons({
+                type: 'warning',
+                title: "Are you sure?",
+                showConfirmButton: true,
+                confirmButtonText: 'Yes',
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    return CommonHelper.blacklistStatus(blackstatusBtn);
+                }
+            });
+        }
     });
 });
 

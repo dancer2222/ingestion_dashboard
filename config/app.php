@@ -190,6 +190,7 @@ return [
         \App\Providers\Apis\GoogleClientServiceProvider::class,
         \App\Providers\Search\SearchableModelProvider::class,
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        \Ingestion\ICache\ICacheServiceProvider::class,
     ],
 
     /*
@@ -242,5 +243,6 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Amqp' => Bschmitt\Amqp\Facades\Amqp::class,
+        'ICache' => \Ingestion\ICache\Facades\ICache::class,
     ],
 ];

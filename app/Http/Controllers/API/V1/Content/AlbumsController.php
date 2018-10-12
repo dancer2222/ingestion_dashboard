@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1\Content;
 use App\Models\Album;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\ICache\Facades\ICache;
 use Ingestion\Logs\UserActivityLogs;
 use Ingestion\Rabbitmq\Indexation;
 
@@ -18,6 +19,14 @@ class AlbumsController extends Controller
      * @var string
      */
     private $mediaType = 'albums';
+
+    /**
+     * AlbumsController constructor.
+     */
+    public function __construct()
+    {
+        ICache::forgetContentItem($this->mediaType, request()->id);
+    }
 
     /**
      * @param Request $request

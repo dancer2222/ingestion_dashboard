@@ -14,21 +14,21 @@
 
                 <tbody>
                 @foreach($list as $item)
-                    <tr>
+                    <tr class="search-list-tr">
                         <td>
-                            <a title="Click to see more info about this Id"
+                            <a title="Click to see more info about this Id" class="d-block"
                                href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}">
                                 {{ $item->id }}
                             </a>
                         </td>
                         <td>
-                            <a title="Click to see more info about this Title"
+                            <a title="Click to see more info about this Title" class="d-block"
                                href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}">
                                 {{ $item->title }}
                             </a>
                         </td>
                         <td class="text-left">
-                            <a title="Click to see more info about this Licensor"
+                            <a title="Click to see more info about this Licensor" class="d-block"
                                href="{{ route('licensors.show', ['id' => $item->licensor_id]) }}">
                                 {{ $item->licensor->name ?? ''}}
                             </a>

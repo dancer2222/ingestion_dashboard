@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1\Content;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\ICache\Facades\ICache;
 use Ingestion\Logs\UserActivityLogs;
 use Ingestion\Rabbitmq\Indexation;
 
@@ -18,6 +19,11 @@ class MoviesController extends Controller
      * @var string
      */
     private $mediaType = 'movies';
+
+    public function __construct()
+    {
+        ICache::forgetContentItem($this->mediaType, request()->id);
+    }
 
     /**
      * @param Request $request

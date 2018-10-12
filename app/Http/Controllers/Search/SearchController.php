@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Search;
 use App\Models\Contracts\SearchableModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
+use Ingestion\ICache\Facades\ICache;
 
 class SearchController extends Controller
 {
@@ -35,20 +35,6 @@ class SearchController extends Controller
     ];
 
     /**
-     * @var string
-     */
-    private $cacheKeyPrefix;
-
-    /**
-     * SearchController constructor.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->cacheKeyPrefix = $request->route()->getName();
-    }
-
-    /**
      * @param string $mediaType
      * @param Request $request
      * @param SearchableModel $model
@@ -58,14 +44,13 @@ class SearchController extends Controller
     {
         $page = $request->get('page', 1);
         $needle = $request->get('needle');
-        $cacheKey = "{$this->cacheKeyPrefix}.$mediaType.$needle.page_$page";
         $viewData['mediaType'] = $mediaType;
 
         if ($needle) {
-            if (!($data = Cache::get($cacheKey))) {
+            if (!($data = ICache::getSearchList($mediaType, $needle, $page))) {
                 $data = $model->seek($needle, ['licensor:id,name'])->paginate(15);
 
-                Cache::put($cacheKey, $data, 1000);
+                ICache::putSearchList($data, $mediaType, $needle, $page);
             }
 
             $viewData['list'] = $data;
@@ -90,12 +75,11 @@ class SearchController extends Controller
         }
 
         $scopes = array_merge($this->scopesMapping[$mediaType], $this->generalScopesMapping);
-        $cacheKey = "{$this->cacheKeyPrefix}.$mediaType.$id";
 
-        if (!($data = Cache::get($cacheKey))) {
+        if (!($data = ICache::getContentItem($mediaType, $id))) {
             $data = $model->seekById($id, $scopes);
 
-            Cache::put($cacheKey, $data, 1000);
+            ICache::putContentItem($data, $mediaType, $id);
         }
 
         $viewData['item'] = $data;
