@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\BookBlackList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\ICache\Facades\ICache;
 use Ingestion\Logs\UserActivityLogs;
 use Ingestion\Rabbitmq\Indexation;
 
@@ -19,6 +20,14 @@ class BooksController extends Controller
      * @var string
      */
     private $mediaType = 'books';
+
+    /**
+     * BooksController constructor.
+     */
+    public function __construct()
+    {
+        ICache::forgetContentItem($this->mediaType, request()->id);
+    }
 
     /**
      * @param Request $request
