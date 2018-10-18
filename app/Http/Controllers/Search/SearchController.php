@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Search;
 use App\Models\Contracts\SearchableModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Ingestion\ICache\Facades\ICache;
 
 class SearchController extends Controller
 {
@@ -12,10 +13,25 @@ class SearchController extends Controller
      * @var array
      */
     private $scopesMapping = [
-        'audiobooks' => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'blacklist', 'products'],
-        'books'      => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'blacklist', 'languages'],
-        'movies'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges', 'brightcove'],
-        'albums'     => ['provider', 'licensor', 'georestricts', 'qaBatch', 'statusChanges'],
+        'audiobooks' => [
+            'blacklist',
+            'products:id,data_source_provider_id,title,isbn,modified_date,price,sale_start_date,sale_end_date,active_date,inactive_date,currency,status',
+        ],
+        'books'      => ['blacklist', 'languages'],
+        'movies'     => ['brightcove'],
+        'albums'     => [],
+    ];
+
+    /**
+     * @var array
+     */
+    private $generalScopesMapping = [
+        'provider',
+        'licensor:id,name',
+        'georestricts:media_id,country_code,status',
+        'qaBatch:id,data_source_provider_id,import_date,title',
+        'statusChanges:id,media_id,old_value,new_value,date_added',
+        'failedItems',
     ];
 
     /**
@@ -26,10 +42,18 @@ class SearchController extends Controller
      */
     public function index(string $mediaType, Request $request, SearchableModel $model)
     {
+        $page = $request->get('page', 1);
+        $needle = $request->get('needle');
         $viewData['mediaType'] = $mediaType;
-        
-        if ($request->get('needle')) {
-            $viewData['list'] = $model->seek($request->get('needle'))->paginate(15);
+
+        if ($needle) {
+            if (!($data = ICache::getSearchList($mediaType, $needle, $page))) {
+                $data = $model->seek($needle, ['licensor:id,name'])->paginate(15);
+
+                ICache::putSearchList($data, $mediaType, $needle, $page);
+            }
+
+            $viewData['list'] = $data;
         }
 
         return view('template_v2.search.index', $viewData);
@@ -50,7 +74,15 @@ class SearchController extends Controller
             return view('template_v2.search.index', $viewData);
         }
 
-        $viewData['item'] = $model->seekById($id, $this->scopesMapping[$mediaType]);
+        $scopes = array_merge($this->scopesMapping[$mediaType], $this->generalScopesMapping);
+
+        if (!($data = ICache::getContentItem($mediaType, $id))) {
+            $data = $model->seekById($id, $scopes);
+
+            ICache::putContentItem($data, $mediaType, $id);
+        }
+
+        $viewData['item'] = $data;
 
         return view($viewName, $viewData);
     }

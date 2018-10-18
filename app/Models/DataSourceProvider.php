@@ -25,4 +25,22 @@ class DataSourceProvider extends Model
             ->where('id', $id)
             ->first();
     }
+
+    /**
+     * It returns list of all related batches
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function qaBatches()
+    {
+        return $this->hasMany(QaBatch::class, 'data_source_provider_id', 'id');
+    }
+
+    /**
+     * It returns the first found batch
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function qaBatch()
+    {
+        return $this->hasOne(QaBatch::class, 'data_source_provider_id', 'id');
+    }
 }

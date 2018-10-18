@@ -21,6 +21,15 @@ class Album extends Model implements SearchableModel
 
     /**
      * @param $id
+     * @return string
+     */
+    public function getIdAttribute($id)
+    {
+        return (string)$id;
+    }
+
+    /**
+     * @param $id
      * @return mixed
      */
     public function getInfoById($id)
@@ -141,6 +150,14 @@ class Album extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function failedItems()
+    {
+        return $this->hasMany(FailedItems::class, 'item_id', 'data_origin_id');
+    }
+
+    /**
      * @param string $needle
      * @param array $scopes
      * @param array $has
@@ -163,7 +180,7 @@ class Album extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        $trimmed = str_replace(["-", " "], "", $needle);
+        $trimmed = str_replace(['-', ' ', '`', '\''], '', $needle);
 
         if (is_numeric($trimmed) && ctype_digit($trimmed)) {
             $query = $query->where('id', 'like', "%$trimmed%")

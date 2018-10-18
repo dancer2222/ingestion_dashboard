@@ -1,3 +1,18 @@
+.search-list-tr>td a {
+  color: #000000;
+}
+
+.search-list-tr>td:hover a {
+  color: #5c4ac7;
+  font-weight: bold;
+
+  transform: scale(1.055, 1.055);
+  -webkit-transform: scale(1.055, 1.055);
+  -moz-transform: scale(1.055, 1.055);
+  -o-transform: scale(1.055, 1.055);
+  -ms-transform: scale(1.055, 1.055);
+}
+
 .btn-group-toggle .btn {
   color: #67757c !important; }
 

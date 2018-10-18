@@ -53,7 +53,7 @@ class ParseController extends Controller
     public function index(Request $request, S3Client $awsS3, ParseMetadata $parse)
     {
         if ($this->dataType == 'zip') {
-            $message = 'This file has an extension `zip` you can look it up in: [public/' . $this->filepath . ']';
+            $message = 'This file has an extension `zip` you can look it up in: [' . $this->filepath . ']';
 
             return back()->with('message', $message);
         }
@@ -93,6 +93,10 @@ class ParseController extends Controller
 
         if (!is_null($metadata)) {
             $arrayMetadata = json_decode($metadata->metadata, true);
+
+            if ($request->type === 'movies') {
+                dd($arrayMetadata);
+            }
 
             return response(ArrayToXml::convert($arrayMetadata, 'product'))
                 ->header('Content-Type', 'text/xml');

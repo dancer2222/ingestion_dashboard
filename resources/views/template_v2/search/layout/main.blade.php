@@ -2,10 +2,27 @@
 
 @section('title', ucfirst($mediaType) . " - $item->title")
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('theme_v2/css/lib/sweetalert/sweetalert.css') }}">
+@endpush
+
 @section('content')
 
-@include('template_v2.search._search_form')
+@include('template_v2.search.including_stack._search_form')
+<div class="row m-t-15">
+    <div class="col-6">
 
+        <b>Show on playster this {{ $mediaType }} - <a
+                href="{{ config('main.links.playster.prod') }}{{ $mediaType }}/{{ $item->id}}/{{ $item->title }}"
+                target="_blank"> {{ $item->title}}</a></b>
+    </div>
+
+    <div class="col-6">
+        <b>Show on QA playster this {{ $mediaType }} - <a
+                href="{{ config('main.links.playster.qa') }}{{ $mediaType }}/{{ $item->id }}/{{ $item->title }}"
+                target="_blank">{{ $item->title }}</a></b>
+    </div>
+</div>
 @php
     $isActive = $item->status === 'active';
     $isInBlacklist = isset($item->blacklist) && $item->blacklist->status == 'active';
@@ -20,7 +37,7 @@
                 {{-- Title & Status switcher--}}
                 <div class="row">
                     <div class="col-6">
-                        <h5 class="card-title" data-clipboard="{float: 'right', value: {{ $item->title }}">
+                        <h5 class="card-title" data-clipboard='{"float": "right", "value": "{{ $item->title }}"}'>
                             <b>{{ $item->title }}</b>
                         </h5>
 
@@ -32,7 +49,7 @@
                     <div class="col-6 text-right" id="status_panel">
                         {{-- Status switcher --}}
 
-                        @include('template_v2.search._options', ['id' => $item->id, 'mediaType' => $mediaType, 'isMediaActive' => $isActive, 'isDisplay' => !$isInBlacklist])
+                        @include('template_v2.search.including_stack._options', ['id' => $item->id, 'mediaType' => $mediaType, 'isMediaActive' => $isActive, 'isDisplay' => !$isInBlacklist])
 
                         @if(in_array($mediaType, ['audiobooks', 'books']))
                         <button class="btn btn-sm btn-outline-dark ld-over-inverse blacklist-btn {{ !$isInBlacklist ? 'hidden' : '' }}" id="blacklist_remove"
@@ -71,10 +88,17 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item {{ !$item->statusChanges->count() ? 'hidden' : '' }}">
                         <a class="nav-link" data-toggle="tab" href="#status_info" role="tab" aria-selected="false">
                             <span class="hidden-sm-up"><i class="ti-email"></i></span>
                             <span class="hidden-xs-down">Status info</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item {{ !$item->failedItems->count() ? 'hidden' : '' }}">
+                        <a class="nav-link" data-toggle="tab" href="#failed_items" role="tab" aria-selected="false">
+                            <span class="hidden-sm-up"><i class="ti-email"></i></span>
+                            <span class="hidden-xs-down">Failed items</span>
                         </a>
                     </li>
 
@@ -86,8 +110,8 @@
                 <div class="tab-content">
                     {{-- Common item contents --}}
                     @include('template_v2.search.nav_items._georestricts', ['restricts' => $item->georestricts])
-                    @include('template_v2.search.nav_items._status_changes_tracking', ['statusChangesTracking' => $item->statusChanges])
-
+                    @include('template_v2.search.nav_items._status_changes_tracking', ['statusChangesTracking' => $item->statusChanges->reverse()])
+                    @include('template_v2.search.nav_items._failed_items', ['failedItems' => $item->failedItems->reverse()])
                     @stack('search_nav_items_content')
                 </div>
             </div>
@@ -97,3 +121,7 @@
 </div>
 
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('theme_v2/js/lib/sweetalert/sweetalert.min.js') }}"></script>
+@endpush

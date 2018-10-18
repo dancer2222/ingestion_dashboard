@@ -9,10 +9,10 @@
             @role(['tester', 'admin'])
             <li>
                 <a class="has-arrow " href="#" aria-expanded="false">
-                    <i class="fa fa-search"></i>
+                    <i class="fa fa-search text-danger"></i>
                     <span class="hide-menu">
                         Search v2
-                        <span class="badge badge-danger">alpha</span>
+                        <span class="badge badge-danger">beta</span>
                     </span>
                 </a>
                 <ul aria-expanded="false" class="collapse">
@@ -27,6 +27,14 @@
                     </li>
                     <li>
                         <a href="{{ route('reports.index', 'albums') }}">Albums</a>
+                    </li>
+
+                    <li class="nav-devider"></li>
+
+                    <li>
+                        <a href="{{ route('authors.index') }}">Authors</a>
+                        <a href="{{ route('licensors.index') }}">Licensors</a>
+                        <a href="{{ route('providers.index') }}">Providers</a>
                     </li>
                 </ul>
             </li>
@@ -63,12 +71,7 @@
                     <li>
                         <a href="{{ route('authors.index') }}">Authors</a>
                         <a href="{{ route('licensors.index') }}">Licensors</a>
-
-                        {{--<ul aria-expanded="false" class="collapse">--}}
-                            {{--<li>--}}
-                                {{--<a href="author/books">Books</a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
+                        <a href="{{ route('providers.index') }}">Providers</a>
                     </li>
                 </ul>
             </li>

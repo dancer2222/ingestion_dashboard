@@ -24,6 +24,15 @@ class Audiobook extends Model implements SearchableModel
 
     /**
      * @param $id
+     * @return string
+     */
+    public function getIdAttribute($id)
+    {
+        return (string)$id;
+    }
+
+    /**
+     * @param $id
      * @return mixed
      */
     public function getInfoById($id)
@@ -198,6 +207,14 @@ class Audiobook extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function failedItems()
+    {
+        return $this->hasMany(FailedItems::class, 'item_id', 'data_origin_id');
+    }
+
+    /**
      * @param string $needle
      * @param array $scopes
      * @param array $has
@@ -222,7 +239,7 @@ class Audiobook extends Model implements SearchableModel
             $query->with($scopes);
         }
 
-        $trimmed = str_replace(["-", " "], "", $needle);
+        $trimmed = str_replace(['-', ' ', '`', '\''], '', $needle);
 
         if ($isbnHandler->validation->isbn($needle)) {
             $isbn = $isbnHandler->hyphens->removeHyphens($needle);
@@ -234,7 +251,7 @@ class Audiobook extends Model implements SearchableModel
         }
 
         if (!$isFound && is_numeric($trimmed) && ctype_digit($trimmed)) {
-            $query = $query->where('id', $trimmed)
+            $query->where('id', $trimmed)
                 ->orWhere('data_origin_id', $trimmed);
 
             $isFound = true;
@@ -243,6 +260,8 @@ class Audiobook extends Model implements SearchableModel
         if (!$isFound) {
             $query->where('title', 'like', "%$needle%");
         }
+
+        $query->select(['id', 'title', 'licensor_id']);
 
         return $query;
     }
@@ -268,6 +287,11 @@ class Audiobook extends Model implements SearchableModel
         if ($scopes) {
             $query->with($scopes);
         }
+
+        $query->select([
+            'id', 'licensor_id', 'data_source_provider_id', 'data_origin_id', 'title', 'description', 'grade_level',
+            'street_date', 'status', 'batch_id', 'date_published', 'ma_release_date', 'premium', 'date_added',
+        ]);
 
         return $query->where('id', $id)->first();
     }

@@ -12,6 +12,7 @@ services:
     volumes:
       - "./../:/var/www/html/dashboard"
       - "/logs:/logs"
+      - "/tmp:/tmp"
     ports:
       - "8686:80"
     working_dir: /var/www/html/dashboard

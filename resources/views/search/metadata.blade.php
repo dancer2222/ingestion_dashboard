@@ -1,28 +1,28 @@
-@extends('layouts.main')
+@php
+$headers = $messages->get('headers');
+$items = $messages->get('items');
+@endphp
 
-@section('title', 'Folders')
-
-@section('content')
-    <table class="table table-hover" border="2px">
-        <tr>
-            @if(isset($messages[0]))
-                @foreach($messages[0] as $item => $a)
-                    <th style="background-color: #2ca02c">
-                        {{ $item }}
-                    </th>
-                @endforeach
+<table class="table table-hover" border="2px">
+    @if($headers)
+    <tr>
+        @foreach($headers as $header)
+            @if($header !== 'description')
+            <th style="background-color: green">{{ $header }}</th>
             @endif
-        </tr>
-        @foreach($messages as $message)
+        @endforeach
+    </tr>
+    @endif
+
+    @if($items)
+        @foreach($items as $item)
             <tr>
-                @foreach($message as $value)
-                    <td>
-                        <p style="font-size: 13px">{{ $value }}</p>
-                    </td>
-                @endforeach
+            @foreach($item as $headerName => $itemValue)
+                @if($headerName !== 'description' && \in_array($headerName, $headers, true))
+                <td>{{ $itemValue }}</td>
+                @endif
+            @endforeach
             </tr>
         @endforeach
-    </table>
-
-    <a class="btn btn-info" href="{{ URL::previous() }}">back</a>
-@endsection
+    @endif
+</table>

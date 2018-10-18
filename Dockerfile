@@ -1,6 +1,7 @@
 FROM richarvey/nginx-php-fpm
 
 RUN apk add --update \
+    openrc \
     autoconf \
     file \
     nano \
@@ -11,7 +12,9 @@ RUN apk add --update \
     pkgconf \
     re2c \
     zlib-dev \
+    libevent-dev \
     libmemcached-dev \
+    memcached \
     cyrus-sasl-dev
 
 RUN apk add --update nodejs
