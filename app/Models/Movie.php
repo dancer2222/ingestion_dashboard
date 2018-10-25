@@ -17,6 +17,7 @@ class Movie extends Model implements SearchableModel
      * @var string
      */
     protected $table = 'movie';
+    public $timestamps = false;
 
     /**
      * @param $id

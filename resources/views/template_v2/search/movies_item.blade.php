@@ -2,8 +2,6 @@
 
 @section('search_primary_info')
 
-<h4 class="card-title">{{ $item->subtitle }}</h4>
-
 {{-- Cover --}}
 <img src="{{ resizer([str_singular($mediaType), $item->id]) ?: asset('theme_v2/images/background/user-info.jpg') }}"
      class="rounded float-right ml-3 d-block"
