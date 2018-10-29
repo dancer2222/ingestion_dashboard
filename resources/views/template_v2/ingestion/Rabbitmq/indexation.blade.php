@@ -78,7 +78,6 @@
                 },
                 valueTypesBatch: @php echo json_encode($batch) @endphp,
                 valueTypesSingle: @php echo json_encode($single) @endphp,
-
                 updateValueTypes: function () {
                     Search.elements.valueType.innerHTML = '';
                     var typesToDisplay = Search.elements.contentType.value === 'updateSingle' ? Search.valueTypesSingle : Search.valueTypesBatch;
