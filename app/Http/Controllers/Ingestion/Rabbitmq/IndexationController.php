@@ -51,6 +51,6 @@ class IndexationController extends Controller
 
         return view('template_v2.ingestion.Rabbitmq.indexation', [
             'status' => "$messagesCount messages were sent to the queue: '$queue' (vhost: $vhost, host: $host)",
-        ])->withErrors($this->errors);
+            'single' => $indexation::ALLOWED_TYPES_SINGLE, 'batch' => $indexation::ALLOWED_TYPES_BATCH])->withErrors($this->errors);
     }
 }

@@ -31,7 +31,7 @@ class IndexationRequest extends FormRequest
             ],
             'type' => [
                 'required',
-                Rule::in(['movies', 'audiobooks', 'books', 'albums']),
+                Rule::in(['movies', 'audiobooks', 'books', 'albums', 'games']),
             ],
             'id' => 'required|regex:/[0-9,\s]/',
         ];
