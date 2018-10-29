@@ -2,9 +2,6 @@
 
 namespace Ingestion\Rabbitmq;
 
-
-use Illuminate\Foundation\Application;
-
 class Indexation
 {
     /**
@@ -16,7 +13,23 @@ class Indexation
      * Allowed actions and types
      */
     const ALLOWED_ACTIONS = ['updateSingle', 'updateBatch'];
-    const ALLOWED_TYPES = ['movies', 'audiobooks', 'books', 'albums'];
+
+    /**
+     * Allowed types by batch indexation
+     */
+    const ALLOWED_TYPES_BATCH = ['albums', 'books', 'audiobooks', 'games', 'movies'];
+
+    /**
+     * Allowed types by single indexation
+     */
+    const ALLOWED_TYPES_SINGLE = [
+        'albums', 'books', 'audiobooks', 'movies', 'games',
+        'songs', 'album_artist', 'song_artist', 'album_genre', 'album_tag', 'song_tag',
+        'book_artist', 'book_author', 'book_genre', 'book_tag',
+        'audiobook_author', 'audiobook_narrator', 'audiobook_genre', 'audiobook_tag',
+        'game_developer', 'game_genre', 'game_tag',
+        'movie_actor', 'movie_director', 'movie_producer', 'movie_writer', 'movie_genre', 'movie_tag'
+    ];
 
     /**
      * Connection name
@@ -53,7 +66,9 @@ class Indexation
      */
     public function push(string $action, string $type, string $ids): int
     {
-        if (!\in_array($action, self::ALLOWED_ACTIONS, true) || !\in_array($type, self::ALLOWED_TYPES, true)) {
+        if (!\in_array($action, self::ALLOWED_ACTIONS, true)
+            || ($action === 'updateBatch' && !\in_array($type, self::ALLOWED_TYPES_BATCH, true))
+            || ($action === 'updateSingle' && !\in_array($type, self::ALLOWED_TYPES_SINGLE, true))) {
             throw new \RuntimeException("Invalid values of 'type' or 'action'.");
         }
 
