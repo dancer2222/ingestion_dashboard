@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Ingestion\Rabbitmq;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingestion\Rabbitmq\IndexationRequest;
-use App\Models\BookLibrarythingData;
 use Ingestion\Rabbitmq\Indexation;
 
 class IndexationController extends Controller
@@ -20,13 +19,13 @@ class IndexationController extends Controller
     private $errors = [];
 
     /**
-     * Display a form to send messages to queue.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        return view('template_v2.ingestion.Rabbitmq.indexation');
+        return view('template_v2.ingestion.Rabbitmq.indexation',
+            ['single' => Indexation::ALLOWED_TYPES_SINGLE, 'batch' => Indexation::ALLOWED_TYPES_BATCH]
+        );
     }
 
     /**
