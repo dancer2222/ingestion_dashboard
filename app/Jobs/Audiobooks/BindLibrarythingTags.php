@@ -72,21 +72,25 @@ class BindLibrarythingTags implements ShouldQueue
             return;
         }
 
+        // Convert product isbn (isbn-13) to isbn-10, then find workcode by converted isbn-10
         $isbn10 = $this->isbn->translate->to10((string)$product->isbn);
         $bookLibrarythingData = BookLibrarythingData::select('workcode')->whereIsbn_10($isbn10)->first();
 
+        // Skip if we have no workcode
         if (!$bookLibrarythingData) {
             return;
         }
 
         $tags = $bookLibrarythingData->tags()->orderBy('weight', 'desc')->limit(self::MAX_BOUND_TAGS)->get();
 
+        // Skip if have no tags by current workcode
         if (!$tags) {
             return;
         }
 
         $audiobook = $product->audiobook;
 
+        // Skip if we have no audiobooks by passed product audiobook
         if ($audiobook->count() !== 1) {
             return;
         }
@@ -119,7 +123,7 @@ class BindLibrarythingTags implements ShouldQueue
         $boundTagsCount = $audiobook->tags()->count();
 
         // Just sync the tags if the audiobook doesn't have any bound tags
-        // or amount of bound tags is more than MAX_BOUND_TAGS
+        // or amount of bound tags is more than self::MAX_BOUND_TAGS
         if (!$boundTagsCount || $boundTagsCount > self::MAX_BOUND_TAGS) {
             // It'll detach all bound tags and attach new ones
             $audiobook->tags()->sync($tagIds);
