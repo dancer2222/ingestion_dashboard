@@ -29,11 +29,9 @@ class IndexationController extends Controller
     }
 
     /**
-     * Send a message in queue.
-     *
-     * @param $request IndexationRequest
-     * @param $indexation Indexation
-     * @return \Illuminate\Http\Response
+     * @param IndexationRequest $request
+     * @param Indexation $indexation
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(IndexationRequest $request, Indexation $indexation)
     {
@@ -49,8 +47,8 @@ class IndexationController extends Controller
         $vhost = config('queue.connections.indexation.vhost');
         $queue = config('queue.connections.indexation.queue');
 
-        return view('template_v2.ingestion.Rabbitmq.indexation', [
-            'status' => "$messagesCount messages were sent to the queue: '$queue' (vhost: $vhost, host: $host)",
-            'single' => $indexation::ALLOWED_TYPES_SINGLE, 'batch' => $indexation::ALLOWED_TYPES_BATCH])->withErrors($this->errors);
+        return redirect()->back()
+            ->with('message', "$messagesCount messages were sent to the queue: '$queue' (vhost: $vhost, host: $host)")
+            ->with($this->errors);
     }
 }
