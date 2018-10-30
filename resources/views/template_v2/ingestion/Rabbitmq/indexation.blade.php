@@ -18,16 +18,12 @@
                                     <label for="action">Action</label>
 
                                     <select class="form-control custom-select" name="action" id="action">
-                                        <option disabled {{ old('action') === null ? 'selected' : '' }}>Choose the
-                                            action
-                                        </option>
-
                                         <option
-                                            value="updateSingle" {{ old('action') === 'updateSingle' ? 'selected' : '' }}>
+                                            value="updateSingle">
                                             Update single
                                         </option>
                                         <option
-                                            value="updateBatch" {{ old('action') === 'updateBatch' ? 'selected' : '' }}>
+                                            value="updateBatch">
                                             Update batch
                                         </option>
                                     </select>
@@ -38,6 +34,10 @@
                                 <div class="form-group">
                                     <label for="type">Content type</label>
                                     <select class="form-control custom-select" name="type" id="type">
+                                        @foreach($single as $vType)
+                                            <option
+                                                value="{{ $vType }}" {{ $vType === 'updateSingle' ? 'selected' : '' }}>{{ $vType }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
