@@ -17,7 +17,7 @@ class BindLibrarythingTags implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    const MAX_BOUND_TAGS = 15;
+    const MAX_BOUND_TAGS = 30;
 
     /**
      * @var ProductAudioBook
@@ -103,8 +103,9 @@ class BindLibrarythingTags implements ShouldQueue
     private function bindTagsToAudiobook(Audiobook $audiobook, Collection $tags)
     {
         $tagIds = $tags->pluck('tag_id');
+        $weight = $tags->pluck('weight');
 
-        if (!$tagIds) {
+        if (!$tagIds && !$weight) {
             return;
         }
 
@@ -122,7 +123,7 @@ class BindLibrarythingTags implements ShouldQueue
         // or amount of bound tags is more than MAX_BOUND_TAGS
         if (!$boundTagsCount || $boundTagsCount > self::MAX_BOUND_TAGS) {
             // It'll detach all bound tags and attach new ones
-            $audiobook->tags()->sync($tagIds);
+            $audiobook->tags()->sync([$tagIds[0] => ['weight' => $weight[0]]]);
 
             return;
         }
@@ -130,7 +131,7 @@ class BindLibrarythingTags implements ShouldQueue
         // Determines how many tags we can attach to the audiobook
         $toTake = self::MAX_BOUND_TAGS - $boundTagsCount + $duplicateTagsCount;
 
-        $audiobook->tags()->syncWithoutDetaching($tagIds->take($toTake));
+        $audiobook->tags()->syncWithoutDetaching([$tagIds[0]->take($toTake) => ['weight' => $weight[0]->take($toTake)]]);
     }
 
     /**
