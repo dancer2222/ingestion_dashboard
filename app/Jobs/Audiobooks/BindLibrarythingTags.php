@@ -106,36 +106,51 @@ class BindLibrarythingTags implements ShouldQueue
      */
     private function bindTagsToAudiobook(Audiobook $audiobook, Collection $tags)
     {
-        $tagIds = $tags->pluck('tag_id');
-        $weight = $tags->pluck('weight');
+        $tagIds = [];
+        $tagsWithWeight = [];
 
-        if (!$tagIds && !$weight) {
+        foreach ($tags as $tag) {
+            // Collect tag ids and tag ids with weight to store in database
+            $tagId = $tag->tag_id;
+            $tagIds[] = $tagId;
+            $tagsWithWeight[$tagId] = ['weight' => $tag->weight];
+        }
+
+        if (!$tagIds && !$tagsWithWeight) {
             return;
         }
 
         // Check if the audiobook already has the same tags we're going to bind
-        $duplicateTagsCount = $audiobook->tags()->whereIn('tag_id', $tagIds)->count();
+        $boundAudiobookTags = $audiobook->tags()->select('tag_id')->get();
+        $duplicateTags = array_intersect($boundAudiobookTags->pluck('tag_id')->toArray(), $tagIds);
+        $duplicateTagsCount = \count($duplicateTags);
 
         // If it's the same amount as MAX_BOUND_TAGS we have to do nothing
         if ($duplicateTagsCount === self::MAX_BOUND_TAGS) {
             return;
         }
 
-        $boundTagsCount = $audiobook->tags()->count();
+        if ($duplicateTags) {
+            $tagIds = array_diff($tagIds, $duplicateTags);
+        }
+
+        $boundTagsCount = $boundAudiobookTags->count();
 
         // Just sync the tags if the audiobook doesn't have any bound tags
         // or amount of bound tags is more than self::MAX_BOUND_TAGS
         if (!$boundTagsCount || $boundTagsCount > self::MAX_BOUND_TAGS) {
             // It'll detach all bound tags and attach new ones
-            $audiobook->tags()->sync([$tagIds[0] => ['weight' => $weight[0]]]);
+            $audiobook->tags()->sync($tagsWithWeight);
 
             return;
         }
 
-        // Determines how many tags we can attach to the audiobook
-        $toTake = self::MAX_BOUND_TAGS - $boundTagsCount + $duplicateTagsCount;
+        // Remove already bound tags
+        $tagsWithoutDuplicates = collect($tagsWithWeight)->filter(function ($value, $key) use ($duplicateTags) {
+            return \in_array($key, $duplicateTags, true) === false;
+        });
 
-        $audiobook->tags()->syncWithoutDetaching([$tagIds[0]->take($toTake) => ['weight' => $weight[0]->take($toTake)]]);
+        $audiobook->tags()->syncWithoutDetaching($tagsWithoutDuplicates);
     }
 
     /**

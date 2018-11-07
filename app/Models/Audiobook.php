@@ -132,7 +132,7 @@ class Audiobook extends Model implements SearchableModel
             'tag_id',
             'id',
             'id'
-        )->withPivot(['id']);
+        )->withPivot(['id', 'weight']);
     }
 
     /**
