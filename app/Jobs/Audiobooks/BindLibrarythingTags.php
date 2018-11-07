@@ -130,10 +130,6 @@ class BindLibrarythingTags implements ShouldQueue
             return;
         }
 
-        if ($duplicateTags) {
-            $tagIds = array_diff($tagIds, $duplicateTags);
-        }
-
         $boundTagsCount = $boundAudiobookTags->count();
 
         // Just sync the tags if the audiobook doesn't have any bound tags
