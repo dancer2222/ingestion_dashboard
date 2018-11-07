@@ -3,9 +3,10 @@
 namespace App\Jobs\Audiobooks;
 
 use App\Models\Audiobook;
+use App\Models\LibrarythingTag;
 use App\Models\ProductAudioBook;
 use App\Models\BookLibrarythingData;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Isbn\Isbn;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -81,7 +82,11 @@ class BindLibrarythingTags implements ShouldQueue
             return;
         }
 
-        $tags = $bookLibrarythingData->tags()->orderBy('weight', 'desc')->limit(self::MAX_BOUND_TAGS)->get();
+        $tags = collect([]);
+
+        LibrarythingTag::where('workcode', $bookLibrarythingData->workcode)->orderBy('weight', 'desc')->chunk(500, function ($ltTags) use (&$tags) {
+            $tags = $tags->merge($ltTags);
+        });
 
         // Skip if have no tags by current workcode
         if (!$tags) {
@@ -121,20 +126,17 @@ class BindLibrarythingTags implements ShouldQueue
         }
 
         // Check if the audiobook already has the same tags we're going to bind
-        $boundAudiobookTags = $audiobook->tags()->select('tag_id')->get();
-        $duplicateTags = array_intersect($boundAudiobookTags->pluck('tag_id')->toArray(), $tagIds);
-        $duplicateTagsCount = \count($duplicateTags);
+        $boundAudiobookTags = collect([]);
+        $audiobook->tags()->select('tag_id')->chunk(500, function ($aBookTags) use (&$boundAudiobookTags) {
+            $boundAudiobookTags = $boundAudiobookTags->merge($aBookTags);
+        });
 
-        // If it's the same amount as MAX_BOUND_TAGS we have to do nothing
-        if ($duplicateTagsCount === self::MAX_BOUND_TAGS) {
-            return;
-        }
+        $duplicateTags = array_intersect($boundAudiobookTags->pluck('tag_id')->toArray(), $tagIds);
 
         $boundTagsCount = $boundAudiobookTags->count();
 
         // Just sync the tags if the audiobook doesn't have any bound tags
-        // or amount of bound tags is more than self::MAX_BOUND_TAGS
-        if (!$boundTagsCount || $boundTagsCount > self::MAX_BOUND_TAGS) {
+        if (!$boundTagsCount) {
             // It'll detach all bound tags and attach new ones
             $audiobook->tags()->sync($tagsWithWeight);
 
