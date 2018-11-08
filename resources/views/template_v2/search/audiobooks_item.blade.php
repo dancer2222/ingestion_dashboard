@@ -48,6 +48,17 @@
     <span class="float-right">{{ $item->qaBatch->data_source_provider_id ?? '' }} [{{ $item->provider->name ?? '' }}]</span>
 </div>
 
+<div class="mb-3 border-bottom">
+    <b>Author id:</b>
+    @if($item->authors->count())
+        @foreach($item->authors as $author)
+            <span class="float-right">[{{ $author->id }}] {{ $author->name }}</span>
+        @endforeach
+    @else
+        <span class="float-right color-danger">Not found authors</span>
+    @endif
+</div>
+
 {{--General info--}}
 @include('template_v2.search.including_stack._general_information')
 

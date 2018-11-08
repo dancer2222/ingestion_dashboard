@@ -215,6 +215,21 @@ class Audiobook extends Model implements SearchableModel
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function authors()
+    {
+        return $this->belongsToMany(
+            Authoraudiobook::class,
+            'audio_book_authors',
+            'audio_book_id',
+            'author_id',
+            'id',
+            'id'
+        );
+    }
+
+    /**
      * @param string $needle
      * @param array $scopes
      * @param array $has
