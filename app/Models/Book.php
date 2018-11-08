@@ -195,6 +195,9 @@ class Book extends Model implements SearchableModel
         return $this->hasMany(FailedItems::class, 'item_id', 'data_origin_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function authors()
     {
         return $this->belongsToMany(

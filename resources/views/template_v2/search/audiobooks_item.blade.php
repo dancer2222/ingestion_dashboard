@@ -49,10 +49,10 @@
 </div>
 
 <div class="mb-3 border-bottom">
-    <b>Author id:</b>
+    <b>Authors(id):</b>
     @if($item->authors->count())
         @foreach($item->authors as $author)
-            <span class="float-right">[{{ $author->id }}] {{ $author->name }}</span>
+            <span class="float-right">[{{ $author->id }}] {{ $author->name }}</span><br>
         @endforeach
     @else
         <span class="float-right color-danger">Not found authors</span>
