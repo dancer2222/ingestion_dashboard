@@ -11,6 +11,11 @@
                         </div>
 
                         <div class="col-6">
+                            <span class="font-weight-bold">Batch id:</span>
+                            <span class="float-right text-right">{{ $message->batch_id }}</span>
+                        </div>
+
+                        <div class="col-6">
                             <span class="float-left text-left font-weight-bold">Date:</span>
                             <span class="float-right text-right">{{ $message->time }}</span>
                         </div>
