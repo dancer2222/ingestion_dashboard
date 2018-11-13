@@ -104,4 +104,17 @@ class ParseController extends Controller
 
         return response('This metadata not found in database')->header('Content-Type', 'text');
     }
+
+    /**
+     * @param Request $request
+     * @param S3Client $awsS3
+     * @param ParseMetadata $parse
+     * @return $this
+     */
+    public function getMetadataFile(Request $request, S3Client $awsS3,ParseMetadata $parse)
+    {
+        $parse->download($awsS3, $request->bucket, $request->object, $this->filepath);
+
+        return response()->download($this->filepath)->sendHeaders('Content-Type', 'application/pdf');
+    }
 }

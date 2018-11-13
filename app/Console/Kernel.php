@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\Books\SyncAverageRatingLT;
+use App\Console\Commands\Cleaner\CleanerRemainingMetadataFiles;
 use App\Console\Commands\Gmail\Reader\IngestionTracking;
 use App\Console\Commands\Librarything\LibraryThingData;
 use App\Console\Commands\Librarything\LibraryThingDataXmlParse;
@@ -36,6 +37,9 @@ class Kernel extends ConsoleKernel
 
         // Books
         SyncAverageRatingLT::class,
+
+        //Clear directory
+        CleanerRemainingMetadataFiles::class,
     ];
 
     /**
@@ -50,6 +54,7 @@ class Kernel extends ConsoleKernel
             // Librarything Tags
             //$schedule->command('librarything_data:download')->twiceMonthly(1);
             $schedule->command('audiobooks:bind-tags')->daily();
+            $schedule->command('cleaner:metadataFiles')->weekly();
         }
 
         if ($this->app->environment('production')) {
