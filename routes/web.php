@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/search/{contentType?}/{valueType?}/{value?}', 'SearchController@index')->name('search');
 
         Route::post('/show', 'ParseController@index')->name('reports.parse.index');
+        Route::post('/download', 'ParseController@getMetadataFile')->name('reports.parse.getMetadataFile');
         Route::post('/metadata', 'ParseController@getMetadataIntoDatabase')->name('reports.parse.getMetadataIntoDatabase');
         Route::get('/track/{id?}', 'TrackController@index')->name('reports.track.index');
 

@@ -41,5 +41,5 @@
     <input type="hidden" id="type" name="type" value="{{ $mediaType }}">
     <input type="hidden" id="id" name="id" value="{{ $item->id }}">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
-    <button type="submit" class="btn btn-info">Info by metadata file</button>
+    <button type="submit" class="btn btn-outline-primary">Info by metadata file</button>
 </form>
