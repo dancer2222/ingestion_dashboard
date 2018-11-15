@@ -49,32 +49,36 @@
 
 {{--General info--}}
 @include('template_v2.search.including_stack._general_information')
-<div class="mb-3 bottom">
-    <span class="float-left">
-        <form method="POST" class="form-group" id="form"
-              action="{{ route('reports.parse.index') }}" target="_blank">
-            <input type="hidden" id="bucket" name="bucket" value="{{ config('main.links.aws.bucket.books') }}">
-            <input type="hidden" id="object" name="object" value="{{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name ?? '') }}/{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
-            <input type="hidden" id="batchTitle" name="batchTitle"
-                   value="{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
-            <input type="hidden" id="title" name="title" value="{{ $item->title }}">
-            <input type="hidden" id="id" name="id" value="{{ $item->id }}">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <button type="submit" class="btn btn-secondary">Show AWS metadata file <i class="fab fa-aws"></i></button>
-        </form>
-    </span>
-    <span class="float-right">
-        <form method="POST" class="form-group" id="form"
-              action="{{ route('reports.parse.getMetadataFile') }}">
-            <input type="hidden" id="bucket" name="bucket" value="{{ config('main.links.aws.bucket.books') }}">
-            <input type="hidden" id="object" name="object" value="{{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name ?? '') }}/{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
-            <input type="hidden" id="batchTitle" name="batchTitle"
-                   value="{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
-            <input type="hidden" id="title" name="title" value="{{ $item->title }}">
-            <input type="hidden" id="id" name="id" value="{{ $item->id }}">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <button type="submit" class="btn btn-secondary">Download AWS metadata file <i class="fab fa-aws"></i></button>
-        </form>
-    </span>
+<div class="d-inline float-right">
+    <div class="mb-3 bottom">
+        <span class="float-right">
+            <form method="POST" class="form-group" id="form"
+                  action="{{ route('reports.parse.index') }}" target="_blank">
+                <input type="hidden" id="bucket" name="bucket" value="{{ config('main.links.aws.bucket.books') }}">
+                <input type="hidden" id="object" name="object" value="{{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name ?? '') }}/{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
+                <input type="hidden" id="batchTitle" name="batchTitle"
+                       value="{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
+                <input type="hidden" id="title" name="title" value="{{ $item->title }}">
+                <input type="hidden" id="id" name="id" value="{{ $item->id }}">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <button type="submit" class="btn btn-secondary">Show AWS metadata file <b><i class="fab fa-aws"></i></b></button>
+            </form>
+        </span>
+    </div>
+    <div class="mb-3 bottom">
+        <span class="float-right">
+            <form method="POST" class="form-group" id="form"
+                  action="{{ route('reports.parse.getMetadataFile') }}">
+                <input type="hidden" id="bucket" name="bucket" value="{{ config('main.links.aws.bucket.books') }}">
+                <input type="hidden" id="object" name="object" value="{{ \Ingestion\Search\Normalize::normalizeBucketName($item->licensor->name ?? '') }}/{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
+                <input type="hidden" id="batchTitle" name="batchTitle"
+                       value="{{ str_replace(["Full_{$item->licensor->name}_", "Delta_{$item->licensor->name}_"], '', $item->qaBatch->title ?? '-') }}">
+                <input type="hidden" id="title" name="title" value="{{ $item->title }}">
+                <input type="hidden" id="id" name="id" value="{{ $item->id }}">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <button type="submit" class="btn btn-secondary">Download AWS metadata file <b><i class="fab fa-aws"></i></b></button>
+            </form>
+        </span>
+    </div>
 </div>
 @endsection
