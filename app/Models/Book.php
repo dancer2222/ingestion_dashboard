@@ -31,6 +31,15 @@ class Book extends Model implements SearchableModel
     }
 
     /**
+     * @param $id
+     * @return string
+     */
+    public function getIdAttribute($id)
+    {
+        return (string)$id;
+    }
+
+    /**
      * @param $title
      * @return mixed
      */
