@@ -11,6 +11,7 @@ use App\Models\Game;
 use App\Models\QaBatch;
 use App\Models\Software;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Ingestion\Exports\Csv\LicensorsContent;
@@ -125,5 +126,29 @@ class ProvidersController extends Controller
         $data['provider'] = $provider;
 
         return response()->json($data);
+    }
+
+    /**
+     * Display the specified resource specified date.
+     *
+     * @param int $providerId
+     * @param int $mediaTypeId
+     * @param date $date
+     * @param DataSourceProvider $provider
+     * @return \Illuminate\Http\Response
+     */
+    public function trackingStatus($providerId, $mediaTypeId, $date, Request $request, DataSourceProvider $provider)
+    {
+        $date = Carbon::parse($date);
+        $startDay = $date->startOfMonth()->timestamp;
+        $endDay = $date->lastOfMonth()->timestamp;
+
+        $modelName = self::CONTENT_MODELS_MAPPING[$mediaTypeId];
+        $model = new $modelName;
+        $data['list'] = $model->whereHas('provider', function ($query) use ($providerId) {
+                $query->where($query->getModel()->getTable() . '.id', $providerId);
+            })->whereHas('statusChanges', function ($query) use ($startDay, $endDay) {
+            $query->where('new_value', 'active')->where('date_added', '>=', $startDay)->where('date_added', '<=', $endDay);
+        })->with('provider')->paginate();
     }
 }
