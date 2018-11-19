@@ -37,9 +37,13 @@
     </span>
 </div>
 
-<form method="POST" class="form-group" action="{{ ida_route('reports.parse.getMetadataIntoDatabase') }}" target="_blank">
-    <input type="hidden" id="type" name="type" value="{{ $mediaType }}">
-    <input type="hidden" id="id" name="id" value="{{ $item->id }}">
-    <input type="hidden" name="_token" value="{{csrf_token()}}">
-    <button type="submit" class="btn btn-outline-primary">Info by metadata file</button>
-</form>
+<div class="d-inline" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group" role="group" aria-label="First group">
+        <form method="POST" class="form-group" action="{{ ida_route('reports.parse.getMetadataIntoDatabase') }}" target="_blank">
+            <input type="hidden" id="type" name="type" value="{{ $mediaType }}">
+            <input type="hidden" id="id" name="id" value="{{ $item->id }}">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <button type="submit" class="btn btn-outline-primary">Info by metadata file from <b>DB</b><i class="fab fa-android"></i></button>
+        </form>
+    </div>
+</div>
