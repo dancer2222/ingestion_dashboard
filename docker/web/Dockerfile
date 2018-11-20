@@ -48,7 +48,11 @@ RUN adduser -D -u 1000 ida
 
 COPY ./ /var/www/html/dashboard
 COPY ./crontab /var/spool/cron/crontabs/root
+
+# Supervisor
+RUN mkdir -p /etc/supervisor/conf.d/
 COPY ./supervisor-ida.conf /etc/supervisor/conf.d/
+
 COPY ./nginx.conf /etc/nginx/sites-enabled/default.conf
 COPY ./php.ini /usr/local/etc/php/php.ini
 COPY ./run.sh /dashboard-run.sh

@@ -230,20 +230,23 @@ class Provider extends React.Component {
         this.loadProviderContent(1);
     }
 
-    loadProviderContent = (page) => {
+    loadProviderContent = (page, provider_name) => {
         this.setState({
             isLoading: true
         });
 
-        page = page ? page : this.state.currentPage;
+        let params = {};
+        params.mediaType = this.state.mediaType;
+        params.page = page ? page : this.state.currentPage;
+
+        if (provider_name) {
+            params.provider_name = provider_name;
+        }
 
         axios({
             url: this.props.urlToProvider + '/' + this.state.providerId,
             method: 'get',
-            params: {
-                page: page,
-                mediaType: this.state.mediaType
-            }
+            params: params,
         }).then(result => {
             if (!result.data.hasOwnProperty('list') && result.data.hasOwnProperty('mediaType')) {
                 return false;
