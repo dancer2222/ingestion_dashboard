@@ -143,9 +143,7 @@ Route::group(['middleware' => ['auth']], function() {
     // Providers Search
     Route::name('providers.')->prefix('providers')->namespace('Providers')->group(function () {
         Route::get('/', 'ProvidersController@index')->name('index');
-        Route::get('/search', 'ProvidersController@search')->name('search');
-        Route::get('/search/{id?}', 'ProvidersController@searchOne')->name('searchOne');
-        Route::get('/search/{providerId}/{mediaTypeId}/{date}', 'ProvidersController@trackingStatus')->name('trackingStatus');
+        Route::get('/{media_type}/{id}', 'ProvidersController@show')->name('show');
 
     });
 });
