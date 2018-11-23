@@ -144,7 +144,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::name('providers.')->prefix('providers')->namespace('Providers')->group(function () {
         Route::get('/', 'ProvidersController@index')->name('index');
         Route::get('/{media_type}/{id}', 'ProvidersController@show')->name('show');
-
+        Route::get('/{media_type}/{id}/status_changes', 'ProvidersController@showTrackingStatusChanges')->name('showStatusChanges');
     });
 });
 

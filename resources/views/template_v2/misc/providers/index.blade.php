@@ -122,7 +122,7 @@
                 @include('template_v2.misc.providers.providers_list')
             @endisset
 
-            @isset($providerContentList)
+            @isset($provider)
                 @include('template_v2.misc.providers.providers_content_list')
             @endisset
         </div>
