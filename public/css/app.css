@@ -20,4 +20,10 @@
 .btn-group-toggle .btn:hover {
   color: #fff !important; }
 
+.card-shadow-hover:hover {
+  -webkit-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
+}
+
 /*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsMEJBQXlCLEVBQzFCOztBQUVEOztFQUVFLHVCQUFzQixFQUN2QiIsImZpbGUiOiJhcHAuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmJ0bi1ncm91cC10b2dnbGUgLmJ0biB7XG4gIGNvbG9yOiAjNjc3NTdjICFpbXBvcnRhbnQ7XG59XG5cbi5idG4tb3V0bGluZS1zZWNvbmRhcnk6bm90KDpkaXNhYmxlZCk6bm90KC5kaXNhYmxlZCkuYWN0aXZlLFxuLmJ0bi1ncm91cC10b2dnbGUgLmJ0bjpob3ZlciB7XG4gIGNvbG9yOiAjZmZmICFpbXBvcnRhbnQ7XG59XG4iXX0= */

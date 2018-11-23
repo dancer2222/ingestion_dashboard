@@ -1,121 +1,128 @@
-@php
-    $filterIsActive = in_array('active', $statuses);
-    $filterIsInactive = in_array('inactive', $statuses);
-    $filterTrackingStatusActive = in_array('active', $trackingStatuses);
-    $filterTrackingStatusInactive = in_array('inactive', $trackingStatuses);
-@endphp
+{{--@php--}}
+    {{--$filterIsActive = in_array('active', $statuses);--}}
+    {{--$filterIsInactive = in_array('inactive', $statuses);--}}
+    {{--$filterTrackingStatusActive = in_array('active', $trackingStatuses);--}}
+    {{--$filterTrackingStatusInactive = in_array('inactive', $trackingStatuses);--}}
+{{--@endphp--}}
 
 <hr>
 
-<h3>
-    Provider
+{{--<h3>--}}
+    {{--Provider--}}
 
     {{--<a href="{{ route('providers.export.content', ['media_type' => request()->get('media_type'), 'id' => $provider->id]) }}" class="btn btn-outline-info btn-sm float-right" target="_blank">--}}
         {{--Export CSV--}}
     {{--</a>--}}
-</h3>
+{{--</h3>--}}
 
 <div class="row">
-    <ul class="col-sm-12 col-md-6">
-        <li>ID: <b>{{ $provider->id }}</b></li>
-        <li>Name: <b>{{ $provider->name }}</b></li>
-        <li>Media Type: <b>{{ $mediaType }}</b></li>
-    </ul>
+
+    <div class="col-md-3">
+        <div class="card p-30 card-shadow-hover">
+            <div class="media">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">Name: {{ $provider->name }}</h5>
+                    <p class="h-4 mt-3">ID: {{ $provider->id }}</p>
+                    <p class="h-4">Media type: {{ $mediaType }}</p>
+                </div>
+                <i class="align-self-center ml-3 fas fa-user f-s-40"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-30 card-shadow-hover">
+            <div class="media">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">{{ $providerActiveContent }}</h5>
+                    <p class="h-4 mt-3">active {{ $mediaType }}</p>
+                </div>
+                <i class="align-self-center mr-3 fas fa-smile text-success f-s-40"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-30 card-shadow-hover">
+            <div class="media">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">{{ $providerInactiveContent }}</h5>
+                    <p class="h-4 mt-3">inactive {{ $mediaType }}</p>
+                </div>
+                <i class="align-self-center mr-3 fas fa-dizzy text-danger f-s-40"></i>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<table class="table mt-3">
-    <thead class="thead-dark">
-    <tr>
-        <th class="bg-white" colspan="3">
-            <a class="color-primary text-underline float-left" data-toggle="collapse"  href="#collapseFilter"
-               role="button" aria-expanded="false" aria-controls="collapseFilter"
-                onclick="$(this).find('i').hasClass('fa-arrow-down') ? $(this).find('i.fa-arrow-down').removeClass('fa-arrow-down').addClass('fa-arrow-up') : $(this).find('i.fa-arrow-up').removeClass('fa-arrow-up').addClass('fa-arrow-down');">
-                <u>
-                    Filter
-                    <i class="fas fa-arrow-down"></i>
-                </u>
-            </a>
+<hr>
 
-            <br>
+<div class="row">
+    <div class="col-3">
+        <div class="card card-shadow-hover">
+            <div class="card-body">
+                <h5 class="card-title">Tracking status changes</h5>
 
-            <div class="collapse col mb-4" id="collapseFilter">
-                <form class="row" action="{{ route('providers.show', ['media_type' => $mediaType, 'id' => $provider->id]) }}" method="get">
-                    <div class="col">
-                        <div class="text-dark text-left">Status</div>
-                        <div class="btn-group btn-group-toggle btn-group-sm float-left" data-toggle="buttons">
-                            <label class="btn btn-outline-secondary color-success {{ $filterIsActive ? 'active' : '' }}" for="status_active">
-                                <input type="checkbox" id="status_active" name="status[]" class="custom-control-input" value="active"
-                                        {{ $filterIsActive ? 'checked' : '' }}>
-                                active
-                            </label>
-
-                            <label class="btn btn-outline-secondary {{ $filterIsInactive ? 'active' : '' }}" for="status_inactive">
-                                <input type="checkbox" id="status_inactive" name="status[]" class="custom-control-input" value="inactive"
-                                        {{ $filterIsInactive ? 'checked' : '' }}>
-                                inactive
-                            </label>
+                <form action="{{ route('providers.showStatusChanges', ['mediaType' => $mediaType, 'providerId' => $provider->id]) }}" method="post" id="provider-status-changes-form">
+                    <div class="form-group row">
+                        <label for="example-date-input" class="col-12 col-form-label">After</label>
+                        <div class="col-12">
+                            <input class="form-control" name="date_after" type="date" value="" id="example-date-input">
                         </div>
                     </div>
 
-                    <div class="col">
-                        <div class="text-dark text-left">Tracking status changes</div>
-                        <div class="btn-group btn-group-toggle btn-group-sm float-left" data-toggle="buttons">
-                            <label class="btn btn-outline-secondary color-success {{ $filterTrackingStatusActive ? 'active' : '' }}" for="status_tracking_active">
-                                <input type="checkbox" id="status_tracking_active" name="status_tracking[]" class="custom-control-input" value="active"
-                                        {{ $filterTrackingStatusActive ? 'checked' : '' }}>
-                                active
-                            </label>
-
-                            <label class="btn btn-outline-secondary {{ $filterTrackingStatusInactive ? 'active' : '' }}" for="status_tracking_inactive">
-                                <input type="checkbox" id="status_tracking_inactive" name="status_tracking[]" class="custom-control-input" value="inactive"
-                                        {{ $filterTrackingStatusInactive ? 'checked' : '' }}>
-                                inactive
-                            </label>
-                        </div>
-
-                        <div>
-                            <input type="date" class="form-control" name="tracking_date" value="{{ $trackingDate }}">
+                    <div class="form-group row">
+                        <label for="example-date-input" class="col-12 col-form-label">Before</label>
+                        <div class="col-12">
+                            <input class="form-control" name="date_before" type="date" value="" id="example-date-input">
                         </div>
                     </div>
 
-                    <hr>
-
-                    <div class="col-12 mt-4">
-                        <button type="submit" class="btn btn-sm btn-primary pl-5 pr-5 float-left">apply</button>
-                    </div>
+                    <button type="button" id="provider-tracking-status-changes-find" class="btn btn-primary">apply</button>
                 </form>
+
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
             </div>
-        </th>
-    </tr>
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Batch ID</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($providerContentList as $item)
-        <tr>
-            <th scope="row">
-                <a title="Click to see more info about this Id" href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}">
-                    {{ $item->id }}
-                </a>
+        </div>
+    </div>
+    <div class="col-9">
+        <div class="row" id="provider-tracking-statuses-container"></div>
+    </div>
+</div>
 
-                <span class="pull-right badge badge-{{ $item->status === 'active' ? 'success' : 'secondary' }}">
-                    {{ $item->status }}
-                </span>
-            </th>
-            <td>
-                <a title="Click to see more info about this Title" href="{{ route('reports.show', ['mediaType' => $mediaType, 'id' => $item->id]) }}" class="font-weight-bold text-dark">
-                    {{ $item->title }}
-                </a>
-            </td>
-            <td>{{ $item->batch_id }}</td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+@push('scripts')
+<script>
+const ProviderStatusChanges = {
+    submitBtn: $('#provider-tracking-status-changes-find'),
+    form: $('#provider-status-changes-form'),
+    resultContainer: $('#provider-tracking-statuses-container'),
+    find: function () {
+        ProviderStatusChanges.resultContainer.empty();
 
-@if($providerContentList && $providerContentList instanceof \Illuminate\Pagination\LengthAwarePaginator)
-    {{ $providerContentList->links() }}
-@endif
+        let data = {
+            date_after: ProviderStatusChanges.form.find('input[name="date_after"]').val(),
+            date_before: ProviderStatusChanges.form.find('input[name="date_before"]').val()
+        };
+
+        $.ajax({
+            url: ProviderStatusChanges.form.attr('action'),
+            method: 'get',
+            data: data,
+            success: function (r) {
+                ProviderStatusChanges.resultContainer.append(r);
+            },
+            error: function (e) {
+                console.log(e);
+                ProviderStatusChanges.resultContainer.empty();
+                ProviderStatusChanges.resultContainer.html($('<span class="text-danger">An error happened.</span>'));
+            }
+        });
+    }
+};
+
+ProviderStatusChanges.submitBtn.on('click', ProviderStatusChanges.find);
+</script>
+
+@endpush
