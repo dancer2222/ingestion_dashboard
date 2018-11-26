@@ -13,9 +13,9 @@
         </div>
     </div>
 
-    <div class="float-left">
-        <a href="{{ route('providers.index', ['list' => true]) }}" class="btn btn-sm btn-outline-dark">View full list</a>
-    </div>
+    {{--<div class="float-left">--}}
+        {{--<a href="{{ route('providers.index', ['list' => true]) }}" class="btn btn-sm btn-outline-dark">View full list</a>--}}
+    {{--</div>--}}
 
     <div class="float-right">
         {{-- Statuses --}}

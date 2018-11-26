@@ -9,7 +9,9 @@
         </thead>
         <tbody>
         @foreach($providers as $provider)
-            <tr onclick="location.assign('{{ route('providers.show', ['media_type' => $provider->qaBatch->mediaType->title,'id' => $provider->id]) }}')" style="cursor: pointer;">
+            <tr onclick="location.assign('{{ route('providers.show', ['media_type' => $media_types->where('media_type_id', $provider->qaBatch->media_type_id)->first()->title,'id' => $provider->id]) }}')"
+                data-url="{{ route('providers.show', ['media_type' => $media_types->where('media_type_id', $provider->qaBatch->media_type_id)->first()->title, 'id' => $provider->id]) }}"
+                style="cursor: pointer;">
                 <th scope="row">
                     {{ $provider->id }}
                 </th>

@@ -82,8 +82,6 @@
                     <button type="button" id="provider-tracking-status-changes-find" class="btn btn-primary">apply</button>
                 </form>
 
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
             </div>
         </div>
     </div>
@@ -98,7 +96,14 @@ const ProviderStatusChanges = {
     submitBtn: $('#provider-tracking-status-changes-find'),
     form: $('#provider-status-changes-form'),
     resultContainer: $('#provider-tracking-statuses-container'),
+    loaderTurnOn: function () {
+        this.submitBtn.append($('<i class="fas fa-spinner fa-pulse ml-2 text-white"></i>'));
+    },
+    loaderTurnOff: function () {
+        this.submitBtn.find('.fa-spinner').remove();
+    },
     find: function () {
+        ProviderStatusChanges.loaderTurnOn();
         ProviderStatusChanges.resultContainer.empty();
 
         let data = {
@@ -112,11 +117,13 @@ const ProviderStatusChanges = {
             data: data,
             success: function (r) {
                 ProviderStatusChanges.resultContainer.append(r);
+                ProviderStatusChanges.loaderTurnOff();
             },
             error: function (e) {
                 console.log(e);
                 ProviderStatusChanges.resultContainer.empty();
-                ProviderStatusChanges.resultContainer.html($('<span class="text-danger">An error happened.</span>'));
+                ProviderStatusChanges.resultContainer.html($('<span class="text-danger">An error has occurred.</span>'));
+                ProviderStatusChanges.loaderTurnOff();
             }
         });
     }
