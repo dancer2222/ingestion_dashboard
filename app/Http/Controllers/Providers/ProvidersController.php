@@ -16,6 +16,10 @@ use App\Models\TrackingStatusChanges;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+/**
+ * Class ProvidersController
+ * @package App\Http\Controllers\Providers
+ */
 class ProvidersController extends Controller
 {
     const CONTENT_MODELS_MAPPING = [
@@ -36,13 +40,11 @@ class ProvidersController extends Controller
     public function index(MediaType $mediaType, DataSourceProvider $dataSourceProvider, Request $request)
     {
         $data = [];
-        $isList = $request->has('list');
-        $isNeedle = $request->has('needle');
         $dataSourceProviderQuery = $dataSourceProvider->newQuery();
 
-        if ($isNeedle || $isList) {
-            $needle = $request->get('needle');
-            $mediaTypes = $mediaType->select('media_type_id')->whereIn('title', $request->get('media_type', array_keys(self::CONTENT_MODELS_MAPPING)))->get();
+        if ($request->has('needle') || $request->has('media_type')) {
+            $needle = $request->get('needle', '');
+            $mediaTypes = $mediaType->select('media_type_id', 'title')->whereIn('title', $request->get('media_type', array_keys(self::CONTENT_MODELS_MAPPING)))->get();
 
             if ($needle) {
                 $dataSourceProviderQuery->where('id', 'like', "%$needle%")
@@ -51,11 +53,12 @@ class ProvidersController extends Controller
                 $dataSourceProviderQuery->whereNotNull('name');
             }
 
+            $data['media_types'] = $mediaTypes;
             $data['providers'] = $dataSourceProviderQuery->select('id', 'name')
                 ->whereHas('qaBatches', function ($q) use ($mediaTypes) {
                     $q->whereIn('media_type_id', $mediaTypes->pluck('media_type_id'))->distinct('data_source_provider_id');
                 })->with(['qaBatch' => function ($q) {
-                    $q->select('id', 'data_source_provider_id', 'media_type_id')->with('mediaType');
+                    $q->select('id', 'data_source_provider_id', 'media_type_id');
                 }])->get();
         }
 
@@ -90,6 +93,12 @@ class ProvidersController extends Controller
         return view('template_v2.misc.providers.index', $data);
     }
 
+    /**
+     * @param string $mediaType
+     * @param string $providerId
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showTrackingStatusChanges(string $mediaType, string $providerId, Request $request)
     {
         $data = [];
@@ -109,31 +118,33 @@ class ProvidersController extends Controller
         $dateAfter = Carbon::parse($request->get('date_after'));
         $dateBefore = Carbon::parse($request->get('date_before'));
 
-
-        $contentActiveModelQuery->join($contentModel->getTable(), function ($join) use ($qaBatchIds, $trackingStatusChangesTable, $contentModelTable) {
+        // Count all active items
+        $contentActiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($qaBatchIds, $trackingStatusChangesTable, $contentModelTable) {
                 $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id")
                     ->whereIn("$contentModelTable.batch_id", $qaBatchIds);
             })
             ->where('new_value', 'active')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
-            ->where("$trackingStatusChangesTable.media_type_id", $mediaTypeId->media_type_id);
+            ->where("$trackingStatusChangesTable.media_type_id", $mediaTypeId->media_type_id)
+            ->distinct();
 
-
-        $contentInactiveModelQuery->join($contentModel->getTable(), function ($join) use ($qaBatchIds, $trackingStatusChangesTable, $contentModelTable) {
+        // Count all inactive items
+        $contentInactiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($qaBatchIds, $trackingStatusChangesTable, $contentModelTable) {
                 $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id")
                     ->whereIn("$contentModelTable.batch_id", $qaBatchIds);
             })
             ->where('new_value', 'inactive')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
-            ->where("$trackingStatusChangesTable.media_type_id", $mediaTypeId->media_type_id);
+            ->where("$trackingStatusChangesTable.media_type_id", $mediaTypeId->media_type_id)
+            ->distinct();
 
         // dd() below is for debug
         //dd(implode(', ', $qaBatchIds->toArray()), $dateAfter->timestamp, $dateBefore->timestamp, $mediaTypeId->media_type_id, $contentActiveModelQuery->toSql());
 
-        $data['activeContent'] = $contentActiveModelQuery->count();
-        $data['inactiveContent'] = $contentInactiveModelQuery->count();
+        $data['activeContent'] = $contentActiveModelQuery->count("$contentModelTable.id");
+        $data['inactiveContent'] = $contentInactiveModelQuery->count("$contentModelTable.id");
 
         return view('template_v2.misc.providers.tracking_status_changes_ajax', $data);
     }
