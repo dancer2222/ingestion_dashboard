@@ -96,6 +96,7 @@ const ProviderStatusChanges = {
     submitBtn: $('#provider-tracking-status-changes-find'),
     form: $('#provider-status-changes-form'),
     resultContainer: $('#provider-tracking-statuses-container'),
+    isLoading: false,
     loaderTurnOn: function () {
         this.submitBtn.append($('<i class="fas fa-spinner fa-pulse ml-2 text-white"></i>'));
     },
@@ -103,6 +104,11 @@ const ProviderStatusChanges = {
         this.submitBtn.find('.fa-spinner').remove();
     },
     find: function () {
+        if (ProviderStatusChanges.isLoading === true) {
+            return false;
+        }
+
+        ProviderStatusChanges.isLoading = true;
         ProviderStatusChanges.loaderTurnOn();
         ProviderStatusChanges.resultContainer.empty();
 
@@ -118,12 +124,14 @@ const ProviderStatusChanges = {
             success: function (r) {
                 ProviderStatusChanges.resultContainer.append(r);
                 ProviderStatusChanges.loaderTurnOff();
+                ProviderStatusChanges.isLoading = false;
             },
             error: function (e) {
                 console.log(e);
                 ProviderStatusChanges.resultContainer.empty();
                 ProviderStatusChanges.resultContainer.html($('<span class="text-danger">An error has occurred.</span>'));
                 ProviderStatusChanges.loaderTurnOff();
+                ProviderStatusChanges.isLoading = false;
             }
         });
     }
