@@ -119,10 +119,10 @@ class ProvidersController extends Controller
         $dateBefore = Carbon::parse($request->get('date_before'));
 
         // Count all active items
-        $contentActiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($qaBatchIds, $trackingStatusChangesTable, $contentModelTable) {
-                $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id")
-                    ->whereIn("$contentModelTable.batch_id", $qaBatchIds);
+        $contentActiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($trackingStatusChangesTable, $contentModelTable) {
+                $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id");
             })
+            ->whereIn("$contentModelTable.batch_id", $qaBatchIds)
             ->where('new_value', 'active')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
@@ -130,10 +130,10 @@ class ProvidersController extends Controller
             ->distinct();
 
         // Count all inactive items
-        $contentInactiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($qaBatchIds, $trackingStatusChangesTable, $contentModelTable) {
-                $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id")
-                    ->whereIn("$contentModelTable.batch_id", $qaBatchIds);
+        $contentInactiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($trackingStatusChangesTable, $contentModelTable) {
+                $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id");
             })
+            ->whereIn("$contentModelTable.batch_id", $qaBatchIds)
             ->where('new_value', 'inactive')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
