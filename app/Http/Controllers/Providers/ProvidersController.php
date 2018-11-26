@@ -122,7 +122,10 @@ class ProvidersController extends Controller
         $contentActiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($trackingStatusChangesTable, $contentModelTable) {
                 $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id");
             })
-            ->whereIn("$contentModelTable.batch_id", $qaBatchIds)
+            ->leftJoin('qa_batches', function ($j) use ($contentModelTable) {
+                $j->on("$contentModelTable.batch_id", '=', 'qa_batches.id');
+            })
+            ->where("qa_batches.data_source_provider_id", $providerId)
             ->where('new_value', 'active')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
@@ -133,7 +136,10 @@ class ProvidersController extends Controller
         $contentInactiveModelQuery->leftJoin($contentModel->getTable(), function ($join) use ($trackingStatusChangesTable, $contentModelTable) {
                 $join->on("$trackingStatusChangesTable.media_id", '=', "$contentModelTable.id");
             })
-            ->whereIn("$contentModelTable.batch_id", $qaBatchIds)
+            ->leftJoin('qa_batches', function ($j) use ($contentModelTable) {
+                $j->on("$contentModelTable.batch_id", '=', 'qa_batches.id');
+            })
+            ->where("qa_batches.data_source_provider_id", $providerId)
             ->where('new_value', 'inactive')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
