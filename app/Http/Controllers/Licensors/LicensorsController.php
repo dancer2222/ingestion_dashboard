@@ -110,7 +110,7 @@ class LicensorsController extends Controller
             $licensorName = str_replace(' ', '_', $licensor->name);
             $filename = "{$licensorName}_{$licensor->media_type}_{$nowDate}.csv";
 
-            return (new LicensorsContent($licensor, $licensorContentModel, ['id', 'title']))
+            return (new LicensorsContent($licensor, $licensorContentModel, ['id', 'title', 'status']))
                 ->download($filename, \Maatwebsite\Excel\Excel::CSV);
         } catch (\Exception $e) {
             logger()->error($e->getMessage());
