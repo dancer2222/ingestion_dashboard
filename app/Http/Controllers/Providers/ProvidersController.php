@@ -103,8 +103,6 @@ class ProvidersController extends Controller
     {
         $data = [];
         $mediaTypeId = MediaType::select('media_type_id')->where('title', $mediaType)->first();
-        $qaBatch = QaBatch::select('id')->where('data_source_provider_id', $providerId)->get();
-        $qaBatchIds = $qaBatch->pluck('id');
 
         $contentModelName = self::CONTENT_MODELS_MAPPING[$mediaType];
         $contentModel = new $contentModelName;
@@ -125,7 +123,9 @@ class ProvidersController extends Controller
             ->leftJoin('qa_batches', function ($j) use ($contentModelTable) {
                 $j->on("$contentModelTable.batch_id", '=', 'qa_batches.id');
             })
-            ->where("qa_batches.data_source_provider_id", $providerId)
+            ->where('qa_batches.data_source_provider_id', $providerId)
+            ->where('qa_batches.import_date', '>=', $dateAfter->format('Y-m-d H:i:s'))
+            ->where('qa_batches.import_date', '<=', $dateBefore->format('Y-m-d H:i:s'))
             ->where('new_value', 'active')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
@@ -139,7 +139,9 @@ class ProvidersController extends Controller
             ->leftJoin('qa_batches', function ($j) use ($contentModelTable) {
                 $j->on("$contentModelTable.batch_id", '=', 'qa_batches.id');
             })
-            ->where("qa_batches.data_source_provider_id", $providerId)
+            ->where('qa_batches.data_source_provider_id', $providerId)
+            ->where('qa_batches.import_date', '>=', $dateAfter->format('Y-m-d H:i:s'))
+            ->where('qa_batches.import_date', '<=', $dateBefore->format('Y-m-d H:i:s'))
             ->where('new_value', 'inactive')
             ->where("$trackingStatusChangesTable.date_added", '>=', $dateAfter->timestamp)
             ->where("$trackingStatusChangesTable.date_added", '<=', $dateBefore->timestamp)
