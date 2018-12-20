@@ -54,7 +54,7 @@ class Kernel extends ConsoleKernel
             // Librarything Tags
             //$schedule->command('librarything_data:download')->twiceMonthly(1);
             $schedule->command('audiobooks:bind-tags')->daily();
-            $schedule->command('cleaner:metadataFiles')->weekly();
+            $schedule->command('cleaner:metadataFiles')->daily();
         }
 
         if ($this->app->environment('production')) {

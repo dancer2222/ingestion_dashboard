@@ -146,6 +146,12 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{media_type}/{id}', 'ProvidersController@show')->name('show');
         Route::get('/{media_type}/{id}/status_changes', 'ProvidersController@showTrackingStatusChanges')->name('showStatusChanges');
     });
+
+    Route::name('tests.')->prefix('tests')->namespace('TestsContent')->group(function () {
+        Route::get('/books', 'TestsController@indexBooks')->name('indexBooks');
+        Route::post('/infoBooks', 'TestsController@getInfoBooks')->name('file');
+        Route::get('/download/{fileName}', 'TestsController@download')->name('download');
+    });
 });
 
 Auth::routes();

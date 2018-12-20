@@ -179,6 +179,25 @@
                 </ul>
             </li>
 
+            <li>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <i class="fas fa-bug"></i>
+                    <span class="hide-menu">
+                        Test Content
+                    </span>
+                </a>
+
+                <ul aria-expanded="false" class="collapse">
+                    <li>
+                        <a href="{{ route('tests.indexBooks') }}">Books</a>
+                    </li>
+
+                    {{--<li>--}}
+                        {{--<a href="{{ route('ratings.index', 'books') }}">Books</a>--}}
+                    {{--</li>--}}
+                </ul>
+            </li>
+
             {{--<li class="nav-label">Misc</li>--}}
 
             {{--<li>--}}

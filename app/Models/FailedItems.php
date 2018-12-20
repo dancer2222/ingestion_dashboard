@@ -30,4 +30,18 @@ class FailedItems extends Model
 
         return count($allInfo) ? $allInfo : null;
     }
+
+    /**
+     * @param $dataOriginId
+     * @return |null
+     */
+    public function getActiveFailedItems($dataOriginId)
+    {
+        $allInfo = $this->where('item_id', $dataOriginId)
+            ->where('status', 'active')
+            ->get()
+            ->toArray();
+
+        return count($allInfo) ? $allInfo : 'don`t have active errors';
+    }
 }

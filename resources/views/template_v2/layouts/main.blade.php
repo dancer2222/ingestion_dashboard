@@ -19,6 +19,8 @@
 
     {{-- Favicon icon --}}
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ asset("$templatePrefix/images/favicon.ico") }}" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+
 
     {{-- Title --}}
     <title>@yield('title', env('APP_NAME'))</title>

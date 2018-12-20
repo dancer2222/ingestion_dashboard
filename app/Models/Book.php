@@ -174,6 +174,29 @@ class Book extends Model implements SearchableModel
     }
 
     /**
+     * @param array $isbn
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getInfoByIsbns(array $isbn)
+    {
+        return DB::table('book as b')
+            ->leftJoin('book_authors as bauth', 'b.id', 'bauth.book_id')
+            ->leftJoin('author as auth', 'bauth.author_id', 'auth.id')
+            ->select(DB::raw("
+                                b.id,
+                                b.title,
+                                b.ma_release_date,
+                                b.status,
+                                b.isbn,
+                                b.data_origin_id,
+                                GROUP_CONCAT(DISTINCT auth.name SEPARATOR ', ') AS auth_name"))
+            ->whereIn('b.isbn', $isbn)
+            ->groupBy('b.id')
+            ->orderBy('b.id', 'DESC')
+            ->get();
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function languages()
@@ -185,7 +208,7 @@ class Book extends Model implements SearchableModel
             'language_id',
             'id',
             'id'
-            );
+        );
     }
 
     /**
