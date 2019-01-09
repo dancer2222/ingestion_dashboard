@@ -11,19 +11,19 @@
                 <h2 class="text-center color-danger">{{ $filepath['filepathNotNowReleaseDate'] }}</h2>
                 <table class="table table-hover">
                     <thead>
-                        <tr>
-                            @if(empty($variableStatusItem['notNowReleaseDate']))
-                                -
-                            @else
-                                @foreach($variableStatusItem['notNowReleaseDate'][0] as $item => $value)
-                                    @if($value === "Empty")
-                                        -
-                                    @else
-                                        <td class="text-left"><span style="font-weight: bold">{{ $item }}</span></td>
-                                    @endif
-                                @endforeach
-                            @endif
-                        </tr>
+                    <tr>
+                        @if(empty($variableStatusItem['notNowReleaseDate']))
+                            -
+                        @else
+                            @foreach($variableStatusItem['notNowReleaseDate'][0] as $item => $value)
+                                @if($value === "Empty")
+                                    -
+                                @else
+                                    <td class="text-left"><span style="font-weight: bold">{{ $item }}</span></td>
+                                @endif
+                            @endforeach
+                        @endif
+                    </tr>
                     </thead>
                     <tbody>
                     @if(empty($variableStatusItem['notNowReleaseDate']))
@@ -191,7 +191,7 @@
                 </table>
             </div>
         </div>
-        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <button type="submit" class="btn btn-info btn-lg btn-block">Get final report</button>
     </form>
 @endsection

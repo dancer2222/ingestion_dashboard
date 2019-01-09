@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Isbn\Isbn;
-use function view;
 use yidas\phpSpreadsheet\Helper;
 
 /**
@@ -20,17 +19,25 @@ class TestsController extends Controller
     /**
      * @var array
      */
-    private $isbns, $notNowReleaseDate, $activeItem,
-        $levelWarningItem, $levelCriticalItem, $inactiveNotHaveFailedItem = [];
+    private $isbns = [];
 
     /**
      * @var
      */
-    private $date, $filepathNotNowReleaseDate, $filepathNotFoundIsbn, $filepathActiveItem,
-        $filepathLevelWarningItem, $filepathLevelCriticalItem, $filepathInactiveNotHaveFailedItem,
-        $isbnHandler, $notFoundIsbn;
+    private $date;
 
+    /**
+     * @var
+     */
+    private $isbnHandler;
+    /**
+     * @var
+     */
+    private $filepath, $variableStatusItem;
 
+    /**
+     * @var Helper
+     */
     private $helperXLSX;
 
     /**
@@ -60,7 +67,6 @@ class TestsController extends Controller
 
         if ($request->has('data')) {
             $this->getIsbnFromForm($request->data);
-
         }
 
         if ($request->has('file')) {
@@ -73,27 +79,10 @@ class TestsController extends Controller
 
         $this->isbns = array_unique($this->isbns);
         $this->getInfoFromDB($request->mediaType);
-        $this->createXlSX($this->notFoundIsbn);
+        $this->createXlSX($this->variableStatusItem['notFoundIsbn']);
 
-        $filepath = [
-            'filepathNotNowReleaseDate'         => $this->filepathNotNowReleaseDate,
-            'filepathActiveItem'                => $this->filepathActiveItem,
-            'filepathLevelWarningItem'          => $this->filepathLevelWarningItem,
-            'filepathLevelCriticalItem'         => $this->filepathLevelCriticalItem,
-            'filepathInactiveNotHaveFailedItem' => $this->filepathInactiveNotHaveFailedItem,
-            'filepathNotFoundIsbn'              => $this->filepathNotFoundIsbn,
-        ];
-
-        $variableStatusItem = [
-            'notNowReleaseDate'                 => $this->notNowReleaseDate,
-            'activeItem'                        => $this->activeItem,
-            'levelWarningItem'                  => $this->levelWarningItem,
-            'levelCriticalItem'                 => $this->levelCriticalItem,
-            'inactiveNotHaveFailedItem'         => $this->inactiveNotHaveFailedItem,
-            'notFoundIsbn'                      => $this->notFoundIsbn,
-        ];
-
-        return view('testsContent.showBooks', ['filepath' => $filepath, 'variableStatusItem' => $variableStatusItem]);
+        return view('testsContent.showBooks',
+            ['filepath' => $this->filepath, 'variableStatusItem' => $this->variableStatusItem]);
     }
 
     /**
@@ -162,7 +151,7 @@ class TestsController extends Controller
 
         foreach ($this->isbns as $key => $isbn) {
             if (!$data->where('isbn', $isbn)->all()) {
-                $this->notFoundIsbn [][] = $isbn;
+                $this->variableStatusItem['notFoundIsbn'][][] = $isbn;
             }
         }
 
@@ -200,18 +189,18 @@ class TestsController extends Controller
 
         foreach ($completeInfo as $item) {
             if ($this->date->format('Y-m-d') < $item['ma_release_date']) {
-                $this->notNowReleaseDate [] = $item;
+                $this->variableStatusItem['notNowReleaseDate'] [] = $item;
             } else {
                 if ('active' === $item['status']) {
-                    $this->activeItem [] = $item;
+                    $this->variableStatusItem['activeItem'] [] = $item;
                 } else {
                     if (!isset($item['level'])) {
-                        $this->inactiveNotHaveFailedItem [] = $item;
+                        $this->variableStatusItem['inactiveNotHaveFailedItem'] [] = $item;
                     } else {
                         if ('warning' === $item['level']) {
-                            $this->levelWarningItem [] = $item;
+                            $this->variableStatusItem['levelWarningItem'] [] = $item;
                         } else {
-                            $this->levelCriticalItem [] = $item;
+                            $this->variableStatusItem['levelCriticalItem'] [] = $item;
                         }
                     }
                 }
@@ -231,73 +220,73 @@ class TestsController extends Controller
             'error level', 'reason', 'time', 'error_code', 'batch_id'
         ];
 
-        $this->filepathNotNowReleaseDate = 'Future_release_date_' . ($this->date->format('d-m-Y'));
+        $this->filepath['filepathNotNowReleaseDate'] = 'Future_release_date_' . ($this->date->format('d-m-Y'));
 
-        if (is_null($this->notNowReleaseDate)) {
-            $this->notNowReleaseDate = [[0 => 'Empty']];
+        if (!isset($this->variableStatusItem['notNowReleaseDate'])) {
+            $this->variableStatusItem['notNowReleaseDate'] = [[0 => 'Empty']];
         }
 
         $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
-            ->addRows($this->notNowReleaseDate)
-            ->save(public_path('tmp/download/' . $this->filepathNotNowReleaseDate));
+            ->addRows($this->variableStatusItem['notNowReleaseDate'])
+            ->save(public_path('tmp/download/' . $this->filepath['filepathNotNowReleaseDate']));
 
-        $this->filepathNotFoundIsbn = 'Not_found_ISBN_' . $this->date->format('d-m-Y');
+        $this->filepath['filepathNotFoundIsbn'] = 'Not_found_ISBN_' . $this->date->format('d-m-Y');
 
-        if (is_null($this->notFoundIsbn)) {
-            $this->notFoundIsbn = [[0 => 'Empty']];
+        if (!isset($this->variableStatusItem['notFoundIsbn'])) {
+            $this->variableStatusItem['notFoundIsbn'] = [[0 => 'Empty']];
         }
 
         $this->helperXLSX->newSpreadsheet()
             ->addRow([
                 'isbn'
             ])->setStyle(['font' => ['bold' => true]])->setAutoSize()
-            ->addRows($this->notFoundIsbn)
-            ->save(public_path('tmp/download/' . $this->filepathNotFoundIsbn));
+            ->addRows($this->variableStatusItem['notFoundIsbn'])
+            ->save(public_path('tmp/download/' . $this->filepath['filepathNotFoundIsbn']));
 
-        $this->filepathActiveItem = 'Active_items_' . ($this->date->format('d-m-Y'));
+        $this->filepath['filepathActiveItem'] = 'Active_items_' . ($this->date->format('d-m-Y'));
 
-        if (is_null($this->activeItem)) {
-            $this->activeItem = [[0 => 'Empty']];
+        if (!isset($this->variableStatusItem['activeItem'])) {
+            $this->variableStatusItem['activeItem'] = [[0 => 'Empty']];
         }
 
         $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
-            ->addRows($this->activeItem)
-            ->save(public_path('tmp/download/' . $this->filepathActiveItem));
+            ->addRows($this->variableStatusItem['activeItem'])
+            ->save(public_path('tmp/download/' . $this->filepath['filepathActiveItem']));
 
-        $this->filepathLevelWarningItem = 'Level_warning_failed_items_' . ($this->date->format('d-m-Y'));
+        $this->filepath['filepathLevelWarningItem'] = 'Level_warning_failed_items_' . ($this->date->format('d-m-Y'));
 
-        if (is_null($this->levelWarningItem)) {
-            $this->levelWarningItem = [[0 => 'Empty']];
+        if (!isset($this->variableStatusItem['levelWarningItem'])) {
+            $this->variableStatusItem['levelWarningItem'] = [[0 => 'Empty']];
         }
 
         $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
-            ->addRows($this->levelWarningItem)
-            ->save(public_path('tmp/download/' . $this->filepathLevelWarningItem));
+            ->addRows($this->variableStatusItem['levelWarningItem'])
+            ->save(public_path('tmp/download/' . $this->filepath['filepathLevelWarningItem']));
 
-        $this->filepathLevelCriticalItem = 'Level_critical_failedItems_' . ($this->date->format('d-m-Y'));
+        $this->filepath['filepathLevelCriticalItem'] = 'Level_critical_failedItems_' . ($this->date->format('d-m-Y'));
 
-        if (is_null($this->levelCriticalItem)) {
-            $this->levelCriticalItem = [[0 => 'Empty']];
+        if (!isset($this->variableStatusItem['levelCriticalItem'])) {
+            $this->variableStatusItem['levelCriticalItem'] = [[0 => 'Empty']];
         }
 
         $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
-            ->addRows($this->levelCriticalItem)
-            ->save(public_path('tmp/download/' . $this->filepathLevelCriticalItem));
+            ->addRows($this->variableStatusItem['levelCriticalItem'])
+            ->save(public_path('tmp/download/' . $this->filepath['filepathLevelCriticalItem']));
 
-        $this->filepathInactiveNotHaveFailedItem = 'Inactive_items_NotHave_failedItems_' . ($this->date->format('d-m-Y'));
+        $this->filepath['filepathInactiveNotHaveFailedItem'] = 'Inactive_items_NotHave_failedItems_' . ($this->date->format('d-m-Y'));
 
-        if (is_null($this->inactiveNotHaveFailedItem)) {
-            $this->inactiveNotHaveFailedItem = [[0 => 'Empty']];
+        if (!isset($this->variableStatusItem['inactiveNotHaveFailedItem'])) {
+            $this->variableStatusItem['inactiveNotHaveFailedItem'] = [[0 => 'Empty']];
         }
 
         $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
-            ->addRows($this->inactiveNotHaveFailedItem)
-            ->save(public_path('tmp/download/' . $this->filepathInactiveNotHaveFailedItem));
+            ->addRows($this->variableStatusItem['inactiveNotHaveFailedItem'])
+            ->save(public_path('tmp/download/' . $this->filepath['filepathInactiveNotHaveFailedItem']));
     }
 
     /**

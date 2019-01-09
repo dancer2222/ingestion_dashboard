@@ -11,6 +11,5 @@
                    class="btn btn-outline-info">Download</a>
             </div>
         </div>
-
     </div>
 </div>
