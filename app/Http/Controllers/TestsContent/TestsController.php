@@ -5,8 +5,10 @@ namespace App\Http\Controllers\TestsContent;
 use App\Http\Controllers\Controller;
 use App\Models\FailedItems;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Isbn\Isbn;
+use function view;
 use yidas\phpSpreadsheet\Helper;
 
 /**
@@ -29,12 +31,15 @@ class TestsController extends Controller
         $isbnHandler, $notFoundIsbn;
 
 
+    private $helperXLSX;
+
     /**
      * TestsController constructor.
      */
     public function __construct()
     {
         $this->date = new Carbon();
+        $this->helperXLSX = new Helper();
     }
 
     /**
@@ -47,9 +52,7 @@ class TestsController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function getInfoBooks(Request $request)
     {
@@ -64,26 +67,33 @@ class TestsController extends Controller
             $this->getIsbnFromFile($request->file);
         }
 
+        if (is_null($this->isbns)) {
+            return redirect()->back()->withErrors('Not Found ISBN');
+        }
+
         $this->isbns = array_unique($this->isbns);
-
         $this->getInfoFromDB($request->mediaType);
-
         $this->createXlSX($this->notFoundIsbn);
 
-        return view('testsContent.showBooks', [
+        $filepath = [
             'filepathNotNowReleaseDate'         => $this->filepathNotNowReleaseDate,
-            'notNowReleaseDate'                 => $this->notNowReleaseDate,
             'filepathActiveItem'                => $this->filepathActiveItem,
-            'activeItem'                        => $this->activeItem,
             'filepathLevelWarningItem'          => $this->filepathLevelWarningItem,
-            'levelWarningItem'                  => $this->levelWarningItem,
             'filepathLevelCriticalItem'         => $this->filepathLevelCriticalItem,
-            'levelCriticalItem'                 => $this->levelCriticalItem,
             'filepathInactiveNotHaveFailedItem' => $this->filepathInactiveNotHaveFailedItem,
-            'inactiveNotHaveFailedItem'         => $this->inactiveNotHaveFailedItem,
             'filepathNotFoundIsbn'              => $this->filepathNotFoundIsbn,
+        ];
+
+        $variableStatusItem = [
+            'notNowReleaseDate'                 => $this->notNowReleaseDate,
+            'activeItem'                        => $this->activeItem,
+            'levelWarningItem'                  => $this->levelWarningItem,
+            'levelCriticalItem'                 => $this->levelCriticalItem,
+            'inactiveNotHaveFailedItem'         => $this->inactiveNotHaveFailedItem,
             'notFoundIsbn'                      => $this->notFoundIsbn,
-        ]);
+        ];
+
+        return view('testsContent.showBooks', ['filepath' => $filepath, 'variableStatusItem' => $variableStatusItem]);
     }
 
     /**
@@ -101,7 +111,6 @@ class TestsController extends Controller
         $data = trim($data, ' ,\r\n');
         $datas = explode(',', $data);
 
-
         foreach ($datas as $data) {
             $data = str_replace('`', '', $data);
             if ($this->isbnHandler->validation->isbn($data)) {
@@ -112,8 +121,7 @@ class TestsController extends Controller
 
     /**
      * @param $data
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @return \Illuminate\Http\RedirectResponse
      */
     private function getIsbnFromFile($data)
     {
@@ -125,7 +133,11 @@ class TestsController extends Controller
             '`',
         ];
 
-        $data = excelToArray($data->getRealPath());
+        try {
+            $data = excelToArray($data->getRealPath());
+        } catch (Exception $exception) {
+            return redirect()->back()->withErrors($exception);
+        }
 
         foreach ($data['items'] as $item) {
             foreach ($item as $value) {
@@ -146,7 +158,6 @@ class TestsController extends Controller
     {
         $contentModelName = self::CONTENT_MODELS_MAPPING[$mediaType];
         $contentModel = new $contentModelName;
-
         $data = $contentModel->getInfoByIsbns($this->isbns);
 
         foreach ($this->isbns as $key => $isbn) {
@@ -156,14 +167,12 @@ class TestsController extends Controller
         }
 
         $failedItems = new FailedItems();
-
         $completeInfo = [];
 
         foreach ($data as $item) {
             $result = $failedItems->getActiveFailedItems($item->data_origin_id);
 
             if (is_array($result)) {
-
                 $completeInfo [] = [
                     'id'              => ' ' . $item->id,
                     'title'           => $item->title,
@@ -217,19 +226,18 @@ class TestsController extends Controller
      */
     private function createXlSX()
     {
-        $help = new Helper();
         $columnTitle = [
             'id', 'title', 'author_name', 'isbn', 'ma_release_date', 'status book',
             'error level', 'reason', 'time', 'error_code', 'batch_id'
         ];
 
-        $this->filepathNotNowReleaseDate = 'Not_now_release_date_' . ($this->date->format('d-m-Y'));
+        $this->filepathNotNowReleaseDate = 'Future_release_date_' . ($this->date->format('d-m-Y'));
 
         if (is_null($this->notNowReleaseDate)) {
             $this->notNowReleaseDate = [[0 => 'Empty']];
         }
 
-        $help->newSpreadsheet()
+        $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
             ->addRows($this->notNowReleaseDate)
             ->save(public_path('tmp/download/' . $this->filepathNotNowReleaseDate));
@@ -240,13 +248,12 @@ class TestsController extends Controller
             $this->notFoundIsbn = [[0 => 'Empty']];
         }
 
-        $help->newSpreadsheet()
+        $this->helperXLSX->newSpreadsheet()
             ->addRow([
                 'isbn'
             ])->setStyle(['font' => ['bold' => true]])->setAutoSize()
             ->addRows($this->notFoundIsbn)
             ->save(public_path('tmp/download/' . $this->filepathNotFoundIsbn));
-
 
         $this->filepathActiveItem = 'Active_items_' . ($this->date->format('d-m-Y'));
 
@@ -254,11 +261,10 @@ class TestsController extends Controller
             $this->activeItem = [[0 => 'Empty']];
         }
 
-        $help->newSpreadsheet()
+        $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
             ->addRows($this->activeItem)
             ->save(public_path('tmp/download/' . $this->filepathActiveItem));
-
 
         $this->filepathLevelWarningItem = 'Level_warning_failed_items_' . ($this->date->format('d-m-Y'));
 
@@ -266,11 +272,10 @@ class TestsController extends Controller
             $this->levelWarningItem = [[0 => 'Empty']];
         }
 
-        $help->newSpreadsheet()
+        $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
             ->addRows($this->levelWarningItem)
             ->save(public_path('tmp/download/' . $this->filepathLevelWarningItem));
-
 
         $this->filepathLevelCriticalItem = 'Level_critical_failedItems_' . ($this->date->format('d-m-Y'));
 
@@ -278,11 +283,10 @@ class TestsController extends Controller
             $this->levelCriticalItem = [[0 => 'Empty']];
         }
 
-        $help->newSpreadsheet()
+        $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
             ->addRows($this->levelCriticalItem)
             ->save(public_path('tmp/download/' . $this->filepathLevelCriticalItem));
-
 
         $this->filepathInactiveNotHaveFailedItem = 'Inactive_items_NotHave_failedItems_' . ($this->date->format('d-m-Y'));
 
@@ -290,7 +294,7 @@ class TestsController extends Controller
             $this->inactiveNotHaveFailedItem = [[0 => 'Empty']];
         }
 
-        $help->newSpreadsheet()
+        $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
             ->addRows($this->inactiveNotHaveFailedItem)
             ->save(public_path('tmp/download/' . $this->filepathInactiveNotHaveFailedItem));
@@ -303,5 +307,37 @@ class TestsController extends Controller
     public function download($fileName)
     {
         return response()->download(public_path('tmp/download/' . $fileName . '.xlsx'));
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function createFinalXLSX(Request $request)
+    {
+        $medias = $request->media;
+
+        foreach ($medias as $media => $value) {
+            if (!isset($value['checked'])) {
+                unset($medias[$media]);
+            }
+        }
+
+        foreach ($medias as &$media) {
+            foreach ($media as $item => $value) {
+                if ($item == 'checked') {
+                    unset($media[$item]);
+                }
+            }
+        }
+
+        $columnTitle = [
+            'id', 'title', 'author_name', 'isbn', 'ma_release_date', 'status book',
+            'error level', 'reason', 'time', 'error_code', 'batch_id'
+        ];
+
+        $this->helperXLSX->newSpreadsheet()
+            ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
+            ->addRows($medias)
+            ->output($this->date->format('d-m-Y') . 'Final report');
     }
 }

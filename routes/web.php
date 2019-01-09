@@ -151,6 +151,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/books', 'TestsController@indexBooks')->name('indexBooks');
         Route::post('/infoBooks', 'TestsController@getInfoBooks')->name('file');
         Route::get('/download/{fileName}', 'TestsController@download')->name('download');
+        Route::post('/download', 'TestsController@createFinalXLSX')->name('final');
     });
 });
 
