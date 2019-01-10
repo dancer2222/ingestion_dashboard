@@ -79,7 +79,7 @@ class TestsController extends Controller
 
         $this->isbns = array_unique($this->isbns);
         $this->getInfoFromDB($request->mediaType);
-        $this->createXlSX($this->variableStatusItem['notFoundIsbn']);
+        $this->createXlSX();
 
         return view('testsContent.showBooks',
             ['filepath' => $this->filepath, 'variableStatusItem' => $this->variableStatusItem]);
@@ -103,7 +103,7 @@ class TestsController extends Controller
         foreach ($datas as $data) {
             $data = str_replace('`', '', $data);
             if ($this->isbnHandler->validation->isbn($data)) {
-                $this->isbns [] = $data;
+                $this->isbns []= $data;
             }
         }
     }
@@ -133,7 +133,7 @@ class TestsController extends Controller
                 $data = str_replace($patterns, '', $value);
 
                 if ($this->isbnHandler->validation->isbn($data)) {
-                    $this->isbns [] = $data;
+                    $this->isbns []= $data;
                 }
             }
         }
@@ -162,7 +162,7 @@ class TestsController extends Controller
             $result = $failedItems->getActiveFailedItems($item->data_origin_id);
 
             if (is_array($result)) {
-                $completeInfo [] = [
+                $completeInfo []= [
                     'id'              => ' ' . $item->id,
                     'title'           => $item->title,
                     'name'            => $item->auth_name,
@@ -176,7 +176,7 @@ class TestsController extends Controller
                     'batch_id'        => $result[0]['batch_id'],
                 ];
             } else {
-                $completeInfo [] = [
+                $completeInfo []= [
                     'id'              => ' ' . $item->id,
                     'title'           => $item->title,
                     'name'            => $item->auth_name,
@@ -189,18 +189,18 @@ class TestsController extends Controller
 
         foreach ($completeInfo as $item) {
             if ($this->date->format('Y-m-d') < $item['ma_release_date']) {
-                $this->variableStatusItem['notNowReleaseDate'] [] = $item;
+                $this->variableStatusItem['notNowReleaseDate'] []= $item;
             } else {
                 if ('active' === $item['status']) {
-                    $this->variableStatusItem['activeItem'] [] = $item;
+                    $this->variableStatusItem['activeItem'] []= $item;
                 } else {
                     if (!isset($item['level'])) {
-                        $this->variableStatusItem['inactiveNotHaveFailedItem'] [] = $item;
+                        $this->variableStatusItem['inactiveNotHaveFailedItem'] []= $item;
                     } else {
                         if ('warning' === $item['level']) {
-                            $this->variableStatusItem['levelWarningItem'] [] = $item;
+                            $this->variableStatusItem['levelWarningItem'] []= $item;
                         } else {
-                            $this->variableStatusItem['levelCriticalItem'] [] = $item;
+                            $this->variableStatusItem['levelCriticalItem'] []= $item;
                         }
                     }
                 }
@@ -216,8 +216,17 @@ class TestsController extends Controller
     private function createXlSX()
     {
         $columnTitle = [
-            'id', 'title', 'author_name', 'isbn', 'ma_release_date', 'status book',
-            'error level', 'reason', 'time', 'error_code', 'batch_id'
+            'id',
+            'title',
+            'author_name',
+            'isbn',
+            'ma_release_date',
+            'status book',
+            'error level',
+            'reason',
+            'time',
+            'error_code',
+            'batch_id'
         ];
 
         $this->filepath['filepathNotNowReleaseDate'] = 'Future_release_date_' . ($this->date->format('d-m-Y'));
@@ -300,8 +309,9 @@ class TestsController extends Controller
 
     /**
      * @param Request $request
+     * @param $mediaType
      */
-    public function createFinalXLSX(Request $request)
+    public function createFinalXLSX(Request $request, $mediaType)
     {
         $medias = $request->media;
 
@@ -311,22 +321,69 @@ class TestsController extends Controller
             }
         }
 
-        foreach ($medias as &$media) {
+        $contentModelName = self::CONTENT_MODELS_MAPPING[$mediaType];
+        $contentModel = new $contentModelName;
+
+        $isbns = [];
+        foreach ($medias as $media) {
             foreach ($media as $item => $value) {
-                if ($item == 'checked') {
-                    unset($media[$item]);
+                if ($item === 'isbn') {
+                    $isbns []= $value;
                 }
             }
         }
 
+        $data = $contentModel->getInfoByIsbns($isbns);
+
+        $failedItems = new FailedItems();
+        $completeInfo = [];
+
+        foreach ($data as $item) {
+            $result = $failedItems->getActiveFailedItems($item->data_origin_id);
+
+            if (is_array($result)) {
+                $completeInfo []= [
+                    'id'              => ' ' . $item->id,
+                    'title'           => $item->title,
+                    'name'            => $item->auth_name,
+                    'isbn'            => $item->isbn,
+                    'ma_release_date' => $item->ma_release_date,
+                    'status'          => $item->status,
+                    'level'           => $result[0]['level'],
+                    'reason'          => $result[0]['reason'],
+                    'time'            => $result[0]['time'],
+                    'error_code'      => $result[0]['error_code'],
+                    'batch_id'        => $result[0]['batch_id'],
+                ];
+            } else {
+                $completeInfo []= [
+                    'id'              => ' ' . $item->id,
+                    'title'           => $item->title,
+                    'name'            => $item->auth_name,
+                    'isbn'            => $item->isbn,
+                    'ma_release_date' => $item->ma_release_date,
+                    'status'          => $item->status,
+                ];
+            }
+        }
+
         $columnTitle = [
-            'id', 'title', 'author_name', 'isbn', 'ma_release_date', 'status book',
-            'error level', 'reason', 'time', 'error_code', 'batch_id'
+            'id',
+            'title',
+            'author_name',
+            'isbn',
+            'ma_release_date',
+            'status book',
+            'error level',
+            'reason',
+            'time',
+            'error_code',
+            'batch_id'
         ];
 
         $this->helperXLSX->newSpreadsheet()
             ->addRow($columnTitle)->setStyle(['font' => ['bold' => true]])->setAutoSize()
-            ->addRows($medias)
+            ->addRows($completeInfo)
             ->output($this->date->format('d-m-Y') . 'Final report');
     }
 }

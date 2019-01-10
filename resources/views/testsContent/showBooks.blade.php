@@ -4,7 +4,7 @@
 
 @section('content')
     <form method="POST" class="form-control-feedback"
-          action="{{ route('tests.final') }}">
+          action="{{ route('tests.final', ['mediaType' => 'books']) }}">
         <div class="row">
             @include('testsContent.buttons', ['name' => $filepath['filepathNotNowReleaseDate'], 'dataTarget' => '#notNowReleaseDate'])
             <div id="notNowReleaseDate" class="collapse table-responsive">

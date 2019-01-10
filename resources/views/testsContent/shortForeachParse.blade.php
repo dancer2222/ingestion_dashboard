@@ -20,13 +20,8 @@
         <td class="text-left">
             <div class="input-group-prepend">
                 <div class="input-group-text">
-                    <input type="checkbox"
-                           name="media[{{ $substrId }}][checked]" checked>
-                    <input type="hidden" name="media[{{ $substrId }}][title]" value="{{ $values['title'] }}">
-                    <input type="hidden" name="media[{{ $substrId }}][name]" value="{{ $values['name'] }}">
+                    <input type="checkbox" name="media[{{ $substrId }}][checked]" checked>
                     <input type="hidden" name="media[{{ $substrId }}][isbn]" value="{{ $values['isbn'] }}">
-                    <input type="hidden" name="media[{{ $substrId }}][ma_release_date]" value="{{ $values['ma_release_date'] }}">
-                    <input type="hidden" name="media[{{ $substrId }}][status]" value="{{ $values['status'] }}">
                 </div>
             </div>
         </td>
