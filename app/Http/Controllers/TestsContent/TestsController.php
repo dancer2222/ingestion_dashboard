@@ -215,6 +215,13 @@ class TestsController extends Controller
      */
     private function createXlSX()
     {
+        $downloadPath = public_path("tmp/download");
+
+        if (!file_exists($downloadPath)) {
+            mkdir($downloadPath, 0777, true);
+            @chmod($downloadPath, 0777);
+        }
+
         $columnTitle = [
             'id',
             'title',
