@@ -8,7 +8,8 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Title</th>
-                        <th scope="col" class="text-left">Licensor</th>
+                        <th scope="col">Licensor</th>
+                        <th scope="col" class="text-left">Status</th>
                     </tr>
                 </thead>
 
@@ -32,6 +33,13 @@
                                href="{{ route('licensors.show', ['id' => $item->licensor_id]) }}">
                                 {{ $item->licensor->name ?? ''}}
                             </a>
+                        </td>
+                        <td class="text-left">
+                            @if(isset($item->status) && $item->status === 'active')
+                                <span style="color: #0ea432">{{ $item->status}}</span>
+                            @elseif(isset($item->status) && $item->status === 'inactive')
+                                <span style="color: red">{{ $item->status}}</span>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

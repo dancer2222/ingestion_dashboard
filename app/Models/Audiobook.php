@@ -276,8 +276,6 @@ class Audiobook extends Model implements SearchableModel
             $query->where('title', 'like', "%$needle%");
         }
 
-        $query->select(['id', 'title', 'licensor_id']);
-
         return $query;
     }
 

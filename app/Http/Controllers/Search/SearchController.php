@@ -48,7 +48,9 @@ class SearchController extends Controller
 
         if ($needle) {
             if (!($data = ICache::getSearchList($mediaType, $needle, $page))) {
-                $data = $model->seek($needle, ['licensor:id,name'])->paginate(15);
+                $data = $model->seek($needle, ['licensor:id,name'])
+                    ->select('id', 'title', 'licensor_id', 'status')
+                    ->paginate(15);
 
                 ICache::putSearchList($data, $mediaType, $needle, $page);
             }
